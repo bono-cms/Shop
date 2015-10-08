@@ -1,0 +1,30 @@
+<?php
+ return array (
+  'module' => 
+  array (
+    'name' => 'Shop',
+    'url' => '/admin/module/shop',
+    'icon' => '/module/Shop/Assets/shop.png',
+    'order' => 1,
+    'description' => 'Shop module allows you to manage e-commerce system on your site',
+  ),
+  'default_category_per_page_count' => '4',
+  'defaultPerPageCount' => '1',
+  'cover_height_category' => '',
+  'cover_width_category' => '',
+  'cover_width' => '450',
+  'cover_height' => '450',
+  'thumb_height' => '75',
+  'order_notification_type' => 'adminOnly',
+  'basket_storage_type' => 'cookies',
+  'category_cover_height' => '120',
+  'category_cover_width' => '120',
+  'thumb_width' => '75',
+  'showcase_count' => '3',
+  'stoke_price_enabled' => '1',
+  'special_support' => '1',
+  'currency' => '$',
+  'recent_max_amount' => '3',
+  'basket_page_id' => '145',
+  'stoke_per_page_count' => '10',
+);
