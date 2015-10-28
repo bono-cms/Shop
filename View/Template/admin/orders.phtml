@@ -1,6 +1,7 @@
 <?php
 
 use Krystal\Form\Widget\BooleanWidget;
+use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
 
 ?>
@@ -47,27 +48,27 @@ use Krystal\Form\HtmlHelper;
 				
 				<tr>
 					<th class="col-md-1">
-						<input type="number" min="1" class="form-control" name="filter[id]" value="<?php echo $filter->get('id'); ?>" />
+						<?php echo Element::number('filter[id]', $filter->get('id'), array('class' => 'form-control', 'min' => '1')); ?>
 					</th>
 					<th>
-						<input type="text" name="filter[date]" class="form-control" value="<?php echo $filter->get('date'); ?>" />
+                        <?php echo Element::text('filter[date]', $filter->get('date'), array('class' => 'form-control')); ?>
 					</th>
 					<th>
-						<input type="text" class="form-control" name="filter[name]" value="<?php echo $filter->get('name'); ?>" />
+                        <?php echo Element::text('filter[name]', $filter->get('name'), array('class' => 'form-control')); ?>
 					</th>
 					<th>
-						<input type="text" class="form-control" name="filter[phone]" value="<?php echo $filter->get('phone'); ?>" />
+                        <?php echo Element::text('filter[phone]', $filter->get('phone'), array('class' => 'form-control')); ?>
 					</th>
 					<th>
-						<input type="text" class="form-control" name="filter[address]" value="<?php echo $filter->get('address'); ?>" />
+                        <?php echo Element::text('filter[address]', $filter->get('address'), array('class' => 'form-control')); ?>
 					</th>
 					<th></th>
 					<th></th>
 					<th class="col-md-1">
-						<input type="number" min="1" class="form-control" name="filter[qty]" value="<?php echo $filter->get('qty'); ?>" />
+                        <?php echo Element::number('filter[qty]', $filter->get('qty'), array('class' => 'form-control', 'min' => '1')); ?>
 					</th>
 					<th>
-						<input type="number" step="any" min="1" class="form-control" name="filter[total_price]" value="<?php echo $filter->get('total_price'); ?>" />
+                        <?php echo Element::number('filter[total_price]', $filter->get('total_price'), array('class' => 'form-control', 'step' => 'any', 'min' => '1')); ?>
 					</th>
 					<th>
 						<?php echo BooleanWidget::render(array('name' => 'filter[approved]', 'class' => 'form-control'), $filter->get('approved'), $this->getTranslator()); ?>
@@ -105,7 +106,6 @@ use Krystal\Form\HtmlHelper;
 				
 			</tbody>
 			<?php endif; ?>
-			
 		</table>
 		
 		<div>
@@ -115,11 +115,9 @@ use Krystal\Form\HtmlHelper;
 			<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
 			<br />
 		</div>
-		
 	</form>
 	
 	<?php $this->loadBlock('paginator'); ?>
-	
 	
 	<?php if (empty($orders)): ?>
 	<div class="center-block">
