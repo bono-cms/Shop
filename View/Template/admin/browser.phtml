@@ -1,6 +1,7 @@
 <?php
 
 use Krystal\Form\Widget\BooleanWidget;
+use Krystal\Form\Widget\DropdownWidget;
 use Krystal\Form\HtmlHelper;
 use Krystal\Form\Element;
 
@@ -22,8 +23,8 @@ use Krystal\Form\Element;
 		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
 		 
 		 <?php if (!empty($products)):?>
-		 <li><a href="#" data-button="save-changes"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a></li>
-		 <li><a href="#" data-button="remove-selected" data-button="remove-selected"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+		 <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Browser@saveAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a></li>
+		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Browser@deleteSelectedAction'); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
 		 
 		 <?php else: ?>
 		 <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a></li>
@@ -91,7 +92,7 @@ use Krystal\Form\Element;
 						<th></th>
 						<th><?php echo Element::text($filter->getElementName('title'), $filter->get('title'), array('class' => 'form-control')); ?></th>
 						<th class="date-col"><?php echo Element::text($filter->getElementName('date'), $filter->get('date'), array('class' => 'form-control')); ?></th>
-                        <th><?php echo Element::select($filter->getElementName('category_id'), $categories, $filter->get('category_id')); ?></th>
+                        <th><?php echo DropdownWidget::render(array('name' => $filter->getElementName('category_id'), 'class' => 'form-control'), $categories, $filter->get('category_id')); ?></th>
 						<th class="price-col"><?php echo Element::text($filter->getElementName('price'), $filter->get('price'), array('class' => 'form-control')); ?></th>
 						<th class="text-center"><?php echo BooleanWidget::render(array('name' => $filter->getElementName('published'), 'class' => 'form-control'), $filter->get('published'), $this->getTranslator()); ?></th>
 						<th class="text-center"><?php echo BooleanWidget::render(array('name' => $filter->getElementName('seo'), 'class' => 'form-control'), $filter->get('seo'), $this->getTranslator()); ?></th>

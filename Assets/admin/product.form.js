@@ -1,34 +1,7 @@
 
-$(function() {
+$(function(){
 
 	$.wysiwyg.init(['product[description]']);
-	$.setFormGroup('product');
-
-	/**
-	 * Updates a product
-	 * 
-	 * @param callable callback
-	 * @return void
-	 */
-	function update(callback) {
-		$("form").send({
-			url : "/admin/module/shop/product/edit.ajax",
-			success : callback
-		});
-	}
-
-	/**
-	 * Adds a product
-	 * 
-	 * @param callable callback
-	 * @return void
-	 */
-	function add(callback) {
-		$("form").send({
-			url : "/admin/module/shop/product/add.ajax",
-			success : callback
-		});
-	}
 
 	/**
 	 * Creates row in the image table
@@ -36,7 +9,7 @@ $(function() {
 	 * @param string img blob image data
 	 * @return void
 	 */
-	function createRow(img) {
+	function createRow(img){
 		// Temporary solution
 		var content = 
 		'<tr>' + 
@@ -87,17 +60,11 @@ $(function() {
 		input.click();
 	});
 	
-	
 	$("[data-button='edit']").click(function(event){
 		event.preventDefault();
 		
-		// Current image file
 		var id = $(this).data('image');
-		
-		// Get current DOMElement
 		var $file = $(this).parent().find("input[type='file']");
-		
-		// Current image
 		var $img = $(this).parent().parent().find("td img");
 		
 		$file.preview(function(imgData){
@@ -110,7 +77,6 @@ $(function() {
 		$file.click();
 	});
 	
-	
 	$(document).on('click', "[data-button='delete']", function(event){
 		event.preventDefault();
 		var $row = $(this).parent().parent();
@@ -120,55 +86,4 @@ $(function() {
 		
 		$row.empty();
 	});
-	
-	
-	$("[data-button='save']").click(function(){
-		update(function(response){
-			if (response == "1") {
-				window.location.reload();
-			} else {
-				$.showErrors(response);
-			}
-		});
-	});
-	
-	$("[data-button='save-create']").click(function(event){
-		update(function(response) {
-			if (response == "1") {
-				window.location = '/admin/module/shop/product/add';
-			} else {
-				$.showErrors(response);
-			}
-		});
-	});
-	
-	
-	$("[data-button='add-create']").click(function(){
-		add(function(response){
-			if ($.isNumeric(response)) {
-				window.location.reload();
-			} else {
-				$.showErrors(response);
-			}
-		});
-	});
-	
-	
-	$("[data-button='add']").click(function() {
-		add(function(response) {
-			if ($.isNumeric(response)) {
-				window.location = '/admin/module/shop/product/edit/' + response;
-			} else {
-				$.showErrors(response);
-			}
-		});
-	});
-	
-	
-	$("[data-button='cancel']").click(function(event){
-		event.preventDefault();
-		window.location = '/admin/module/shop';
-	});
-	
 });
-
