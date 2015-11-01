@@ -13,19 +13,19 @@ namespace Shop\Service;
 
 interface ProductRemoverInterface
 {
-	/**
-	 * Completely removes a product by its associated id
-	 * 
-	 * @param string $id Product's id
-	 * @return boolean
-	 */
-	public function removeAllById($id);
+    /**
+     * Completely removes a product by its associated id
+     * 
+     * @param string $id Product's id
+     * @return boolean
+     */
+    public function removeAllById($id);
 
-	/**
-	 * Removes all associated product ids with given category id
-	 * 
-	 * @param string $id Category's id
-	 * @return array
-	 */
-	public function removeAllProductsByCategoryId($id);	
+    /**
+     * Removes all associated product ids with given category id
+     * 
+     * @param string $id Category's id
+     * @return array
+     */
+    public function removeAllProductsByCategoryId($id); 
 }

@@ -13,72 +13,72 @@ namespace Shop\Service;
 
 interface CategoryManagerInterface
 {
-	/**
-	 * Fetches children by parent id
-	 * 
-	 * @param string $parentId
-	 * @return array
-	 */
-	public function fetchChildrenByParentId($parentId);
+    /**
+     * Fetches children by parent id
+     * 
+     * @param string $parentId
+     * @return array
+     */
+    public function fetchChildrenByParentId($parentId);
 
-	/**
-	 * Returns category's breadcrumbs
-	 * 
-	 * @param \Shop\Service\CategoryEntity $category
-	 * @return array
-	 */
-	public function getBreadcrumbs(CategoryEntity $category);
+    /**
+     * Returns category's breadcrumbs
+     * 
+     * @param \Shop\Service\CategoryEntity $category
+     * @return array
+     */
+    public function getBreadcrumbs(CategoryEntity $category);
 
-	/**
-	 * Fetches all categories
-	 * 
-	 * @return array
-	 */
-	public function fetchAll();
+    /**
+     * Fetches all categories
+     * 
+     * @return array
+     */
+    public function fetchAll();
 
-	/**
-	 * Counts all available categories
-	 * 
-	 * @return integer
-	 */
-	public function countAll();
+    /**
+     * Counts all available categories
+     * 
+     * @return integer
+     */
+    public function countAll();
 
-	/**
-	 * Returns last category's id
-	 * 
-	 * @return integer
-	 */
-	public function getLastId();
+    /**
+     * Returns last category's id
+     * 
+     * @return integer
+     */
+    public function getLastId();
 
-	/**
-	 * Updates a category
-	 * 
-	 * @param array $input Raw input data
-	 * @return boolean
-	 */
-	public function update(array $input);
+    /**
+     * Updates a category
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function update(array $input);
 
-	/**
-	 * Adds a category
-	 * 
-	 * @param array $input Raw input data
-	 * @return boolean
-	 */
-	public function add(array $input);
+    /**
+     * Adds a category
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function add(array $input);
 
-	/**
-	 * Removes a category by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return boolean
-	 */
-	public function removeById($id);
+    /**
+     * Removes a category by its associated id
+     * 
+     * @param string $id Category id
+     * @return boolean
+     */
+    public function removeById($id);
 
-	/**
-	 * Fetches category's entity by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return \Shop\Service\CategoryEntity|boolean
-	 */
-	public function fetchById($id);
+    /**
+     * Fetches category's entity by its associated id
+     * 
+     * @param string $id Category id
+     * @return \Shop\Service\CategoryEntity|boolean
+     */
+    public function fetchById($id);
 }

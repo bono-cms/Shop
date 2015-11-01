@@ -15,13 +15,13 @@ use Site\Controller\AbstractController;
 
 abstract class AbstractShopController extends AbstractController
 {
-	/**
-	 * Returns configuration entity
-	 * 
-	 * @return \Krystal\Stdlib\VirtualEntity
-	 */
-	final protected function getConfig()
-	{
-		return $this->getModuleService('configManager')->getEntity();
-	}
+    /**
+     * Returns configuration entity
+     * 
+     * @return \Krystal\Stdlib\VirtualEntity
+     */
+    final protected function getConfig()
+    {
+        return $this->getModuleService('configManager')->getEntity();
+    }
 }

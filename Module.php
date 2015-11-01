@@ -20,62 +20,62 @@ use Shop\Service\SiteService;
 
 final class Module extends AbstractShopModule
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getServiceProviders()
-	{
-		// Build required mappers
-		$imageMapper = $this->getMapper('/Shop/Storage/MySQL/ImageMapper', false);
-		$productMapper = $this->getMapper('/Shop/Storage/MySQL/ProductMapper');
-		$categoryMapper = $this->getMapper('/Shop/Storage/MySQL/CategoryMapper');
-		$orderInfoMapper = $this->getMapper('/Shop/Storage/MySQL/OrderInfoMapper', false);
-		$orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceProviders()
+    {
+        // Build required mappers
+        $imageMapper = $this->getMapper('/Shop/Storage/MySQL/ImageMapper', false);
+        $productMapper = $this->getMapper('/Shop/Storage/MySQL/ProductMapper');
+        $categoryMapper = $this->getMapper('/Shop/Storage/MySQL/CategoryMapper');
+        $orderInfoMapper = $this->getMapper('/Shop/Storage/MySQL/OrderInfoMapper', false);
+        $orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
 
-		// Now build required services
-		$productImageManager = $this->getProductImageManager();
-		$webPageManager = $this->getWebPageManager();
-		$historyManager = $this->getHistoryManager();
+        // Now build required services
+        $productImageManager = $this->getProductImageManager();
+        $webPageManager = $this->getWebPageManager();
+        $historyManager = $this->getHistoryManager();
 
-		$basketManager = $this->getBasketManager($productMapper, $productImageManager->getImageBag());
-		$basketManager->load();
+        $basketManager = $this->getBasketManager($productMapper, $productImageManager->getImageBag());
+        $basketManager->load();
 
-		$config = $this->getConfigService();
+        $config = $this->getConfigService();
 
-		$productRemover = new ProductRemover($productMapper, $imageMapper, $webPageManager, $productImageManager);
+        $productRemover = new ProductRemover($productMapper, $imageMapper, $webPageManager, $productImageManager);
 
-		// Build category manager
-		$categoryManager = new CategoryManager(
-			$categoryMapper, 
-			$productMapper, 
-			$webPageManager, 
-			$this->getCategoryImageManager(), 
-			$historyManager, 
-			$productRemover,
-			$this->getMenuWidget()
-		);
+        // Build category manager
+        $categoryManager = new CategoryManager(
+            $categoryMapper, 
+            $productMapper, 
+            $webPageManager, 
+            $this->getCategoryImageManager(), 
+            $historyManager, 
+            $productRemover,
+            $this->getMenuWidget()
+        );
 
-		$productManager = new ProductManager(
-			$productMapper, 
-			$imageMapper, 
-			$categoryMapper, 
-			$webPageManager, 
-			$productImageManager, 
-			$historyManager,
-			$productRemover
-		);
+        $productManager = new ProductManager(
+            $productMapper, 
+            $imageMapper, 
+            $categoryMapper, 
+            $webPageManager, 
+            $productImageManager, 
+            $historyManager,
+            $productRemover
+        );
 
-		$siteService = new SiteService($productManager, $this->getRecentProduct($productManager), $config->getEntity());
+        $siteService = new SiteService($productManager, $this->getRecentProduct($productManager), $config->getEntity());
 
-		return array(
+        return array(
 
-			'siteService' => $siteService,
-			'configManager' => $config,
-			'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager),
-			'basketManager' => $basketManager,
-			'taskManager' => new TaskManager($productMapper, $categoryManager),
-			'productManager' => $productManager,
-			'categoryManager' => $categoryManager
-		);
-	}
+            'siteService' => $siteService,
+            'configManager' => $config,
+            'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager),
+            'basketManager' => $basketManager,
+            'taskManager' => new TaskManager($productMapper, $categoryManager),
+            'productManager' => $productManager,
+            'categoryManager' => $categoryManager
+        );
+    }
 }

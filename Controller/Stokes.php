@@ -13,64 +13,64 @@ namespace Shop\Controller;
 
 final class Stokes extends AbstractShopController
 {
-	/**
-	 * Shows all available products that have stoke prices
-	 * 
-	 * @param string $id Page id
-	 * @param integer $pageNumber Current page number
-	 * @param string $code Optional language code
-	 * @param string $slug Optional slug
-	 * @return string
-	 */
-	public function indexAction($id, $pageNumber = 1, $code = null, $slug = null)
-	{
-		$pageManager = $this->getService('Pages', 'pageManager');
-		$page = $pageManager->fetchById($id);
+    /**
+     * Shows all available products that have stoke prices
+     * 
+     * @param string $id Page id
+     * @param integer $pageNumber Current page number
+     * @param string $code Optional language code
+     * @param string $slug Optional slug
+     * @return string
+     */
+    public function indexAction($id, $pageNumber = 1, $code = null, $slug = null)
+    {
+        $pageManager = $this->getService('Pages', 'pageManager');
+        $page = $pageManager->fetchById($id);
 
-		// First of all, make sure the page exist
-		if ($page !== false) {
+        // First of all, make sure the page exist
+        if ($page !== false) {
 
-			$productManager = $this->getModuleService('productManager');
-			$products = $productManager->fetchAllPublishedStokesByPage($pageNumber, $this->getConfig()->getStokePerPageCount());
+            $productManager = $this->getModuleService('productManager');
+            $products = $productManager->fetchAllPublishedStokesByPage($pageNumber, $this->getConfig()->getStokePerPageCount());
 
-			$this->loadPlugins($page->getTitle());
+            $this->loadPlugins($page->getTitle());
 
-			// Grab and configure pagination component
-			$paginator = $productManager->getPaginator();
+            // Grab and configure pagination component
+            $paginator = $productManager->getPaginator();
 
-			// If $slug isn't null by type, then this controller is invoked manually from Site module
-			if ($slug !== null) {
-				$this->preparePaginator($paginator, $code, $slug, $pageNumber);
-			}
+            // If $slug isn't null by type, then this controller is invoked manually from Site module
+            if ($slug !== null) {
+                $this->preparePaginator($paginator, $code, $slug, $pageNumber);
+            }
 
-			return $this->view->render('shop-stokes', array(
-				'paginator' => $paginator,
-				'products' => $products,
-				'page' => $page,
-			));
+            return $this->view->render('shop-stokes', array(
+                'paginator' => $paginator,
+                'products' => $products,
+                'page' => $page,
+            ));
 
-		} else {
+        } else {
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
-	/**
-	 * Loads category plugins
-	 * 
-	 * @param string $title Page title
-	 * @return void
-	 */
-	private function loadPlugins($title)
-	{
-		$this->loadSitePlugins();
+    /**
+     * Loads category plugins
+     * 
+     * @param string $title Page title
+     * @return void
+     */
+    private function loadPlugins($title)
+    {
+        $this->loadSitePlugins();
 
-		// Append breadcrumbs now
-		$this->view->getBreadcrumbBag()->add(array(
-			array(
-				'link' => '#',
-				'name' => $title
-			)
-		));
-	}
+        // Append breadcrumbs now
+        $this->view->getBreadcrumbBag()->add(array(
+            array(
+                'link' => '#',
+                'name' => $title
+            )
+        ));
+    }
 }

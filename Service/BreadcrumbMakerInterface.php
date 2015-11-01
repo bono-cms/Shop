@@ -13,20 +13,20 @@ namespace Shop\Service;
 
 interface BreadcrumbMakerInterface
 {
-	/**
-	 * Gets breadcrumbs with appends
-	 * 
-	 * @param string $id Category's id
-	 * @param array $appends Additional appends
-	 * @return array
-	 */
-	public function getWithCategoryId($id, array $appends);
+    /**
+     * Gets breadcrumbs with appends
+     * 
+     * @param string $id Category's id
+     * @param array $appends Additional appends
+     * @return array
+     */
+    public function getWithCategoryId($id, array $appends);
 
-	/**
-	 * Gets all breadcrumbs by associated id
-	 * 
-	 * @param string $id Category id
-	 * @return array
-	 */
-	public function getBreadcrumbsById($id);
+    /**
+     * Gets all breadcrumbs by associated id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function getBreadcrumbsById($id);
 }

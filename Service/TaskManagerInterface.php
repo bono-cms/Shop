@@ -13,19 +13,19 @@ namespace Shop\Service;
 
 interface TaskManagerInterface
 {
-	/**
-	 * Fetches category's entity by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return \Krystal\Stdlib\VirtualEntity
-	 */
-	public function fetchByCategoryId($id);
+    /**
+     * Fetches category's entity by its associated id
+     * 
+     * @param string $id Category id
+     * @return \Krystal\Stdlib\VirtualEntity
+     */
+    public function fetchByCategoryId($id);
 
-	/**
-	 * Counts amount of products associated with provided category id
-	 * 
-	 * @param string $id Category id
-	 * @return integer
-	 */
-	public function getProductCountByCategoryId($id);
+    /**
+     * Counts amount of products associated with provided category id
+     * 
+     * @param string $id Category id
+     * @return integer
+     */
+    public function getProductCountByCategoryId($id);
 }

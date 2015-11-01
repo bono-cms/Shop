@@ -15,13 +15,13 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class CategoryEntity extends VirtualEntity
 {
-	/**
-	 * Checks if a category has a cover
-	 * 
-	 * @return boolean
-	 */
-	public function hasCover()
-	{
-		return $this->getCover() !== '';
-	}
+    /**
+     * Checks if a category has a cover
+     * 
+     * @return boolean
+     */
+    public function hasCover()
+    {
+        return $this->getCover() !== '';
+    }
 }

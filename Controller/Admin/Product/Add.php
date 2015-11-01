@@ -15,47 +15,47 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class Add extends AbstractProduct
 {
-	/**
-	 * Shows adding form
-	 * 
-	 * @return string
-	 */
-	public function indexAction()
-	{
-		$this->loadSharedPlugins();
+    /**
+     * Shows adding form
+     * 
+     * @return string
+     */
+    public function indexAction()
+    {
+        $this->loadSharedPlugins();
 
-		$product = new VirtualEntity();
-		$product->setSeo(true)
-			    ->setPublished(true)
-				->setSpecialOffer(false);
+        $product = new VirtualEntity();
+        $product->setSeo(true)
+                ->setPublished(true)
+                ->setSpecialOffer(false);
 
-		return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-			'title' => 'Add a product',
-			'product' => $product
-		)));
-	}
+        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+            'title' => 'Add a product',
+            'product' => $product
+        )));
+    }
 
-	/**
-	 * Adds a product
-	 * 
-	 * @return string
-	 */
-	public function addAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost());
+    /**
+     * Adds a product
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost());
 
-		if ($formValidator->isValid()) {
+        if ($formValidator->isValid()) {
 
-			$productManager = $this->getProductManager();
-			$productManager->add($this->request->getAll());
+            $productManager = $this->getProductManager();
+            $productManager->add($this->request->getAll());
 
-			$this->flashBag->set('success', 'A product has been added successfully');
+            $this->flashBag->set('success', 'A product has been added successfully');
 
-			return $productManager->getLastId();
+            return $productManager->getLastId();
 
-		} else {
+        } else {
 
-			return $formValidator->getErrors();
-		}
-	}
+            return $formValidator->getErrors();
+        }
+    }
 }

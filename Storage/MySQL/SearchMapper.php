@@ -16,16 +16,16 @@ use Krystal\Db\Sql\QueryBuilderInterface;
 
 final class SearchMapper extends AbstractSearchProvider
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function appendQuery(QueryBuilderInterface $queryBuilder, $placeholder)
-	{
-		$queryBuilder->select($this->getWithDefaults(array('description' => 'content')))
-					 ->from(ProductMapper::getTableName())
-					 ->whereEquals('lang_id', "'{$this->getLangId()}'")
-					 ->andWhereEquals('published', '1')
-					 ->andWhereLike('title', $placeholder)
-					 ->orWhereLike('description', $placeholder);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function appendQuery(QueryBuilderInterface $queryBuilder, $placeholder)
+    {
+        $queryBuilder->select($this->getWithDefaults(array('description' => 'content')))
+                     ->from(ProductMapper::getTableName())
+                     ->whereEquals('lang_id', "'{$this->getLangId()}'")
+                     ->andWhereEquals('published', '1')
+                     ->andWhereLike('title', $placeholder)
+                     ->orWhereLike('description', $placeholder);
+    }
 }

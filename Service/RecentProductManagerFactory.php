@@ -18,23 +18,23 @@ use Shop\Service\RecentProduct;
 
 final class RecentProductManagerFactory
 {
-	/**
-	 * Builds an instance
-	 * 
-	 * @param \Shop\Service\ProductManagerInterface $productManager
-	 * @param \Krystal\Http\PersistentStorageInterface $storage
-	 * @param \Krystal\Stdlib\VirtualEntity $config
-	 * @return \Shop\Service\RecentProduct
-	 */
-	public static function build(ProductManagerInterface $productManager, PersistentStorageInterface $storage, VirtualEntity $config)
-	{
-		$amount = (int) $config->getMaxRecentAmount();
+    /**
+     * Builds an instance
+     * 
+     * @param \Shop\Service\ProductManagerInterface $productManager
+     * @param \Krystal\Http\PersistentStorageInterface $storage
+     * @param \Krystal\Stdlib\VirtualEntity $config
+     * @return \Shop\Service\RecentProduct
+     */
+    public static function build(ProductManagerInterface $productManager, PersistentStorageInterface $storage, VirtualEntity $config)
+    {
+        $amount = (int) $config->getMaxRecentAmount();
 
-		$tool = new CsvLimitedTool(null, $amount + 1);
+        $tool = new CsvLimitedTool(null, $amount + 1);
 
-		$rp = new RecentProduct($productManager, $tool, $storage);
-		$rp->load();
+        $rp = new RecentProduct($productManager, $tool, $storage);
+        $rp->load();
 
-		return $rp;
-	}
+        return $rp;
+    }
 }

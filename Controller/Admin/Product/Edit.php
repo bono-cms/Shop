@@ -13,51 +13,51 @@ namespace Shop\Controller\Admin\Product;
 
 final class Edit extends AbstractProduct
 {
-	/**
-	 * Shows edit form
-	 * 
-	 * @param string $id Product id
-	 * @return string
-	 */
-	public function indexAction($id)
-	{
-		$product = $this->getProductManager()->fetchById($id);
+    /**
+     * Shows edit form
+     * 
+     * @param string $id Product id
+     * @return string
+     */
+    public function indexAction($id)
+    {
+        $product = $this->getProductManager()->fetchById($id);
 
-		if ($product !== false) {
-			$this->loadSharedPlugins();
+        if ($product !== false) {
+            $this->loadSharedPlugins();
 
-			return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-				'product' => $product,
-				'title' => 'Edit the product',
-				'photos' => $this->getProductManager()->fetchAllImagesById($id),
-			)));
+            return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+                'product' => $product,
+                'title' => 'Edit the product',
+                'photos' => $this->getProductManager()->fetchAllImagesById($id),
+            )));
 
-		} else {
+        } else {
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
-	/**
-	 * Updates a product
-	 * 
-	 * @return string
-	 */
-	public function updateAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost());
+    /**
+     * Updates a product
+     * 
+     * @return string
+     */
+    public function updateAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost());
 
-		if ($formValidator->isValid()) {
+        if ($formValidator->isValid()) {
 
-			if ($this->getProductManager()->update($this->request->getAll())) {
+            if ($this->getProductManager()->update($this->request->getAll())) {
 
-				$this->flashBag->set('success', 'The product has been updated successfully');
-				return '1';
-			}
+                $this->flashBag->set('success', 'The product has been updated successfully');
+                return '1';
+            }
 
-		} else {
+        } else {
 
-			return $formValidator->getErrors();
-		}
-	}
+            return $formValidator->getErrors();
+        }
+    }
 }

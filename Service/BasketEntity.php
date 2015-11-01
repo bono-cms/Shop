@@ -15,13 +15,13 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class BasketEntity extends VirtualEntity
 {
-	/**
-	 * Checks if there's at least one product
-	 * 
-	 * @return boolean
-	 */
-	public function hasProducts()
-	{
-		return $this->getTotalQty() != 0;
-	}
+    /**
+     * Checks if there's at least one product
+     * 
+     * @return boolean
+     */
+    public function hasProducts()
+    {
+        return $this->getTotalQty() != 0;
+    }
 }
