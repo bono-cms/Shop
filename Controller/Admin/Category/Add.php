@@ -23,12 +23,14 @@ final class Add extends AbstractCategory
     public function indexAction()
     {
         $this->loadSharedPlugins();
+        $this->loadBreadcrumbs('Add a category');
         $this->view->getPluginBag()->load('preview');
-        
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+
+        return $this->view->render($this->getTemplatePath(), array(
+            'categories' => $this->getCategoriesTree(),
             'title' => 'Add a category',
             'category' => new VirtualEntity()
-        )));
+        ));
     }
 
     /**
@@ -41,17 +43,14 @@ final class Add extends AbstractCategory
         $formValidator = $this->getValidator($this->request->getPost('category'), $this->request->getFiles());
 
         if ($formValidator->isValid()) {
-
             $categoryManager = $this->getCategoryManager();
 
             if ($categoryManager->add($this->request->getAll())) {
-
                 $this->flashBag->set('success', 'A category has been added successfully');
                 return $categoryManager->getLastId();
             }
 
         } else {
-
             return $formValidator->getErrors();
         }
     }

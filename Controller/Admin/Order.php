@@ -28,12 +28,9 @@ final class Order extends AbstractController
         $records = $this->getFilter($this->getOrderManager(), self::FILTER_ROUTE);
 
         if ($records !== false) {
-
             $this->loadPlugins();
             return $this->view->render($this->getTemplatePath(), $this->getRecordsWithSharedVars($records, $this->getOrderManager()->getPaginator()));
-
         } else {
-
             // None selected, so no need to apply a filter
             return $this->indexAction();
         }
@@ -52,7 +49,6 @@ final class Order extends AbstractController
         $paginator = $orderManager->getPaginator();
         $paginator->setUrl('/admin/module/shop/orders/page/(:var)');
 
-        // Grab all order entities
         $orders = $orderManager->fetchAllByPage($page, $this->getSharedPerPageCount());
 
         $this->loadPlugins();
@@ -70,7 +66,6 @@ final class Order extends AbstractController
             $id = $this->request->getPost('id');
 
             if ($this->getOrderManager()->approveById($id)) {
-
                 $this->flashBag->set('success', 'Selected order marked as approved now');
                 return '1';
             }
@@ -88,7 +83,6 @@ final class Order extends AbstractController
             $id = $this->request->getPost('id');
 
             if ($this->getOrderManager()->removeById($id)) {
-
                 $this->flashBag->set('success', 'Selected order has been removed successfully');
                 return '1';
             }
@@ -106,7 +100,6 @@ final class Order extends AbstractController
         $details = $this->getOrderManager()->fetchAllDetailsByOrderId($id);
 
         return $this->view->disableLayout()->render('order-details', array(
-
             'id' => $id,
             'currency' => $this->getConfig()->getCurrency(),
             'details' => $details
@@ -150,7 +143,7 @@ final class Order extends AbstractController
     {
         $this->view->getPluginBag()
                    ->load('datepicker')
-                   ->appendScript($this->getWithAssetPath('/admin/orders.js'));
+                   ->appendScript('@Shop/admin/orders.js');
     }
 
     /**

@@ -47,8 +47,20 @@ abstract class AbstractProduct extends AbstractController
     {
         $this->view->getPluginBag()
                    ->load(array('preview', $this->getWysiwygPluginName()))
-                   ->appendScript($this->getWithAssetPath('/admin/product.form.js'))
-                   ->appendStylesheet($this->getWithAssetPath('/admin/product.form.css'));
+                   ->appendScript('@Shop/admin/product.form.js')
+                   ->appendStylesheet('@Shop/admin/product.form.css');
+    }
+
+    /**
+     * Loads breadcrumbs
+     * 
+     * @param string $title
+     * @return void
+     */
+    final protected function loadBreadcrumbs($title)
+    {
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne($title);
     }
 
     /**
@@ -59,17 +71,6 @@ abstract class AbstractProduct extends AbstractController
      */
     final protected function getWithSharedVars(array $overrides)
     {
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'name' => 'Shop',
-                'link' => 'Shop:Admin:Browser@indexAction'
-            ),
-            array(
-                'name' => $overrides['title'],
-                'link' => '#'
-            )
-        ));
-
         $vars = array(
             'categories' => $this->getCategoryManager()->fetchAllAsTree(),
             'config' => $this->getModuleService('configManager')->getEntity()

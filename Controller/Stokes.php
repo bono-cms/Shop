@@ -64,13 +64,6 @@ final class Stokes extends AbstractShopController
     private function loadPlugins($title)
     {
         $this->loadSitePlugins();
-
-        // Append breadcrumbs now
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'link' => '#',
-                'name' => $title
-            )
-        ));
+        $this->view->getBreadcrumbBag()->addOne($title);
     }
 }

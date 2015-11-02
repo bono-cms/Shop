@@ -59,7 +59,7 @@ abstract class AbstractCategory extends AbstractController
 
         $this->view->getPluginBag()
                    ->load($this->getWysiwygPluginName())
-                   ->appendScript($this->getWithAssetPath('/admin/category.form.js'));
+                   ->appendScript('@Shop/admin/category.form.js');
     }
 
     /**
@@ -71,32 +71,27 @@ abstract class AbstractCategory extends AbstractController
     {
         return $this->getModuleService('categoryManager');
     }
-
+    
     /**
-     * Return shared variables
+     * Returns a tree of categories
      * 
-     * @param array $overrides
      * @return array
      */
-    final protected function getWithSharedVars(array $overrides)
+    final protected function getCategoriesTree()
     {
         $treeBuilder = new TreeBuilder($this->getCategoryManager()->fetchAll());
+        return $treeBuilder->render(new PhpArray('title'));
+    }
 
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'name' => 'Shop',
-                'link' => 'Shop:Admin:Browser@indexAction'
-            ),
-            array(
-                'name' => $overrides['title'],
-                'link' => '#'
-            )
-        ));
-
-        $vars = array(
-            'categories' => $treeBuilder->render(new PhpArray('title'))
-        );
-
-        return array_replace_recursive($vars, $overrides);
+    /**
+     * Loads breadcrumbs
+     * 
+     * @param string $title
+     * @return void
+     */
+    final protected function loadBreadcrumbs($title)
+    {
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne($title);
     }
 }

@@ -23,6 +23,7 @@ final class Add extends AbstractProduct
     public function indexAction()
     {
         $this->loadSharedPlugins();
+        $this->loadBreadcrumbs('Add a product');
 
         $product = new VirtualEntity();
         $product->setSeo(true)
@@ -45,16 +46,13 @@ final class Add extends AbstractProduct
         $formValidator = $this->getValidator($this->request->getPost());
 
         if ($formValidator->isValid()) {
-
             $productManager = $this->getProductManager();
             $productManager->add($this->request->getAll());
 
             $this->flashBag->set('success', 'A product has been added successfully');
-
             return $productManager->getLastId();
 
         } else {
-
             return $formValidator->getErrors();
         }
     }

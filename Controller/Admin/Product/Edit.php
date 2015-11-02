@@ -25,15 +25,15 @@ final class Edit extends AbstractProduct
 
         if ($product !== false) {
             $this->loadSharedPlugins();
+            $this->loadBreadcrumbs('Edit the product');
 
             return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
                 'product' => $product,
                 'title' => 'Edit the product',
-                'photos' => $this->getProductManager()->fetchAllImagesById($id),
+                'photos' => $this->getProductManager()->fetchAllImagesById($id)
             )));
 
         } else {
-
             return false;
         }
     }
@@ -48,15 +48,12 @@ final class Edit extends AbstractProduct
         $formValidator = $this->getValidator($this->request->getPost());
 
         if ($formValidator->isValid()) {
-
             if ($this->getProductManager()->update($this->request->getAll())) {
-
                 $this->flashBag->set('success', 'The product has been updated successfully');
                 return '1';
             }
 
         } else {
-
             return $formValidator->getErrors();
         }
     }

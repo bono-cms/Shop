@@ -37,7 +37,6 @@ final class Basket extends AbstractShopController
             ));
 
         } else {
-
             return false;
         }
     }
@@ -50,12 +49,10 @@ final class Basket extends AbstractShopController
     public function recountAction()
     {
         if ($this->request->hasPost('id', 'qty')) {
-
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
 
             $basketManager = $this->getBasketManager();
-
             $basketManager->recount($id, $qty);
             $basketManager->save();
 
@@ -84,7 +81,6 @@ final class Basket extends AbstractShopController
     public function addAction()
     {
         if ($this->request->hasPost('id', 'qty')) {
-
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
 
@@ -105,7 +101,6 @@ final class Basket extends AbstractShopController
     public function deleteAction()
     {
         if ($this->request->hasPost('id')) {
-
             $id = $this->request->getPost('id');
 
             $basketManager = $this->getBasketManager();
@@ -141,12 +136,7 @@ final class Basket extends AbstractShopController
     private function loadPlugins($page)
     {
         $this->loadSitePlugins();
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'name' => $page->getTItle(),
-                'link' => '#'
-            )
-        ));
+        $this->view->getBreadcrumbBag()->addOne($page->getTItle());
     }
 
     /**

@@ -31,14 +31,12 @@ final class Browser extends AbstractController
 
         if ($records !== false) {
             $this->loadSharedPlugins();
-
             return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
                 'paginator' => $this->getProductManager()->getPaginator(),
                 'products' => $records
             )));
 
         } else {
-
             // None selected, so no need to apply a filter
             return $this->indexAction();
         }
@@ -58,9 +56,9 @@ final class Browser extends AbstractController
         $paginator->setUrl('/admin/module/shop/page/(:var)');
 
         $this->loadSharedPlugins();
+        $this->view->getBreadcrumbBag()->addOne('Shop');
 
         return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-
             'paginator' => $paginator,
             'products' => $products,
         )));
@@ -76,6 +74,7 @@ final class Browser extends AbstractController
     public function categoryAction($id, $page = 1)
     {
         $this->loadSharedPlugins();
+        $this->view->getBreadcrumbBag()->addOne('Shop');
 
         $paginator = $this->getProductManager()->getPaginator();
         $paginator->setUrl('/admin/module/shop/category/'.$id. '/page/(:var)');
@@ -95,7 +94,6 @@ final class Browser extends AbstractController
     public function saveAction()
     {
         if ($this->request->hasPost('price', 'published', 'seo')) {
-
             // Grab request data
             $prices = $this->request->getPost('price');
             $published = $this->request->getPost('published');
@@ -104,12 +102,11 @@ final class Browser extends AbstractController
             // Grab a manager
             $productManager = $this->getProductManager();
 
-            $this->flashBag->set('success', 'Settings have been updated successfully');
-
             $productManager->updatePrices($prices);
             $productManager->updatePublished($published);
             $productManager->updateSeo($seo);
 
+            $this->flashBag->set('success', 'Settings have been updated successfully');
             return '1';
         }
     }
@@ -125,7 +122,6 @@ final class Browser extends AbstractController
             $id = $this->request->getPost('id');
 
             if ($this->getProductManager()->removeById($id)) {
-
                 $this->flashBag->set('success', 'Selected product has been removed successfully');
                 return '1';
             }
@@ -140,13 +136,11 @@ final class Browser extends AbstractController
     public function deleteSelectedAction()
     {
         if ($this->request->hasPost('toDelete')) {
-
             $ids = array_keys($this->request->getPost('toDelete'));
             $this->getProductManager()->removeByIds($ids);
             $this->flashBag->set('success', 'Selected products have been removed successfully');
 
         } else {
-
             $this->flashBag->set('warning', 'You should select at least one product to remove');
         }
 
@@ -161,11 +155,9 @@ final class Browser extends AbstractController
     public function deleteCategoryAction()
     {
         if ($this->request->hasPost('id')) {
-
             $id = $this->request->getPost('id');
 
             $categoryManager = $this->getModuleService('categoryManager');
-
             if ($categoryManager->removeById($id)) {
                 $this->flashBag->set('success', 'The category has been removed successfully');
                 return '1';
@@ -183,7 +175,7 @@ final class Browser extends AbstractController
         $this->view->getPluginBag()
                    ->load('datepicker')
                    ->load('lightbox')
-                   ->appendScript($this->getWithAssetPath('/admin/browser.js'));
+                   ->appendScript('@Shop/admin/browser.js');
     }
 
     /**
@@ -195,12 +187,6 @@ final class Browser extends AbstractController
     final protected function getWithSharedVars(array $extra)
     {
         $treeBuilder = new TreeBuilder($this->getModuleService('categoryManager')->fetchAll());
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'name' => 'Shop',
-                'link' => '#'
-            )
-        ));
 
         $vars = array(
             'title' => 'Shop',
