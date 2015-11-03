@@ -14,6 +14,21 @@ namespace Shop\Service;
 interface CategoryManagerInterface
 {
     /**
+     * Returns a tree with prompt placeholder
+     * 
+     * @param string $text
+     * @return array
+     */
+    public function getPromtWithCategoriesTree($text);
+
+    /**
+     * Fetches all categories as a tree
+     * 
+     * @return array
+     */
+    public function getCategoriesTree();
+
+    /**
      * Fetches children by parent id
      * 
      * @param string $parentId

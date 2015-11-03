@@ -99,6 +99,31 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
+     * Returns a tree with prompt placeholder
+     * 
+     * @param string $text
+     * @return array
+     */
+    public function getPromtWithCategoriesTree($text)
+    {
+        $tree = $this->getCategoriesTree();
+        ArrayUtils::assocPrepend($tree, null, $text);
+
+        return $tree;
+    }
+
+    /**
+     * Fetches all categories as a tree
+     * 
+     * @return array
+     */
+    public function getCategoriesTree()
+    {
+        $treeBuilder = new TreeBuilder($this->fetchAll());
+        return $treeBuilder->render(new PhpArray('title'));
+    }
+
+    /**
      * Fetches children by parent id
      * 
      * @param string $parentId
@@ -107,17 +132,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function fetchChildrenByParentId($parentId)
     {
         return $this->prepareResults($this->categoryMapper->fetchChildrenByParentId($parentId));
-    }
-
-    /**
-     * Fetches all categories as a tree
-     * 
-     * @return array
-     */
-    public function fetchAllAsTree()
-    {
-        $treeBuilder = new TreeBuilder($this->fetchAll());
-        return $treeBuilder->render(new PhpArray('title'));
     }
 
     /**
