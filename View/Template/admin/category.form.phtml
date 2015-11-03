@@ -1,7 +1,5 @@
 <?php
 
-use Krystal\Form\Widget\DropdownWidget;
-use Krystal\Form\HtmlHelper;
 use Krystal\Form\Element;
 
 ?>
@@ -35,7 +33,7 @@ use Krystal\Form\Element;
 				<div class="form-group clearfix">
 					<label class="col-lg-2 control-label"><?php $this->show('Parent category'); ?></label>
 					<div class="col-lg-10">
-                        <?php echo DropdownWidget::render(array('name' => 'category[parent_id]', 'class' => 'form-control'), $categories, $category->getParentId(), '— '.$this->translate('None').' —'); ?>
+                        <?php echo Element::select('category[parent_id]', $categories, $category->getParentId(), array('class' => 'form-control')); ?>
 					</div>
 				</div>
 				
