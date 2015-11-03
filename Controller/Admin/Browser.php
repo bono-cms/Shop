@@ -12,8 +12,6 @@
 namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
-use Krystal\Tree\AdjacencyList\TreeBuilder;
-use Krystal\Tree\AdjacencyList\Render\PhpArray;
 use Krystal\Db\Filter\QueryContainer;
 
 final class Browser extends AbstractController
@@ -186,12 +184,10 @@ final class Browser extends AbstractController
      */
     final protected function getWithSharedVars(array $extra)
     {
-        $treeBuilder = new TreeBuilder($this->getModuleService('categoryManager')->fetchAll());
-
         $vars = array(
             'title' => 'Shop',
             'taskManager' => $this->getModuleService('taskManager'),
-            'categories' => $treeBuilder->render(new PhpArray('title')),
+            'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'filter' => new QueryContainer($this->request->getQuery(), self::FILTER_ROUTE)
         );
 

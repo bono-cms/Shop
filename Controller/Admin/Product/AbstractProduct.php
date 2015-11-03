@@ -72,7 +72,7 @@ abstract class AbstractProduct extends AbstractController
     final protected function getWithSharedVars(array $overrides)
     {
         $vars = array(
-            'categories' => $this->getCategoryManager()->fetchAllAsTree(),
+            'categories' => $this->getCategoryManager()->getCategoriesTree(),
             'config' => $this->getModuleService('configManager')->getEntity()
         );
 

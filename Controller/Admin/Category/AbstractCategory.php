@@ -79,8 +79,8 @@ abstract class AbstractCategory extends AbstractController
      */
     final protected function getCategoriesTree()
     {
-        $treeBuilder = new TreeBuilder($this->getCategoryManager()->fetchAll());
-        return $treeBuilder->render(new PhpArray('title'));
+        $text = sprintf('— %s —', $this->translator->translate('None'));
+        return $this->getCategoryManager()->getPromtWithCategoriesTree($text);
     }
 
     /**
