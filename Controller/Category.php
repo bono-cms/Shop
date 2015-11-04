@@ -17,7 +17,7 @@ use Krystal\Form\Providers\PerPageCount;
 final class Category extends AbstractShopController
 {
     /**
-     * Opens a category by its associated id
+     * Renders a category by its associated id
      * 
      * @param string $id Category id
      * @param integer $pageNumber Current page number
@@ -32,7 +32,6 @@ final class Category extends AbstractShopController
 
         // If $category isn't false, then right id is supplied, $category itself a bag
         if ($category !== false) {
-
             $this->loadPlugins($categoryManager->getBreadcrumbs($category));
 
             $productManager = $this->getModuleService('productManager');
@@ -50,7 +49,7 @@ final class Category extends AbstractShopController
                 $id, 
                 $pageNumber, 
                 $this->getPerPageCountProvider()->getPerPageCount(), 
-                $this->getCategorySortProvider()->getData()
+                $this->getCategorySortProvider()->getSortOption()
             );
 
             $vars = array(
@@ -59,9 +58,9 @@ final class Category extends AbstractShopController
                 'page' => $category,
                 'category' => $category,
 
-                // Rest
-                'perPageCounts' => $this->getPerPageCountProvider()->getPerPageCountValues(),
-                'sortOptions' => $this->getCategorySortProvider()->getSortingOptions(),
+                // Form gadgets
+                'ppc' => $this->getPerPageCountProvider(),
+                'sorter' => $this->getCategorySortProvider()
             );
 
             // Extract child categories
@@ -138,10 +137,7 @@ final class Category extends AbstractShopController
     public function changePerPageCountAction()
     {
         if ($this->request->hasPost('count')) {
-
-            // Grab new per page count from request
             $count = $this->request->getPost('count');
-
             $this->getPerPageCountProvider()->setPerPageCount($count);
 
             return '1';
@@ -156,20 +152,10 @@ final class Category extends AbstractShopController
     public function changeSortAction()
     {
         if ($this->request->hasPost('sort')) {
-
             $sort = $this->request->getPost('sort');
             $this->getCategorySortProvider()->setSortOption($sort);
 
             return '1';
         }
-    }
-
-    /**
-     * List all categories
-     * 
-     * @return string
-     */
-    public function listAction()
-    {
     }
 }
