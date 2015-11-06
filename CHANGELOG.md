@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.3
+---
+
+ * Fixed issue with date sorting when viewing categories
+ * Improved internal code-base
+
 1.2
 ---
 
