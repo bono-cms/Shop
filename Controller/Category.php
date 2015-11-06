@@ -11,8 +11,8 @@
 
 namespace Shop\Controller;
 
-use Shop\Service\CategorySortProvider;
-use Krystal\Form\Providers\PerPageCount;
+use Shop\Service\CategorySortGadget;
+use Krystal\Form\Gadget\PerPageCount;
 
 final class Category extends AbstractShopController
 {
@@ -48,8 +48,8 @@ final class Category extends AbstractShopController
             $products = $productManager->fetchAllPublishedByCategoryIdAndPage(
                 $id, 
                 $pageNumber, 
-                $this->getPerPageCountProvider()->getPerPageCount(), 
-                $this->getCategorySortProvider()->getSortOption()
+                $this->getPerPageCountGadget()->getPerPageCount(), 
+                $this->getCategorySortGadget()->getSortOption()
             );
 
             $vars = array(
@@ -59,8 +59,8 @@ final class Category extends AbstractShopController
                 'category' => $category,
 
                 // Form gadgets
-                'ppc' => $this->getPerPageCountProvider(),
-                'sorter' => $this->getCategorySortProvider()
+                'ppc' => $this->getPerPageCountGadget(),
+                'sorter' => $this->getCategorySortGadget()
             );
 
             // Extract child categories
@@ -101,32 +101,31 @@ final class Category extends AbstractShopController
      * 
      * @return \Shop\Service\PerPageCountProvider
      */
-    private function getPerPageCountProvider()
+    private function getPerPageCountGadget()
     {
-        static $provider = null;
+        static $gadget = null;
 
-        if (is_null($provider)) {
-            $provider = new PerPageCount($this->sessionBag, 'cat_pc', 5);
+        if (is_null($gadget)) {
+            $gadget = new PerPageCount($this->sessionBag, 'cat_pc', 5);
         }
 
-        return $provider;
+        return $gadget;
     }
 
     /**
      * Returns prepared category sort provider
      * 
-     * @return \Krystal\Service\CategorySortProvider
+     * @return \Krystal\Service\CategorySortGadget
      */
-    private function getCategorySortProvider()
+    private function getCategorySortGadget()
     {
-        // To cache method calls, so that returned instance instantiated only once
-        static $provider = null;
+        static $gadget = null;
 
-        if (is_null($provider)) {
-            $provider = new CategorySortProvider($this->sessionBag);
+        if (is_null($gadget)) {
+            $gadget = new CategorySortGadget($this->sessionBag);
         }
 
-        return $provider;
+        return $gadget;
     }
 
     /**
@@ -138,7 +137,7 @@ final class Category extends AbstractShopController
     {
         if ($this->request->hasPost('count')) {
             $count = $this->request->getPost('count');
-            $this->getPerPageCountProvider()->setPerPageCount($count);
+            $this->getPerPageCountGadget()->setPerPageCount($count);
 
             return '1';
         }
@@ -153,7 +152,7 @@ final class Category extends AbstractShopController
     {
         if ($this->request->hasPost('sort')) {
             $sort = $this->request->getPost('sort');
-            $this->getCategorySortProvider()->setSortOption($sort);
+            $this->getCategorySortGadget()->setSortOption($sort);
 
             return '1';
         }

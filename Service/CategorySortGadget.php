@@ -11,10 +11,10 @@
 
 namespace Shop\Service;
 
-use Krystal\Form\Providers\DataSorter;
+use Krystal\Form\Gadget\DataSorter;
 use Krystal\Http\PersistentStorageInterface;
 
-final class CategorySortProvider extends DataSorter
+final class CategorySortGadget extends DataSorter
 {
     const SORT_ORDER = 'order';
     const SORT_TITLE = 'title';

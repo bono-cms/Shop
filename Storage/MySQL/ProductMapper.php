@@ -13,7 +13,7 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductMapperInterface;
-use Shop\Service\CategorySortProvider;
+use Shop\Service\CategorySortGadget;
 
 final class ProductMapper extends AbstractMapper implements ProductMapperInterface
 {
@@ -255,29 +255,29 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         switch ($sort) {
 
-            case CategorySortProvider::SORT_ORDER:
+            case CategorySortGadget::SORT_ORDER:
                 $order = 'order';
             break;
 
-            case CategorySortProvider::SORT_TITLE:
+            case CategorySortGadget::SORT_TITLE:
                 $order = 'title';
             break;
 
-            case CategorySortProvider::SORT_PRICE_DESC:
+            case CategorySortGadget::SORT_PRICE_DESC:
                 $order = 'regular_price';
                 $desc = true;
             break;
 
-            case CategorySortProvider::SORT_PRICE_ASC:
+            case CategorySortGadget::SORT_PRICE_ASC:
                 $order = 'regular_price';
             break;
 
-            case CategorySortProvider::SORT_TIMESTAMP_DESC:
+            case CategorySortGadget::SORT_TIMESTAMP_DESC:
                 $order = 'timestamp';
                 $desc = true;
             break;
 
-            case CategorySortProvider::SORT_TIMESTAMP_ASC:
+            case CategorySortGadget::SORT_TIMESTAMP_ASC:
                 $order = 'timestamp';
             break;
 
