@@ -20,8 +20,8 @@ final class CategorySortGadget extends DataSorter
     const SORT_TITLE = 'title';
     const SORT_PRICE_DESC = 'price_desc';
     const SORT_PRICE_ASC = 'price_asc';
-    const SORT_TIMESTAMP_DESC = 'timestamp_desc';
-    const SORT_TIMESTAMP_ASC = 'timestamp_asc';
+    const SORT_DATE_DESC = 'date_desc';
+    const SORT_DATE_ASC = 'date_asc';
 
     /**
      * State initialization
@@ -36,8 +36,8 @@ final class CategorySortGadget extends DataSorter
             self::SORT_TITLE => 'By title',
             self::SORT_PRICE_ASC => 'By price - from lower to higher',
             self::SORT_PRICE_DESC => 'By price - from higher to lower',
-            self::SORT_TIMESTAMP_DESC => 'By date added - from newest to oldest',
-            self::SORT_TIMESTAMP_ASC => 'By date added - from oldest to newest'
+            self::SORT_DATE_DESC => 'By date added - from newest to oldest',
+            self::SORT_DATE_ASC => 'By date added - from oldest to newest'
         ));
     }
 }

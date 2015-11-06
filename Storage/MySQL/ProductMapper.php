@@ -272,13 +272,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 $order = 'regular_price';
             break;
 
-            case CategorySortGadget::SORT_TIMESTAMP_DESC:
-                $order = 'timestamp';
+            case CategorySortGadget::SORT_DATE_DESC:
+                $order = 'date';
                 $desc = true;
             break;
 
-            case CategorySortGadget::SORT_TIMESTAMP_ASC:
-                $order = 'timestamp';
+            case CategorySortGadget::SORT_DATE_ASC:
+                $order = 'date';
             break;
 
             default:
