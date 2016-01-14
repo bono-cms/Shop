@@ -369,10 +369,8 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $title = Filter::escape($this->productMapper->fetchTitleById($id));
 
         if ($this->removeAllById($id)) {
-
             $this->track('Product "%s" has been removed', $title);
             return true;
-
         } else {
             return false;
         }
@@ -416,7 +414,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         // If a cover has been selected, then we need to override its base name right now
         if (!empty($files['file'])) {
-
             $this->filterFileInput($files['file']);
             $product['cover'] = $files['file'][0]->getName();
         }
@@ -561,7 +558,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         }
 
         $this->track('Product "%s" has been updated', $product['title']);
-
         $this->webPageManager->update($product['web_page_id'], $product['slug']);
 
         return $this->productMapper->update(ArrayUtils::arrayWithout($product, array('slug')));
@@ -581,11 +577,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             if (!empty($value) && strpos($dataType, 'image_') !== false) {
                 // Grab a changed image id
                 $id = str_replace('image_', '', $dataType);
-
                 $result[$id] = $value;
             }
         }
-        
+
         return $result;
     }
 
