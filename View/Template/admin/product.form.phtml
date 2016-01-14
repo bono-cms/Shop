@@ -182,7 +182,7 @@ use Krystal\Form\HtmlHelper;
 							</td>
 							
 							<td class="text-center col-md-1">
-								<?php echo Element::number(sprintf('photos[order][%s]', $photo->getId()), $photo->getOrder(), array('class' => 'form-control center-block')); ?>
+								<?php echo Element::number(sprintf('photos[order][%s]', $photo->getId()), $photo->getOrder(), array('class' => 'form-control center-block', 'min' => '0')); ?>
 							</td>
 							
 							<td class="text-center">
