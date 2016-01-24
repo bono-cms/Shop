@@ -54,7 +54,6 @@ final class Browser extends AbstractController
         $paginator->setUrl('/admin/module/shop/page/(:var)');
 
         $this->loadSharedPlugins();
-        $this->view->getBreadcrumbBag()->addOne('Shop');
 
         return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
             'paginator' => $paginator,
@@ -72,7 +71,6 @@ final class Browser extends AbstractController
     public function categoryAction($id, $page = 1)
     {
         $this->loadSharedPlugins();
-        $this->view->getBreadcrumbBag()->addOne('Shop');
 
         $paginator = $this->getProductManager()->getPaginator();
         $paginator->setUrl('/admin/module/shop/category/'.$id. '/page/(:var)');
@@ -170,6 +168,10 @@ final class Browser extends AbstractController
      */
     final protected function loadSharedPlugins()
     {
+        // Add a breadcrumb
+        $this->view->getBreadcrumbBag()->addOne('Shop');
+
+        // Load the rest
         $this->view->getPluginBag()
                    ->load('datepicker')
                    ->load('lightbox')
