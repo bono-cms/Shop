@@ -141,6 +141,10 @@ final class Order extends AbstractController
      */
     private function loadPlugins()
     {
+        // Add a breadcrumb
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('List of orders');
+
         $this->view->getPluginBag()
                    ->load('datepicker')
                    ->appendScript('@Shop/admin/orders.js');
