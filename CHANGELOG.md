@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added ability to remove several orders at once
  * Fixed issue with appearing breadcrumb on filtering
  * Added breadcrumbs in order list. Removed "Back" button
  * Added extra "Go home" item to return back when viewing particular category id
