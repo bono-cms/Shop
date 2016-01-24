@@ -236,9 +236,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             }
 
             return $entities;
-
         } else {
-
             return false;
         }
     }
@@ -452,7 +450,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         // Do we have images?
         if (!empty($files)) {
-
             // So let's first try to upload them
             if ($this->imageManager->upload($id, $files)) {
                 // And write their base names into storage
@@ -505,7 +502,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
                         $this->imageMapper->updateFileNameById($imageId, $fileBag[0]->getName());
                     }
                 }
-
                 // PHP hasn't block scope, so we have to remove it manually
                 unset($fileBag);
             }
