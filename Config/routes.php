@@ -59,6 +59,10 @@ return array(
         'controller' => 'Admin:Order@deleteAction'
     ),
     
+    '/module/shop/basket/order/delete-selected.ajax' => array(
+        'controller' => 'Admin:Order@deleteSelectedAction'
+    ),
+    
     '/module/shop/basket/order/approve.ajax' => array(
         'controller' => 'Admin:Order@approveAction'
     ),

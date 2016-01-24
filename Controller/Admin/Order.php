@@ -90,6 +90,25 @@ final class Order extends AbstractController
     }
 
     /**
+     * Delete orders by their associated ids
+     * 
+     * @return string
+     */
+    public function deleteSelectedAction()
+    {
+        if ($this->request->hasPost('toDelete')) {
+            $ids = array_keys($this->request->getPost('toDelete'));
+            $this->getOrderManager()->removeByIds($ids);
+            $this->flashBag->set('success', 'Selected orders have been removed successfully');
+
+        } else {
+            $this->flashBag->set('warning', 'You should select at least one order to remove');
+        }
+
+        return '1';
+    }
+
+    /**
      * Shows details for a given order id
      * 
      * @param string $id Order id
