@@ -133,6 +133,23 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
+     * Remove a collection of orders by their associated id
+     * 
+     * @param array $ids
+     * @return boolean
+     */
+    public function removeByIds(array $ids)
+    {
+        foreach ($ids as $id) {
+            if (!$this->removeById($id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /**
      * Fetches all order's details by its associated id
      * 
      * @param string $id Order id

@@ -52,6 +52,14 @@ interface OrderManagerInterface
     public function removeById($id);
 
     /**
+     * Remove a collection of orders by their associated id
+     * 
+     * @param array $ids
+     * @return boolean
+     */
+    public function removeByIds(array $ids);
+
+    /**
      * Fetches all order's details by its associated id
      * 
      * @param string $id Order id
