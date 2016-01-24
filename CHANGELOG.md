@@ -5,6 +5,7 @@ CHANGELOG
 ---
 
  * Added extra "Go home" item to return back when viewing particular category id
+ * Minor improvements in internals
 
 1.3
 ---
