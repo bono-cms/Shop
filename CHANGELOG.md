@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.4
+---
+
+ * Added extra "Go home" item to return back when viewing particular category id
+
 1.3
 ---
 

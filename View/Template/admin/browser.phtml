@@ -14,6 +14,11 @@ use Krystal\Form\Element;
 	  </button>
 	  
 	  <ul class="dropdown-menu">
+         <?php if (isset($currentCategoryId)): ?>
+		 <li><a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a></li>
+		 <li class="divider"></li>
+         <?php endif; ?>
+         
 		 <li><a href="<?php echo $this->url('Shop:Admin:Product:Add@indexAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a></li>
 		 <li><a href="<?php echo $this->url('Shop:Admin:Category:Add@indexAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a></li>
 		 <li><a href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a></li>
