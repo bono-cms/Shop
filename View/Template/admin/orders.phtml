@@ -45,40 +45,22 @@ use Krystal\Form\HtmlHelper;
 				</tr>
 				
 				<tr>
-					<th class="col-md-1">
-						<?php echo Element::number('filter[id]', $filter->get('id'), array('class' => 'form-control', 'min' => '1')); ?>
-					</th>
-					<th>
-                        <?php echo Element::text('filter[date]', $filter->get('date'), array('class' => 'form-control')); ?>
-					</th>
-					<th>
-                        <?php echo Element::text('filter[name]', $filter->get('name'), array('class' => 'form-control')); ?>
-					</th>
-					<th>
-                        <?php echo Element::text('filter[phone]', $filter->get('phone'), array('class' => 'form-control')); ?>
-					</th>
-					<th>
-                        <?php echo Element::text('filter[address]', $filter->get('address'), array('class' => 'form-control')); ?>
-					</th>
+					<th class="col-md-1"><?php echo Element::number('filter[id]', $filter->get('id'), array('class' => 'form-control', 'min' => '1')); ?></th>
+					<th><?php echo Element::text('filter[date]', $filter->get('date'), array('class' => 'form-control')); ?></th>
+					<th><?php echo Element::text('filter[name]', $filter->get('name'), array('class' => 'form-control')); ?></th>
+					<th><?php echo Element::text('filter[phone]', $filter->get('phone'), array('class' => 'form-control')); ?></th>
+					<th><?php echo Element::text('filter[address]', $filter->get('address'), array('class' => 'form-control')); ?></th>
 					<th></th>
 					<th></th>
-					<th class="col-md-1">
-                        <?php echo Element::number('filter[qty]', $filter->get('qty'), array('class' => 'form-control', 'min' => '1')); ?>
-					</th>
-					<th>
-                        <?php echo Element::number('filter[total_price]', $filter->get('total_price'), array('class' => 'form-control', 'step' => 'any', 'min' => '1')); ?>
-					</th>
-					<th>
-						<?php echo BooleanWidget::render(array('name' => 'filter[approved]', 'class' => 'form-control'), $filter->get('approved'), $this->getTranslator()); ?>
-					</th>
+					<th class="col-md-1"><?php echo Element::number('filter[qty]', $filter->get('qty'), array('class' => 'form-control', 'min' => '1')); ?></th>
+					<th><?php echo Element::number('filter[total_price]', $filter->get('total_price'), array('class' => 'form-control', 'step' => 'any', 'min' => '1')); ?></th>
+					<th><?php echo BooleanWidget::render(array('name' => 'filter[approved]', 'class' => 'form-control'), $filter->get('approved'), $this->getTranslator()); ?></th>
 					<th></th>
 				</tr>
-				
 			</thead>
 			
 			<?php if (!empty($orders)): ?>
 			<tbody>
-				
 				<?php foreach($orders as $order): ?>
 				<tr <?php HtmlHelper::addClassOnDemand(!$order->getApproved(), 'warning'); ?>>
 					<td class="text-center text-muted"><?php echo $order->getId(); ?></td>
@@ -101,7 +83,6 @@ use Krystal\Form\HtmlHelper;
 					</td>
 				</tr>
 				<?php endforeach; ?>
-				
 			</tbody>
 			<?php endif; ?>
 		</table>
