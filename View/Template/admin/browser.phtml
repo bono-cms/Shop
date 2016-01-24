@@ -14,7 +14,7 @@ use Krystal\Form\Element;
 	  </button>
 	  
 	  <ul class="dropdown-menu">
-         <?php if (isset($currentCategoryId)): ?>
+         <?php if (isset($categoryId)): ?>
 		 <li><a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a></li>
 		 <li class="divider"></li>
          <?php endif; ?>
@@ -178,11 +178,11 @@ use Krystal\Form\Element;
 		<tbody>
 			<?php foreach ($categories as $id => $category): ?>
 			
-			<tr <?php HtmlHelper::addClassOnDemand(isset($currentCategoryId) && $currentCategoryId == $id, 'info'); ?>>
+			<tr <?php HtmlHelper::addClassOnDemand(isset($categoryId) && $categoryId == $id, 'info'); ?>>
 				<td class="text-center text-muted"><?php echo $id; ?></td>
 				<td>
 					<a class="pull-left" href="<?php echo $this->url('Shop:Admin:Browser@categoryAction', $id); ?>">
-						<?php HtmlHelper::wrapOnDemand(isset($currentCategoryId) && $currentCategoryId == $id, 'strong', $category); ?>
+						<?php HtmlHelper::wrapOnDemand(isset($categoryId) && $categoryId == $id, 'strong', $category); ?>
 					</a>
 				</td>
 				
