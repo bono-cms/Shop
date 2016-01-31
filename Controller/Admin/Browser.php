@@ -28,14 +28,8 @@ final class Browser extends AbstractController
         $records = $this->getFilter($this->getProductManager(), self::FILTER_ROUTE);
 
         if ($records !== false) {
-            $this->loadSharedPlugins();
-            return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-                'paginator' => $this->getProductManager()->getPaginator(),
-                'products' => $records
-            )));
-
+            return $this->createGrid($records, null, null);
         } else {
-            // None selected, so no need to apply a filter
             return $this->indexAction();
         }
     }
@@ -49,16 +43,9 @@ final class Browser extends AbstractController
     public function indexAction($page = 1)
     {
         $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount());
+        $url = '/admin/module/shop/page/(:var)';
 
-        $paginator = $this->getProductManager()->getPaginator();
-        $paginator->setUrl('/admin/module/shop/page/(:var)');
-
-        $this->loadSharedPlugins();
-
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-            'paginator' => $paginator,
-            'products' => $products,
-        )));
+        return $this->createGrid($products, $url, null);
     }
 
     /**
@@ -70,130 +57,46 @@ final class Browser extends AbstractController
      */
     public function categoryAction($id, $page = 1)
     {
-        $this->loadSharedPlugins();
+        $products = $this->getProductManager()->fetchAllByCategoryIdAndPage($id, $page, $this->getSharedPerPageCount());
+        $url = '/admin/module/shop/category/'.$id. '/page/(:var)';
 
+        return $this->createGrid($product, $url, $id);
+    }
+
+    /**
+     * Creates a grid
+     * 
+     * @param array $products
+     * @param string $url
+     * @param string $categoryId
+     * @return string
+     */
+    private function createGrid(array $products, $url = null, $categoryId)
+    {
         $paginator = $this->getProductManager()->getPaginator();
-        $paginator->setUrl('/admin/module/shop/category/'.$id. '/page/(:var)');
 
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-            'categoryId' => $id,
-            'paginator' => $paginator,
-            'products' => $this->getProductManager()->fetchAllByCategoryIdAndPage($id, $page, $this->getSharedPerPageCount()),
-        )));
-    }
-
-    /**
-     * Save updates from the table
-     * 
-     * @return string
-     */
-    public function saveAction()
-    {
-        if ($this->request->hasPost('price', 'published', 'seo')) {
-            // Grab request data
-            $prices = $this->request->getPost('price');
-            $published = $this->request->getPost('published');
-            $seo = $this->request->getPost('seo');
-
-            // Grab a manager
-            $productManager = $this->getProductManager();
-
-            $productManager->updatePrices($prices);
-            $productManager->updatePublished($published);
-            $productManager->updateSeo($seo);
-
-            $this->flashBag->set('success', 'Settings have been updated successfully');
-            return '1';
-        }
-    }
-
-    /**
-     * Deletes a product
-     * 
-     * @return string
-     */
-    public function deleteAction()
-    {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getProductManager()->removeById($id)) {
-                $this->flashBag->set('success', 'Selected product has been removed successfully');
-                return '1';
-            }
-        }
-    }
-
-    /**
-     * Deletes selected products
-     * 
-     * @return string
-     */
-    public function deleteSelectedAction()
-    {
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-            $this->getProductManager()->removeByIds($ids);
-            $this->flashBag->set('success', 'Selected products have been removed successfully');
-
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one product to remove');
+        if ($url !== null) {
+            $paginator->setUrl($url);
         }
 
-        return '1';
-    }
-
-    /**
-     * Deletes a category by its associated id
-     * 
-     * @return string
-     */
-    public function deleteCategoryAction()
-    {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            $categoryManager = $this->getModuleService('categoryManager');
-            if ($categoryManager->removeById($id)) {
-                $this->flashBag->set('success', 'The category has been removed successfully');
-                return '1';
-            }
-        }
-    }
-    
-    /**
-     * Loads shared plugins
-     * 
-     * @return void
-     */
-    final protected function loadSharedPlugins()
-    {
-        // Add a breadcrumb
-        $this->view->getBreadcrumbBag()->addOne('Shop');
-
-        // Load the rest
+        // Load view plugins
         $this->view->getPluginBag()
                    ->load('datepicker')
                    ->load('lightbox')
                    ->appendScript('@Shop/admin/browser.js');
-    }
 
-    /**
-     * Returns shared variables
-     * 
-     * @param array $extra
-     * @return array
-     */
-    final protected function getWithSharedVars(array $extra)
-    {
-        $vars = array(
-            'title' => 'Shop',
+        // Append a breadcrumb
+        $this->view->getBreadcrumbBag()
+                   ->addOne('Shop');
+
+        return $this->view->render('browser', array(
+            'products' => $products,
+            'paginator' => $paginator,
+            'categoryId' => $categoryId,
             'taskManager' => $this->getModuleService('taskManager'),
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'filter' => new QueryContainer($this->request->getQuery(), self::FILTER_ROUTE)
-        );
-
-        return array_replace_recursive($vars, $extra);
+        ));
     }
 
     /**
@@ -201,18 +104,8 @@ final class Browser extends AbstractController
      * 
      * @return \Shop\Service\ProductManager
      */
-    final protected function getProductManager()
+    private function getProductManager()
     {
         return $this->getModuleService('productManager');
-    }
-
-    /**
-     * Returns template path
-     * 
-     * @return string
-     */
-    final protected function getTemplatePath()
-    {
-        return 'browser';
     }
 }

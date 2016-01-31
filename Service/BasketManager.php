@@ -147,12 +147,12 @@ final class BasketManager implements BasketManagerInterface
                 // Now finally prepare the entity
                 $entity = new VirtualEntity();
                 $entity->setId((int) $product['id'])
-                           ->setTitle(Filter::escape($product['title']))
-                           ->setUrl($this->webPageManager->getUrl($product['web_page_id'], $product['lang_id']))
-                           ->setImageBag($imageBag)
-                           ->setQty($qty)
-                           ->setPrice($price)
-                           ->setSubTotalPrice($qty * $price);
+                       ->setTitle(Filter::escape($product['title']))
+                       ->setUrl($this->webPageManager->getUrl($product['web_page_id'], $product['lang_id']))
+                       ->setImageBag($imageBag)
+                       ->setQty($qty)
+                       ->setPrice($price)
+                       ->setSubTotalPrice($qty * $price);
 
                 // Finally add prepared entity
                 array_push($entities, $entity);

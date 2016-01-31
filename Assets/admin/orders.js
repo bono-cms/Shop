@@ -1,6 +1,4 @@
-
 $(function(){
-
 	$("[name='filter[date]']").datepicker({
 		format : 'yyyy-mm-dd'
 	});
@@ -8,14 +6,13 @@ $(function(){
 	$.delete({
 		categories : {
 			order : {
-				url : "/module/shop/basket/order/delete.ajax"
+				url : "/module/shop/basket/order/delete"
 			}
 		}
 	});
 	
 	$("[data-button='approve']").click(function(event){
 		event.preventDefault();
-		
 		var id = $(this).data('id');
 		
 		$.ajax({
@@ -33,7 +30,6 @@ $(function(){
 		});
 	});
 	
-	
 	$("[data-button='details']").click(function(event){
 		event.preventDefault();
 		
@@ -47,5 +43,4 @@ $(function(){
 			}
 		});
 	});
-	
 });

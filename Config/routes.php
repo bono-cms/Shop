@@ -27,43 +27,39 @@ return array(
         'controller' => 'Basket@indexAction'
     ),
     
-    '/module/shop/basket/add.ajax' => array(
+    '/module/shop/basket/add' => array(
         'controller' => 'Basket@addAction'
     ),
     
-    '/module/shop/basket/get-stat.ajax' => array(
+    '/module/shop/basket/get-stat' => array(
         'ajax' => true,
         'controller' => 'Basket@getStatAction'
     ),
     
-    '/module/shop/basket/re-count.ajax' => array(
+    '/module/shop/basket/re-count' => array(
         //'ajax' => true,
         'controller' => 'Basket@recountAction'
     ),
     
-    '/module/shop/basket/delete.ajax' => array(
+    '/module/shop/basket/delete' => array(
         'controller' => 'Basket@deleteAction'
     ),
     
-    '/module/shop/basket/clear.ajax' => array(
+    '/module/shop/basket/clear' => array(
         'controller' => 'Basket@clearAction'
     ),
     
     
     //---- Orders
-    '/module/shop/basket/order.ajax' => array(
+    '/module/shop/basket/order' => array(
         'controller' => 'Order@orderAction'
     ),
     
-    '/module/shop/basket/order/delete.ajax' => array(
+    '/module/shop/basket/order/delete' => array(
         'controller' => 'Admin:Order@deleteAction'
     ),
     
-    '/module/shop/basket/order/delete-selected.ajax' => array(
-        'controller' => 'Admin:Order@deleteSelectedAction'
-    ),
-    
-    '/module/shop/basket/order/approve.ajax' => array(
+    '/module/shop/basket/order/approve' => array(
         'controller' => 'Admin:Order@approveAction'
     ),
     
@@ -86,37 +82,31 @@ return array(
     //---- Orders
     
     
-    '/module/shop/category/do/change-per-page-count.ajax' => array(
+    '/module/shop/category/do/change-per-page-count' => array(
         'controller' => 'Category@changePerPageCountAction'
     ),
     
-    '/module/shop/category/do/change-sort-action.ajax' => array(
+    '/module/shop/category/do/change-sort-action' => array(
         'controller' => 'Category@changeSortAction'
     ),
     
     // ------------------------------------------
     
     
-    '/admin/module/shop/statistic.ajax' => array(
+    '/admin/module/shop/statistic' => array(
         'controller' => 'Admin:Statistic@indexAction'
     ),
     
-    
     '/admin/module/shop/category/add' => array(
-        'controller' => 'Admin:Category:Add@indexAction'
-    ),
-    
-    '/admin/module/shop/category/add.ajax' => array(
-        'controller' => 'Admin:Category:Add@addAction',
-        'disallow' => array('guest')
+        'controller' => 'Admin:Category@addAction'
     ),
     
     '/admin/module/shop/category/edit/(:var)' => array(
-        'controller' => 'Admin:Category:Edit@indexAction'
+        'controller' => 'Admin:Category@editAction'
     ),
     
-    '/admin/module/shop/category/edit.ajax' => array(
-        'controller' => 'Admin:Category:Edit@updateAction',
+    '/admin/module/shop/category/save' => array(
+        'controller' => 'Admin:Category@saveAction',
         'disallow' => array('guest')
     ),
     
@@ -129,8 +119,8 @@ return array(
         'controller' => 'Admin:Browser@categoryAction'
     ),
     
-    '/admin/module/shop/category/do/delete.ajax' => array(
-        'controller' => 'Admin:Browser@deleteCategoryAction',
+    '/admin/module/shop/category/do/delete' => array(
+        'controller' => 'Admin:Category@deleteAction',
         'disallow' => array('guest')
     ),
     
@@ -141,42 +131,31 @@ return array(
     '/admin/module/shop/filter/(:var)' => array(
         'controller' => 'Admin:Browser@filterAction'
     ),
-
     
     '/admin/module/shop/page/(:var)' => array(
         'controller' => 'Admin:Browser@indexAction'
     ),
     
-    '/admin/module/shop/save.ajax' => array(
-        'controller' => 'Admin:Browser@saveAction',
-        'disallow' => array('guest')
-    ),
-    
-    '/admin/module/shop/delete-selected.ajax' => array(
-        'controller' => 'Admin:Browser@deleteSelectedAction',
+    '/admin/module/shop/tweak' => array(
+        'controller' => 'Admin:Product@tweakAction',
         'disallow' => array('guest')
     ),
     
     '/admin/module/shop/product/add' => array(
-        'controller' => 'Admin:Product:Add@indexAction'
-    ),
-    
-    '/admin/module/shop/product/add.ajax' => array(
-        'controller' => 'Admin:Product:Add@addAction',
-        'disallow' => array('guest')
+        'controller' => 'Admin:Product@addAction'
     ),
     
     '/admin/module/shop/product/edit/(:var)' => array(
-        'controller' => 'Admin:Product:Edit@indexAction'
+        'controller' => 'Admin:Product@editAction'
     ),
     
-    '/admin/module/shop/product/edit.ajax' => array(
-        'controller' => 'Admin:Product:Edit@updateAction',
+    '/admin/module/shop/product/save' => array(
+        'controller' => 'Admin:Product@saveAction',
         'disallow' => array('guest')
     ),
     
-    '/admin/module/shop/product/delete.ajax' => array(
-        'controller' => 'Admin:Browser@deleteAction',
+    '/admin/module/shop/product/delete' => array(
+        'controller' => 'Admin:Product@deleteAction',
         'disallow' => array('guest')
     ),
     

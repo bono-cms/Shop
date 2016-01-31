@@ -132,13 +132,13 @@ use Krystal\Form\HtmlHelper;
 
             <?php if (!$product->getId()): ?>
 
-            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Product:Edit@indexAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Product:Add@addAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Add'); ?></button>
-            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Product:Add@addAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Product@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Add'); ?></button>
+            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
 
             <?php else: ?>
 
-            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Product:Edit@updateAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Save'); ?></button>
-            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Product:Add@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Product:Edit@updateAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
+            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Save'); ?></button>
+            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
 
             <?php endif; ?>
 
@@ -213,7 +213,6 @@ use Krystal\Form\HtmlHelper;
         </div>
       </div>
       <!--Images tab-->
-     
     </div>
 </form>
 

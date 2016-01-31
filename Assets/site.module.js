@@ -16,7 +16,7 @@ $(function(){
         updatePerPageCount : function(count, done){
             $.ajax({
                 type : "POST",
-                url : "/module/shop/category/do/change-per-page-count.ajax",
+                url : "/module/shop/category/do/change-per-page-count",
                 data : {
                     count : count
                 },
@@ -45,7 +45,7 @@ $(function(){
         updateSort : function(sort, done){
             $.ajax({
                 type : "POST",
-                url : "/module/shop/category/do/change-sort-action.ajax",
+                url : "/module/shop/category/do/change-sort-action",
                 data : {
                     sort : sort
                 },
@@ -94,7 +94,7 @@ $(function(){
             var self = this;
             $.ajax({
                 type : "POST",
-                url : "/module/shop/basket/re-count.ajax",
+                url : "/module/shop/basket/re-count",
                 data : {
                     id : id,
                     qty : qty
@@ -121,7 +121,7 @@ $(function(){
             var self = this;
             $.ajax({
                 type : "GET",
-                url : "/module/shop/basket/get-stat.ajax",
+                url : "/module/shop/basket/get-stat",
                 beforeSend : function(){
                     // This should not invoke global beforeSend() handler, so we'd override it with empty function
                 },
@@ -146,7 +146,7 @@ $(function(){
             var self = this;
             $.ajax({
                 type : "POST",
-                url : "/module/shop/basket/add.ajax",
+                url : "/module/shop/basket/add",
                 data : {
                     id : id,
                     qty : qty
@@ -174,7 +174,7 @@ $(function(){
             var self = this;
             $.ajax({
                 type : "POST",
-                url : "/module/shop/basket/delete.ajax",
+                url : "/module/shop/basket/delete",
                 data : {
                     id : id,
                 },
@@ -206,7 +206,7 @@ $(function(){
                     // This should not invoke global complete() handler, so we'd override it with empty function too
                 },
                 type : "POST",
-                url : "/module/shop/basket/clear.ajax",
+                url : "/module/shop/basket/clear",
                 success : function(response) {
                     self.handleSuccess(response, callback);
                 }
@@ -221,7 +221,7 @@ $(function(){
         order : function(success){
             $.ajax({
                 type : "POST",
-                url : "/module/shop/basket/order.ajax",
+                url : "/module/shop/basket/order",
                 data : $("[data-basket-form='order']").serialize(),
                 success : function(response) {
                     // TODO

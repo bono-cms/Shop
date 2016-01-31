@@ -25,13 +25,11 @@ final class Order extends AbstractController
      */
     public function filterAction()
     {
-        $records = $this->getFilter($this->getOrderManager(), self::FILTER_ROUTE);
+        $orders = $this->getFilter($this->getOrderManager(), self::FILTER_ROUTE);
 
         if ($records !== false) {
-            $this->loadPlugins();
-            return $this->view->render($this->getTemplatePath(), $this->getRecordsWithSharedVars($records, $this->getOrderManager()->getPaginator()));
+            return $this->createGrid($orders);
         } else {
-            // None selected, so no need to apply a filter
             return $this->indexAction();
         }
     }
@@ -44,15 +42,10 @@ final class Order extends AbstractController
      */
     public function indexAction($page = 1)
     {
-        $orderManager = $this->getOrderManager();
+        $orders = $this->getOrderManager()->fetchAllByPage($page, $this->getSharedPerPageCount());
+        $url = '/admin/module/shop/orders/page/(:var)';
 
-        $paginator = $orderManager->getPaginator();
-        $paginator->setUrl('/admin/module/shop/orders/page/(:var)');
-
-        $orders = $orderManager->fetchAllByPage($page, $this->getSharedPerPageCount());
-
-        $this->loadPlugins();
-        return $this->view->render($this->getTemplatePath(), $this->getRecordsWithSharedVars($orders, $paginator));
+        return $this->createGrid($orders, $url);
     }
 
     /**
@@ -79,23 +72,7 @@ final class Order extends AbstractController
      */
     public function deleteAction()
     {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getOrderManager()->removeById($id)) {
-                $this->flashBag->set('success', 'Selected order has been removed successfully');
-                return '1';
-            }
-        }
-    }
-
-    /**
-     * Delete orders by their associated ids
-     * 
-     * @return string
-     */
-    public function deleteSelectedAction()
-    {
+        // Batch removal
         if ($this->request->hasPost('toDelete')) {
             $ids = array_keys($this->request->getPost('toDelete'));
             $this->getOrderManager()->removeByIds($ids);
@@ -103,6 +80,15 @@ final class Order extends AbstractController
 
         } else {
             $this->flashBag->set('warning', 'You should select at least one order to remove');
+        }
+
+        // Single removal
+        if ($this->request->hasPost('id')) {
+            $id = $this->request->getPost('id');
+
+            if ($this->getOrderManager()->removeById($id)) {
+                $this->flashBag->set('success', 'Selected order has been removed successfully');
+            }
         }
 
         return '1';
@@ -126,47 +112,36 @@ final class Order extends AbstractController
     }
 
     /**
-     * Returns template path
+     * Creates a grid
      * 
+     * @param array $orders
+     * @param string $url
      * @return string
      */
-    private function getTemplatePath()
+    private function createGrid(array $orders, $url = null)
     {
-        return 'orders';
-    }
+        $paginator = $this->getOrderManager()->getPaginator();
 
-    /**
-     * Returns shared variables for the template to display
-     * 
-     * @param array $records
-     * @param $paginator
-     * @return array
-     */
-    private function getRecordsWithSharedVars(array $records, $paginator)
-    {
-        return array(
-            'orders' => $records,
+        if ($url !== null) {
+            $paginator->setUrl($url);
+        }
+
+        // Load view plugins
+        $this->view->getPluginBag()
+                   ->load('datepicker')
+                   ->appendScript('@Shop/admin/orders.js');
+
+        // Append breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('List of orders');
+
+        return $this->view->render('orders', array(
+            'orders' => $orders,
             'paginator' => $paginator,
             'config' => $this->getConfig(),
             'title' => 'Orders',
             'filter' => new QueryContainer($this->request->getQuery(), self::FILTER_ROUTE)
-        );
-    }
-
-    /**
-     * Loads required view plugins
-     * 
-     * @return void
-     */
-    private function loadPlugins()
-    {
-        // Add a breadcrumb
-        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('List of orders');
-
-        $this->view->getPluginBag()
-                   ->load('datepicker')
-                   ->appendScript('@Shop/admin/orders.js');
+        ));
     }
 
     /**

@@ -1,5 +1,4 @@
-
-$(function() {
+$(function(){
 	$("[name='filter[date]']").datepicker({
 		format : 'yyyy-mm-dd'
 	});
@@ -7,10 +6,10 @@ $(function() {
 	$.delete({
 		categories : {
 			category : {
-				url : "/admin/module/shop/category/do/delete.ajax"
+				url : "/admin/module/shop/category/do/delete"
 			},
 			product : {
-				url : "/admin/module/shop/product/delete.ajax"
+				url : "/admin/module/shop/product/delete"
 			}
 		}
 	});
@@ -18,7 +17,7 @@ $(function() {
 	$("[data-button='statistic']").click(function(event){
 		event.preventDefault();
 		$.ajax({
-			url : '/admin/module/shop/statistic.ajax',
+			url : '/admin/module/shop/statistic',
 			beforeSend : function(){
 				// Empty function cancels loading div
 			},
