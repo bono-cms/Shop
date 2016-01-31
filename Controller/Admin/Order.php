@@ -27,7 +27,7 @@ final class Order extends AbstractController
     {
         $orders = $this->getFilter($this->getOrderManager(), self::FILTER_ROUTE);
 
-        if ($records !== false) {
+        if ($orders !== false) {
             return $this->createGrid($orders);
         } else {
             return $this->indexAction();

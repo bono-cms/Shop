@@ -95,6 +95,12 @@ use Krystal\Form\HtmlHelper;
             </tbody>
             <?php endif; ?>
         </table>
+
+        <?php if (empty($orders)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No orders'); ?></h2>
+        </div>
+        <?php endif; ?>
         
         <div>
             <?php if ($filter->isApplied()): ?>
@@ -108,11 +114,6 @@ use Krystal\Form\HtmlHelper;
     
     <?php $this->loadBlock('paginator'); ?>
     
-    <?php if (empty($orders)): ?>
-    <div class="center-block">
-        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No orders'); ?></h2>
-    </div>
-    <?php endif; ?>
     
 </div>
 
