@@ -344,7 +344,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * @param array $ids
      * @return boolean
      */
-    public function removeByIds(array $ids)
+    public function deleteByIds(array $ids)
     {
         foreach ($ids as $id) {
             if (!$this->removeAllById($id)) {
@@ -362,7 +362,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * @param string $id Product's id
      * @return boolean
      */
-    public function removeById($id)
+    public function deleteById($id)
     {
         $title = Filter::escape($this->productMapper->fetchTitleById($id));
 

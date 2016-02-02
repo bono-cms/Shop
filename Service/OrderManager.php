@@ -124,7 +124,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
      * @param string $id Order's id
      * @return boolean
      */
-    public function removeById($id)
+    public function deleteById($id)
     {
         $this->orderInfoMapper->deleteById($id);
         $this->orderProductMapper->deleteAllByOrderId($id);
@@ -138,7 +138,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
      * @param array $ids
      * @return boolean
      */
-    public function removeByIds(array $ids)
+    public function deleteByIds(array $ids)
     {
         foreach ($ids as $id) {
             if (!$this->removeById($id)) {

@@ -350,7 +350,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * @param string $id Category id
      * @return boolean
      */
-    public function removeById($id)
+    public function deleteById($id)
     {
         $this->removeCategoryById($id);
         $this->removeChildNodes($id);

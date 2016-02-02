@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Updated module icon
  * Added ability to remove several orders at once
  * Fixed issue with appearing breadcrumb on filtering
  * Added breadcrumbs in order list. Removed "Back" button

@@ -23,10 +23,20 @@ final class Order extends AbstractShopController
     public function orderAction()
     {
         $input = $this->request->getPost();
-        $formValidator = $this->getValidator($input);
+        $formValidator = $this->validatorFactory->build(array(
+            'input' => array(
+                'source' => $input,
+                'definition' => array(
+                    'name' => new Pattern\Name(),
+                    'phone' => new Pattern\Phone(),
+                    'address' => new Pattern\Address(),
+                    'comment' => new Pattern\Comment(),
+                    'captcha' => new Pattern\Captcha($this->captcha)
+                )
+            )
+        ));        
 
         if ($formValidator->isValid()) {
-
             if ($this->makeOrder($input)) {
                 $this->flashBag->set('success', 'Your order has been sent! We will contact you soon. Thank you!');
                 return '1';
@@ -53,9 +63,8 @@ final class Order extends AbstractShopController
             'currency' => $this->getModuleService('configManager')->getEntity()->getCurrency(),
             'input' => $input
         ));
-        
-        if ($orderManager->make($input)) {
 
+        if ($orderManager->make($input)) {
             // Prepare the subject
             $subject = $this->translator->translate('You have a new order from %s', $input['name']);
 
@@ -66,27 +75,5 @@ final class Order extends AbstractShopController
         } else {
             return false;
         }
-    }
-
-    /**
-     * Returns prepared form validator
-     * 
-     * @param array $input Raw input data
-     * @return \Krystal\Validate\ValidatorChain
-     */
-    private function getValidator(array $input)
-    {
-        return $this->validatorFactory->build(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name(),
-                    'phone' => new Pattern\Phone(),
-                    'address' => new Pattern\Address(),
-                    'comment' => new Pattern\Comment(),
-                    'captcha' => new Pattern\Captcha($this->captcha)
-                )
-            )
-        ));
     }
 }

@@ -72,26 +72,7 @@ final class Order extends AbstractController
      */
     public function deleteAction()
     {
-        // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-            $this->getOrderManager()->removeByIds($ids);
-            $this->flashBag->set('success', 'Selected orders have been removed successfully');
-
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one order to remove');
-        }
-
-        // Single removal
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getOrderManager()->removeById($id)) {
-                $this->flashBag->set('success', 'Selected order has been removed successfully');
-            }
-        }
-
-        return '1';
+        return $this->invokeRemoval('orderManager');
     }
 
     /**

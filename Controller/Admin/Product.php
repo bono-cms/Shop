@@ -112,26 +112,7 @@ final class Product extends AbstractController
      */
     public function deleteAction()
     {
-        // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-            $this->getProductManager()->removeByIds($ids);
-            $this->flashBag->set('success', 'Selected products have been removed successfully');
-
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one product to remove');
-        }
-
-        // Single removal
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getProductManager()->removeById($id)) {
-                $this->flashBag->set('success', 'Selected product has been removed successfully');
-            }
-        }
-
-        return '1';
+        return $this->invokeRemoval('productManager');
     }
 
     /**
@@ -168,7 +149,7 @@ final class Product extends AbstractController
     {
         $input = $this->request->getPost();
 
-        $formValidator = $this->validatorFactory->build(array(
+        return $this->invokeSave('productManager', $input['product']['id'], $this->request->getAll(), array(
             'input' => array(
                 'source' => $input['product'],
                 'definition' => array(
@@ -178,24 +159,5 @@ final class Product extends AbstractController
                 )
             )
         ));
-
-        if ($formValidator->isValid()) {
-            $productManager = $this->getProductManager();
-
-            if ($input['product']['id']) {
-                if ($productManager->update($this->request->getAll())) {
-                    $this->flashBag->set('success', 'The product has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                $productManager->add($this->request->getAll());
-                $this->flashBag->set('success', 'A product has been added successfully');
-                return $productManager->getLastId();
-            }
-
-        } else {
-            return $formValidator->getErrors();
-        }
     }
 }

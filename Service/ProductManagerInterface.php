@@ -84,7 +84,15 @@ interface ProductManagerInterface
      * @param array $ids
      * @return boolean
      */
-    public function removeByIds(array $ids);
+    public function deleteByIds(array $ids);
+
+    /**
+     * Deletes a product by its associated id
+     * 
+     * @param string $id Product's id
+     * @return boolean
+     */
+    public function deleteById($id);
 
     /**
      * Returns prepared paginator's instance

@@ -87,7 +87,7 @@ interface CategoryManagerInterface
      * @param string $id Category id
      * @return boolean
      */
-    public function removeById($id);
+    public function deleteById($id);
 
     /**
      * Fetches category's entity by its associated id

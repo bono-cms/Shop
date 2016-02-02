@@ -1,8 +1,4 @@
-
 $(function(){
-
-	$.wysiwyg.init(['product[description]']);
-
 	/**
 	 * Creates row in the image table
 	 * 

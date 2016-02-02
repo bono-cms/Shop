@@ -49,7 +49,7 @@ interface OrderManagerInterface
      * @param string $id Order's id
      * @return boolean
      */
-    public function removeById($id);
+    public function deleteById($id);
 
     /**
      * Remove a collection of orders by their associated id
@@ -57,7 +57,7 @@ interface OrderManagerInterface
      * @param array $ids
      * @return boolean
      */
-    public function removeByIds(array $ids);
+    public function deleteByIds(array $ids);
 
     /**
      * Fetches all order's details by its associated id

@@ -103,15 +103,7 @@ final class Category extends AbstractController
      */
     public function deleteAction()
     {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            $categoryManager = $this->getModuleService('categoryManager');
-            if ($categoryManager->removeById($id)) {
-                $this->flashBag->set('success', 'The category has been removed successfully');
-                return '1';
-            }
-        }
+        return $this->invokeRemoval('categoryManager');
     }
 
     /**
@@ -123,7 +115,7 @@ final class Category extends AbstractController
     {
         $input = $this->request->getPost('category');
 
-        $formValidator = $this->validatorFactory->build(array(
+        return $this->invokeSave('categoryManager', $input['id'], $this->request->getAll(), array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -131,25 +123,5 @@ final class Category extends AbstractController
                 )
             )
         ));
-
-        if ($formValidator->isValid()) {
-            $categoryManager = $this->getCategoryManager();
-
-            if ($input['id']) {
-                if ($categoryManager->update($this->request->getAll())) {
-                    $this->flashBag->set('success', 'The category has been updated successfully');
-                    return '1';
-                }
-                
-            } else {
-                if ($categoryManager->add($this->request->getAll())) {
-                    $this->flashBag->set('success', 'A category has been added successfully');
-                    return $categoryManager->getLastId();
-                }
-            }
-
-        } else {
-            return $formValidator->getErrors();
-        }
     }
 }

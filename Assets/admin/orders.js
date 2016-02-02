@@ -14,9 +14,9 @@ $(function(){
 	$("[data-button='approve']").click(function(event){
 		event.preventDefault();
 		var id = $(this).data('id');
-		
+
 		$.ajax({
-			url : "/module/shop/basket/order/approve.ajax",
+			url : "/module/shop/basket/order/approve",
 			data : {
 				id : id
 			},

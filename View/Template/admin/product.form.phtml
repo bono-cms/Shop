@@ -63,7 +63,7 @@ use Krystal\Form\HtmlHelper;
                 <div class="form-group clearfix">
                     <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
                     <div class="col-lg-10">
-                        <textarea name="product[description]" rows="7" class="form-control"><?php echo $product->getDescription(); ?></textarea>
+                        <?php echo Element::textarea('product[description]', $product->getDescription(), array('data-wysiwyg' => 'true')); ?>
                     </div>
                 </div>
                 
