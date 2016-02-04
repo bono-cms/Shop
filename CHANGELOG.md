@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Switched back to two columns view
  * Updated module icon
  * Added ability to remove several orders at once
  * Fixed issue with appearing breadcrumb on filtering
