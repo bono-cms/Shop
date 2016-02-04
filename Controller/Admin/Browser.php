@@ -60,7 +60,7 @@ final class Browser extends AbstractController
         $products = $this->getProductManager()->fetchAllByCategoryIdAndPage($id, $page, $this->getSharedPerPageCount());
         $url = '/admin/module/shop/category/'.$id. '/page/(:var)';
 
-        return $this->createGrid($product, $url, $id);
+        return $this->createGrid($products, $url, $id);
     }
 
     /**
