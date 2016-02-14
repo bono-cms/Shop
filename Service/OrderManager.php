@@ -141,7 +141,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     public function deleteByIds(array $ids)
     {
         foreach ($ids as $id) {
-            if (!$this->removeById($id)) {
+            if (!$this->deleteById($id)) {
                 return false;
             }
         }
