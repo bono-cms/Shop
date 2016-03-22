@@ -21,7 +21,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public static function getTableName()
     {
-        return 'bono_module_shop_orders_info';
+        return self::getWithPrefix('bono_module_shop_orders_info');
     }
 
     /**

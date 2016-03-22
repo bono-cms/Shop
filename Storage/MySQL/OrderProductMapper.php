@@ -22,7 +22,7 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
      */
     public static function getTableName()
     {
-        return 'bono_module_shop_orders_products';
+        return self::getWithPrefix('bono_module_shop_orders_products');
     }
 
     /**

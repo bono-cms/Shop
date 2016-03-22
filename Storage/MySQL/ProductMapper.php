@@ -22,7 +22,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public static function getTableName()
     {
-        return 'bono_module_shop_products';
+        return self::getWithPrefix('bono_module_shop_products');
     }
 
     /**

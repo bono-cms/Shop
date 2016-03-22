@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added support for table prefix
  * Switched back to two columns view
  * Updated module icon
  * Added ability to remove several orders at once
