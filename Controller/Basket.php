@@ -136,7 +136,7 @@ final class Basket extends AbstractShopController
     private function loadPlugins($page)
     {
         $this->loadSitePlugins();
-        $this->view->getBreadcrumbBag()->addOne($page->getTItle());
+        $this->view->getBreadcrumbBag()->addOne($page->getTitle());
     }
 
     /**
