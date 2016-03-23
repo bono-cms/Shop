@@ -25,7 +25,10 @@ final class Basket extends AbstractShopController
         $page = $pageManager->fetchById($id);
 
         if ($page !== false) {
-            $this->loadPlugins($page);
+            // Load view plugins
+            $this->loadSitePlugins();
+            $this->view->getBreadcrumbBag()
+                       ->addOne($page->getTitle());
 
             return $this->view->render('shop-basket', array(
                 'products' => $this->getBasketManager()->getProducts(),
@@ -125,18 +128,6 @@ final class Basket extends AbstractShopController
         $this->flashBag->set('success', 'Your basket has been cleared successfully');
 
         return json_encode($basketManager->getAllStat());
-    }
-
-    /**
-     * Loads required plugins for view
-     * 
-     * @param $page
-     * @return void
-     */
-    private function loadPlugins($page)
-    {
-        $this->loadSitePlugins();
-        $this->view->getBreadcrumbBag()->addOne($page->getTitle());
     }
 
     /**
