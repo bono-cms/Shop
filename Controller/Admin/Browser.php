@@ -42,7 +42,7 @@ final class Browser extends AbstractController
      */
     public function indexAction($page = 1)
     {
-        $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount());
+        $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount(), null);
         $url = '/admin/module/shop/page/(:var)';
 
         return $this->createGrid($products, $url, null);
@@ -57,7 +57,7 @@ final class Browser extends AbstractController
      */
     public function categoryAction($id, $page = 1)
     {
-        $products = $this->getProductManager()->fetchAllByCategoryIdAndPage($id, $page, $this->getSharedPerPageCount());
+        $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount(), $id);
         $url = '/admin/module/shop/category/'.$id. '/page/(:var)';
 
         return $this->createGrid($products, $url, $id);
@@ -71,7 +71,7 @@ final class Browser extends AbstractController
      * @param string $categoryId
      * @return string
      */
-    private function createGrid(array $products, $url = null, $categoryId)
+    private function createGrid(array $products, $url, $categoryId)
     {
         $paginator = $this->getProductManager()->getPaginator();
 

@@ -291,28 +291,16 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Fetches all products by associated category id and filtered by pagination
-     * 
-     * @param string $categoryId
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByCategoryIdAndPage($categoryId, $page, $itemsPerPage)
-    {
-        return $this->getResults($page, $itemsPerPage, false, $categoryId);
-    }
-
-    /**
      * Fetches all product filtered by pagination
      * 
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
+     * @param string $categoryId Optional category id filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage)
+    public function fetchAllByPage($page, $itemsPerPage, $categoryId = null)
     {
-        return $this->getResults($page, $itemsPerPage, false);
+        return $this->getResults($page, $itemsPerPage, false, $categoryId);
     }
 
     /**

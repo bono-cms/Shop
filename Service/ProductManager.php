@@ -623,24 +623,12 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * 
      * @param integer $page
      * @param integer $itemsPerPage Per page count
+     * @param string $categoryId Optional category id filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage)
+    public function fetchAllByPage($page, $itemsPerPage, $categoryId)
     {
-        return $this->prepareResults($this->productMapper->fetchAllByPage($page, $itemsPerPage));
-    }
-
-    /**
-     * Fetches all product entities associated with category id and filtered by pagination
-     * 
-     * @param integer $id Category id
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByCategoryIdAndPage($id, $page, $itemsPerPage)
-    {
-        return $this->prepareResults($this->productMapper->fetchAllByCategoryIdAndPage($id, $page, $itemsPerPage));
+        return $this->prepareResults($this->productMapper->fetchAllByPage($page, $itemsPerPage, $categoryId));
     }
 
     /**

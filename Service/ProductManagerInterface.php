@@ -158,19 +158,10 @@ interface ProductManagerInterface
      * 
      * @param integer $page
      * @param integer $itemsPerPage Per page count
+     * @param string $categoryId Optional category id filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage);
-
-    /**
-     * Fetches all product entities associated with category id and filtered by pagination
-     * 
-     * @param integer $id Category id
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByCategoryIdAndPage($id, $page, $itemsPerPage);
+    public function fetchAllByPage($page, $itemsPerPage, $categoryId);
 
     /**
      * Fetches all published product entities associated with given category id
