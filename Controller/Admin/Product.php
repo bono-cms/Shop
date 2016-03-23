@@ -20,26 +20,6 @@ use Krystal\Stdlib\VirtualEntity;
 final class Product extends AbstractController
 {
     /**
-     * Returns product manager
-     * 
-     * @return \Shop\Service\ProductManager
-     */
-    private function getProductManager()
-    {
-        return $this->getModuleService('productManager');
-    }
-
-    /**
-     * Returns product manager
-     * 
-     * @return \Shop\Service\ProductManager
-     */
-    private function getCategoryManager()
-    {
-        return $this->getModuleService('categoryManager');
-    }
-
-    /**
      * Creates a form
      * 
      * @param \Krystal\Stdlib\VirtualEntity $product
@@ -60,7 +40,7 @@ final class Product extends AbstractController
 
         // If viewing edit form, then grab product photos as well
         if ($product->getId()) {
-            $photos = $this->getProductManager()->fetchAllImagesById($product->getId());
+            $photos = $this->getModuleService('productManager')->fetchAllImagesById($product->getId());
         } else {
             $photos = array();
         }
@@ -68,7 +48,7 @@ final class Product extends AbstractController
         return $this->view->render('product.form', array(
             'photos' => $photos,
             'product' => $product,
-            'categories' => $this->getCategoryManager()->getCategoriesTree(),
+            'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'config' => $this->getModuleService('configManager')->getEntity()
         ));
     }
@@ -96,7 +76,7 @@ final class Product extends AbstractController
      */
     public function editAction($id)
     {
-        $product = $this->getProductManager()->fetchById($id);
+        $product = $this->getModuleService('productManager')->fetchById($id);
 
         if ($product !== false) {
             return $this->createForm($product, 'Edit the product');
@@ -129,7 +109,7 @@ final class Product extends AbstractController
             $seo = $this->request->getPost('seo');
 
             // Grab a manager
-            $productManager = $this->getProductManager();
+            $productManager = $this->getModuleService('productManager');
 
             $productManager->updatePrices($prices);
             $productManager->updatePublished($published);

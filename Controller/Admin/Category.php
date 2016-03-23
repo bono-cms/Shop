@@ -20,16 +20,6 @@ use Krystal\Stdlib\VirtualEntity;
 final class Category extends AbstractController
 {
     /**
-     * Returns category manager
-     * 
-     * @return \Shop\Service\CategoryManager
-     */
-    private function getCategoryManager()
-    {
-        return $this->getModuleService('categoryManager');
-    }
-
-    /**
      * Returns a tree of categories
      * 
      * @return array
@@ -37,7 +27,7 @@ final class Category extends AbstractController
     private function getCategoriesTree()
     {
         $text = sprintf('— %s —', $this->translator->translate('None'));
-        return $this->getCategoryManager()->getPromtWithCategoriesTree($text);
+        return $this->getModuleService('categoryManager')->getPromtWithCategoriesTree($text);
     }
 
     /**
@@ -87,7 +77,7 @@ final class Category extends AbstractController
      */
     public function editAction($id)
     {
-        $category = $this->getCategoryManager()->fetchById($id);
+        $category = $this->getModuleService('categoryManager')->fetchById($id);
 
         if ($category !== false) {
             return $this->createForm($category, 'Edit the category');
