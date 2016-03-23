@@ -4,6 +4,8 @@ CHANGELOG
 1.4
 ---
 
+ * Fixed minor issue with basket's breadcrumb
+ * Merged `fetchAllByPage()` with `fetchAllByCategoryIdAndPage()`
  * Added support for table prefix
  * Switched back to two columns view
  * Updated module icon
