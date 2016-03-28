@@ -11,40 +11,11 @@
 
 namespace Shop\Service;
 
-use Cms\Service\SiteBootstrapperInterface;
+use Cms\Service\AbstractSiteBootstrapper;
 use Shop\Service\BasketEntity;
-use Krystal\Application\Module\ModuleManagerInterface;
-use Krystal\Application\View\ViewManagerInterface;
 
-final class SiteBootstrapper implements SiteBootstrapperInterface
+final class SiteBootstrapper extends AbstractSiteBootstrapper
 {
-    /**
-     * Module manager to grab data
-     * 
-     * @var \Krystal\Application\Module\ModuleManagerInterface
-     */
-    private $moduleManager;
-
-    /**
-     * View manager whose state would be altered
-     * 
-     * @var \Krystal\Application\View\ViewManagerInterface
-     */
-    private $view;
-
-    /**
-     * State initialization
-     * 
-     * @param \Krystal\Application\Module\ModuleManagerInterface $moduleManager
-     * @param \Krystal\Application\View\ViewManagerInterface $view
-     * @return void
-     */
-    public function __construct(ModuleManagerInterface $moduleManager, ViewManagerInterface $view)
-    {
-        $this->moduleManager = $moduleManager;
-        $this->view = $view;
-    }
-
     /**
      * Loads basket service
      * 
