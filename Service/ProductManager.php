@@ -231,7 +231,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
                     ->setImage($image['image'])
                     ->setOrder((int) $image['order'])
                     ->setPublished((bool) $image['published']);
-                
+
                 array_push($entities, $entity);
             }
 

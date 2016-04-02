@@ -61,7 +61,7 @@ final class Basket extends AbstractShopController
 
             return json_encode(array(
                 'product' => $basketManager->getProductStat($id),
-                'all' => $this->getBasketManager()->getAllStat()
+                'all' => $basketManager->getAllStat()
             ));
         }
     }

@@ -27,7 +27,6 @@ final class Product extends AbstractShopController
 
         // If $product isn't false, then its an entity
         if ($product !== false) {
-
             // Load required plugins for view
             $this->loadPlugins($productManager->getBreadcrumbs($product));
 
@@ -35,16 +34,14 @@ final class Product extends AbstractShopController
                 // Image bags of current product
                 'images' => $productManager->fetchAllPublishedImagesById($id),
                 'page' => $product,
-                'product' => $product,
+                'product' => $product
             ));
 
             // After product is viewed, it's time to increment its view count
             $productManager->incrementViewCount($id);
 
             return $response;
-
         } else {
-
             // Returning false will trigger 404 error automatically
             return false;
         }
