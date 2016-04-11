@@ -16,8 +16,6 @@ use Krystal\Db\Filter\QueryContainer;
 
 final class Browser extends AbstractController
 {
-    const FILTER_ROUTE = '/admin/module/shop/filter/';
-
     /**
      * Applies the filter
      * 
@@ -25,7 +23,7 @@ final class Browser extends AbstractController
      */
     public function filterAction()
     {
-        $records = $this->getFilter($this->getProductManager(), self::FILTER_ROUTE);
+        $records = $this->getFilter($this->getProductManager(), $this->createUrl('Shop:Admin:Browser@filterAction', array(null)));
 
         if ($records !== false) {
             return $this->createGrid($records, null, null);
@@ -43,7 +41,7 @@ final class Browser extends AbstractController
     public function indexAction($page = 1)
     {
         $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount(), null);
-        $url = '/admin/module/shop/page/(:var)';
+        $url = $this->createUrl('Shop:Admin:Browser@indexAction', array(), 1);
 
         return $this->createGrid($products, $url, null);
     }
@@ -58,7 +56,7 @@ final class Browser extends AbstractController
     public function categoryAction($id, $page = 1)
     {
         $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount(), $id);
-        $url = '/admin/module/shop/category/'.$id. '/page/(:var)';
+        $url = $this->createUrl('Shop:Admin:Browser@categoryAction', array($id), 1);
 
         return $this->createGrid($products, $url, $id);
     }
@@ -95,7 +93,7 @@ final class Browser extends AbstractController
             'categoryId' => $categoryId,
             'taskManager' => $this->getModuleService('taskManager'),
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
-            'filter' => new QueryContainer($this->request->getQuery(), self::FILTER_ROUTE)
+            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Browser@filterAction', array(null)))
         ));
     }
 
