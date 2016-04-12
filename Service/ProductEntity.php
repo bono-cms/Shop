@@ -16,6 +16,17 @@ use Krystal\Stdlib\VirtualEntity;
 final class ProductEntity extends VirtualEntity
 {
     /**
+     * Returns image URL
+     * 
+     * @param string $size
+     * @return string
+     */
+    public function getImageUrl($size)
+    {
+        return $this->getImageBag()->getUrl($size);
+    }
+
+    /**
      * Checks whether this product is marked as a special offer
      * 
      * @return boolean
