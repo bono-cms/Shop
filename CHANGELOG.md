@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added `getImageUrl()` entities in product entity object. It basically acts as a shortcut
  * Fixed minor issue with basket's breadcrumb
  * Merged `fetchAllByPage()` with `fetchAllByCategoryIdAndPage()`
  * Added support for table prefix
