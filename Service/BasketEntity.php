@@ -16,6 +16,17 @@ use Krystal\Stdlib\VirtualEntity;
 final class BasketEntity extends VirtualEntity
 {
     /**
+     * Returns image URL
+     * 
+     * @param string $size
+     * @return string
+     */
+    public function getImageUrl($size)
+    {
+        return $this->getImageBag()->getUrl($size);
+    }
+
+    /**
      * Checks if there's at least one product
      * 
      * @return boolean
