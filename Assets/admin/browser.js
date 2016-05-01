@@ -3,21 +3,12 @@ $(function(){
 		format : 'yyyy-mm-dd'
 	});
 	
-	$.delete({
-		categories : {
-			category : {
-				url : "/admin/module/shop/category/do/delete"
-			},
-			product : {
-				url : "/admin/module/shop/product/delete"
-			}
-		}
-	});
-	
 	$("[data-button='statistic']").click(function(event){
 		event.preventDefault();
+        var url = $(this).data('url');
+        
 		$.ajax({
-			url : '/admin/module/shop/statistic',
+			url : url,
 			beforeSend : function(){
 				// Empty function cancels loading div
 			},

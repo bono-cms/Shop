@@ -88,11 +88,12 @@ final class Product extends AbstractController
     /**
      * Deletes a product
      * 
+     * @param string $id
      * @return string
      */
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        return $this->invokeRemoval('productManager');
+        return $this->invokeRemoval('productManager', $id);
     }
 
     /**

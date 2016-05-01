@@ -119,7 +119,7 @@ return array(
         'controller' => 'Admin:Browser@categoryAction'
     ),
     
-    '/admin/module/shop/category/do/delete' => array(
+    '/admin/module/shop/category/do/delete/(:var)' => array(
         'controller' => 'Admin:Category@deleteAction',
         'disallow' => array('guest')
     ),
@@ -154,7 +154,7 @@ return array(
         'disallow' => array('guest')
     ),
     
-    '/admin/module/shop/product/delete' => array(
+    '/admin/module/shop/product/delete/(:var)' => array(
         'controller' => 'Admin:Product@deleteAction',
         'disallow' => array('guest')
     ),
