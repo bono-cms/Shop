@@ -110,7 +110,7 @@ final class Category extends AbstractController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'title' => new Pattern\Title()
+                    'name' => new Pattern\Name()
                 )
             )
         ));

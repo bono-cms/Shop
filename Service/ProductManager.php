@@ -187,8 +187,9 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setLangId((int) $product['lang_id'])
             ->setCategoryId($product['category_id'])
             ->setWebPageId($product['web_page_id'])
-            ->setCategoryName(Filter::escape($this->categoryMapper->fetchTitleById($product['category_id'])))
+            ->setCategoryName(Filter::escape($this->categoryMapper->fetchNameById($product['category_id'])))
             ->setTitle(Filter::escape($product['title']))
+            ->setName(Filter::escape($product['name']))
             ->setPrice($product['regular_price'])
             ->setStokePrice($product['stoke_price'])
             ->setSpecialOffer((bool) $product['special_offer'])
@@ -364,10 +365,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     public function deleteById($id)
     {
-        $title = Filter::escape($this->productMapper->fetchTitleById($id));
+        $name = Filter::escape($this->productMapper->fetchNameById($id));
 
         if ($this->removeAllById($id)) {
-            $this->track('Product "%s" has been removed', $title);
+            $this->track('Product "%s" has been removed', $name);
             return true;
         } else {
             return false;
@@ -407,13 +408,18 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $files =& $input['files'];
 
         if (empty($product['slug'])) {
-            $product['slug'] = $product['title'];
+            $product['slug'] = $product['name'];
         }
 
         // If a cover has been selected, then we need to override its base name right now
         if (!empty($files['file'])) {
             $this->filterFileInput($files['file']);
             $product['cover'] = $files['file'][0]->getName();
+        }
+
+        // Empty title is taken from the name
+        if (empty($product['title'])) {
+            $product['title'] = $product['name'];
         }
 
         // Make it now look like a slug
@@ -462,7 +468,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             }
         }
 
-        $this->track('Product "%s" has been added', $product['title']);
+        $this->track('Product "%s" has been added', $product['name']);
 
         // Add a web page now
         return $this->webPageManager->add($id, $product['slug'], 'Shop (Products)', 'Shop:Product@indexAction', $this->productMapper);
@@ -553,7 +559,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             $product['cover'] = $photos['cover'];
         }
 
-        $this->track('Product "%s" has been updated', $product['title']);
+        $this->track('Product "%s" has been updated', $product['name']);
         $this->webPageManager->update($product['web_page_id'], $product['slug']);
 
         return $this->productMapper->update(ArrayUtils::arrayWithout($product, array('slug')));

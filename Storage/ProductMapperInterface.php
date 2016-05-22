@@ -23,12 +23,12 @@ interface ProductMapperInterface
     public function fetchAllPublishedStokesByPage($page, $itemsPerPage);
 
     /**
-     * Fetches product title by its associated id
+     * Fetches product name by its associated id
      * 
      * @param string $id Product id
      * @return string
      */
-    public function fetchTitleById($id);
+    public function fetchNameById($id);
 
     /**
      * Fetches latest published products

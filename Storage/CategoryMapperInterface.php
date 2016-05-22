@@ -30,12 +30,12 @@ interface CategoryMapperInterface
     public function fetchBcData();
 
     /**
-     * Fetches category's title by its associated id
+     * Fetches category name by its associated id
      * 
      * @param string $id Category id
      * @return string
      */
-    public function fetchTitleById($id);
+    public function fetchNameById($id);
 
     /**
      * Fetches all categories

@@ -91,7 +91,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $db = $this->db->select('*')
                         ->from(static::getTableName())
-                        ->whereLike('title', '%'.$input['title'].'%', true)
+                        ->whereLike('name', '%'.$input['name'].'%', true)
                         ->andWhereEquals('date', $input['date'], true)
                         ->andWhereEquals('id', $input['id'], true)
                         ->andWhereEquals('regular_price', $input['regular_price'], true)
@@ -99,12 +99,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                         ->andWhereEquals('published', $input['published'], true)
                         ->andWhereEquals('seo', $input['seo'], true)
                         ->orderBy($sortingColumn);
-        
-        if ($desc){
+
+        if ($desc) {
             $db->desc();
         }
 
-        return $db->paginate($page, $itemsPerPage)->queryAll();
+        return $db->paginate($page, $itemsPerPage)
+                  ->queryAll();
     }
 
     /**
@@ -203,14 +204,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Fetches product title by its associated id
+     * Fetches product name by its associated id
      * 
      * @param string $id Product id
      * @return string
      */
-    public function fetchTitleById($id)
+    public function fetchNameById($id)
     {
-        return $this->findColumnByPk($id, 'title');
+        return $this->findColumnByPk($id, 'name');
     }
 
     /**

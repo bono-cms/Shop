@@ -120,7 +120,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function getCategoriesTree()
     {
         $treeBuilder = new TreeBuilder($this->fetchAll());
-        return $treeBuilder->render(new PhpArray('title'));
+        return $treeBuilder->render(new PhpArray('name'));
     }
 
     /**
@@ -212,6 +212,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setLangId((int) $category['lang_id'])
             ->setWebPageId($category['web_page_id'])
             ->setTitle(Filter::escape($category['title']))
+            ->setName(Filter::escape($category['name']))
             ->setDescription(Filter::escapeContent($category['description']))
             ->setOrder((int) $category['order'])
             ->setSeo((bool) $category['seo'])
@@ -236,8 +237,13 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $category =& $input['data']['category'];
 
         if (empty($category['slug'])) {
-            // Empty slug by default is taken from a title
-            $category['slug'] = $category['title'];
+            // Empty slug by default is taken from a name
+            $category['slug'] = $category['name'];
+        }
+
+        // Empty title is take from the name
+        if (empty($category['title'])) {
+            $category['title'] = $category['name'];
         }
 
         $category['slug'] = $this->webPageManager->sluggify($category['slug']);
@@ -259,13 +265,11 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
 
         // Allow to remove a cover, only it case it exists and checkbox was checked
         if (isset($category['remove_cover']) && !empty($category['cover'])) {
-
             // Remove a cover, but not a dir itself
             $this->imageManager->delete($category['id']);
             $category['cover'] = '';
 
         } else {
-
             if (!empty($input['files']['file'])) {
                 $file =& $input['files']['file'];
 
@@ -289,10 +293,10 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $this->categoryMapper->update(ArrayUtils::arrayWithout($category, array('slug', 'menu', 'remove_cover')));
 
         if ($this->hasMenuWidget() && isset($input['data']['menu'])) {
-            $this->updateMenuItem($category['web_page_id'], $category['title'], $input['data']['menu']);
+            $this->updateMenuItem($category['web_page_id'], $category['name'], $input['data']['menu']);
         }
 
-        $this->track('Category "%s" has been updated', $category['title']);
+        $this->track('Category "%s" has been updated', $category['name']);
         return true;
     }
 
@@ -331,12 +335,12 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
                 $this->imageManager->upload($id, $input['files']['file']);
             }
 
-            $this->track('Added category "%s"', $category['title']);
+            $this->track('Added category "%s"', $category['name']);
 
             if ($this->webPageManager->add($id, $category['slug'], 'Shop (Categories)', 'Shop:Category@indexAction', $this->categoryMapper)) {
                 // Do the work in case menu widget was injected
                 if ($this->hasMenuWidget()) {
-                    $this->addMenuItem($this->webPageManager->getLastId(), $category['title'], $input['data']);
+                    $this->addMenuItem($this->webPageManager->getLastId(), $category['name'], $input['data']);
                 }
             }
 

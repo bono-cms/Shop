@@ -134,7 +134,7 @@ final class Product extends AbstractController
             'input' => array(
                 'source' => $input['product'],
                 'definition' => array(
-                    'title' => new Pattern\Title(),
+                    'name' => new Pattern\Name(),
                     'regular_price' => new Pattern\Price(),
                     'description' => new Pattern\Description()
                 )

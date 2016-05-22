@@ -59,8 +59,8 @@ use Krystal\Form\Element;
                             </th>
                             <th class="text-center"><?php $this->show('Cover'); ?></th>
                             <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('title'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('title'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('title') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Title'); ?>
+                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('name'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('name'); ?>">
+                                <i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Name'); ?>
                                 </a>
                             </th>
                             <th class="text-center">
@@ -94,7 +94,7 @@ use Krystal\Form\Element;
                             <th></th>
                             <th><?php echo Element::number($filter->getElementName('id'), $filter->get('id'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
                             <th></th>
-                            <th><?php echo Element::text($filter->getElementName('title'), $filter->get('title'), array('class' => 'form-control')); ?></th>
+                            <th><?php echo Element::text($filter->getElementName('name'), $filter->get('name'), array('class' => 'form-control')); ?></th>
                             <th class="date-col"><?php echo Element::text($filter->getElementName('date'), $filter->get('date'), array('class' => 'form-control')); ?></th>
                             <th><?php echo DropdownWidget::render(array('name' => $filter->getElementName('category_id'), 'class' => 'form-control'), $categories, $filter->get('category_id')); ?></th>
                             <th class="price-col"><?php echo Element::text($filter->getElementName('price'), $filter->get('price'), array('class' => 'form-control')); ?></th>
@@ -116,7 +116,7 @@ use Krystal\Form\Element;
                             <td>
                                 <a data-toggle="tooltip" data-placement="top" data-original-title="<?php $this->show('Click to zoom this image'); ?>" data-lightbox="<?php printf('image-%s', $product->getId()); ?>" href="<?php echo $product->getImageBag()->getUrl('original'); ?>"><img class="img-responsive center-block" src="<?php echo $product->getImageBag()->getUrl('120x120'); ?>" /></a>
                             </td>
-                            <td class="text-center"><?php echo $product->getTitle(); ?></td>
+                            <td class="text-center"><?php echo $product->getName(); ?></td>
                             <td class="text-center"><?php echo $product->getDate(); ?></td>
                             <td class="text-center"><?php echo $product->getCategoryName(); ?></td>
                             <td>
@@ -176,7 +176,7 @@ use Krystal\Form\Element;
             <?php if (!empty($categories)): ?>
             <tbody>
                 <?php foreach ($categories as $id => $category): ?>
-                
+
                 <tr <?php HtmlHelper::addClassOnDemand(isset($categoryId) && $categoryId == $id, 'info'); ?>>
                     <td class="text-center text-muted"><?php echo $id; ?></td>
                     <td>
