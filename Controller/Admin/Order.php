@@ -16,8 +16,6 @@ use Krystal\Db\Filter\QueryContainer;
 
 final class Order extends AbstractController
 {
-    const FILTER_ROUTE = '/admin/module/shop/orders/filter/';
-
     /**
      * Applies the filter
      * 
@@ -25,7 +23,7 @@ final class Order extends AbstractController
      */
     public function filterAction()
     {
-        $orders = $this->getFilter($this->getOrderManager(), self::FILTER_ROUTE);
+        $orders = $this->getFilter($this->getOrderManager(), $this->createUrl('Shop:Admin:Order@filterAction', array(null)));
 
         if ($orders !== false) {
             return $this->createGrid($orders);
@@ -43,7 +41,7 @@ final class Order extends AbstractController
     public function indexAction($page = 1)
     {
         $orders = $this->getOrderManager()->fetchAllByPage($page, $this->getSharedPerPageCount());
-        $url = '/admin/module/shop/orders/page/(:var)';
+        $url = $this->createUrl('Shop:Admin:Order@indexAction', array(), 1);
 
         return $this->createGrid($orders, $url);
     }
@@ -119,7 +117,7 @@ final class Order extends AbstractController
             'paginator' => $paginator,
             'config' => $this->getConfig(),
             'title' => 'Orders',
-            'filter' => new QueryContainer($this->request->getQuery(), self::FILTER_ROUTE)
+            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Order@filterAction', array(null)))
         ));
     }
 
