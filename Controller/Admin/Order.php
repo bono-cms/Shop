@@ -51,28 +51,26 @@ final class Order extends AbstractController
     /**
      * Approves an order by its id
      * 
+     * @param string $id
      * @return string
      */
-    public function approveAction()
+    public function approveAction($id)
     {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getOrderManager()->approveById($id)) {
-                $this->flashBag->set('success', 'Selected order marked as approved now');
-                return '1';
-            }
+        if ($this->getOrderManager()->approveById($id)) {
+            $this->flashBag->set('success', 'Selected order marked as approved now');
+            return '1';
         }
     }
 
     /**
      * Deletes an order by its associated id
      * 
+     * @param string $id
      * @return string
      */
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        return $this->invokeRemoval('orderManager');
+        return $this->invokeRemoval('orderManager', $id);
     }
 
     /**

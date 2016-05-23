@@ -84,11 +84,11 @@ use Krystal\Form\HtmlHelper;
                     <td class="text-center"><?php $this->show($order->getApproved() ? 'Yes' : 'No'); ?></td>
                     <td class="text-center">
                         <?php if (!$order->getApproved()):?>
-                        <a data-toggle="tooltip" data-placement="left" title="<?php $this->show('Approve this order'); ?>" data-button="approve" href="#" data-id="<?php echo $order->getId(); ?>"><i class="glyphicon glyphicon-ok"></i></a>
+                        <a data-toggle="tooltip" data-placement="left" title="<?php $this->show('Approve this order'); ?>" data-button="approve" data-url="<?php echo $this->url('Shop:Admin:Order@approveAction', $order->getId()); ?>" href="#"><i class="glyphicon glyphicon-ok"></i></a>
                         <?php endif; ?>
                         
-                        <a data-toggle="tooltip" data-placement="left" title="<?php $this->show('Remove this order'); ?>" data-button="delete" data-category="order" data-id="<?php echo $order->getId(); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" title="<?php $this->show('View purchased products'); ?>" data-button="details" data-order-id="<?php echo $order->getId(); ?>" href="#"><i class="glyphicon glyphicon-th-list"></i></a>
+                        <a data-toggle="tooltip" data-placement="left" title="<?php $this->show('Remove this order'); ?>" data-button="delete" data-url="<?php echo $this->url('Shop:Admin:Order@deleteAction', $order->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                        <a data-toggle="tooltip" data-placement="left" title="<?php $this->show('View purchased products'); ?>" data-button="details" data-url="<?php echo $this->url('Shop:Admin:Order@detailsAction', $order->getId()); ?>" href="#"><i class="glyphicon glyphicon-th-list"></i></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

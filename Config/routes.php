@@ -55,11 +55,11 @@ return array(
         'controller' => 'Order@orderAction'
     ),
     
-    '/module/shop/basket/order/delete' => array(
+    '/%s/module/shop/basket/order/delete/(:var)' => array(
         'controller' => 'Admin:Order@deleteAction'
     ),
     
-    '/module/shop/basket/order/approve' => array(
+    '/%s/module/shop/basket/order/approve/(:var)' => array(
         'controller' => 'Admin:Order@approveAction'
     ),
     
