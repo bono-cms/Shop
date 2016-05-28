@@ -144,14 +144,11 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
-     * Fetches a title by product's web page id
-     * 
-     * @param string $webPageId
-     * @return string
+     * {@inheritDoc}
      */
-    public function fetchTitleByWebPageId($webPageId)
+    public function fetchNameByWebPageId($webPageId)
     {
-        return $this->productMapper->fetchTitleByWebPageId($webPageId);
+        return $this->productMapper->fetchNameByWebPageId($webPageId);
     }
 
     /**
