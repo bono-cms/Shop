@@ -13,7 +13,7 @@ use Krystal\Form\Element;
 	
 	<div class="tab-content">
 		<div class="tab-pane fade in active" id="page" role="tabpanel">
-			<div class="well clearfix">
+			<div class="well">
 				
 				<!--Special hidden value for menu widget. That's a workaround-->
                 <?php echo Element::hidden('web_page_id', $category->getWebPageId()); ?>
@@ -21,7 +21,7 @@ use Krystal\Form\Element;
                 <?php echo Element::hidden('category[web_page_id]', $category->getWebPageId()); ?>
                 <?php echo Element::hidden('category[cover]', $category->getCover()); ?>
 				
-				<div class="form-group clearfix">
+				<div class="form-group">
 					<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
 					<div class="col-lg-10">
 						<div class="input-group">
@@ -31,14 +31,14 @@ use Krystal\Form\Element;
 					</div>
 				</div>
 				
-				<div class="form-group clearfix">
+				<div class="form-group">
 					<label class="col-lg-2 control-label"><?php $this->show('Parent category'); ?></label>
 					<div class="col-lg-10">
                         <?php echo Element::select('category[parent_id]', $categories, $category->getParentId(), array('class' => 'form-control')); ?>
 					</div>
 				</div>
 				
-				<div class="form-group clearfix">
+				<div class="form-group">
 					<label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
 					<div class="col-lg-10">
                         <?php echo Element::textarea('category[description]', $category->getDescription(), array('data-wysiwyg' => 'true')); ?>
@@ -46,14 +46,14 @@ use Krystal\Form\Element;
 				</div>
 				
 				<div class="options">
-					<div class="form-group clearfix">
+					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
 						<div class="col-lg-10">
                             <?php echo Element::checkbox('category[seo]', $category->getSeo(), array('class' => 'form-control')); ?>
 						</div>
 					</div>
 					
-					<div class="form-group clearfix">
+					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
 						<div class="col-lg-10">
 							<div class="input-group">
@@ -63,7 +63,7 @@ use Krystal\Form\Element;
 						</div>
 					</div>
 					
-					<div class="form-group clearfix">
+					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
 						<div class="col-lg-10">
 							<div class="input-group">
@@ -75,7 +75,7 @@ use Krystal\Form\Element;
 						</div>
 					</div>
 					
-                    <div class="form-group clearfix">
+                    <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
                         <div class="col-lg-10">
                             <div class="input-group">
@@ -85,7 +85,7 @@ use Krystal\Form\Element;
                         </div>
                     </div>
                     
-					<div class="form-group clearfix">
+					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
 						<div class="col-lg-10">
 							<div class="input-group">
@@ -95,14 +95,14 @@ use Krystal\Form\Element;
 						</div>
 					</div>
 					
-					<div class="form-group clearfix">
+					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
 						<div class="col-lg-10">
                             <?php echo Element::textarea('category[meta_description]', $category->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
 						</div>
 					</div>
 					
-					<div class="form-group clearfix">
+					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Сover'); ?></label>
 						<div class="col-lg-10">
 
