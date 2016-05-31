@@ -250,7 +250,7 @@ $(function(){
         },
 
         /**
-         * Grabs all nodes associated with provided product id and filters result by provided selecto
+         * Grabs all nodes associated with provided product id and filters result by provided selector
          * 
          * @param string id Product id
          * @param string selector
@@ -285,7 +285,7 @@ $(function(){
                 } else {
                     // Otherwise just update a table
                     this.updateStat(data);
-                    
+
                     $row = this.getNodesByProductIdWithFilter(id, "[data-basket-type='container']");
                     $row.hide(500, function(){
                         // Remove a row

@@ -49,7 +49,6 @@ final class SiteBootstrapper extends AbstractSiteBootstrapper
         $this->view->addVariable('basket', $basket)
                    ->getPluginBag()
                    ->appendScript('@Shop/site.module.js');
-        
     }
 
     /**
