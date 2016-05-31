@@ -91,6 +91,20 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     }
 
     /**
+     * Counts amount of unapproved orders
+     * 
+     * @return string
+     */
+    public function countUnapproved()
+    {
+        return $this->db->select()
+                        ->count('id', 'count')
+                        ->from(self::getTableName())
+                        ->whereEquals('approved', '0')
+                        ->query('count');
+    }
+
+    /**
      * Adds new order data
      * 
      * @param array $data

@@ -36,6 +36,13 @@ interface OrderManagerInterface
     public function countAll($approved);
 
     /**
+     * Counts amount of unapproved orders
+     * 
+     * @return integer
+     */
+    public function countUnapproved();
+
+    /**
      * Approves an order by its associated id
      * 
      * @param string $id Order's id

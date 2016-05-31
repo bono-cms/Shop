@@ -22,6 +22,13 @@ interface OrderInfoMapperInterface
     public function countAll($approved);
 
     /**
+     * Counts amount of unapproved orders
+     * 
+     * @return string
+     */
+    public function countUnapproved();
+
+    /**
      * Adds new order data
      * 
      * @param array $data

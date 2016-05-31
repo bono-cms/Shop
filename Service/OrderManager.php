@@ -97,6 +97,16 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
+     * Counts amount of unapproved orders
+     * 
+     * @return integer
+     */
+    public function countUnapproved()
+    {
+        return (int) $this->orderInfoMapper->countUnapproved();
+    }
+
+    /**
      * Counts all orders
      * 
      * @param boolean $approved Whether to count only approved orders
