@@ -186,16 +186,16 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     protected function toEntity(array $order)
     {
         $entity = new VirtualEntity();
-        $entity->setId((int) $order['id'])
-                 ->setDate($order['date'])
-                 ->setName(Filter::stripTags($order['name']))
-                 ->setPhone($order['phone'])
-                 ->setAddress(Filter::stripTags($order['address']))
-                 ->setComment(Filter::stripTags($order['comment']))
-                 ->setDelivery(Filter::stripTags($order['delivery']))
-                 ->setQty((int) $order['qty'])
-                 ->setTotalPrice($order['total_price'])
-                 ->setApproved((bool) $order['approved']);
+        $entity->setId($order['id'], VirtualEntity::FILTER_INT)
+                 ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
+                 ->setName($order['name'], VirtualEntity::FILTER_TAGS)
+                 ->setPhone($order['phone'], VirtualEntity::FILTER_TAGS)
+                 ->setAddress($order['address'], VirtualEntity::FILTER_TAGS)
+                 ->setComment($order['comment'], VirtualEntity::FILTER_TAGS)
+                 ->setDelivery($order['delivery'], VirtualEntity::FILTER_TAGS)
+                 ->setQty($order['qty'], VirtualEntity::FILTER_INT)
+                 ->setTotalPrice($order['total_price'], VirtualEntity::FILTER_FLOAT)
+                 ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL);
 
         return $entity;
     }

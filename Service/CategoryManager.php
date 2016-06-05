@@ -206,22 +206,22 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
                  ->setCover($category['cover']);
 
         $entity = new CategoryEntity();
-        $entity->setId((int) $category['id'])
+        $entity->setId($category['id'], CategoryEntity::FILTER_INT)
             ->setImageBag($imageBag)
-            ->setParentId((int) $category['parent_id'])
-            ->setLangId((int) $category['lang_id'])
-            ->setWebPageId($category['web_page_id'])
-            ->setTitle(Filter::escape($category['title']))
-            ->setName(Filter::escape($category['name']))
-            ->setDescription(Filter::escapeContent($category['description']))
-            ->setOrder((int) $category['order'])
-            ->setSeo((bool) $category['seo'])
-            ->setSlug(Filter::escape($this->webPageManager->fetchSlugByWebPageId($category['web_page_id'])))
-            ->setKeywords(Filter::escape($category['keywords']))
+            ->setParentId($category['parent_id'], CategoryEntity::FILTER_INT)
+            ->setLangId($category['lang_id'], CategoryEntity::FILTER_INT)
+            ->setWebPageId($category['web_page_id'], CategoryEntity::FILTER_INT)
+            ->setTitle($category['title'], CategoryEntity::FILTER_TAGS)
+            ->setName($category['name'], CategoryEntity::FILTER_TAGS)
+            ->setDescription($category['description'], CategoryEntity::FILTER_SAFE_TAGS)
+            ->setOrder($category['order'], CategoryEntity::FILTER_INT)
+            ->setSeo($category['seo'], CategoryEntity::FILTER_BOOL)
+            ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), CategoryEntity::FILTER_TAGS)
+            ->setKeywords($category['keywords'], CategoryEntity::FILTER_TAGS)
             ->setPermanentUrl('/module/shop/category/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setMetaDescription(Filter::escape($category['meta_description']))
-            ->setCover(Filter::escape($category['cover']));
+            ->setMetaDescription($category['meta_description'], CategoryEntity::FILTER_TAGS)
+            ->setCover($category['cover'], CategoryEntity::FILTER_TAGS);
 
         return $entity;
     }
