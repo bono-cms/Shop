@@ -10,7 +10,7 @@ use Krystal\Form\HtmlHelper;
 <h2><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?> (<?php echo $paginator->getTotalAmount(); ?>)</h2>
 
 <div class="table-responsive">
-    <?php $this->loadBlock('items-per-page', array('caption' => 'Recent orders')); ?>
+    <?php $this->loadPartial('items-per-page', array('caption' => 'Recent orders')); ?>
     
     <form action="<?php echo $this->url('Shop:Admin:Order@filterAction', null); ?>" novalidate>
         <table class="table table-hover table-bordered table-striped">
@@ -115,7 +115,7 @@ use Krystal\Form\HtmlHelper;
         <?php endif; ?>
     </form>
     
-    <?php $this->loadBlock('paginator'); ?>
+    <?php $this->loadPartial('paginator'); ?>
     
     
 </div>
