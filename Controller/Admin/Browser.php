@@ -88,6 +88,7 @@ final class Browser extends AbstractController
                    ->addOne('Shop');
 
         return $this->view->render('browser', array(
+            'newOrdersCount' => $this->getModuleService('orderManager')->countUnapproved(),
             'products' => $products,
             'paginator' => $paginator,
             'categoryId' => $categoryId,
