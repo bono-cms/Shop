@@ -34,7 +34,7 @@ final class Order extends AbstractShopController
                     'captcha' => new Pattern\Captcha($this->captcha)
                 )
             )
-        ));        
+        ));
 
         if ($formValidator->isValid()) {
             if ($this->makeOrder($input)) {
