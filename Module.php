@@ -25,6 +25,8 @@ final class Module extends AbstractShopModule
      */
     public function getServiceProviders()
     {
+        $config = $this->createConfigService();
+
         // Build required mappers
         $imageMapper = $this->getMapper('/Shop/Storage/MySQL/ImageMapper', false);
         $productMapper = $this->getMapper('/Shop/Storage/MySQL/ProductMapper');
@@ -33,14 +35,12 @@ final class Module extends AbstractShopModule
         $orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
 
         // Now build required services
-        $productImageManager = $this->getProductImageManager();
+        $productImageManager = $this->getProductImageManager($config->getEntity());
         $webPageManager = $this->getWebPageManager();
         $historyManager = $this->getHistoryManager();
 
-        $basketManager = $this->getBasketManager($productMapper, $productImageManager->getImageBag());
+        $basketManager = $this->getBasketManager($config->getEntity(), $productMapper, $productImageManager->getImageBag());
         $basketManager->load();
-
-        $config = $this->getConfigService();
 
         $productRemover = new ProductRemover($productMapper, $imageMapper, $webPageManager, $productImageManager);
 
@@ -49,7 +49,7 @@ final class Module extends AbstractShopModule
             $categoryMapper, 
             $productMapper, 
             $webPageManager, 
-            $this->getCategoryImageManager(), 
+            $this->getCategoryImageManager($config->getEntity()), 
             $historyManager, 
             $productRemover,
             $this->getMenuWidget()
@@ -65,7 +65,7 @@ final class Module extends AbstractShopModule
             $productRemover
         );
 
-        $siteService = new SiteService($productManager, $this->getRecentProduct($productManager), $config->getEntity());
+        $siteService = new SiteService($productManager, $this->getRecentProduct($config->getEntity(), $productManager), $config->getEntity());
 
         return array(
 

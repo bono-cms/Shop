@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Changed the way of storing configuration data. Since now its stored in the database
  * Added notification count of new orders on the grid's page
  * Added `name` attribute
  * Added `getImageUrl()` entities in product entity object. It basically acts as a shortcut

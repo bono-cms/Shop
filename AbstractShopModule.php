@@ -13,7 +13,7 @@ namespace Shop;
 
 use Krystal\Image\Tool\ImageBagInterface;
 use Krystal\Image\Tool\ImageManager;
-use Krystal\Config\File\FileArray;
+use Krystal\Stdlib\VirtualEntity;
 use Cms\AbstractCmsModule;
 use Shop\Service\ProductImageManagerFactory;
 use Shop\Service\CategoryImageManagerFactory;
@@ -27,12 +27,11 @@ abstract class AbstractShopModule extends AbstractCmsModule
     /**
      * Returns product image manager
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Image\ImageManager
      */
-    final protected function getProductImageManager()
+    final protected function getProductImageManager(VirtualEntity $config)
     {
-        $config = $this->getConfigEntity();
-
         $plugins = array(
             'thumb' => array(
                 'dimensions' => array(
@@ -62,12 +61,11 @@ abstract class AbstractShopModule extends AbstractCmsModule
     /**
      * Returns category image manager
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Image\ImageManager
      */
-    final protected function getCategoryImageManager()
+    final protected function getCategoryImageManager(VirtualEntity $config)
     {
-        $config = $this->getConfigEntity();
-
         $plugins = array(
             'thumb' => array(
                 'dimensions' => array(
@@ -93,22 +91,24 @@ abstract class AbstractShopModule extends AbstractCmsModule
     /**
      * Returns manager for recent products
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @param \Shop\Service\ProductManagerInterface $productManager
      * @return \Shop\Service\RecentProduct
      */
-    final protected function getRecentProduct(ProductManagerInterface $productManager)
+    final protected function getRecentProduct(VirtualEntity $config, ProductManagerInterface $productManager)
     {
-        return RecentProductManagerFactory::build($productManager, $this->getStorage(), $this->getConfigEntity());
+        return RecentProductManagerFactory::build($productManager, $this->createStorage($config), $config);
     }
 
     /**
      * Returns storage manager
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Http\PersistentStorageInterface
      */
-    final protected function getStorage()
+    final protected function createStorage(VirtualEntity $config)
     {
-        if ($this->getConfigEntity()->getBasketStorageType() == 'cookies') {
+        if ($config->getBasketStorageType() == 'cookies') {
             return $this->getServiceLocator()->get('request')->getCookieBag();
         } else {
             // Always session storage by default
@@ -119,12 +119,13 @@ abstract class AbstractShopModule extends AbstractCmsModule
     /**
      * Returns an instance of basket manager
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @param \Shop\Storage\ProductMapperInterface $productMapper
      * @param \Krystal\Image\Tool\ImageBagInterface $imageBag
      * @return \Shop\Service\BasketManager
      */
-    final protected function getBasketManager($productMapper, ImageBagInterface $imageBag)
+    final protected function getBasketManager(VirtualEntity $config, $productMapper, ImageBagInterface $imageBag)
     {
-        return BasketManagerFactory::build($productMapper, $this->getWebPageManager(), $imageBag, $this->getStorage());
+        return BasketManagerFactory::build($productMapper, $this->getWebPageManager(), $imageBag, $this->createStorage($config));
     }
 }
