@@ -14,6 +14,15 @@ namespace Shop\Storage;
 interface ProductMapperInterface
 {
     /**
+     * Fetches best sale product ids
+     * 
+     * @param integer $qty Minimal quantity for a product to be considered as a best sale
+     * @param integer $limit
+     * @return array
+     */
+    public function fetchBestSales($qty, $limit);
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page

@@ -132,6 +132,25 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Fetches best sales
+     * 
+     * @param integer $qty Minimal quantity for a product to be considered as a best sale
+     * @param integer $limit
+     * @return array
+     */
+    public function fetchBestSales($qty, $limit)
+    {
+        $entities = array();
+        $ids = $this->productMapper->fetchBestSales($qty, $limit);
+
+        foreach ($ids as $id) {
+            $entities[] = $this->fetchById($id);
+        }
+
+        return $entities;
+    }
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page

@@ -14,6 +14,7 @@ namespace Shop\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductMapperInterface;
 use Shop\Service\CategorySortGadget;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class ProductMapper extends AbstractMapper implements ProductMapperInterface
 {
@@ -71,6 +72,26 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         return $this->getSelectQuery($published, $categoryId, $order, $desc)
                     ->paginate($page, $itemsPerPage)
                     ->queryAll();
+    }
+
+    /**
+     * Fetches best sale product ids
+     * 
+     * @param integer $qty Minimal quantity for a product to be considered as a best sale
+     * @param integer $limit
+     * @return array
+     */
+    public function fetchBestSales($qty, $limit)
+    {
+        return $this->db->select(array(sprintf('%s.%s', OrderProductMapper::getTableName(), 'product_id') => 'id'), true)
+                        ->from(OrderProductMapper::getTableName())
+                        ->innerJoin(OrderInfoMapper::getTableName())
+                        ->whereEquals(sprintf('%s.%s', OrderInfoMapper::getTableName(), 'id'), new RawSqlFragment(sprintf('%s.%s', OrderProductMapper::getTableName(), 'order_id')))
+                        ->andWhereEquals(sprintf('%s.%s', OrderInfoMapper::getTableName(), 'approved'), new RawSqlFragment("'1'"))
+                        ->groupBy('id')
+                        ->having('SUM', sprintf('%s.%s', OrderProductMapper::getTableName(), 'qty'), '>=', $qty)
+                        ->limit($limit)
+                        ->queryAll('id');
     }
 
     /**
