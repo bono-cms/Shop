@@ -97,7 +97,7 @@ final class Basket extends AbstractShopController
     }
 
     /**
-     * Makes an order
+     * Removes a product by its associated id
      * 
      * @return string
      */
