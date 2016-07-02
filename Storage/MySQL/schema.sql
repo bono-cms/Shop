@@ -6,6 +6,7 @@ CREATE TABLE `bono_module_shop_orders_info` (
 	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Unique order id',
 	`date` DATE NOT NULL,
 	`name` varchar(255) NOT NULL COMMENT 'Name of customer',
+	`email` varchar(255) NOT NULL COMMENT 'Customer email',
 	`phone` varchar(254) NOT NULL COMMENT 'Phone of customer',
 	`address` TEXT NOT NULL COMMENT 'Destination address',
 	`comment` TEXT NOT NULL COMMENT 'Customer comment',

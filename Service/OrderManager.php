@@ -189,6 +189,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
         $entity->setId($order['id'], VirtualEntity::FILTER_INT)
                  ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
                  ->setName($order['name'], VirtualEntity::FILTER_TAGS)
+                 ->setEmail($order['email'], VirtualEntity::FILTER_TAGS)
                  ->setPhone($order['phone'], VirtualEntity::FILTER_TAGS)
                  ->setAddress($order['address'], VirtualEntity::FILTER_TAGS)
                  ->setComment($order['comment'], VirtualEntity::FILTER_TAGS)

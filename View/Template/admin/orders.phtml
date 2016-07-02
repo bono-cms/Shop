@@ -27,6 +27,9 @@ use Krystal\Form\HtmlHelper;
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('name'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('name'); ?>"><i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Customer'); ?></a>
                     </th>
                     <th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('email'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('email'); ?>"><i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Email'); ?></a>
+                    </th>
+                    <th class="text-center">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('phone'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('phone'); ?>"><i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Phone'); ?></a>
                     </th>
                     <th class="text-center">
@@ -55,6 +58,7 @@ use Krystal\Form\HtmlHelper;
                     <th class="col-md-1"><?php echo Element::number('filter[id]', $filter->get('id'), array('class' => 'form-control', 'min' => '1')); ?></th>
                     <th><?php echo Element::text('filter[date]', $filter->get('date'), array('class' => 'form-control')); ?></th>
                     <th><?php echo Element::text('filter[name]', $filter->get('name'), array('class' => 'form-control')); ?></th>
+                    <th><?php echo Element::text('filter[email]', $filter->get('email'), array('class' => 'form-control')); ?></th>
                     <th><?php echo Element::text('filter[phone]', $filter->get('phone'), array('class' => 'form-control')); ?></th>
                     <th><?php echo Element::text('filter[address]', $filter->get('address'), array('class' => 'form-control')); ?></th>
                     <th></th>
@@ -76,6 +80,7 @@ use Krystal\Form\HtmlHelper;
                     <td class="text-center text-muted"><?php echo $order->getId(); ?></td>
                     <td class="text-center"><?php echo $order->getDate(); ?></td>
                     <td class="text-center"><?php echo $order->getName(); ?></td>
+                    <td class="text-center"><?php echo $order->getEmail(); ?></td>
                     <td class="text-center"><?php echo $order->getPhone(); ?></td>
                     <td class="text-center"><?php echo $order->getAddress(); ?></td>
                     <td class="text-center"><?php echo $order->getComment(); ?></td>

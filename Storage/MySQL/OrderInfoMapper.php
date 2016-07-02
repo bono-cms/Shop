@@ -44,6 +44,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
                         ->from(static::getTableName())
                         ->whereLike('name', '%'.$input['name'].'%', true)
                         ->andWhereLike('phone', '%'.$input['phone'].'%', true)
+                        ->andWhereLike('email', '%'.$input['email'].'%', true)
                         ->andWhereEquals('id', $input['id'], true)
                         ->andWhereEquals('date', $input['date'], true)
                         ->andWhereEquals('qty', $input['qty'], true)
