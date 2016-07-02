@@ -31,6 +31,13 @@ interface SiteServiceInterface
     public function getProductsWithMaxViewCount($limit, $categoryId = null);
 
     /**
+     * Returns best sale product entities
+     * 
+     * @return array
+     */
+    public function getBestSales();
+
+    /**
      * Returns an array of entities of recent products
      * 
      * @param string $id Current product id to be excluded

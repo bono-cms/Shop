@@ -44,7 +44,9 @@ final class ConfigManager extends ConfigModuleService
                ->setThumbHeight($this->get('thumb_height', 300), VirtualEntity::FILTER_FLOAT)
                ->setThumbWidth($this->get('thumb_width', 300), VirtualEntity::FILTER_FLOAT)
                ->setCategoryCoverHeight($this->get('category_cover_height', 300), VirtualEntity::FILTER_FLOAT)
-               ->setCategoryCoverWidth($this->get('category_cover_width', 300), VirtualEntity::FILTER_FLOAT);
+               ->setCategoryCoverWidth($this->get('category_cover_width', 300), VirtualEntity::FILTER_FLOAT)
+               ->setBestSellersLimit($this->get('best_sellers_limit', 5), VirtualEntity::FILTER_INT)
+               ->setBestSellersApplyCount($this->get('best_sellers_apply_count', '2'), VirtualEntity::FILTER_INT);
 
         return $entity;
     }

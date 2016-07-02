@@ -75,6 +75,16 @@ final class SiteService implements SiteServiceInterface
     }
 
     /**
+     * Returns best sale product entities
+     * 
+     * @return array
+     */
+    public function getBestSales()
+    {
+        return $this->productManager->fetchBestSales($this->config->getBestSellersApplyCount(), $this->config->getBestSellersLimit());
+    }
+
+    /**
      * Returns an array of entities of recent products
      * 
      * @param string $id Current product id to be excluded

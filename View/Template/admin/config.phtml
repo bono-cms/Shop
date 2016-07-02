@@ -111,6 +111,29 @@ use Krystal\Form\Element;
                         <span class="help-block"><?php $this->show("Page's id which is attached to basket's controller"); ?></span>
                     </div>
                 </div>
+                
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Best sellers maximal amount'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('config[best_sellers_limit]', $config->getBestSellersLimit(), array('class' => 'form-control')); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                        <span class="help-block"><?php $this->show('Type the amount of best sellers you want to be displayed'); ?></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Start considering a best seller'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('config[best_sellers_apply_count]', $config->getBestSellersApplyCount(), array('class' => 'form-control')); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                        <span class="help-block"><?php $this->show('How many times a product should be sold minimally to be considered as a best-seller?'); ?></span>
+                    </div>
+                </div>
+                
             </div>
         </div>
         <!--/Common tab-->
