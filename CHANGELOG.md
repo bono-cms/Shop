@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added email field in the order form
  * Added ability to fetch best seller products
  * Added option to disable or enable the basket
  * Changed the way of storing configuration data. Since now its stored in the database
