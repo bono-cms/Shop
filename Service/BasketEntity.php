@@ -16,6 +16,16 @@ use Krystal\Stdlib\VirtualEntity;
 final class BasketEntity extends VirtualEntity
 {
     /**
+     * Checks whether basket is disabled
+     * 
+     * @return boolean
+     */
+    public function isEnabled()
+    {
+        return $this->getEnabled();
+    }
+
+    /**
      * Returns image URL
      * 
      * @param string $size

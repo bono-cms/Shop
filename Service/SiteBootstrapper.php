@@ -44,6 +44,7 @@ final class SiteBootstrapper extends AbstractSiteBootstrapper
         $basket->setTotalPrice($basketManager->getTotalPrice());
         $basket->setTotalQty($basketManager->getTotalQuantity());
         $basket->setCurrency($config->getCurrency());
+        $basket->setEnabled($config->getBasketEnabled());
 
         // Finally add $basket entity and append a script which handles a basket
         $this->view->addVariable('basket', $basket)

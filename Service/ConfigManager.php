@@ -32,6 +32,7 @@ final class ConfigManager extends ConfigModuleService
                ->setBasketPageId($this->get('basket_page_id', 0), VirtualEntity::FILTER_INT)
                ->setStokePerPageCount($this->get('stoke_per_page_count', 10), VirtualEntity::FILTER_INT);
 
+        $entity->setBasketEnabled($this->get('basket_enabled', true), VirtualEntity::FILTER_BOOL);
         $entity->setBasketStorageType($this->get('basket_storage_type', 'cookies'), VirtualEntity::FILTER_TAGS);
         $entity->setBasketStorageTypes(array(
             'session' => 'Save data until a user closes a browser (In session)',

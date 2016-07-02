@@ -19,6 +19,13 @@ use Krystal\Form\Element;
             
             <div class="well">
                 <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Enable basket'); ?></label>
+                    <div class="col-lg-10">
+                        <?php echo Element::checkbox('config[basket_enabled]', $config->getBasketEnabled(), array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                
+                <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Activate stoke price support'); ?></label>
                     <div class="col-lg-10">
                         <?php echo Element::checkbox('config[stoke_price_enabled]', $config->getStokePriceEnabled(), array('class' => 'form-control')); ?>

@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added option to disable or enable the basket
  * Changed the way of storing configuration data. Since now its stored in the database
  * Added notification count of new orders on the grid's page
  * Added `name` attribute
