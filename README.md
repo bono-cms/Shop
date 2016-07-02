@@ -18,6 +18,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Regular and stoke prices
  - Cover and additional images
  - Recently viewed products
+ - Best sellers
  - Latest products
  - Description
  - View counter
