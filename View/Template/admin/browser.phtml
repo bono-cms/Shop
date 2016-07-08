@@ -94,7 +94,8 @@ use Krystal\Form\Element;
                             </th>
                             <th class="text-center"><?php $this->show('Actions'); ?></th>
                         </tr>
-                        <tr>
+                        
+                        <tr class="filter">
                             <th></th>
                             <th><?php echo Element::number($filter->getElementName('id'), $filter->get('id'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
                             <th></th>
