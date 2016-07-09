@@ -676,6 +676,36 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Fetches basic product info by its associated id
+     * 
+     * @param string $id Product id
+     * @return \Shop\Service\ProductEntity|boolean
+     */
+    public function fetchBasicById($id)
+    {
+        $product = $this->productMapper->fetchBasicById($id);
+
+        // If not empty, then valid $id supplied
+        if (!empty($product)) {
+            $imageBag = clone $this->imageManager->getImageBag();
+            $imageBag->setId($id)
+                     ->setCover($product['cover']);
+
+            $entity = new ProductEntity();
+            $entity->setId($id)
+                   ->setImageBag($imageBag)
+                   ->setCover($product['cover'], ProductEntity::FILTER_TAGS)
+                   ->setName($product['name'], ProductEntity::FILTER_TAGS)
+                   ->setRegularPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
+                   ->setStokePrice($product['stoke_price'], ProductEntity::FILTER_FLOAT);
+
+            return $entity;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Counts all available products
      * 
      * @return integer

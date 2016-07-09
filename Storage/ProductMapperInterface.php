@@ -163,6 +163,14 @@ interface ProductMapperInterface
     public function fetchById($id);
 
     /**
+     * Fetches basic product info by its associated id
+     * 
+     * @param string $id Product id
+     * @return array
+     */
+    public function fetchBasicById($id);
+
+    /**
      * Counts all available products
      * 
      * @return integer
