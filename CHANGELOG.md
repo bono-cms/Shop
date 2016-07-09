@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Improved the looks of "Successfully added to the basket" modal dialog
  * Added email field in the order form
  * Added ability to fetch best seller products
  * Added option to disable or enable the basket
