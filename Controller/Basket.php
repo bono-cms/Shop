@@ -84,15 +84,36 @@ final class Basket extends AbstractShopController
     public function addAction()
     {
         if ($this->request->hasPost('id', 'qty')) {
+            // Get HTTP POST variables
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
 
-            // Grab basket manager to add it
-            $basketManager = $this->getBasketManager();
-            $basketManager->add($id, $qty);
-            $basketManager->save();
+            $productManager = $this->getModuleService('productManager');
+            $product = $productManager->fetchBasicById($id);
 
-            return json_encode($basketManager->getAllStat());
+            // Make sure the valid product id supplied
+            if ($product !== false) {
+                // Grab basket manager to add it
+                $basketManager = $this->getBasketManager();
+                $basketManager->add($id, $qty);
+                $basketManager->save();
+
+                return json_encode(array(
+                    'basket' => $basketManager->getAllStat(),
+                    'product' => array(
+                        'id' => $product->getId(),
+                        'regularPrice' => $product->getRegularPrice(),
+                        'stokePrice' => $product->getStokePrice(),
+                        'name' => $product->getName(),
+                        'cover' => $product->getImageUrl('450x450'),
+                        'qty' => $qty
+                    )
+                ));
+
+            } else {
+                // Failure
+                return 0;
+            }
         }
     }
 
