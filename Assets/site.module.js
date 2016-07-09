@@ -157,8 +157,11 @@ $(function(){
                 complete : function(){
                     // This should not invoke global complete() handler, so we'd override it with empty function too
                 },
-                success : function(response) {
-                    self.handleSuccess(response, callback);
+                success : function(response){
+                    self.handleSuccess(response, function(data){
+                        view.updateStat(data.basket);
+                        view.updateAddedQv(data.product);
+                    });
                 }
             });
         },
@@ -231,9 +234,28 @@ $(function(){
         }
     };
     
-    
     // View-related logic
     var view = {
+        /**
+         * Update values in "Successfully added" modal dialog
+         * 
+         * @param object product JSON object received from back-end
+         * @return void
+         */
+        updateAddedQv: function(product){
+            // Create price
+            if (product.stokePrice != 0){
+                var price = product.stokePrice;
+            } else {
+                var price = product.regularPrice;
+            }
+            
+            $("[data-qv-product='name']").text(product.name);
+            $("[data-qv-product='qty']").text(product.qty);
+            $("[data-qv-product='price']").text(price);
+            $("[data-qv-product='cover']").attr('src', product.cover);
+        },
+        
         updateStat : function(data){
             // If we have special labels in a mark-up, then we need to update them accordingly
             $("[data-basket-label='total-products-qty']").text(data.totalQuantity);
