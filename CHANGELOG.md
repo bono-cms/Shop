@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added `getSalePercentage()` in `\Shop\Service\ProductEntity`
  * Improved the looks of "Successfully added to the basket" modal dialog
  * Added email field in the order form
  * Added ability to fetch best seller products

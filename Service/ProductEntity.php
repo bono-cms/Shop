@@ -27,6 +27,20 @@ final class ProductEntity extends VirtualEntity
     }
 
     /**
+     * Returns sale percentage
+     * 
+     * @return integer
+     */
+    public function getSalePercentage()
+    {
+        if ($this->hasStokePrice()) {
+            return (int) $this->getStokePrice() * 100 / $this->getPrice();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
      * Checks whether this product is marked as a special offer
      * 
      * @return boolean
