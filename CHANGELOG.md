@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Removed `table-striped` class from main table
  * Added `getSalePercentage()` in `\Shop\Service\ProductEntity`
  * Improved the looks of "Successfully added to the basket" modal dialog
  * Added email field in the order form
