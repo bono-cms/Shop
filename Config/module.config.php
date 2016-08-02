@@ -2,6 +2,7 @@
 
 return array(
  'name' => 'Shop',
+ 'caption' => 'Shop',
  'route' => 'Shop:Admin:Browser@indexAction',
  'icon' => 'fa fa-shopping-cart fa-5x',
  'order' => 1,
