@@ -26,6 +26,7 @@ final class Dropper extends AbstractStorageDropper
             OrderInfoMapper::getTableName(),
             OrderProductMapper::getTableName(),
             ProductMapper::getTableName(),
+            ProductMapper::getJunctionTableName()
         );
     }
 }
