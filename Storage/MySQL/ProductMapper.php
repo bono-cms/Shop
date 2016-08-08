@@ -27,6 +27,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getJunctionTableName()
+    {
+        return self::getWithPrefix('bono_module_shop_product_category_relations');
+    }
+
+    /**
      * Returns shared select
      * 
      * @param boolean $published
@@ -193,11 +201,25 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id
+     * @param boolean $published Whether to fetch only published one
+     * @param boolean $junction Whether to grab meta information about its categories
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $published = false, $junction = true)
     {
-        return $this->findByPk($id);
+        $db = $this->db->select('*')
+                      ->from(self::getTableName())
+                      ->whereEquals('id', $id);
+
+        if ($published === true) {
+            $db->andWhereEquals('published', '1');
+        }
+
+        if ($junction === true) {
+            $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', array('id', 'name'));
+        }
+
+        return $db->query();
     }
 
     /**
@@ -325,7 +347,18 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 return array();
         }
 
-        return $this->getResults($page, $itemsPerPage, true, $categoryId, $order, $desc);
+        $ids = $this->getMasterIdsFromJunction($categoryId);
+        $result = array();
+
+        foreach ($ids as $id) {
+            $product = $this->fetchById($id, true, false);
+
+            if ($product) {
+                $result[] = $product;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -338,7 +371,24 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllByPage($page, $itemsPerPage, $categoryId = null)
     {
-        return $this->getResults($page, $itemsPerPage, false, $categoryId);
+        if ($categoryId === null) {
+            return $this->db->select('*')
+                         ->from(self::getTableName())
+                         ->whereEquals('lang_id', $this->getLangId())
+                         ->orderBy('id')
+                         ->desc()
+                         ->paginate($page, $itemsPerPage)
+                         ->queryAll();
+        } else {
+            $ids = $this->getMasterIdsFromJunction($categoryId);
+            $result = array();
+
+            foreach ($ids as $id) {
+                $result[] = $this->fetchById($id, false, false);
+            }
+
+            return $result;
+        }
     }
 
     /**
@@ -349,11 +399,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function countAllByCategoryId($categoryId)
     {
-        return (int) $this->db->select()
-                        ->count('id', 'count')
-                        ->from(static::getTableName())
-                        ->whereEquals('category_id', $categoryId)
-                        ->query('count');
+        //@TODO Optimize
+        return count($this->getMasterIdsFromJunction($categoryId));
     }
 
     /**
@@ -411,6 +458,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function update(array $input)
     {
+        $this->syncWithJunction($input['id'], $input['category_id']);
+
+        unset($input['category_id']);
         return $this->persist($input);
     }
 
@@ -422,7 +472,12 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function insert(array $input)
     {
-        return $this->persist($this->getWithLang($input));
+        $categories = $input['category_id'];
+        unset($input['category_id']);
+
+        $this->persist($this->getWithLang($input));
+
+        return $this->insertIntoJunction($this->getLastId(), $categories);
     }
 
     /**
@@ -444,6 +499,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function deleteById($id)
     {
-        return $this->deleteByPk($id);
+        return $this->deleteByPk($id) && $this->removeFromJunction($id);
     }
 }

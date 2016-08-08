@@ -158,9 +158,11 @@ interface ProductMapperInterface
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id
+     * @param boolean $published Whether to fetch only published one
+     * @param boolean $junction Whether to grab meta information about its categories
      * @return array
      */
-    public function fetchById($id);
+    public function fetchById($id, $published = false, $junction = true);
 
     /**
      * Fetches basic product info by its associated id
