@@ -124,7 +124,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                         ->andWhereEquals('date', $input['date'], true)
                         ->andWhereEquals('id', $input['id'], true)
                         ->andWhereEquals('regular_price', $input['regular_price'], true)
-                        ->andWhereEquals('category_id', $input['category_id'], true)
                         ->andWhereEquals('published', $input['published'], true)
                         ->andWhereEquals('seo', $input['seo'], true)
                         ->orderBy($sortingColumn);
