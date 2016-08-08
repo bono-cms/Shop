@@ -1,5 +1,7 @@
 $(function(){
-	/**
+    $("#categories").select2();
+
+    /**
 	 * Creates row in the image table
 	 * 
 	 * @param string img blob image data
