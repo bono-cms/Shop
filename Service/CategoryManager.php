@@ -62,13 +62,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     private $historyManager;
 
     /**
-     * Internal service to remove category's products
-     * 
-     * @var \Shop\Service\ProductRemoverInterface
-     */
-    private $productRemover;
-
-    /**
      * State initialization
      * 
      * @param \Shop\Storage\CategoryMapperInterface $categoryMapper
@@ -85,7 +78,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         WebPageManagerInterface $webPageManager, 
         ImageManagerInterface $imageManager,
         HistoryManagerInterface $historyManager,
-        ProductRemoverInterface $productRemover,
         MenuWidgetInterface $menuWidget = null
     ){
         $this->categoryMapper = $categoryMapper;
@@ -93,7 +85,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $this->webPageManager = $webPageManager;
         $this->imageManager = $imageManager;
         $this->historyManager = $historyManager;
-        $this->productRemover = $productRemover;
 
         $this->setMenuWidget($menuWidget);
     }
@@ -374,9 +365,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
 
         $this->categoryMapper->deleteById($id);
         $this->imageManager->delete($id);
-
-        // Remove associated products
-        $this->productRemover->removeAllProductsByCategoryId($id);
 
         return true;
     }
