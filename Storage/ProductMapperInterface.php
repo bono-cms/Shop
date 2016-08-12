@@ -170,14 +170,6 @@ interface ProductMapperInterface
      */
     public function countAll();
 
-    /**
-     * Deletes all products associated with provided category id
-     * 
-     * @param string $categoryId
-     * @return boolean
-     */
-    public function deleteByCategoryId($categoryId);
-
     /** 
      * Deletes a product by its associated id
      * 

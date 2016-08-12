@@ -490,17 +490,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         return $this->insertIntoJunction($this->getLastId(), $categories);
     }
 
-    /**
-     * Deletes all products associated with provided category id
-     * 
-     * @param string $categoryId
-     * @return boolean
-     */
-    public function deleteByCategoryId($categoryId)
-    {
-        return $this->deleteByColumn('category_id', $categoryId);
-    }
-
     /** 
      * Deletes a product by its associated id
      * 
