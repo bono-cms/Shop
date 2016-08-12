@@ -6,6 +6,8 @@ use Krystal\Form\Widget\DropdownWidget;
 use Krystal\Form\HtmlHelper;
 use Krystal\Form\Element;
 
+$categoryId = !empty($filter->get('category_id')) ? $filter->get('category_id') : $categoryId;
+
 ?>
 
 <div class="btn-toolbar">
@@ -49,6 +51,10 @@ use Krystal\Form\Element;
     <div class="col-lg-8">
         <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
         <form action="<?php echo $this->url('Shop:Admin:Browser@filterAction', null); ?>" novalidate>
+            <?php if (isset($categoryId)): ?>
+            <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
+            <?php endif; ?>
+        
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <thead>
