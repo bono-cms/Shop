@@ -110,11 +110,12 @@ final class SiteService implements SiteServiceInterface
     /**
      * Returns an array of latest product entities
      * 
+     * @param integer $categoryId Optionally can be filtered by category id
      * @return array
      */
-    public function getLatest()
+    public function getLatest($categoryId = null)
     {
         $count = $this->config->getShowCaseCount();
-        return $this->productManager->fetchLatestPublished($count);
+        return $this->productManager->fetchLatestPublished($count, $categoryId);
     }
 }
