@@ -237,7 +237,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $entity->setImageBag($imageBag)
             ->setId($product['id'], ProductEntity::FILTER_INT)
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)
-            ->setCategoryId($product['category_id'], ProductEntity::FILTER_INT)
             ->setWebPageId($product['web_page_id'], ProductEntity::FILTER_INT)
 
             // Categories
