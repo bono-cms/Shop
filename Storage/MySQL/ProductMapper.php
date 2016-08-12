@@ -66,6 +66,47 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Shared query set fetcher all product filtered by pagination
+     * 
+     * @param integer $page Current page
+     * @param integer $itemsPerPage Per page count
+     * @param boolean $published Whether to filter by "published" attribute
+     * @param string $categoryId Optional category id filter
+     * @param string $order Sort order
+     * @param boolean $boolean Whether to sort by DESC
+     * @return array
+     */
+    private function querySet($page, $itemsPerPage, $published, $categoryId, $order, $desc)
+    {
+        $db = $this->db->select('*')
+                       ->from(self::getTableName());
+
+        if ($categoryId !== null) {
+            $db->innerJoin(self::getJunctionTableName());
+        }
+
+        $db->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId());
+
+        if ($published === true) {
+            $db->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'published'), '1');
+        }
+
+        if ($categoryId !== null) {
+            $db->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+               ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN));
+        }
+
+        $db->orderBy(sprintf('%s.%s', self::getTableName(), $order));
+
+        if ($desc === true) {
+            $db->desc();
+        }
+
+        return $db->paginate($page, $itemsPerPage)
+                  ->queryAll();
+    }
+
+    /**
      * Queries for a result
      * 
      * @param integer $page Current page number
@@ -346,18 +387,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 return array();
         }
 
-        $ids = $this->getMasterIdsFromJunction($categoryId);
-        $result = array();
-
-        foreach ($ids as $id) {
-            $product = $this->fetchById($id, true, false);
-
-            if ($product) {
-                $result[] = $product;
-            }
-        }
-
-        return $result;
+        return $this->querySet($page, $itemsPerPage, true, $categoryId, $order, $desc);
     }
 
     /**
@@ -370,24 +400,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllByPage($page, $itemsPerPage, $categoryId = null)
     {
-        if ($categoryId === null) {
-            return $this->db->select('*')
-                         ->from(self::getTableName())
-                         ->whereEquals('lang_id', $this->getLangId())
-                         ->orderBy('id')
-                         ->desc()
-                         ->paginate($page, $itemsPerPage)
-                         ->queryAll();
-        } else {
-            $ids = $this->getMasterIdsFromJunction($categoryId);
-            $result = array();
-
-            foreach ($ids as $id) {
-                $result[] = $this->fetchById($id, false, false);
-            }
-
-            return $result;
-        }
+        return $this->querySet($page, $itemsPerPage, false, $categoryId, 'id', true);
     }
 
     /**
