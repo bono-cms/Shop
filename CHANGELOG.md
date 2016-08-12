@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Ability to attach several categories for one single product
  * Removed `table-striped` class from main table
  * Added `getSalePercentage()` in `\Shop\Service\ProductEntity`
  * Improved the looks of "Successfully added to the basket" modal dialog
