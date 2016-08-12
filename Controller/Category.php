@@ -71,6 +71,9 @@ final class Category extends AbstractShopController
                 $vars['categories'] = $children;
             }
 
+            // Persists last category id, for product breadcrumbs
+            $this->getCategoryIdKeeper()->persistLastCategoryId($id);
+
             // Done. Now just render them
             return $this->view->render('shop-category', $vars);
 
