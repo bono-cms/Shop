@@ -71,7 +71,7 @@ final class SiteService implements SiteServiceInterface
      */
     public function getProductsWithMaxViewCount($limit, $categoryId = null)
     {
-        return $this->productManager->getProductsWithMaxViewCount($limit, $categoryId);
+        return $this->productManager->fetchAllPublishedWithMaxViewCount($limit, $categoryId);
     }
 
     /**
