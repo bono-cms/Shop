@@ -241,19 +241,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id
-     * @param boolean $published Whether to fetch only published one
      * @param boolean $junction Whether to grab meta information about its categories
      * @return array
      */
-    public function fetchById($id, $published = false, $junction = true)
+    public function fetchById($id, $junction = true)
     {
         $db = $this->db->select('*')
                       ->from(self::getTableName())
-                      ->whereEquals('id', $id);
-
-        if ($published === true) {
-            $db->andWhereEquals('published', '1');
-        }
+                      ->whereEquals('id', $id)
+                      ->andWhereEquals('published', '1');
 
         if ($junction === true) {
             $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', array('id', 'name'));
