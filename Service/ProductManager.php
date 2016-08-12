@@ -758,10 +758,11 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * Fetches latest product entities
      * 
      * @param integer $limit Limit for fetching
+     * @param integer $categoryId Optionally can be filtered by category id
      * @return array
      */
-    public function fetchLatestPublished($limit)
+    public function fetchLatestPublished($limit, $categoryId = null)
     {
-        return $this->prepareResults($this->productMapper->fetchLatestPublished($limit));
+        return $this->prepareResults($this->productMapper->fetchLatestPublished($limit, $categoryId));
     }
 }

@@ -43,18 +43,10 @@ interface ProductMapperInterface
      * Fetches latest published products
      * 
      * @param integer $limit
+     * @param integer $categoryId Optional category id
      * @return array
      */
-    public function fetchLatestPublished($limit);
-
-    /**
-     * Fetch latest products by associated category id
-     * 
-     * @param string $categoryId
-     * @param integer $limit
-     * @return array
-     */
-    public function fetchLatestByPublishedCategoryId($categoryId, $limit);
+    public function fetchLatestPublished($limit, $categoryId = null);
 
     /**
      * Fetches all published products associated with category id and filtered by pagination

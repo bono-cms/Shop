@@ -35,37 +35,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Returns shared select
-     * 
-     * @param boolean $published
-     * @param string $categoryId Can be filtered by category id
-     * @param string $order
-     * @return \Krystal\Db\Sql\Db
-     */
-    private function getSelectQuery($published, $categoryId = null, $order = 'id', $desc = true)
-    {
-        $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
-
-        if ($published === true) {
-            $db->andWhereEquals('published', '1');
-        }
-
-        if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
-        }
-
-        $db->orderBy($order);
-
-        if ($desc == true) {
-            $db->desc();
-        }
-
-        return $db;
-    }
-
-    /**
      * Appends INNER JOIN on junction table
      * 
      * @return void
@@ -125,23 +94,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         return $db->paginate($page, $itemsPerPage)
                   ->queryAll();
-    }
-
-    /**
-     * Queries for a result
-     * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @param boolean $published Whether to sort only published records
-     * @param string $sort Column name to sort by
-     * @param string $categoryId Optional category id
-     * @return array
-     */
-    private function getResults($page, $itemsPerPage, $published, $categoryId = null, $order = 'id', $desc = true)
-    {
-        return $this->getSelectQuery($published, $categoryId, $order, $desc)
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
     }
 
     /**
@@ -361,27 +313,29 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Fetches latest published products
      * 
      * @param integer $limit
+     * @param integer $categoryId Optional category id
      * @return array
      */
-    public function fetchLatestPublished($limit)
+    public function fetchLatestPublished($limit, $categoryId = null)
     {
-        return $this->getSelectQuery(true)
-                    ->limit($limit)
-                    ->queryAll();
-    }
+        $db = $this->db->select('*')
+                       ->from(static::getTableName());
 
-    /**
-     * Fetch latest products by associated category id
-     * 
-     * @param string $categoryId
-     * @param integer $limit
-     * @return array
-     */
-    public function fetchLatestByPublishedCategoryId($categoryId, $limit)
-    {
-        return $this->getSelectQuery(true, $categoryId)
-                    ->limit($limit)
-                    ->queryAll();
+        if ($categoryId !== null) {
+            $this->junctionJoin();
+        }
+
+        $db->whereEquals('lang_id', $this->getLangId())
+           ->andWhereEquals('published', '1');
+
+        if ($categoryId !== null) {
+            $this->appendJunctionCategory($categoryId);
+        }
+
+        return $db->orderBy('id')
+                  ->desc()
+                  ->limit($limit)
+                  ->queryAll();
     }
 
     /**
