@@ -27,51 +27,73 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Returns shared select
-     * 
-     * @param boolean $published
-     * @param string $categoryId Can be filtered by category id
-     * @param string $order
-     * @return \Krystal\Db\Sql\Db
+     * {@inheritDoc}
      */
-    private function getSelectQuery($published, $categoryId = null, $order = 'id', $desc = true)
+    public static function getJunctionTableName()
     {
-        $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
-
-        if ($published === true) {
-            $db->andWhereEquals('published', '1');
-        }
-
-        if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
-        }
-
-        $db->orderBy($order);
-
-        if ($desc == true) {
-            $db->desc();
-        }
-
-        return $db;
+        return self::getWithPrefix('bono_module_shop_product_category_relations');
     }
 
     /**
-     * Queries for a result
+     * Appends INNER JOIN on junction table
      * 
-     * @param integer $page Current page number
+     * @return void
+     */
+    private function junctionJoin()
+    {
+        $this->db->innerJoin(self::getJunctionTableName());
+    }
+
+    /**
+     * Appends category filter on junction table
+     * 
+     * @param string $categoryId
+     * @return void
+     */
+    private function appendJunctionCategory($categoryId)
+    {
+        $this->db->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+                 ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN));
+    }
+
+    /**
+     * Shared query set fetcher all product filtered by pagination
+     * 
+     * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
-     * @param boolean $published Whether to sort only published records
-     * @param string $sort Column name to sort by
-     * @param string $categoryId Optional category id
+     * @param boolean $published Whether to filter by "published" attribute
+     * @param string $categoryId Optional category id filter
+     * @param string $order Sort order
+     * @param boolean $boolean Whether to sort by DESC
      * @return array
      */
-    private function getResults($page, $itemsPerPage, $published, $categoryId = null, $order = 'id', $desc = true)
+    private function querySet($page, $itemsPerPage, $published, $categoryId, $order, $desc)
     {
-        return $this->getSelectQuery($published, $categoryId, $order, $desc)
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
+        $db = $this->db->select('*')
+                       ->from(self::getTableName());
+
+        if ($categoryId !== null) {
+            $this->junctionJoin();
+        }
+
+        $db->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId());
+
+        if ($published === true) {
+            $db->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'published'), '1');
+        }
+
+        if ($categoryId !== null) {
+            $this->appendJunctionCategory($categoryId);
+        }
+
+        $db->orderBy(sprintf('%s.%s', self::getTableName(), $order));
+
+        if ($desc === true) {
+            $db->desc();
+        }
+
+        return $db->paginate($page, $itemsPerPage)
+                  ->queryAll();
     }
 
     /**
@@ -111,15 +133,24 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         $db = $this->db->select('*')
-                        ->from(static::getTableName())
-                        ->whereLike('name', '%'.$input['name'].'%', true)
-                        ->andWhereEquals('date', $input['date'], true)
-                        ->andWhereEquals('id', $input['id'], true)
-                        ->andWhereEquals('regular_price', $input['regular_price'], true)
-                        ->andWhereEquals('category_id', $input['category_id'], true)
-                        ->andWhereEquals('published', $input['published'], true)
-                        ->andWhereEquals('seo', $input['seo'], true)
-                        ->orderBy($sortingColumn);
+                        ->from(static::getTableName());
+
+        if (!empty($input['category_id'])) {
+            $this->junctionJoin();
+        }
+
+        $db->whereLike('name', '%'.$input['name'].'%', true)
+           ->andWhereEquals('date', $input['date'], true)
+           ->andWhereEquals('id', $input['id'], true)
+           ->andWhereEquals('regular_price', $input['regular_price'], true)
+           ->andWhereEquals('published', $input['published'], true)
+           ->andWhereEquals('seo', $input['seo'], true);
+
+        if (!empty($input['category_id'])) {
+            $this->appendJunctionCategory($input['category_id']);
+        }
+
+        $db->orderBy($sortingColumn);
 
         if ($desc) {
             $db->desc();
@@ -158,12 +189,16 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function getMinCategoryPriceCount($categoryId)
     {
-        return $this->db->select()
+        $db = $this->db->select()
                         ->min('regular_price', 'min_price')
-                        ->from(static::getTableName())
-                        ->whereEquals('published', '1')
-                        ->andWhereEquals('category_id', $categoryId)
-                        ->query('min_price');
+                        ->from(static::getTableName());
+
+        $this->junctionJoin();
+
+        $db->whereEquals('published', '1');
+        $this->appendJunctionCategory($categoryId);
+
+        return $db->query('min_price');
     }
 
     /**
@@ -176,16 +211,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchAllPublishedWithMaxViewCount($limit, $categoryId = null)
     {
         $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId())
-                       ->andWhereEquals('published', '1');
+                       ->from(static::getTableName());
 
         if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
+            $this->junctionJoin();
         }
 
-        return $db->andWhereGreaterThan('views', '0')
-                  ->limit($limit)
+        $db->whereEquals('lang_id', $this->getLangId())
+           ->andWhereEquals('published', '1')
+           ->andWhereGreaterThan('views', '0');
+
+        if ($categoryId !== null) {
+            $this->appendJunctionCategory($categoryId);
+        }
+
+        return $db->limit($limit)
                   ->queryAll();
     }
 
@@ -193,11 +233,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id
+     * @param boolean $junction Whether to grab meta information about its categories
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $junction = true)
     {
-        return $this->findByPk($id);
+        $db = $this->db->select('*')
+                      ->from(self::getTableName())
+                      ->whereEquals('id', $id)
+                      ->andWhereEquals('published', '1');
+
+        if ($junction === true) {
+            $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', array('id', 'name'));
+        }
+
+        return $db->query();
     }
 
     /**
@@ -237,7 +287,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchProductIdsByCategoryId($categoryId)
     {
-        return $this->fetchOneColumn('id', 'category_id', $categoryId);
+        // To be selected
+        $column = 'id';
+
+        return $this->db->select($column)
+                        ->from(self::getTableName())
+                        ->junctionJoin()
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->appendJunctionCategory($categoryId)
+                        ->query($column);
     }
 
     /**
@@ -255,27 +313,29 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Fetches latest published products
      * 
      * @param integer $limit
+     * @param integer $categoryId Optional category id
      * @return array
      */
-    public function fetchLatestPublished($limit)
+    public function fetchLatestPublished($limit, $categoryId = null)
     {
-        return $this->getSelectQuery(true)
-                    ->limit($limit)
-                    ->queryAll();
-    }
+        $db = $this->db->select('*')
+                       ->from(static::getTableName());
 
-    /**
-     * Fetch latest products by associated category id
-     * 
-     * @param string $categoryId
-     * @param integer $limit
-     * @return array
-     */
-    public function fetchLatestByPublishedCategoryId($categoryId, $limit)
-    {
-        return $this->getSelectQuery(true, $categoryId)
-                    ->limit($limit)
-                    ->queryAll();
+        if ($categoryId !== null) {
+            $this->junctionJoin();
+        }
+
+        $db->whereEquals('lang_id', $this->getLangId())
+           ->andWhereEquals('published', '1');
+
+        if ($categoryId !== null) {
+            $this->appendJunctionCategory($categoryId);
+        }
+
+        return $db->orderBy('id')
+                  ->desc()
+                  ->limit($limit)
+                  ->queryAll();
     }
 
     /**
@@ -325,7 +385,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 return array();
         }
 
-        return $this->getResults($page, $itemsPerPage, true, $categoryId, $order, $desc);
+        return $this->querySet($page, $itemsPerPage, true, $categoryId, $order, $desc);
     }
 
     /**
@@ -338,7 +398,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllByPage($page, $itemsPerPage, $categoryId = null)
     {
-        return $this->getResults($page, $itemsPerPage, false, $categoryId);
+        return $this->querySet($page, $itemsPerPage, false, $categoryId, 'id', true);
     }
 
     /**
@@ -349,11 +409,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function countAllByCategoryId($categoryId)
     {
-        return (int) $this->db->select()
-                        ->count('id', 'count')
-                        ->from(static::getTableName())
-                        ->whereEquals('category_id', $categoryId)
-                        ->query('count');
+        //@TODO Optimize
+        return count($this->getMasterIdsFromJunction($categoryId));
     }
 
     /**
@@ -411,6 +468,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function update(array $input)
     {
+        $this->syncWithJunction($input['id'], $input['category_id']);
+
+        unset($input['category_id']);
         return $this->persist($input);
     }
 
@@ -422,18 +482,12 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function insert(array $input)
     {
-        return $this->persist($this->getWithLang($input));
-    }
+        $categories = $input['category_id'];
+        unset($input['category_id']);
 
-    /**
-     * Deletes all products associated with provided category id
-     * 
-     * @param string $categoryId
-     * @return boolean
-     */
-    public function deleteByCategoryId($categoryId)
-    {
-        return $this->deleteByColumn('category_id', $categoryId);
+        $this->persist($this->getWithLang($input));
+
+        return $this->insertIntoJunction($this->getLastId(), $categories);
     }
 
     /** 
@@ -444,6 +498,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function deleteById($id)
     {
-        return $this->deleteByPk($id);
+        return $this->deleteByPk($id) && $this->removeFromJunction($id);
     }
 }

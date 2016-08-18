@@ -189,10 +189,46 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Create category pair (id => name)
+     * 
+     * @param array $categories
+     * @return array
+     */
+    private function createCategoryPair(array $categories)
+    {
+        $result = array();
+
+        foreach ($categories as $category) {
+            $result[(int) $category['id']] = Filter::escape($category['name']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Create category ids
+     * 
+     * @param array $categories
+     * @return array
+     */
+    private function createCategoryIds(array $categories)
+    {
+        $ids = array();
+
+        foreach ($categories as $category) {
+            array_push($ids, (int) $category['id']);
+        }
+
+        return $ids;
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function toEntity(array $product)
     {
+        $categories = isset($product['categories']) ? $product['categories'] : array();
+
         $imageBag = clone $this->imageManager->getImageBag();
         $imageBag->setId($product['id'])
                  ->setCover($product['cover']);
@@ -201,9 +237,12 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $entity->setImageBag($imageBag)
             ->setId($product['id'], ProductEntity::FILTER_INT)
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)
-            ->setCategoryId($product['category_id'], ProductEntity::FILTER_INT)
             ->setWebPageId($product['web_page_id'], ProductEntity::FILTER_INT)
-            ->setCategoryName($this->categoryMapper->fetchNameById($product['category_id']), ProductEntity::FILTER_TAGS)
+
+            // Categories
+            ->setCategoryIds($this->createCategoryIds($categories))
+            ->setCategories($this->createCategoryPair($categories))
+
             ->setTitle($product['title'], ProductEntity::FILTER_TAGS)
             ->setName($product['name'], ProductEntity::FILTER_TAGS)
             ->setPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
@@ -719,10 +758,11 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * Fetches latest product entities
      * 
      * @param integer $limit Limit for fetching
+     * @param integer $categoryId Optionally can be filtered by category id
      * @return array
      */
-    public function fetchLatestPublished($limit)
+    public function fetchLatestPublished($limit, $categoryId = null)
     {
-        return $this->prepareResults($this->productMapper->fetchLatestPublished($limit));
+        return $this->prepareResults($this->productMapper->fetchLatestPublished($limit, $categoryId));
     }
 }

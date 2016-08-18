@@ -16,6 +16,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
 ## Products
 
  - Regular and stoke prices
+ - Ability to attach several categories to single product
  - Cover and additional images
  - Recently viewed products
  - Best sellers

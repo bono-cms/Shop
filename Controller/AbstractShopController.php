@@ -12,6 +12,7 @@
 namespace Shop\Controller;
 
 use Site\Controller\AbstractController;
+use Krystal\Form\Gadget\LastCategoryKeeper;
 
 abstract class AbstractShopController extends AbstractController
 {
@@ -23,5 +24,21 @@ abstract class AbstractShopController extends AbstractController
     final protected function getConfig()
     {
         return $this->getModuleService('configManager')->getEntity();
+    }
+
+    /**
+     * Returns category keeper service
+     * 
+     * @return \Krystal\Form\Gadget\LastCategoryKeeper
+     */
+    final protected function getCategoryIdKeeper()
+    {
+        static $keeper = null;
+
+        if (is_null($keeper)) {
+            $keeper = new LastCategoryKeeper($this->sessionBag);
+        }
+
+        return $keeper;
     }
 }

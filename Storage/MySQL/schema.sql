@@ -32,8 +32,6 @@ CREATE TABLE `bono_module_shop_orders_products` (
 ) DEFAULT CHARSET = UTF8;
 
 
-
-
 DROP TABLE IF EXISTS `bono_module_shop_categories`;
 CREATE TABLE `bono_module_shop_categories` (
 	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -65,10 +63,9 @@ CREATE TABLE `bono_module_shop_product_images` (
 
 DROP TABLE IF EXISTS `bono_module_shop_products`;
 CREATE TABLE `bono_module_shop_products` (
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`lang_id` INT NOT NULL,
-	`category_id` INT NOT NULL COMMENT 'Category id this product belongs to',
-	`web_page_id` INT NOT NULL COMMENT 'Web page id this product refers to',
+    `web_page_id` INT NOT NULL COMMENT 'Web page id this product refers to',
 	`title` varchar(255) NOT NULL COMMENT 'Title of the product',
 	`name` varchar(255) NOT NULL COMMENT 'Name of the product',
 	`regular_price` FLOAT NOT NULL COMMENT 'Regular price of this product',
@@ -85,4 +82,11 @@ CREATE TABLE `bono_module_shop_products` (
 	`views` INT NOT NULL COMMENT 'View couter'
 	
 ) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_shop_product_category_relations`;
+CREATE TABLE `bono_module_shop_product_category_relations` (
+    `master_id` INT NOT NULL COMMENT 'Product ID',
+    `slave_id` INT NOT NULL COMMENT 'Category ID'
+);
 

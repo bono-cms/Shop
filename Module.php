@@ -61,7 +61,6 @@ final class Module extends AbstractCmsModule
             $webPageManager, 
             $this->getCategoryImageManager($config->getEntity()), 
             $historyManager, 
-            $productRemover,
             $this->getMenuWidget()
         );
 

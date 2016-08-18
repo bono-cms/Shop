@@ -6,6 +6,8 @@ use Krystal\Form\Widget\DropdownWidget;
 use Krystal\Form\HtmlHelper;
 use Krystal\Form\Element;
 
+$categoryId = !empty($filter->get('category_id')) ? $filter->get('category_id') : $categoryId;
+
 ?>
 
 <div class="btn-toolbar">
@@ -49,6 +51,10 @@ use Krystal\Form\Element;
     <div class="col-lg-8">
         <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
         <form action="<?php echo $this->url('Shop:Admin:Browser@filterAction', null); ?>" novalidate>
+            <?php if (isset($categoryId)): ?>
+            <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
+            <?php endif; ?>
+        
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -70,11 +76,6 @@ use Krystal\Form\Element;
                             <th class="text-center">
                                 <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('date'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('date'); ?>">
                                 <i class="<?php echo $filter->isSortedByDesc('date') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Date'); ?>
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('category_id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('category_id'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('category_id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Category'); ?>
                                 </a>
                             </th>
                             <th class="text-center">
@@ -101,7 +102,6 @@ use Krystal\Form\Element;
                             <th></th>
                             <th><?php echo Element::text($filter->getElementName('name'), $filter->get('name'), array('class' => 'form-control')); ?></th>
                             <th class="date-col"><?php echo Element::text($filter->getElementName('date'), $filter->get('date'), array('class' => 'form-control')); ?></th>
-                            <th><?php echo DropdownWidget::render(array('name' => $filter->getElementName('category_id'), 'class' => 'form-control'), $categories, $filter->get('category_id')); ?></th>
                             <th class="price-col"><?php echo Element::text($filter->getElementName('price'), $filter->get('price'), array('class' => 'form-control')); ?></th>
                             <th class="text-center"><?php echo BooleanWidget::render(array('name' => $filter->getElementName('published'), 'class' => 'form-control'), $filter->get('published'), $this->getTranslator()); ?></th>
                             <th class="text-center"><?php echo BooleanWidget::render(array('name' => $filter->getElementName('seo'), 'class' => 'form-control'), $filter->get('seo'), $this->getTranslator()); ?></th>
@@ -119,11 +119,10 @@ use Krystal\Form\Element;
                             </td>
                             <td class="col-lg-1 text-center text-muted"><?php echo $product->getId(); ?></td>
                             <td>
-                                <a data-toggle="tooltip" data-placement="top" data-original-title="<?php $this->show('Click to zoom this image'); ?>" data-lightbox="<?php printf('image-%s', $product->getId()); ?>" href="<?php echo $product->getImageBag()->getUrl('original'); ?>"><img class="img-responsive center-block" src="<?php echo $product->getImageBag()->getUrl('120x120'); ?>" /></a>
+                                <a data-toggle="tooltip" data-placement="top" data-original-title="<?php $this->show('Click to zoom this image'); ?>" data-lightbox="<?php printf('image-%s', $product->getId()); ?>" href="<?php echo $product->getImageBag()->getUrl('original'); ?>"><img class="img-responsive center-block" src="<?php echo $product->getImageBag()->getUrl('200x200'); ?>" /></a>
                             </td>
                             <td class="text-center"><?php echo $product->getName(); ?></td>
                             <td class="text-center"><?php echo $product->getDate(); ?></td>
-                            <td class="text-center"><?php echo $product->getCategoryName(); ?></td>
                             <td>
                                 <?php echo Element::number(sprintf('price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0')); ?>
                             </td>

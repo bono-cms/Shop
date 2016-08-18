@@ -57,7 +57,7 @@ use Krystal\Form\HtmlHelper;
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
                     <div class="col-lg-10">
-                        <?php echo Element::select('product[category_id]', $categories, $product->getCategoryId(), array('class' => 'form-control')); ?>
+                        <?php echo Element::select('product[category_id][]', $categories, $product->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'id' => 'categories')); ?>
                     </div>
                 </div>
                 

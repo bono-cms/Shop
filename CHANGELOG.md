@@ -4,6 +4,9 @@ CHANGELOG
 1.4
 ---
 
+ * In `getLatest()` added optional category id filter `\Shop\Service\SiteService`
+ * Fixed issue with `getProductsWithMaxViewCount()` in `\Shop\Service\SiteService`
+ * Ability to attach several categories for one single product
  * Removed `table-striped` class from main table
  * Added `getSalePercentage()` in `\Shop\Service\ProductEntity`
  * Improved the looks of "Successfully added to the basket" modal dialog

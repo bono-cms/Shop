@@ -11,6 +11,8 @@
 
 namespace Shop\Controller;
 
+use Shop\Service\ProductEntity;
+
 final class Product extends AbstractShopController
 {
     /**
@@ -27,8 +29,11 @@ final class Product extends AbstractShopController
 
         // If $product isn't false, then its an entity
         if ($product !== false) {
+            // Configure breadcrumbs
+            $this->configureBreadcrumbs($product);
+
             // Load required plugins for view
-            $this->loadPlugins($productManager->getBreadcrumbs($product));
+            $this->loadPlugins();
 
             $response = $this->view->render('shop-product', array(
                 // Image bags of current product
@@ -48,21 +53,40 @@ final class Product extends AbstractShopController
     }
 
     /**
-     * Loads required plugins
+     * Configure breadcrumbs for view
      * 
-     * @param array $breadcrumbs
+     * @param \Shop\Service\ProductEntity $product
      * @return void
      */
-    private function loadPlugins(array $breadcrumbs)
+    private function configureBreadcrumbs(ProductEntity $product)
+    {
+        $keeper = $this->getCategoryIdKeeper();
+
+        if ($keeper->hasLastCategoryId()) {
+            // Set the last persisted category id
+            $product->setCategoryId($keeper->getLastCategoryId(), ProductEntity::FILTER_INT);
+
+            // Append breadcrumbs
+            $this->view->getBreadcrumbBag()
+                       ->add($this->getModuleService('productManager')->getBreadcrumbs($product));
+
+        } else {
+            // No last id? Then make sure no breadcrumbs displayed
+            $this->view->getBreadcrumbBag()->clear();
+        }
+    }
+
+    /**
+     * Loads view plugins
+     * 
+     * @return void
+     */
+    private function loadPlugins()
     {
         $this->loadSitePlugins();
 
         // Load zoom plugin
         $this->view->getPluginBag()
                    ->load(array('zoom'));
-
-        // Alter breadcrumbs in view
-        $this->view->getBreadcrumbBag()
-                   ->add($breadcrumbs);
     }
 }
