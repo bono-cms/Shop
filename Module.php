@@ -74,10 +74,9 @@ final class Module extends AbstractCmsModule
             $productRemover
         );
 
-        $siteService = new SiteService($productManager, $this->getRecentProduct($config->getEntity(), $productManager), $config->getEntity());
+        $siteService = new SiteService($productManager, $categoryManager, $this->getRecentProduct($config->getEntity(), $productManager), $config->getEntity());
 
         return array(
-
             'siteService' => $siteService,
             'configManager' => $config,
             'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager),

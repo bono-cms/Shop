@@ -12,15 +12,24 @@
 namespace Shop\Service;
 
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
+use Shop\View\CategoryDropdown;
 
 final class SiteService implements SiteServiceInterface
 {
     /**
      * Product manager service
      * 
-     * @var \Shop\Service\SiteService
+     * @var \Shop\Service\ProductManagerInterface
      */
     private $productManager;
+
+    /**
+     * Category manager service
+     * 
+     * @var \Shop\Service\CategoryManagerInterface
+     */
+    private $categoryManager;
 
     /**
      * Configuration entity
@@ -40,15 +49,43 @@ final class SiteService implements SiteServiceInterface
      * State initialization
      * 
      * @param \Shop\Service\ProductManagerInterface $productManager
+     * @param \Shop\Service\CategoryManagerInterface $categoryManager
      * @param \Shop\Service\RecentProductInterface $recentProduct
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
-    public function __construct(ProductManagerInterface $productManager, RecentProductInterface $recentProduct, VirtualEntity $config)
+    public function __construct(ProductManagerInterface $productManager, CategoryManagerInterface $categoryManager, RecentProductInterface $recentProduct, VirtualEntity $config)
     {
         $this->productManager = $productManager;
+        $this->categoryManager = $categoryManager;
         $this->recentProduct = $recentProduct;
         $this->config = $config;
+    }
+
+    /**
+     * Renders category tree as array
+     * 
+     * @return array
+     */
+    public function renderCategoryTree()
+    {
+        return $this->categoryManager->getCategoriesTree();
+    }
+
+    /**
+     * Renders category tree
+     * 
+     * @param array $options
+     * @param \Krystal\Tree\AdjacencyList\Render\AbstractRenderer $walker
+     * @return mixed
+     */
+    public function renderCategoryDropdown(array $options = array(), AbstractRenderer $walker = null)
+    {
+        if (is_null($walker)) {
+            $walker = new CategoryDropdown($options);
+        }
+
+        return $this->categoryManager->renderTree($walker);
     }
 
     /**

@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * In site service, added `renderCategoryTree()` and `renderCategoryDropdown()` to dynamically render menus
  * In `getLatest()` added optional category id filter `\Shop\Service\SiteService`
  * Fixed issue with `getProductsWithMaxViewCount()` in `\Shop\Service\SiteService`
  * Ability to attach several categories for one single product

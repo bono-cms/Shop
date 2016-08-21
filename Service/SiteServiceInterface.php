@@ -11,8 +11,26 @@
 
 namespace Shop\Service;
 
+use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
+
 interface SiteServiceInterface
 {
+    /**
+     * Renders category tree as array
+     * 
+     * @return array
+     */
+    public function renderCategoryTree();
+
+    /**
+     * Renders category tree
+     * 
+     * @param array $options
+     * @param \Krystal\Tree\AdjacencyList\Render\AbstractRenderer $walker
+     * @return mixed
+     */
+    public function renderCategoryDropdown(array $options = array(), AbstractRenderer $walker = null);
+
     /**
      * Returns minimal product's price associated with provided category id
      * 

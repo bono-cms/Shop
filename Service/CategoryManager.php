@@ -21,6 +21,7 @@ use Shop\Storage\ProductMapperInterface;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Security\Filter;
 use Krystal\Tree\AdjacencyList\TreeBuilder;
+use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 use Krystal\Tree\AdjacencyList\Render\PhpArray;
 use Krystal\Stdlib\ArrayUtils;
 
@@ -104,14 +105,25 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
+     * Creates Tree builder instance
+     * 
+     * @param \Krystal\Tree\AdjacencyList\Render\AbstractRenderer $walker
+     * @return string
+     */
+    public function renderTree(AbstractRenderer $walker)
+    {
+        $treeBuilder = new TreeBuilder($this->createTreeData());
+        return $treeBuilder->render($walker);
+    }
+
+    /**
      * Fetches all categories as a tree
      * 
      * @return array
      */
     public function getCategoriesTree()
     {
-        $treeBuilder = new TreeBuilder($this->fetchAll());
-        return $treeBuilder->render(new PhpArray('name'));
+        return $this->renderTree(new PhpArray('name'));
     }
 
     /**
@@ -351,6 +363,28 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $this->removeChildNodes($id);
 
         return true;
+    }
+
+    /**
+     * Creates tree data to be supplied for the tree builder
+     * 
+     * @return array
+     */
+    private function createTreeData()
+    {
+        $result = array();
+        $entities = $this->prepareResults($this->fetchAll());
+
+        foreach ($entities as $entity) {
+            $result[] = array(
+                'name' => $entity->getName(),
+                'id' => $entity->getId(),
+                'parent_id' => $entity->getParentId(),
+                'url' => $entity->getUrl()
+            );
+        }
+
+        return $result;
     }
 
     /**

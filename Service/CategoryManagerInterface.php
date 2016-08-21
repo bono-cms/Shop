@@ -11,6 +11,8 @@
 
 namespace Shop\Service;
 
+use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
+
 interface CategoryManagerInterface
 {
     /**
@@ -20,6 +22,14 @@ interface CategoryManagerInterface
      * @return array
      */
     public function getPromtWithCategoriesTree($text);
+
+    /**
+     * Creates Tree builder instance
+     * 
+     * @param \Krystal\Tree\AdjacencyList\Render\AbstractRenderer $walker
+     * @return string
+     */
+    public function renderTree(AbstractRenderer $walker);
 
     /**
      * Fetches all categories as a tree
