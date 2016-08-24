@@ -132,11 +132,27 @@ final class Product extends AbstractController
     {
         $input = $this->request->getPost();
 
+        // If a category hasn't been attached, then assign it to a dummy array
+        if (!isset($input['product']['category_id'])) {
+            $input['product']['category_id'] = array();
+        }
+
         return $this->invokeSave('productManager', $input['product']['id'], $this->request->getAll(), array(
             'input' => array(
                 'source' => $input['product'],
                 'definition' => array(
                     'name' => new Pattern\Name(),
+
+                    // Custom case for category id
+                    'category_id' => array(
+                        'required' => true,
+                        'rules' => array(
+                            'NotEmpty' => array(
+                                'message' => 'Attach at least one category'
+                            )
+                        )
+                    ),
+                    
                     'regular_price' => new Pattern\Price(),
                     'description' => new Pattern\Description()
                 )
