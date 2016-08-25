@@ -26,43 +26,6 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Builds shared select
-     * 
-     * @param boolean $front
-     * @return \Krystal\Db\Sql\Db
-     */
-    private function getSelectQuery($front)
-    {
-        $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
-
-        if ($front === true) {
-            $db->orderBy('order');
-        } else {
-            $db->orderBy('id')
-               ->desc();
-        }
-
-        return $db;
-    }
-
-    /**
-     * Queries for a result
-     * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @param boolean $front
-     * @return array
-     */
-    private function getResults($page, $itemsPerPage, $front)
-    {
-        return $this->getSelectQuery($front)
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
-    }
-
-    /**
      * Fetches children by parent id
      * 
      * @param string $parentId
@@ -181,29 +144,5 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->from(static::getTableName())
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
-    }
-
-    /**
-     * Fetches all categories filtered by pagination
-     * 
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByIdAndPage($page, $itemsPerPage)
-    {
-        return $this->getResults($page, $itemsPerPage, false);
-    }
-
-    /**
-     * Fetches all published categories by associated id and filtered by pagination
-     * 
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllPublishedByIdAndPage($page, $itemsPerPage)
-    {
-        return $this->getResults($page, $itemsPerPage, true);
     }
 }

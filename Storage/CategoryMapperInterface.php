@@ -90,22 +90,4 @@ interface CategoryMapperInterface
      * @return boolean
      */
     public function deleteByParentId($parentId);
-
-    /**
-     * Fetches all categories filtered by pagination
-     * 
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByIdAndPage($page, $itemsPerPage);
-
-    /**
-     * Fetches all published categories by associated id and filtered by pagination
-     * 
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllPublishedByIdAndPage($page, $itemsPerPage);
 }

@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Removed extra `fetchAllByIdAndPage()` and `fetchAllPublishedByIdAndPage()` methods in `CategoryMapper`
  * Fixed sorting issue in `CategoryMapper::fetchChildrenByParentId()`
  * In site service, added `renderCategoryTree()` and `renderCategoryDropdown()` to dynamically render menus
  * In `getLatest()` added optional category id filter `\Shop\Service\SiteService`
