@@ -41,74 +41,6 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Adds a category
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function insert(array $data)
-    {
-        return $this->persist($this->getWithLang($data));
-    }
-
-    /**
-     * Updates a category
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function update(array $data)
-    {
-        return $this->persist($data);
-    }
-
-    /**
-     * Counts all available categories
-     * 
-     * @return integer
-     */
-    public function countAll()
-    {
-        return (int) $this->db->select()
-                              ->count('id', 'count')
-                              ->from(self::getTableName())
-                              ->query('count');
-    }
-
-    /**
-     * Fetches category's data by its associated id
-     * 
-     * @param string $id
-     * @return array
-     */
-    public function fetchById($id)
-    {
-        return $this->findByPk($id);
-    }
-
-    /**
-     * Deletes a category by its associated id
-     * 
-     * @param string $id
-     * @return boolean
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
-    }
-
-    /**
-     * Deletes a category by its associated parent id
-     * 
-     * @param string $parentId Category parent id
-     * @return boolean
-     */
-    public function deleteByParentId($parentId)
-    {
-        return $this->deleteByColumn('parent_id', $parentId);
-    }
-
-    /**
      * Fetches breadcrumb's data
      * 
      * @param string $id Category id
@@ -144,5 +76,73 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->from(static::getTableName())
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
+    }
+
+    /**
+     * Fetches category's data by its associated id
+     * 
+     * @param string $id
+     * @return array
+     */
+    public function fetchById($id)
+    {
+        return $this->findByPk($id);
+    }
+
+    /**
+     * Adds a category
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function insert(array $data)
+    {
+        return $this->persist($this->getWithLang($data));
+    }
+
+    /**
+     * Updates a category
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function update(array $data)
+    {
+        return $this->persist($data);
+    }
+
+    /**
+     * Counts all available categories
+     * 
+     * @return integer
+     */
+    public function countAll()
+    {
+        return (int) $this->db->select()
+                              ->count('id', 'count')
+                              ->from(self::getTableName())
+                              ->query('count');
+    }
+
+    /**
+     * Deletes a category by its associated id
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->deleteByPk($id);
+    }
+
+    /**
+     * Deletes a category by its associated parent id
+     * 
+     * @param string $parentId Category parent id
+     * @return boolean
+     */
+    public function deleteByParentId($parentId)
+    {
+        return $this->deleteByColumn('parent_id', $parentId);
     }
 }

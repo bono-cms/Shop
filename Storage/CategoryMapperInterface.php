@@ -45,6 +45,14 @@ interface CategoryMapperInterface
     public function fetchAll();
 
     /**
+     * Fetches category's data by its associated id
+     * 
+     * @param string $id Category's id
+     * @return array
+     */
+    public function fetchById($id);
+
+    /**
      * Adds a category
      * 
      * @param array $data
@@ -66,14 +74,6 @@ interface CategoryMapperInterface
      * @return integer
      */
     public function countAll();
-
-    /**
-     * Fetches category's data by its associated id
-     * 
-     * @param string $id Category's id
-     * @return array
-     */
-    public function fetchById($id);
 
     /**
      * Deletes a category by its associated id
