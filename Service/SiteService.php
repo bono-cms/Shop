@@ -63,6 +63,17 @@ final class SiteService implements SiteServiceInterface
     }
 
     /**
+     * Returns category top children entities by its associated id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function getCategoryChildrenByParentId($id)
+    {
+        return $this->categoryManager->fetchChildrenByParentId($id);
+    }
+
+    /**
      * Renders category tree as array
      * 
      * @return array

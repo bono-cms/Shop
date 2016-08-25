@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * In site service, added `getCategoryChildrenByParentId()`
  * Fixed issue with user-defined pagination
  * Removed extra `fetchAllByIdAndPage()` and `fetchAllPublishedByIdAndPage()` methods in `CategoryMapper`
  * Fixed sorting issue in `CategoryMapper::fetchChildrenByParentId()`
