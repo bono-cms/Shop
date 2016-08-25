@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Fixed sorting issue in `CategoryMapper::fetchChildrenByParentId()`
  * In site service, added `renderCategoryTree()` and `renderCategoryDropdown()` to dynamically render menus
  * In `getLatest()` added optional category id filter `\Shop\Service\SiteService`
  * Fixed issue with `getProductsWithMaxViewCount()` in `\Shop\Service\SiteService`

@@ -13,6 +13,7 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\CategoryMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class CategoryMapper extends AbstractMapper implements CategoryMapperInterface
 {
@@ -70,8 +71,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function fetchChildrenByParentId($parentId)
     {
         return $this->db->select('*')
-                        ->from(static::getTableName())
+                        ->from(self::getTableName())
                         ->whereEquals('parent_id', $parentId)
+                        ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'))
                         ->queryAll();
     }
 
