@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Fixed issue with user-defined pagination
  * Removed extra `fetchAllByIdAndPage()` and `fetchAllPublishedByIdAndPage()` methods in `CategoryMapper`
  * Fixed sorting issue in `CategoryMapper::fetchChildrenByParentId()`
  * In site service, added `renderCategoryTree()` and `renderCategoryDropdown()` to dynamically render menus

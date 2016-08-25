@@ -109,7 +109,16 @@ final class Category extends AbstractShopController
         static $gadget = null;
 
         if (is_null($gadget)) {
-            $gadget = new PerPageCount($this->sessionBag, 'cat_pc', 5);
+            // Get default value
+            $config = $this->getModuleService('configManager')->getEntity();
+            $default = $config->getDefaultCategoryPerPageCount();
+
+            // Prepare defaults
+            $defaults = array($default, 3, 5, 10, 15, 20, 25); // Default collection
+            $defaults = array_unique($defaults); // Removed duplicates if any
+            asort($defaults, \SORT_NUMERIC); // Sort from lower to highest
+
+            $gadget = new PerPageCount($this->sessionBag, 'cat_pc', $default, $defaults);
         }
 
         return $gadget;
