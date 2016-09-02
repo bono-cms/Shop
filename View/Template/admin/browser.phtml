@@ -23,9 +23,6 @@ $categoryId = !empty($filter->get('category_id')) ? $filter->get('category_id') 
          <?php endif; ?>
          
          <li><a href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a></li>
-         <?php if (isset($categoryId)): ?>
-         <li><a href="<?php echo $this->mapUrl('Shop:Admin:Product@addAction', array($categoryId), 1); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add a product to the current category'); ?></a></li>
-         <?php endif; ?>
          <li><a href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a></li>

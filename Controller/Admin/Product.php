@@ -56,16 +56,14 @@ final class Product extends AbstractController
     /**
      * Renders empty form
      * 
-     * @param string $categoryId
      * @return string
      */
-    public function addAction($categoryId = null)
+    public function addAction()
     {
         $product = new VirtualEntity();
         $product->setSeo(true)
                 ->setPublished(true)
-                ->setSpecialOffer(false)
-                ->setCategoryId($categoryId);
+                ->setSpecialOffer(false);
 
         return $this->createForm($product, 'Add a product');
     }

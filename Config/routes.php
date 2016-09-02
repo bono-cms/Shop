@@ -145,10 +145,6 @@ return array(
         'controller' => 'Admin:Product@addAction'
     ),
 
-    '/%s/module/shop/product/add/category/(:var)' => array(
-        'controller' => 'Admin:Product@addAction'
-    ),
-    
     '/%s/module/shop/product/edit/(:var)' => array(
         'controller' => 'Admin:Product@editAction'
     ),
