@@ -1,4 +1,11 @@
 
+span.product-remove-caption {
+ position: relative;
+ left: 5px;
+ top: -3px;
+ font-weight: 400;
+}
+
 [data-image='preview'] {
  display: block;
 }
