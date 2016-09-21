@@ -208,7 +208,7 @@ use Krystal\Form\HtmlHelper;
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Replace this image'); ?>" data-button="edit" data-image="<?php echo $photo->getImage(); ?>" href="#"><i class="glyphicon glyphicon-pencil"></i></a>
                                 
                                 <?php if ($product->getCover() != $photo->getImage()): ?>
-                                <?php echo Element::checkbox(sprintf('photos[toDelete][%s]', $photo->getId()), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Check if you want to remove this image'))); ?> <?php $this->show('Remove'); ?>
+                                <?php echo Element::checkbox(sprintf('photos[toDelete][%s]', $photo->getId()), false, array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Check if you want to remove this image')), false); ?> <?php $this->show('Remove'); ?>
                                 <?php endif; ?>
                                 
                                 <?php echo Element::file(sprintf('image_%s', $photo->getId()), 'image/x-png, image/gif, image/jpeg', array('class' => 'hidden')); ?>
