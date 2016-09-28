@@ -182,7 +182,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         return $bm->getWithCategoryId($product->getCategoryId(), array(
             array(
-                'name' => $product->getTitle(),
+                'name' => $product->getName(),
                 'link' => '#'
             )
         ));

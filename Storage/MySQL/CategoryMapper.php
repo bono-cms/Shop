@@ -48,7 +48,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchBcData()
     {
-        return $this->db->select(array('title', 'web_page_id', 'lang_id', 'parent_id', 'id'))
+        return $this->db->select(array('name', 'web_page_id', 'lang_id', 'parent_id', 'id'))
                         ->from(static::getTableName())
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
