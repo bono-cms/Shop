@@ -103,6 +103,8 @@ final class BasketManager implements BasketManagerInterface
     {
         $data = $this->storage->load();
         $this->collection->load($data);
+
+        $this->refresh();
     }
 
     /**
@@ -128,10 +130,9 @@ final class BasketManager implements BasketManagerInterface
         foreach ($products as $id => $options) {
             $product = $this->productMapper->fetchById($id);
 
-            if (empty($product)) {
-                // This should never happen, but if happens, then its hacking attack
-                // Or a product itself has been removed. We'd simply ignore it for now
-                continue;
+            if (count($product) === 1) {
+                // If a product itself has been removed. We'd simply ignore it and remove it from collection
+                $this->removeById($id);
             } else {
 
                 $qty = (int) $options[self::BASKET_STATIC_OPTION_QTY];
@@ -290,6 +291,24 @@ final class BasketManager implements BasketManagerInterface
     {
         $this->collection->removeKey($id);
         return true;
+    }
+
+    /**
+     * Refresh the statistic
+     * 
+     * @return void
+     */
+    private function refresh()
+    {
+        $ids = $this->collection->getKeys();
+
+        foreach ($ids as $id) {
+            $valid = $this->productMapper->isPrimaryKeyValue($id);
+
+            if (!$valid) {
+                $this->removeById($id);
+            }
+        }
     }
 
     /**

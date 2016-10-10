@@ -227,7 +227,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     protected function toEntity(array $product)
     {
-        $categories = isset($product['categories']) ? $product['categories'] : array();
+        // If the $id isn't set, then the product isn't valid
+        if (!isset($product['id'])) {
+            return new ProductEntity();
+        }
 
         $imageBag = clone $this->imageManager->getImageBag();
         $imageBag->setId($product['id'])
@@ -238,11 +241,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setId($product['id'], ProductEntity::FILTER_INT)
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)
             ->setWebPageId($product['web_page_id'], ProductEntity::FILTER_INT)
-
-            // Categories
-            ->setCategoryIds($this->createCategoryIds($categories))
-            ->setCategories($this->createCategoryPair($categories))
-
             ->setTitle($product['title'], ProductEntity::FILTER_TAGS)
             ->setName($product['name'], ProductEntity::FILTER_TAGS)
             ->setPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
@@ -262,7 +260,14 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
             ->setViewCount($product['views'], ProductEntity::FILTER_INT);
 
-            return $entity;
+        // It's only set in valid entities
+        if (isset($product['categories'])) {
+            // Categories
+            $entity->setCategoryIds($this->createCategoryIds($product['categories']))
+                   ->setCategories($this->createCategoryPair($product['categories']));
+        }
+
+        return $entity;
     }
 
     /**

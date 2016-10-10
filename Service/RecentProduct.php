@@ -116,8 +116,11 @@ final class RecentProduct implements RecentProductInterface
                 $entity = $this->productManager->fetchById($id);
 
                 // Yet another security check, which ensures that product exists
-                if ($entity !== false) {
+                if ($entity->getId()) {
                     array_push($entities, $entity);
+                } else {
+                    // Looks like the product was removed, so no need to keep it in collection
+                    $this->remove($id);
                 }
             }
         }

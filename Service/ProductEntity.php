@@ -23,7 +23,10 @@ final class ProductEntity extends VirtualEntity
      */
     public function getImageUrl($size)
     {
-        return $this->getImageBag()->getUrl($size);
+        // The image bag is only available on valid IDs
+        if ($this->getId()) {
+            return $this->getImageBag()->getUrl($size);
+        }
     }
 
     /**
