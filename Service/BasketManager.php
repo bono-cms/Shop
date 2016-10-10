@@ -148,6 +148,7 @@ final class BasketManager implements BasketManagerInterface
                 $entity = new BasketEntity();
                 $entity->setId($product['id'], BasketEntity::FILTER_INT)
                        ->setTitle($product['title'], BasketEntity::FILTER_TAGS)
+                       ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
                        ->setUrl($this->webPageManager->getUrl($product['web_page_id'], $product['lang_id']))
                        ->setImageBag($imageBag)
                        ->setQty($qty)

@@ -41,6 +41,16 @@ final class ProductEntity extends VirtualEntity
     }
 
     /**
+     * Checks whether a product is not of out stoke
+     * 
+     * @return boolean
+     */
+    public function isAvailable()
+    {
+        return $this->getInStock() > 0;
+    }
+
+    /**
      * Checks whether this product is marked as a special offer
      * 
      * @return boolean

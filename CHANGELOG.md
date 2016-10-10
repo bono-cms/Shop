@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Support for in stock QTY count. Added `isAvailable()` and `getInStock()` methods in product entity
  * In site service, added `getCategoryChildrenByParentId()`
  * Fixed issue with user-defined pagination
  * Removed extra `fetchAllByIdAndPage()` and `fetchAllPublishedByIdAndPage()` methods in `CategoryMapper`

@@ -125,6 +125,12 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
      */
     public function approveById($id)
     {
+        $productIds = $this->orderProductMapper->findProductIdsByOrderId($id);
+
+        foreach ($productIds as $productId) {
+            $this->orderProductMapper->decrementProductInStockQtyById($productId);
+        }
+
         return $this->orderInfoMapper->approveById($id);
     }
 

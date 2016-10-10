@@ -70,6 +70,7 @@ CREATE TABLE `bono_module_shop_products` (
 	`name` varchar(255) NOT NULL COMMENT 'Name of the product',
 	`regular_price` FLOAT NOT NULL COMMENT 'Regular price of this product',
 	`stoke_price` FLOAT NOT NULL COMMENT 'Whether this product is considered as a special offer',
+    `in_stock` INT NOT NULL COMMENT 'Quantity of the product in stoke',
 	`special_offer` varchar(1) NOT NULL COMMENT 'Whether this product is considered as a special offer',
 	`description` TEXT NOT NULL COMMENT 'Full description` of this product',
 	`published` varchar(1) NOT NULL COMMENT 'Whether this product should be visible on site',

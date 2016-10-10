@@ -247,6 +247,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setName($product['name'], ProductEntity::FILTER_TAGS)
             ->setPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
             ->setStokePrice($product['stoke_price'], ProductEntity::FILTER_FLOAT)
+            ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
             ->setSpecialOffer($product['special_offer'], ProductEntity::FILTER_BOOL)
             ->setDescription($product['description'], ProductEntity::FILTER_SAFE_TAGS)
             ->setPublished($product['published'], ProductEntity::FILTER_BOOL)
@@ -261,7 +262,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
             ->setViewCount($product['views'], ProductEntity::FILTER_INT);
 
-        return $entity;
+            return $entity;
     }
 
     /**
