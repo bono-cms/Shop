@@ -44,6 +44,22 @@ interface OrderProductMapperInterface
     public function insert(array $data);
 
     /**
+     * Decrements product in stock qty
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function decrementProductInStockQtyById($id);
+
+    /**
+     * Find product ids by associated order id
+     * 
+     * @param string $id Order id
+     * @return array
+     */
+    public function findProductIdsByOrderId($id);
+
+    /**
      * Fetches all details by associated order's id
      * 
      * @param string $id Order's id

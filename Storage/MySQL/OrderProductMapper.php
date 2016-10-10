@@ -77,6 +77,35 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     }
 
     /**
+     * Decrements product in stock qty
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function decrementProductInStockQtyById($id)
+    {
+        return $this->db->decrement(ProductMapper::getTableName(), 'in_stock', 1)
+                        ->whereEquals('id', $id)
+                        ->execute();
+    }
+
+    /**
+     * Find product ids by associated order id
+     * 
+     * @param string $id Order id
+     * @return array
+     */
+    public function findProductIdsByOrderId($id)
+    {
+        $column = 'product_id';
+
+        return $this->db->select($column)
+                        ->from(self::getTableName())
+                        ->whereEquals('order_id', $id)
+                        ->queryAll($column);
+    }
+
+    /**
      * Fetches all details by associated order's id
      * 
      * @param string $id Order's id
