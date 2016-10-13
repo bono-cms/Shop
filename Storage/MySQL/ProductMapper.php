@@ -258,7 +258,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchBasicById($id)
     {
-        $columns = array('name', 'regular_price', 'stoke_price', 'cover');
+        $columns = array('name', 'regular_price', 'stoke_price', 'in_stock', 'cover');
 
         return $this->db->select($columns)
                         ->from(self::getTableName())

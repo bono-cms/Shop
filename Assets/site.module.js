@@ -144,6 +144,7 @@ $(function(){
          */
         add : function(id, qty, callback){
             var self = this;
+
             $.ajax({
                 type : "POST",
                 url : "/module/shop/basket/add",
@@ -158,10 +159,28 @@ $(function(){
                     // This should not invoke global complete() handler, so we'd override it with empty function too
                 },
                 success : function(response){
-                    self.handleSuccess(response, function(data){
-                        view.updateStat(data.basket);
-                        view.updateAddedQv(data.product);
-                    });
+                    // If we've got an error code
+                    if ($.isNumeric(response)){
+                        var log = null;
+
+                        switch (parseInt(response)) {
+                            case -1:
+                                log = 'The quantity value is greater than stocking one';
+                            break;
+
+                            case 0:
+                                log = 'Not enough request parameters';
+                            break;
+                        }
+
+                        // Log the error code
+                        console.log(log);
+                    } else {
+                        self.handleSuccess(response, function(data){
+                            view.updateStat(data.basket);
+                            view.updateAddedQv(data.product);
+                        });
+                    }
                 }
             });
         },

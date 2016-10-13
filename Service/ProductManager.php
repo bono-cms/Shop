@@ -741,6 +741,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
                    ->setImageBag($imageBag)
                    ->setCover($product['cover'], ProductEntity::FILTER_TAGS)
                    ->setName($product['name'], ProductEntity::FILTER_TAGS)
+                   ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
                    ->setRegularPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
                    ->setStokePrice($product['stoke_price'], ProductEntity::FILTER_FLOAT);
 

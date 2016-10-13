@@ -95,20 +95,27 @@ final class Basket extends AbstractShopController
             if ($product !== false) {
                 // Grab basket manager to add it
                 $basketManager = $this->getBasketManager();
-                $basketManager->add($id, $qty);
-                $basketManager->save();
 
-                return json_encode(array(
-                    'basket' => $basketManager->getAllStat(),
-                    'product' => array(
-                        'id' => $product->getId(),
-                        'regularPrice' => $product->getRegularPrice(),
-                        'stokePrice' => $product->getStokePrice(),
-                        'name' => $product->getName(),
-                        'cover' => $product->getImageUrl('450x450'),
-                        'qty' => $qty
-                    )
-                ));
+                // Make sure, that quantity cannot be greater than a stocking value
+                if ($qty > $product->getInStock()) {
+                    // Error code that indicates aformentioned error
+                    return -1;
+                } else {
+                    $basketManager->add($id, $qty);
+                    $basketManager->save();
+
+                    return json_encode(array(
+                        'basket' => $basketManager->getAllStat(),
+                        'product' => array(
+                            'id' => $product->getId(),
+                            'regularPrice' => $product->getRegularPrice(),
+                            'stokePrice' => $product->getStokePrice(),
+                            'name' => $product->getName(),
+                            'cover' => $product->getImageUrl('450x450'),
+                            'qty' => $qty
+                        )
+                    ));
+                }
 
             } else {
                 // Failure
