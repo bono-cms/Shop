@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Fixed issue with quote escaping
  * Fixed issue with product synchronizations (in basket and recent block)
  * Support for in stock QTY count. Added `isAvailable()` and `getInStock()` methods in product entity
  * In site service, added `getCategoryChildrenByParentId()`

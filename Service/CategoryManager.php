@@ -214,17 +214,19 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setParentId($category['parent_id'], CategoryEntity::FILTER_INT)
             ->setLangId($category['lang_id'], CategoryEntity::FILTER_INT)
             ->setWebPageId($category['web_page_id'], CategoryEntity::FILTER_INT)
-            ->setTitle($category['title'], CategoryEntity::FILTER_TAGS)
-            ->setName($category['name'], CategoryEntity::FILTER_TAGS)
             ->setDescription($category['description'], CategoryEntity::FILTER_SAFE_TAGS)
             ->setOrder($category['order'], CategoryEntity::FILTER_INT)
             ->setSeo($category['seo'], CategoryEntity::FILTER_BOOL)
             ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), CategoryEntity::FILTER_TAGS)
-            ->setKeywords($category['keywords'], CategoryEntity::FILTER_TAGS)
             ->setPermanentUrl('/module/shop/category/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setMetaDescription($category['meta_description'], CategoryEntity::FILTER_TAGS)
-            ->setCover($category['cover'], CategoryEntity::FILTER_TAGS);
+            ->setCover($category['cover'], CategoryEntity::FILTER_TAGS)
+
+            // Meta data
+            ->setTitle($category['title'], CategoryEntity::FILTER_HTML)
+            ->setName($category['name'], CategoryEntity::FILTER_HTML)
+            ->setKeywords($category['keywords'], CategoryEntity::FILTER_HTML)
+            ->setMetaDescription($category['meta_description'], CategoryEntity::FILTER_HTML);
 
         return $entity;
     }

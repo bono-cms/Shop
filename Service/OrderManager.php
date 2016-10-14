@@ -194,12 +194,12 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
         $entity = new VirtualEntity();
         $entity->setId($order['id'], VirtualEntity::FILTER_INT)
                  ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
-                 ->setName($order['name'], VirtualEntity::FILTER_TAGS)
-                 ->setEmail($order['email'], VirtualEntity::FILTER_TAGS)
-                 ->setPhone($order['phone'], VirtualEntity::FILTER_TAGS)
-                 ->setAddress($order['address'], VirtualEntity::FILTER_TAGS)
-                 ->setComment($order['comment'], VirtualEntity::FILTER_TAGS)
-                 ->setDelivery($order['delivery'], VirtualEntity::FILTER_TAGS)
+                 ->setName($order['name'], VirtualEntity::FILTER_HTML)
+                 ->setEmail($order['email'], VirtualEntity::FILTER_HTML)
+                 ->setPhone($order['phone'], VirtualEntity::FILTER_HTML)
+                 ->setAddress($order['address'], VirtualEntity::FILTER_HTML)
+                 ->setComment($order['comment'], VirtualEntity::FILTER_HTML)
+                 ->setDelivery($order['delivery'], VirtualEntity::FILTER_HTML)
                  ->setQty($order['qty'], VirtualEntity::FILTER_INT)
                  ->setTotalPrice($order['total_price'], VirtualEntity::FILTER_FLOAT)
                  ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL);

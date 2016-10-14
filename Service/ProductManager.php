@@ -241,8 +241,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setId($product['id'], ProductEntity::FILTER_INT)
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)
             ->setWebPageId($product['web_page_id'], ProductEntity::FILTER_INT)
-            ->setTitle($product['title'], ProductEntity::FILTER_TAGS)
-            ->setName($product['name'], ProductEntity::FILTER_TAGS)
             ->setPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
             ->setStokePrice($product['stoke_price'], ProductEntity::FILTER_FLOAT)
             ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
@@ -252,8 +250,13 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setOrder($product['order'], ProductEntity::FILTER_INT)
             ->setSeo($product['seo'], ProductEntity::FILTER_BOOL)
             ->setSlug($this->webPageManager->fetchSlugByWebPageId($product['web_page_id']))
-            ->setKeywords($product['keywords'], ProductEntity::FILTER_TAGS)
-            ->setMetaDescription($product['meta_description'], ProductEntity::FILTER_TAGS)
+
+            // Meta data
+            ->setTitle($product['title'], ProductEntity::FILTER_HTML)
+            ->setName($product['name'], ProductEntity::FILTER_HTML)
+            ->setKeywords($product['keywords'], ProductEntity::FILTER_HTML)
+            ->setMetaDescription($product['meta_description'], ProductEntity::FILTER_HTML)
+
             ->setCover($product['cover'], ProductEntity::FILTER_TAGS)
             ->setDate($product['date'])
             ->setPermanentUrl('/module/shop/product/'.$entity->getId())
