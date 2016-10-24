@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Replacement text inputs with textarea for `keywords` attribute
  * Fixed issue with quote escaping
  * Fixed issue with product synchronizations (in basket and recent block)
  * Support for in stock QTY count. Added `isAvailable()` and `getInStock()` methods in product entity

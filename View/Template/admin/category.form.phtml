@@ -88,10 +88,7 @@ use Krystal\Form\Element;
 					<div class="form-group">
 						<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
 						<div class="col-lg-10">
-							<div class="input-group">
-								<?php echo Element::text('category[keywords]', $category->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
-								<span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
-							</div>
+                            <?php echo Element::textarea('category[keywords]', $category->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
 						</div>
 					</div>
 					

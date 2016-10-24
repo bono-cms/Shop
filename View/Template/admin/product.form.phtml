@@ -135,10 +135,7 @@ use Krystal\Form\HtmlHelper;
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
                         <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text('product[keywords]', $product->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
-                            </div>
+                            <?php echo Element::textarea('product[keywords]', $product->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
                         </div>
                     </div>
                     
