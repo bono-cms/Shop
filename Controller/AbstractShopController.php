@@ -36,7 +36,7 @@ abstract class AbstractShopController extends AbstractController
         static $keeper = null;
 
         if (is_null($keeper)) {
-            $keeper = new LastCategoryKeeper($this->sessionBag);
+            $keeper = new LastCategoryKeeper($this->sessionBag, 'last_category_id', true);
         }
 
         return $keeper;
