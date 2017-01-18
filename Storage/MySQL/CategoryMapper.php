@@ -26,6 +26,14 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getJunctionTableName()
+    {
+        return self::getWithPrefix('bono_module_shop_categories_attr_groups');
+    }
+
+    /**
      * Fetches children by parent id
      * 
      * @param string $parentId
@@ -86,7 +94,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchById($id)
     {
-        return $this->findByPk($id);
+        return array_merge($this->findByPk($id), array('attribute_group_id' => $this->getSlaveIdsFromJunction($id)));
     }
 
     /**
@@ -97,7 +105,14 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function insert(array $data)
     {
-        return $this->persist($this->getWithLang($data));
+        $groups = $data['attribute_group_id'];
+        unset($data['attribute_group_id']);
+
+        // Insert a category
+        $this->persist($this->getWithLang($data));
+
+        // Insert into junction
+        return $this->insertIntoJunction($this->getLastId(), $groups);
     }
 
     /**
@@ -108,6 +123,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function update(array $data)
     {
+        $this->syncWithJunction($data['id'], $data['attribute_group_id']);
+
+        unset($data['attribute_group_id']);
         return $this->persist($data);
     }
 
@@ -132,7 +150,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function deleteById($id)
     {
-        return $this->deleteByPk($id);
+        return $this->deleteByPk($id) && $this->removeFromJunction($id);
     }
 
     /**

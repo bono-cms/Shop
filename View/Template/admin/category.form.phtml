@@ -37,6 +37,13 @@ use Krystal\Form\Element;
                         <?php echo Element::select('category[parent_id]', $categories, $category->getParentId(), array('class' => 'form-control')); ?>
 					</div>
 				</div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Attribute groups'); ?></label>
+                    <div class="col-lg-10">
+                        <?php echo Element::select('category[attribute_group_id][]', $attributeGroups, $category->getAttributeGroupIds(), array('class' => 'form-control', 'multiple' => true, 'id' => 'groups')); ?>
+                    </div>
+                </div>
 				
 				<div class="form-group">
 					<label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>

@@ -226,7 +226,8 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setTitle($category['title'], CategoryEntity::FILTER_HTML)
             ->setName($category['name'], CategoryEntity::FILTER_HTML)
             ->setKeywords($category['keywords'], CategoryEntity::FILTER_HTML)
-            ->setMetaDescription($category['meta_description'], CategoryEntity::FILTER_HTML);
+            ->setMetaDescription($category['meta_description'], CategoryEntity::FILTER_HTML)
+            ->setAttributeGroupIds(isset($category['attribute_group_id']) ? $category['attribute_group_id'] : array());
 
         return $entity;
     }

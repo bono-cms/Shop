@@ -50,6 +50,15 @@ CREATE TABLE `bono_module_shop_categories` (
 ) DEFAULT CHARSET = UTF8;
 
 
+DROP TABLE IF EXISTS `bono_module_shop_categories_attr_groups`;
+CREATE TABLE `bono_module_shop_categories_attr_groups` (
+
+    `master_id` INT NOT NULL COMMENT 'Category ID',
+    `slave_id` INT NOT NULL COMMENT 'Attribute group ID'
+
+) DEFAULT CHARSET = UTF8;
+
+
 DROP TABLE IF EXISTS `bono_module_shop_product_images`;
 CREATE TABLE `bono_module_shop_product_images` (
 	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Image id',
