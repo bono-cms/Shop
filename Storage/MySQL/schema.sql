@@ -91,3 +91,22 @@ CREATE TABLE `bono_module_shop_product_category_relations` (
     `slave_id` INT NOT NULL COMMENT 'Category ID'
 );
 
+
+/* Attributes */
+DROP TABLE IF EXISTS `bono_module_shop_attribute_groups`;
+CREATE TABLE `bono_module_shop_attribute_groups` (
+
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL
+
+) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_shop_attribute_values`;
+CREATE TABLE `bono_module_shop_attribute_values` (
+
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `group_id` INT NOT NULL,
+    `name` varchar(255) NOT NULL
+
+) DEFAULT CHARSET = UTF8;
