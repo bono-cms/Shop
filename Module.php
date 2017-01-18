@@ -15,6 +15,8 @@ use Krystal\Image\Tool\ImageBagInterface;
 use Krystal\Image\Tool\ImageManager;
 use Krystal\Stdlib\VirtualEntity;
 use Cms\AbstractCmsModule;
+use Shop\Service\AttributeGroupManager;
+use Shop\Service\AttributeValueManager;
 use Shop\Service\ProductImageManagerFactory;
 use Shop\Service\CategoryImageManagerFactory;
 use Shop\Service\RecentProductManagerFactory;
@@ -83,7 +85,9 @@ final class Module extends AbstractCmsModule
             'basketManager' => $basketManager,
             'taskManager' => new TaskManager($productMapper, $categoryManager),
             'productManager' => $productManager,
-            'categoryManager' => $categoryManager
+            'categoryManager' => $categoryManager,
+            'attributeGroupManager' => new AttributeGroupManager($this->getMapper('/Shop/Storage/MySQL/AttributeGroupMapper', false)),
+            'attributeValueManager' => new AttributeValueManager($this->getMapper('/Shop/Storage/MySQL/AttributeValueMapper', false))
         );
     }
 
