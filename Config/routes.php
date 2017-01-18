@@ -128,6 +128,50 @@ return array(
         'controller' => 'Admin:Browser@indexAction'
     ),
 
+    '/%s/module/shop/attributes' => array(
+        'controller' => 'Admin:Attributes@indexAction'
+    ),
+
+    '/%s/module/shop/attributes/group/view/(:var)' => array(
+        'controller' => 'Admin:Attributes@groupAction'
+    ),
+    
+    '/%s/module/shop/attributes/group/add' => array(
+        'controller' => 'Admin:AttributeGroup@addAction'
+    ),
+    
+    '/%s/module/shop/attributes/group/edit/(:var)' => array(
+        'controller' => 'Admin:AttributeGroup@editAction'
+    ),
+    
+    '/%s/module/shop/attributes/group/save' => array(
+        'controller' => 'Admin:AttributeGroup@saveAction'
+    ),
+    
+    '/%s/module/shop/attributes/group/delete/(:var)' => array(
+        'controller' => 'Admin:AttributeGroup@deleteAction'
+    ),
+    
+    '/%s/module/shop/attributes/value/save' => array(
+        'controller' => 'Admin:AttributeValue@saveAction'
+    ),
+
+    '/%s/module/shop/attributes/value/add' => array(
+        'controller' => 'Admin:AttributeValue@addAction'
+    ),
+    
+    '/%s/module/shop/attributes/value/edit/(:var)' => array(
+        'controller' => 'Admin:AttributeValue@editAction'
+    ),
+    
+    '/%s/module/shop/attributes/value/save' => array(
+        'controller' => 'Admin:AttributeValue@saveAction'
+    ),
+    
+    '/%s/module/shop/attributes/value/delete/(:var)' => array(
+        'controller' => 'Admin:AttributeValue@deleteAction'
+    ),
+    
     '/%s/module/shop/filter/(:var)' => array(
         'controller' => 'Admin:Browser@filterAction'
     ),
