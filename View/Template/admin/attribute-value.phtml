@@ -1,0 +1,41 @@
+<?php defined('KRYSTAL') or die; ?>
+<?php
+
+use Krystal\Form\Element;
+
+?>
+<form data-group="value">
+	<div class="well">
+		<input type="hidden" name="value[id]" value="<?php echo $value->getId(); ?>" />
+
+		<div class="form-group">
+			<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+			<div class="col-lg-10">
+				<div class="input-group">
+					<?php echo Element::text('value[name]', $value->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
+					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+				</div>
+			</div>
+        </div>
+
+		<div class="form-group">
+			<label class="col-lg-2 control-label"><?php $this->show('Group'); ?></label>
+			<div class="col-lg-10">
+                <?php echo Element::select('value[group_id]', $groups, $value->getGroupId(), array('class' => 'form-control')); ?>
+			</div>
+        </div>
+	</div>
+	
+	<?php if (!$value->getId()): ?>
+	
+	<button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:AttributeValue@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:AttributeValue@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+	<button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:AttributeValue@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+	
+	<?php else: ?>
+	
+	<button data-button="save" data-url="<?php echo $this->url('Shop:Admin:AttributeValue@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+	<button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:AttributeValue@addAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:AttributeValue@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+	
+	<?php endif; ?>
+	<button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+</form>
