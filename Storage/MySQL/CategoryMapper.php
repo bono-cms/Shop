@@ -34,6 +34,41 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
+     * Finds category attributes by its associated id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function findAttributesById($id)
+    {
+        // Data to be selected
+        $columns = array(
+            sprintf('%s.id', AttributeGroupMapper::getTableName()) => 'group_id',
+            sprintf('%s.name', AttributeGroupMapper::getTableName()) => 'group_name',
+            sprintf('%s.id', AttributeValueMapper::getTableName()) => 'value_id',
+            sprintf('%s.name', AttributeValueMapper::getTableName()) => 'value_name',
+        );
+
+        return $this->db->select($columns)
+                        ->from(self::getJunctionTableName())
+                        ->leftJoin(AttributeGroupMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            sprintf('%s.id', AttributeGroupMapper::getTableName()), 
+                            new RawSqlFragment(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN))
+                        )
+                        ->rawAnd()
+                        ->equals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN), $id)
+                        ->innerJoin(AttributeValueMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            sprintf('%s.group_id', AttributeValueMapper::getTableName()), 
+                            new RawSqlFragment(sprintf('%s.id', AttributeGroupMapper::getTableName()))
+                        )
+                        ->queryAll();
+    }
+
+    /**
      * Fetches children by parent id
      * 
      * @param string $parentId
@@ -105,6 +140,11 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function insert(array $data)
     {
+        // Substitube with empty if din't receive
+        if (!isset($data['attribute_group_id'])) {
+            $data['attribute_group_id'] = array();
+        }
+
         $groups = $data['attribute_group_id'];
         unset($data['attribute_group_id']);
 

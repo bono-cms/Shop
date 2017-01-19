@@ -14,6 +14,14 @@ namespace Shop\Storage;
 interface CategoryMapperInterface
 {
     /**
+     * Finds category attributes by its associated id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function findAttributesById($id);
+
+    /**
      * Fetches children by parent id
      * 
      * @param string $parentId
