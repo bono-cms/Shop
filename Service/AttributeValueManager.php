@@ -31,7 +31,7 @@ final class AttributeValueManager extends AbstractManager
      * @param \Shop\Storage\AttributeValueMapperInterface $attributeGroupMapper
      * @return void
      */
-    public function __construct($attributeValueMapper)
+    public function __construct(AttributeValueMapperInterface $attributeValueMapper)
     {
         $this->attributeValueMapper = $attributeValueMapper;
     }
