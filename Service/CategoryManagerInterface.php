@@ -100,6 +100,14 @@ interface CategoryManagerInterface
     public function deleteById($id);
 
     /**
+     * Finds category attributes by its associated id
+     * 
+     * @param string $id
+     * @return array
+     */
+    public function fetchAttributesById($id);
+
+    /**
      * Fetches category's entity by its associated id
      * 
      * @param string $id Category id

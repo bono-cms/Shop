@@ -18,6 +18,7 @@ use Menu\Contract\MenuAwareManager;
 use Menu\Service\MenuWidgetInterface;
 use Shop\Storage\CategoryMapperInterface;
 use Shop\Storage\ProductMapperInterface;
+use Shop\Service\AttributeProcessor;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Security\Filter;
 use Krystal\Tree\AdjacencyList\TreeBuilder;
@@ -437,6 +438,20 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     {
         $webPageId = $this->categoryMapper->fetchWebPageIdById($id);
         return $this->webPageManager->deleteById($webPageId);
+    }
+
+    /**
+     * Finds category attributes by its associated id
+     * 
+     * @param string $id
+     * @return array
+     */
+    public function fetchAttributesById($id)
+    {
+        $rows = $this->categoryMapper->findAttributesById($id);
+        $processor = new AttributeProcessor($rows);
+
+        return $processor->process();
     }
 
     /**
