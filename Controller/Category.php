@@ -57,6 +57,7 @@ final class Category extends AbstractShopController
                 'products' => $products,
                 'page' => $category,
                 'category' => $category,
+                'attributes' => $categoryManager->fetchAttributesById($category->getId()),
 
                 // Form gadgets
                 'ppc' => $this->getPerPageCountGadget(),
