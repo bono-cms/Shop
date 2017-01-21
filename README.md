@@ -15,6 +15,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
 
 ## Products
 
+ - Quick view
  - Regular and stoke prices
  - Ability to attach several categories to single product
  - Cover and additional images
@@ -27,6 +28,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
 
 ## Categories
 
+ - Filters / attributes by product attributes
  - Unlimited depth support (aka Parent-child relationship)
  - Category cover
  - Breadcrumbs
