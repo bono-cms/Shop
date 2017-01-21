@@ -11,6 +11,8 @@
 
 namespace Shop\Service;
 
+use Krystal\Security\Filter;
+
 /**
  * The purpose of this tool is to convert a raw result-set
  * that gets returned from SQL query in CategoryMapper::findAttributesById()
@@ -59,8 +61,8 @@ final class AttributeProcessor
             }
 
             $output[] = array(
-                self::ARRAY_KEY_GROUP_ID => $row[self::ARRAY_KEY_GROUP_ID],
-                self::ARRAY_KEY_GROUP_NAME => $row[self::ARRAY_KEY_GROUP_NAME],
+                self::ARRAY_KEY_GROUP_ID => (int) $row[self::ARRAY_KEY_GROUP_ID],
+                self::ARRAY_KEY_GROUP_NAME => Filter::escape($row[self::ARRAY_KEY_GROUP_NAME]),
                 self::ARRAY_KEY_ATTRIBUTES => $this->findAttrsByGroupId($row[self::ARRAY_KEY_GROUP_ID])
             );
         }
@@ -80,7 +82,7 @@ final class AttributeProcessor
 
         foreach ($this->rows as $row) {
             if ($row[self::ARRAY_KEY_GROUP_ID] == $groupId) {
-                $output[$row[self::ARRAY_KEY_VALUE_ID]] = $row[self::ARRAY_KEY_VALUE_NAME];
+                $output[(int) $row[self::ARRAY_KEY_VALUE_ID]] = Filter::escape($row[self::ARRAY_KEY_VALUE_NAME]);
             }
         }
 
