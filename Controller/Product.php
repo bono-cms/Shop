@@ -16,6 +16,30 @@ use Shop\Service\ProductEntity;
 final class Product extends AbstractShopController
 {
     /**
+     * Renders product information in JSON format
+     * 
+     * @return string
+     */
+    public function quickViewAction()
+    {
+        if ($this->request->hasQuery('id') && $this->request->hasQuery('size')) {
+
+            $id = $this->request->getQuery('id');
+            $size = $this->request->getQuery('size');
+
+            // Grab a service
+            $productManager = $this->getModuleService('productManager');
+            $product = $productManager->fetchById($id);
+
+            // Prepare a cover
+            $properties = $product->getProperties();
+            $properties['coverUrl'] = $product->getImageUrl($size);
+
+            return json_encode($properties);
+        }
+    }
+
+    /**
      * Fetches a product by its associated id
      * 
      * @param string $id Product id

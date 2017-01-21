@@ -23,6 +23,10 @@ return array(
         'controller' => 'Product@indexAction'
     ),
 
+    '/module/shop/product/quick-view/(:var)' => array(
+        'controller' => 'Product@quickViewAction'
+    ),
+    
     '/module/shop/basket' => array(
         'controller' => 'Basket@indexAction'
     ),
