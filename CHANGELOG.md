@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added `getTopCategories()` that returns top category entities in `\Shop\Service\SiteService`
  * Replacement text inputs with textarea for `keywords` attribute
  * Fixed issue with quote escaping
  * Fixed issue with product synchronizations (in basket and recent block)

@@ -16,6 +16,13 @@ use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 interface SiteServiceInterface
 {
     /**
+     * Returns top categories (without children)
+     * 
+     * @return array
+     */
+    public function getTopCategories();
+
+    /**
      * Returns category top children entities by its associated id
      * 
      * @param string $id Category id
