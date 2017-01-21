@@ -151,8 +151,12 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         // Insert a category
         $this->persist($this->getWithLang($data));
 
-        // Insert into junction
-        return $this->insertIntoJunction($this->getLastId(), $groups);
+        // If there's at least one selected group, then insert into the junction table
+        if (!empty($groups)) {
+            return $this->insertIntoJunction($this->getLastId(), $groups);
+        }
+
+        return true;
     }
 
     /**
@@ -163,7 +167,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function update(array $data)
     {
-        $this->syncWithJunction($data['id'], $data['attribute_group_id']);
+        if (!empty($data['attribute_group_id'])) {
+            $this->syncWithJunction($data['id'], $data['attribute_group_id']);
+        }
 
         unset($data['attribute_group_id']);
         return $this->persist($data);
