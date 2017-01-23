@@ -119,3 +119,11 @@ CREATE TABLE `bono_module_shop_attribute_values` (
     `name` varchar(255) NOT NULL
 
 ) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_shop_product_attributes`;
+CREATE TABLE `bono_module_shop_product_attributes` (
+    `product_id` INT NOT NULL COMMENT 'Product ID',
+    `group_id` INT NOT NULL COMMENT 'Group ID',
+    `value_id` INT NOT NULL COMMENT 'Value ID'
+);
