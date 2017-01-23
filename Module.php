@@ -45,6 +45,7 @@ final class Module extends AbstractCmsModule
         $categoryMapper = $this->getMapper('/Shop/Storage/MySQL/CategoryMapper');
         $orderInfoMapper = $this->getMapper('/Shop/Storage/MySQL/OrderInfoMapper', false);
         $orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
+        $attributeMapper = $this->getMapper('/Shop/Storage/MySQL/ProductAttributeMapper', false);
 
         // Now build required services
         $productImageManager = $this->getProductImageManager($config->getEntity());
@@ -70,6 +71,7 @@ final class Module extends AbstractCmsModule
             $productMapper, 
             $imageMapper, 
             $categoryMapper, 
+            $attributeMapper,
             $webPageManager, 
             $productImageManager, 
             $historyManager,

@@ -20,6 +20,7 @@ use Menu\Contract\MenuAwareManager;
 use Shop\Storage\ProductMapperInterface;
 use Shop\Storage\ImageMapperInterface;
 use Shop\Storage\CategoryMapperInterface;
+use Shop\Storage\ProductAttributeMapperInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
 use Cms\Service\WebPageManagerInterface;
@@ -46,6 +47,13 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * @var \Shop\Storage\CategoryMapperInterface
      */
     private $categoryMapper;
+
+    /**
+     * Product attribute relation mapper
+     * 
+     * @var \Shop\Storage\ProductAttributeMapperInterface
+     */
+    private $attributeMapper;
 
     /**
      * Product image manager. it can upload, build paths and remove images
@@ -84,12 +92,14 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
      * @param \Krystal\Image\Tool\ImageManagerInterface $imageManager
      * @param \Cms\Service\HistoryManagerInterface $historyManager
+     * @param \Shop\Storage\ProductAttributeMapperInterface $attributeMapper
      * @return void
      */
     public function __construct(
         ProductMapperInterface $productMapper, 
         ImageMapperInterface $imageMapper, 
         CategoryMapperInterface $categoryMapper,
+        ProductAttributeMapperInterface $attributeMapper,
         WebPageManagerInterface $webPageManager,
         ImageManagerInterface $imageManager,
         HistoryManagerInterface $historyManager,
@@ -98,6 +108,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $this->productMapper = $productMapper;
         $this->imageMapper = $imageMapper;
         $this->categoryMapper = $categoryMapper;
+        $this->attributeMapper = $attributeMapper;
         $this->webPageManager = $webPageManager;
         $this->imageManager = $imageManager;
         $this->historyManager = $historyManager;
@@ -400,7 +411,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     private function removeAllById($id)
     {
-        return $this->productRemover->removeAllById($id);
+        $this->productRemover->removeAllById($id);
+        $this->attributeMapper->deleteByProductId($id);
+
+        return true;
     }
 
     /**
@@ -460,6 +474,17 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Find attributes by product id
+     * 
+     * @param string $productId
+     * @return array
+     */
+    public function findAttributesByProductId($productId)
+    {
+        return $this->attributeMapper->findAttributesByProductId($productId);
+    }
+
+    /**
      * Prepares raw input data before sending to the mapper
      * 
      * @param array $input Raw input data
@@ -513,7 +538,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $files =& $input['files']['file'];
 
         // Insert should be first, because we need to provide an id
-        $this->productMapper->insert(ArrayUtils::arrayWithout($product, array('slug')));
+        $this->productMapper->insert(ArrayUtils::arrayWithout($product, array('slug', 'attributes')));
 
         // After insert, now we can get an id
         $id = $this->getLastId();
@@ -533,6 +558,9 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         }
 
         $this->track('Product "%s" has been added', $product['name']);
+
+        // Save attributes
+        $this->attributeMapper->store($id, $product['attributes']);
 
         // Add a web page now
         return $this->webPageManager->add($id, $product['slug'], 'Shop (Products)', 'Shop:Product@indexAction', $this->productMapper);
@@ -626,7 +654,11 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $this->track('Product "%s" has been updated', $product['name']);
         $this->webPageManager->update($product['web_page_id'], $product['slug']);
 
-        return $this->productMapper->update(ArrayUtils::arrayWithout($product, array('slug')));
+        // Update attributes
+        $this->attributeMapper->deleteByProductId($productId);
+        $this->attributeMapper->store($productId, $product['attributes']);
+
+        return $this->productMapper->update(ArrayUtils::arrayWithout($product, array('slug', 'attributes')));
     }
 
     /**
