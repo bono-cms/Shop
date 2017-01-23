@@ -3,6 +3,7 @@
 
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
+use Shop\Service\AttributeProcessor;
 
 ?>
 
@@ -13,6 +14,7 @@ use Krystal\Form\HtmlHelper;
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
         <li role="presentation"><a href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
+        <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
     </ul>
     
     <div class="tab-content">
@@ -230,6 +232,26 @@ use Krystal\Form\HtmlHelper;
             </div>
         </div>
       </div>
+      
+      <div role="tabpanel" class="tab-pane" id="attrs">
+        <div class="well">
+            <?php foreach ($attributes as $attribute): ?>
+            
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php echo $attribute['group_name']; ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select(
+                        sprintf('product[attributes][%s]', $attribute['group_id']), 
+                        $attribute['attributes'], 
+                        AttributeProcessor::findActiveAttribute($attribute['attributes'], $attributes, $activeAttributes),
+                        array('class' => 'form-control')
+                    ); ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+      </div>
+
       <!--Images tab-->
     </div>
 </form>
