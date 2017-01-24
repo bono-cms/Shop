@@ -23,6 +23,17 @@ interface ProductMapperInterface
     public function fetchBestSales($qty, $limit);
 
     /**
+     * Find products by attributes and associated category id
+     * 
+     * @param string $categoryId Category id
+     * @param array $attributes A collection of group IDs and their value IDs
+     * @param string $page Optional page number
+     * @param string $itemsPerPage Optional Per page count filter
+     * @return array
+     */
+    public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null);
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page

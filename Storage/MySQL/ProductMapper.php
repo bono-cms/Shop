@@ -117,6 +117,56 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Find products by attributes and associated category id
+     * 
+     * @param string $categoryId Category id
+     * @param array $attributes A collection of group IDs and their value IDs
+     * @param string $page Optional page number
+     * @param string $itemsPerPage Optional Per page count filter
+     * @return array
+     */
+    public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null)
+    {
+        // Start building initial fragment
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->innerJoin(ProductAttributeMapper::getTableName())
+                       ->on();
+
+        // Dynamic values
+        foreach (array_values($attributes) as $valueId) {
+            $db->equals(sprintf('%s.value_id', ProductAttributeMapper::getTableName()), $valueId)
+               ->rawAnd();
+        }
+
+        // Iteration counter
+        $iteration = 0;
+        $count = count($attributes);
+
+        // Dynamic groups
+        foreach (array_keys($attributes) as $groupId) {
+            $db->equals(sprintf('%s.group_id', ProductAttributeMapper::getTableName()), $groupId);
+            $iteration++;
+
+            if ($count > 1 && $iteration != $count) {
+                $db->rawAnd();
+            }
+        }
+
+        $db->innerJoin(self::getJunctionTableName())
+           ->on()
+           ->equals(sprintf('%s.slave_id', self::getJunctionTableName()), $categoryId)
+           ->groupBy(sprintf('%s.id', self::getTableName()));
+
+        // Do pagination if both parameters provided
+        if (is_numeric($page) && is_numeric($itemsPerPage)) {
+            $db->paginate($page, $itemsPerPage);
+        }
+
+        return $db->queryAll();
+    }
+
+    /**
      * Filters the raw input
      * 
      * @param array|\ArrayAccess $input Raw input data
