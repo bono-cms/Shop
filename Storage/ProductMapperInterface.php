@@ -14,6 +14,13 @@ namespace Shop\Storage;
 interface ProductMapperInterface
 {
     /**
+     * Fetches all product ids with their corresponding names
+     *
+     * @return array
+     */
+    public function fetchAllNames();
+
+    /**
      * Fetches best sale product ids
      * 
      * @param integer $qty Minimal quantity for a product to be considered as a best sale

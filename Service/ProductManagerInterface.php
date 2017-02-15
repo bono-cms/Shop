@@ -14,6 +14,13 @@ namespace Shop\Service;
 interface ProductManagerInterface
 {
     /**
+     * Fetches all product ids with their corresponding names
+     * 
+     * @return array
+     */
+    public function fetchAllNames();
+
+    /**
      * Fetches best sales
      * 
      * @param integer $qty Minimal quantity for a product to be considered as a best sale

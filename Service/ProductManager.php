@@ -116,6 +116,16 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Fetches all product ids with their corresponding names
+     * 
+     * @return array
+     */
+    public function fetchAllNames()
+    {
+        return ArrayUtils::arrayList($this->productMapper->fetchAllNames(), 'id', 'name');
+    }
+
+    /**
      * Filters the raw input
      * 
      * @param array|\ArrayAccess $input Raw input data

@@ -35,6 +35,19 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Fetches all product ids with their corresponding names
+     *
+     * @return array
+     */
+    public function fetchAllNames()
+    {
+        return $this->db->select(array('id', 'name'))
+                        ->from(self::getTableName())
+                        ->orderBy('name')
+                        ->queryAll();
+    }
+
+    /**
      * Appends category filter on junction table
      * 
      * @param string $categoryId
