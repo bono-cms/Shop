@@ -14,6 +14,14 @@ namespace Shop\Storage;
 interface ProductAttributeMapperInterface
 {
     /**
+     * Finds attached attributes. Primarily used to render atttbutes on product page
+     * 
+     * @param string $productId
+     * @return array
+     */
+    public function findAttachedAttributes($productId);
+
+    /**
      * Find a collection of attributes
      * 
      * @param string $productId

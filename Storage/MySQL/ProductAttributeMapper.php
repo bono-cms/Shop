@@ -13,6 +13,7 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductAttributeMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class ProductAttributeMapper extends AbstractMapper implements ProductAttributeMapperInterface
 {
@@ -22,6 +23,35 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     public static function getTableName()
     {
         return self::getWithPrefix('bono_module_shop_product_attributes');
+    }
+
+    /**
+     * Finds attached attributes. Primarily used to render atttbutes on product page
+     * 
+     * @param string $productId
+     * @return array
+     */
+    public function findAttachedAttributes($productId)
+    {
+        // Columns to be selected
+        $columns = array(
+            AttributeGroupMapper::getFullColumnName('name') => 'group',
+            AttributeValueMapper::getFullColumnName('name') => 'attribute'
+        );
+
+        return $this->db->select($columns)
+                        ->from(AttributeGroupMapper::getTableName())
+                        ->innerJoin(AttributeValueMapper::getTableName())
+                        ->on()
+                        ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
+                        ->innerJoin(self::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName('product_id'), $productId)
+                        ->rawAnd()
+                        ->equals(self::getFullColumnName('group_id'), new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id')))
+                        ->rawAnd()
+                        ->equals(self::getFullColumnName('value_id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('id')))
+                        ->queryAll();
     }
 
     /**
