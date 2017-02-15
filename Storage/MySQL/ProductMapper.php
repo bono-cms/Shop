@@ -35,16 +35,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Appends INNER JOIN on junction table
-     * 
-     * @return void
-     */
-    private function junctionJoin()
-    {
-        $this->db->innerJoin(self::getJunctionTableName());
-    }
-
-    /**
      * Appends category filter on junction table
      * 
      * @param string $categoryId
@@ -73,7 +63,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                        ->from(self::getTableName());
 
         if ($categoryId !== null) {
-            $this->junctionJoin();
+            $this->db->innerJoin(self::getJunctionTableName());
         }
 
         $db->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId());
@@ -186,7 +176,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                         ->from(static::getTableName());
 
         if (!empty($input['category_id'])) {
-            $this->junctionJoin();
+            $this->db->innerJoin(self::getJunctionTableName());
         }
 
         $db->whereLike('name', '%'.$input['name'].'%', true)
@@ -241,13 +231,11 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     {
         $db = $this->db->select()
                         ->min('regular_price', 'min_price')
-                        ->from(static::getTableName());
+                        ->from(self::getTableName())
+                        ->innerJoin(self::getJunctionTableName())
+                        ->whereEquals('published', '1');
 
-        $this->junctionJoin();
-
-        $db->whereEquals('published', '1');
         $this->appendJunctionCategory($categoryId);
-
         return $db->query('min_price');
     }
 
@@ -261,10 +249,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchAllPublishedWithMaxViewCount($limit, $categoryId = null)
     {
         $db = $this->db->select('*')
-                       ->from(static::getTableName());
+                       ->from(self::getTableName());
 
         if ($categoryId !== null) {
-            $this->junctionJoin();
+            $this->db->innerJoin(self::getJunctionTableName());
         }
 
         $db->whereEquals('lang_id', $this->getLangId())
@@ -342,7 +330,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         return $this->db->select($column)
                         ->from(self::getTableName())
-                        ->junctionJoin()
+                        ->innerJoin(self::getJunctionTableName())
                         ->whereEquals('lang_id', $this->getLangId())
                         ->appendJunctionCategory($categoryId)
                         ->query($column);
@@ -372,7 +360,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                        ->from(static::getTableName());
 
         if ($categoryId !== null) {
-            $this->junctionJoin();
+            $this->db->innerJoin(self::getJunctionTableName());
         }
 
         $db->whereEquals('lang_id', $this->getLangId())
@@ -460,7 +448,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function countAllByCategoryId($categoryId)
     {
         //@TODO Optimize
-        return count($this->getMasterIdsFromJunction($categoryId));
+        return count($this->getMasterIdsFromJunction(self::getJunctionTableName(), $categoryId));
     }
 
     /**
@@ -518,7 +506,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function update(array $input)
     {
-        $this->syncWithJunction($input['id'], $input['category_id']);
+        $this->syncWithJunction(self::getJunctionTableName(), $input['id'], $input['category_id']);
 
         unset($input['category_id']);
         return $this->persist($input);
@@ -537,7 +525,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $this->persist($this->getWithLang($input));
 
-        return $this->insertIntoJunction($this->getLastId(), $categories);
+        return $this->insertIntoJunction(self::getJunctionTableName(), $this->getLastId(), $categories);
     }
 
     /** 
@@ -548,6 +536,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function deleteById($id)
     {
-        return $this->deleteByPk($id) && $this->removeFromJunction($id);
+        return $this->deleteByPk($id) && $this->removeFromJunction(self::getJunctionTableName(), $id);
     }
 }

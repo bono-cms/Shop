@@ -129,7 +129,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchById($id)
     {
-        return array_merge($this->findByPk($id), array('attribute_group_id' => $this->getSlaveIdsFromJunction($id)));
+        return array_merge($this->findByPk($id), array('attribute_group_id' => $this->getSlaveIdsFromJunction(self::getJunctionTableName(), $id)));
     }
 
     /**
@@ -153,7 +153,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         // If there's at least one selected group, then insert into the junction table
         if (!empty($groups)) {
-            return $this->insertIntoJunction($this->getLastId(), $groups);
+            return $this->insertIntoJunction(self::getJunctionTableName(), $this->getLastId(), $groups);
         }
 
         return true;
@@ -168,7 +168,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function update(array $data)
     {
         if (!empty($data['attribute_group_id'])) {
-            $this->syncWithJunction($data['id'], $data['attribute_group_id']);
+            $this->syncWithJunction(self::getJunctionTableName(), $data['id'], $data['attribute_group_id']);
         }
 
         unset($data['attribute_group_id']);
@@ -196,7 +196,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function deleteById($id)
     {
-        return $this->deleteByPk($id) && $this->removeFromJunction($id);
+        return $this->deleteByPk($id) && $this->removeFromJunction(self::getJunctionTableName(), $id);
     }
 
     /**
