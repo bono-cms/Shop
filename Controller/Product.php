@@ -49,7 +49,7 @@ final class Product extends AbstractShopController
     {
         // Grab a service
         $productManager = $this->getModuleService('productManager');
-        $product = $productManager->fetchById($id);
+        $product = $productManager->fetchFullById($id);
 
         // If $product isn't false, then its an entity
         if ($product !== false) {

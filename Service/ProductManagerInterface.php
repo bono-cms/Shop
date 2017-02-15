@@ -188,6 +188,14 @@ interface ProductManagerInterface
     public function fetchAllPublishedByCategoryId($categoryId);
 
     /**
+     * Fetches product's entity by its associated id with its associated attachements
+     * 
+     * @param string $id
+     * @return \Krystal\Stdlib\VirtualEntity|boolean
+     */
+    public function fetchFullById($id);
+
+    /**
      * Fetches product's entity by its associated id
      * 
      * @param string $id

@@ -765,6 +765,54 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Creates attached entities
+     * 
+     * @param array $collection
+     * @return array
+     */
+    private function createAttachedEntity(array $collection)
+    {
+        // To be returned
+        $entities = array();
+
+        $ids = $this->createCategoryIds($collection);
+
+        foreach ($ids as $id) {
+            $entity = $this->prepareResult($this->productMapper->fetchById($id, false));
+            $entities[] = $entity;
+        }
+
+        return $entities;
+    }
+
+    /**
+     * Fetches product's entity by its associated id with its associated attachements
+     * 
+     * @param string $id
+     * @return \Krystal\Stdlib\VirtualEntity|boolean
+     */
+    public function fetchFullById($id)
+    {
+        $product = $this->productMapper->fetchById($id);
+
+        $product['recommended_products'] = $this->createAttachedEntity($product['recommended']);
+        $product['similar_products'] = $this->createAttachedEntity($product['similar']);
+
+        // Avoid assignement
+        unset($product['recommended'], $product['similar']);
+
+        $attrs = $this->attributeMapper->findAttachedAttributes($id);
+
+        $entity = $this->prepareResult($product); // Prepare entity
+        $entity->setRecommendedProducts($product['recommended_products'])
+               ->setSimilarProducts($product['similar_products'])
+               ->setHasStaticAttributes(!empty($attrs))
+               ->setStaticAttributes($attrs);
+
+        return $entity;
+    }
+
+    /**
      * Fetches product's entity by its associated id
      * 
      * @param string $id
