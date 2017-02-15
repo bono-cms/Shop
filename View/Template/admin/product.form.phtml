@@ -13,6 +13,7 @@ use Shop\Service\AttributeProcessor;
     
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
+        <li role="presentation"><a href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
         <li role="presentation"><a href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
         <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
     </ul>
@@ -64,54 +65,13 @@ use Shop\Service\AttributeProcessor;
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Recommended products'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::select('product[recommended_ids][]', $names, $product->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true)); ?>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Similar products'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::select('product[similar_ids][]', $names, $product->getSimilarIds(), array('class' => 'form-control', 'multiple' => true)); ?>
-                    </div>
-                </div>
-                
-                <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
                     <div class="col-lg-10">
                         <?php echo Element::textarea('product[description]', $product->getDescription(), array('data-wysiwyg' => 'true')); ?>
                     </div>
                 </div>
                 
-                <div class="form-group <?php HtmlHelper::addOnDemand($config->getSpecialSupport(), 'hidden'); ?>">
-                    <label class="col-lg-2 control-label"><?php $this->show('Special offer'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::checkbox('product[special_offer]', $product->getSpecialOffer(), array('class' => 'form-control')); ?>
-                    </div>
-                </div>
-                
                 <div class="options">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::number('product[order]', $product->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Product sorting order'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('In stock'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::number('product[in_stock]', $product->getInStock(), array('class' => 'form-control', 'placeholder' => $this->translate('Quantity of this product in stock'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
                         <div class="col-lg-10">
@@ -180,7 +140,53 @@ use Shop\Service\AttributeProcessor;
             <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
         </div>
         <!--/Home tab-->
-      
+
+      <!--Images tab-->
+      <div role="tabpanel" class="tab-pane" id="configuration">
+        <div class="well">
+            <div class="form-group <?php HtmlHelper::addOnDemand($config->getSpecialSupport(), 'hidden'); ?>">
+                <label class="col-lg-2 control-label"><?php $this->show('Special offer'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::checkbox('product[special_offer]', $product->getSpecialOffer(), array('class' => 'form-control')); ?>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::number('product[order]', $product->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Product sorting order'))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('In stock'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::number('product[in_stock]', $product->getInStock(), array('class' => 'form-control', 'placeholder' => $this->translate('Quantity of this product in stock'))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Recommended products'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[recommended_ids][]', $names, $product->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true)); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Similar products'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[similar_ids][]', $names, $product->getSimilarIds(), array('class' => 'form-control', 'multiple' => true)); ?>
+                </div>
+            </div>
+        </div>
+      </div>
+        
       <!--Images tab-->
       <div role="tabpanel" class="tab-pane" id="images">
         <div class="well">
