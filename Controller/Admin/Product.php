@@ -49,7 +49,9 @@ final class Product extends AbstractController
             'photos' => $photos,
             'product' => $product,
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
-            'config' => $this->getModuleService('configManager')->getEntity()
+            'config' => $this->getModuleService('configManager')->getEntity(),
+            'attributes' => $this->getModuleService('categoryManager')->fetchAttributesById('6'),
+            'activeAttributes' => $product->getId() ? $this->getModuleService('productManager')->findAttributesByProductId($product->getId()) : array()
         ));
     }
 
