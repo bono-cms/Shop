@@ -291,6 +291,16 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
                    ->setCategories($this->createCategoryPair($product['categories']));
         }
 
+        if (isset($product['recommended'])) {
+            $entity->setRecommendedIds($this->createCategoryIds($product['recommended']));
+            $entity->setRecommended($this->createCategoryPair($product['recommended']));
+        }
+
+        if (isset($product['similar'])) {
+            $entity->setSimilarIds($this->createCategoryIds($product['similar']));
+            $entity->setSimilar($this->createCategoryPair($product['similar']));
+        }
+
         return $entity;
     }
 

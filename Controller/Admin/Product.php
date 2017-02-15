@@ -16,6 +16,7 @@ use Krystal\Tree\AdjacencyList\TreeBuilder;
 use Krystal\Tree\AdjacencyList\Render\PhpArray;
 use Krystal\Validate\Pattern;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 
 final class Product extends AbstractController
 {
@@ -46,6 +47,7 @@ final class Product extends AbstractController
         }
 
         return $this->view->render('product.form', array(
+            'names' => $this->getModuleService('productManager')->fetchAllNames(),
             'photos' => $photos,
             'product' => $product,
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
@@ -132,10 +134,8 @@ final class Product extends AbstractController
     {
         $input = $this->request->getPost();
 
-        // If a category hasn't been attached, then assign it to a dummy array
-        if (!isset($input['product']['category_id'])) {
-            $input['product']['category_id'] = array();
-        }
+        // Recovery missing keys if not received
+        $input['product'] = ArrayUtils::arrayRecovery($input['product'], array('category_id'), array());
 
         return $this->invokeSave('productManager', $input['product']['id'], $this->request->getAll(), array(
             'input' => array(

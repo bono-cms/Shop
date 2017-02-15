@@ -127,3 +127,18 @@ CREATE TABLE `bono_module_shop_product_attributes` (
     `group_id` INT NOT NULL COMMENT 'Group ID',
     `value_id` INT NOT NULL COMMENT 'Value ID'
 );
+
+
+DROP TABLE IF EXISTS `bono_module_shop_product_recommended`;
+CREATE TABLE `bono_module_shop_product_recommended` (
+    `master_id` INT NOT NULL COMMENT 'Target product ID',
+    `slave_id` INT NOT NULL COMMENT 'Attached product ID'
+) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_shop_product_similar`;
+CREATE TABLE `bono_module_shop_product_similar` (
+    `master_id` INT NOT NULL COMMENT 'Target product ID',
+    `slave_id` INT NOT NULL COMMENT 'Attached product ID'
+) DEFAULT CHARSET = UTF8;
+
