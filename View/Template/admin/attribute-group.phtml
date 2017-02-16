@@ -17,6 +17,13 @@ use Krystal\Form\Element;
 				</div>
 			</div>
         </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?php $this->show('Dynamic'); ?></label>
+            <div class="col-lg-10">
+                <?php echo Element::checkbox('group[dynamic]', $group->getDynamic(), array('class' => 'form-control')); ?>
+            </div>
+        </div>
 	</div>
 	
 	<?php if (!$group->getId()): ?>

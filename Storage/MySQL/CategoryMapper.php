@@ -45,8 +45,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         $columns = array(
             sprintf('%s.id', AttributeGroupMapper::getTableName()) => 'group_id',
             sprintf('%s.name', AttributeGroupMapper::getTableName()) => 'group_name',
+            sprintf('%s.dynamic', AttributeGroupMapper::getTableName()) => 'dynamic',
             sprintf('%s.id', AttributeValueMapper::getTableName()) => 'value_id',
-            sprintf('%s.name', AttributeValueMapper::getTableName()) => 'value_name',
+            sprintf('%s.name', AttributeValueMapper::getTableName()) => 'value_name'
         );
 
         return $this->db->select($columns)

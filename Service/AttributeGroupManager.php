@@ -43,7 +43,8 @@ final class AttributeGroupManager extends AbstractManager
     {
         $entity = new VirtualEntity();
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
-               ->setName($row['name'], VirtualEntity::FILTER_TAGS);
+               ->setName($row['name'], VirtualEntity::FILTER_TAGS)
+               ->setDynamic($row['dynamic'], VirtualEntity::FILTER_BOOL);
 
         return $entity;
     }

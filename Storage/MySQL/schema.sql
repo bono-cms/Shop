@@ -106,7 +106,8 @@ DROP TABLE IF EXISTS `bono_module_shop_attribute_groups`;
 CREATE TABLE `bono_module_shop_attribute_groups` (
 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` varchar(255) NOT NULL
+    `name` varchar(255) NOT NULL COMMENT 'Group name',
+    `dynamic` varchar(1) NOT NULL COMMENT 'Whether the group contains dynamic attributes only'
 
 ) DEFAULT CHARSET = UTF8;
 
