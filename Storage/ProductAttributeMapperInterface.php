@@ -14,6 +14,14 @@ namespace Shop\Storage;
 interface ProductAttributeMapperInterface
 {
     /**
+     * Find attached dynamic attributes by product ID
+     * 
+     * @param string $productId
+     * @return array
+     */
+    public function findDynamicAttributes($productId);
+
+    /**
      * Finds attached attributes. Primarily used to render atttbutes on product page
      * 
      * @param string $productId

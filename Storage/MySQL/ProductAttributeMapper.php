@@ -14,6 +14,7 @@ namespace Shop\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductAttributeMapperInterface;
 use Krystal\Db\Sql\RawSqlFragment;
+use Krystal\Db\Sql\RawBinding;
 
 final class ProductAttributeMapper extends AbstractMapper implements ProductAttributeMapperInterface
 {
@@ -26,7 +27,37 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     }
 
     /**
-     * Finds attached attributes. Primarily used to render atttbutes on product page
+     * Find attached dynamic attributes by product ID
+     * 
+     * @param string $productId
+     * @return array
+     */
+    public function findDynamicAttributes($productId)
+    {
+        $columns = array(
+            AttributeGroupMapper::getFullColumnName('id') => 'group_id',
+            AttributeGroupMapper::getFullColumnName('name') => 'group_name',
+            AttributeValueMapper::getFullColumnName('name') => 'value_name',
+            AttributeValueMapper::getFullColumnName('id') => 'value_id'
+        );
+
+        return $this->db->select($columns)
+                        ->from(AttributeGroupMapper::getTableName())
+                        ->innerJoin(AttributeValueMapper::getTableName())
+                        ->on()
+                        ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
+                        ->innerJoin(self::getTableName())
+                        ->on()
+                        ->equals(AttributeGroupMapper::getFullColumnName('dynamic'), new RawBinding('1'))
+                        ->rawAnd()
+                        ->equals(self::getFullColumnName('product_id'), $productId)
+                        ->rawAnd()
+                        ->equals(self::getFullColumnName('group_id'), new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id')))
+                        ->queryAll();
+    }
+
+    /**
+     * Finds attached static attributes. Primarily used to render atttbutes on product page
      * 
      * @param string $productId
      * @return array
@@ -46,6 +77,8 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
                         ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
                         ->innerJoin(self::getTableName())
                         ->on()
+                        ->equals(AttributeGroupMapper::getFullColumnName('dynamic'), new RawSqlFragment('0'))
+                        ->rawAnd()
                         ->equals(self::getFullColumnName('product_id'), $productId)
                         ->rawAnd()
                         ->equals(self::getFullColumnName('group_id'), new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id')))
