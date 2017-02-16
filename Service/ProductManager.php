@@ -801,13 +801,18 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         // Avoid assignement
         unset($product['recommended'], $product['similar']);
 
-        $attrs = $this->attributeMapper->findAttachedAttributes($id);
+        $staticAttrs  = $this->attributeMapper->findStaticAttributes($id);
+
+        $processor = new AttributeProcessor($this->attributeMapper->findDynamicAttributes($id));
+        $dynamicAttrs = $processor->process();
 
         $entity = $this->prepareResult($product); // Prepare entity
         $entity->setRecommendedProducts($product['recommended_products'])
                ->setSimilarProducts($product['similar_products'])
-               ->setHasStaticAttributes(!empty($attrs))
-               ->setStaticAttributes($attrs);
+               ->setHasStaticAttributes(!empty($staticAttrs))
+               ->setHasDynamicAttributes(!empty($dynamicAttrs))
+               ->setStaticAttributes($staticAttrs)
+               ->setDynamicAttributes($dynamicAttrs);
 
         return $entity;
     }

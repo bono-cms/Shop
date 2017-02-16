@@ -89,7 +89,7 @@ final class AttributeProcessor
             $output[] = array(
                 self::ARRAY_KEY_GROUP_ID => (int) $row[self::ARRAY_KEY_GROUP_ID],
                 self::ARRAY_KEY_GROUP_NAME => Filter::escape($row[self::ARRAY_KEY_GROUP_NAME]),
-                self::ARRAY_KEY_GROUP_DYNAMIC => (bool) $row['dynamic'],
+                self::ARRAY_KEY_GROUP_DYNAMIC => isset($row['dynamic']) ? $row['dynamic'] : true,
                 self::ARRAY_KEY_ATTRIBUTES => $this->findAttrsByGroupId($row[self::ARRAY_KEY_GROUP_ID])
             );
         }
