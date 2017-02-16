@@ -62,7 +62,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
      * @param string $productId
      * @return array
      */
-    public function findAttachedAttributes($productId)
+    public function findStaticAttributes($productId)
     {
         // Columns to be selected
         $columns = array(

@@ -22,12 +22,12 @@ interface ProductAttributeMapperInterface
     public function findDynamicAttributes($productId);
 
     /**
-     * Finds attached attributes. Primarily used to render atttbutes on product page
+     * Finds attached static attributes. Primarily used to render atttbutes on product page
      * 
      * @param string $productId
      * @return array
      */
-    public function findAttachedAttributes($productId);
+    public function findStaticAttributes($productId);
 
     /**
      * Find a collection of attributes
