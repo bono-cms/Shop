@@ -444,11 +444,12 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * Finds category attributes by its associated id
      * 
      * @param string $id
+     * @param boolean $dynamic Whether to include dynamic attributes
      * @return array
      */
-    public function fetchAttributesById($id)
+    public function fetchAttributesById($id, $dynamic)
     {
-        $rows = $this->categoryMapper->findAttributesById($id);
+        $rows = $this->categoryMapper->findAttributesById($id, $dynamic);
         $processor = new AttributeProcessor($rows);
 
         return $processor->process();

@@ -52,7 +52,7 @@ final class Product extends AbstractController
             'product' => $product,
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'config' => $this->getModuleService('configManager')->getEntity(),
-            'attributes' => $this->getModuleService('categoryManager')->fetchAttributesById('6'),
+            'attributes' => $this->getModuleService('categoryManager')->fetchAttributesById('6', true),
             'activeAttributes' => $product->getId() ? $this->getModuleService('productManager')->findAttributesByProductId($product->getId()) : array()
         ));
     }

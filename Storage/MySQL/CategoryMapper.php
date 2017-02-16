@@ -14,6 +14,7 @@ namespace Shop\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\CategoryMapperInterface;
 use Krystal\Db\Sql\RawSqlFragment;
+use Krystal\Db\Sql\RawBinding;
 
 final class CategoryMapper extends AbstractMapper implements CategoryMapperInterface
 {
@@ -37,9 +38,10 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      * Finds category attributes by its associated id
      * 
      * @param string $id Category id
+     * @param boolean $dynamic Whether to include dynamic attributes
      * @return array
      */
-    public function findAttributesById($id)
+    public function findAttributesById($id, $dynamic)
     {
         // Data to be selected
         $columns = array(
@@ -50,7 +52,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
             sprintf('%s.name', AttributeValueMapper::getTableName()) => 'value_name'
         );
 
-        return $this->db->select($columns)
+        $db = $this->db->select($columns)
                         ->from(self::getJunctionTableName())
                         ->leftJoin(AttributeGroupMapper::getTableName())
                         ->on()
@@ -59,14 +61,20 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                             new RawSqlFragment(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN))
                         )
                         ->rawAnd()
-                        ->equals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN), $id)
-                        ->innerJoin(AttributeValueMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            sprintf('%s.group_id', AttributeValueMapper::getTableName()), 
-                            new RawSqlFragment(sprintf('%s.id', AttributeGroupMapper::getTableName()))
-                        )
-                        ->queryAll();
+                        ->equals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN), $id);
+
+        if ($dynamic === false) {
+            $db->rawAnd()
+               ->equals(AttributeGroupMapper::getFullColumnName('dynamic'), new RawBinding('0'));
+        }
+
+        return $db->innerJoin(AttributeValueMapper::getTableName())
+                  ->on()
+                  ->equals(
+                    sprintf('%s.group_id', AttributeValueMapper::getTableName()), 
+                    new RawSqlFragment(sprintf('%s.id', AttributeGroupMapper::getTableName()))
+                  )
+                  ->queryAll();
     }
 
     /**

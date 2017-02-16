@@ -103,9 +103,10 @@ interface CategoryManagerInterface
      * Finds category attributes by its associated id
      * 
      * @param string $id
+     * @param boolean $dynamic Whether to include dynamic attributes
      * @return array
      */
-    public function fetchAttributesById($id);
+    public function fetchAttributesById($id, $dynamic);
 
     /**
      * Fetches category's entity by its associated id
