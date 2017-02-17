@@ -436,21 +436,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             break;
 
             case CategorySortGadget::SORT_PRICE_DESC:
-                $order = 'regular_price';
+                $order = 'regular_price, id';
                 $desc = true;
             break;
 
             case CategorySortGadget::SORT_PRICE_ASC:
-                $order = 'regular_price';
+                $order = 'regular_price, id';
             break;
 
             case CategorySortGadget::SORT_DATE_DESC:
-                $order = 'date';
+                $order = 'date, id';
                 $desc = true;
             break;
 
             case CategorySortGadget::SORT_DATE_ASC:
-                $order = 'date';
+                $order = 'date, id';
             break;
 
             default:
@@ -459,7 +459,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 return array();
         }
 
-        return $this->querySet($page, $itemsPerPage, true, $categoryId, $order, $desc);
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->innerJoin(self::getJunctionTableName())
+                       ->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId())
+                       ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'published'), '1')
+                       ->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+                       ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN))
+                       ->orderBy(sprintf('%s.%s', self::getTableName(), $order));
+
+        if ($desc === true) {
+            $db->desc();
+        }
+        
+        return $db->paginate($page, $itemsPerPage)
+                  ->queryAll();
     }
 
     /**
