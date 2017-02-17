@@ -31,7 +31,7 @@ final class CategorySortGadget extends DataSorter
      */
     public function __construct(PersistentStorageInterface $storage)
     {
-        parent::__construct($storage, 'cat_sort', self::SORT_ORDER, array(
+        parent::__construct($storage, 'cat_sort', self::SORT_DATE_DESC, array(
             self::SORT_ORDER => 'By position',
             self::SORT_TITLE => 'By title',
             self::SORT_PRICE_ASC => 'By price - from lower to higher',
