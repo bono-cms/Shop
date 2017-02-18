@@ -489,28 +489,14 @@ $(function(){
         event.preventDefault();
 
         $.ajax({
-            dataType: 'JSON',
             cache: true,
             url: '/module/shop/product/quick-view/',
             data: {
                 id: $(this).attr('data-product-id'),
                 size: $(this).attr('data-cover-size')
             },
-            success: function(data){
-                // Update the cover
-                $('[data-qv-product="cover"]').attr('src', data.coverUrl);
-                // Update the URL
-                $("[data-qv-product='url']").attr('href', data.url);
-
-                for (var key in data) {
-                    var value = data[key];
-
-                    // Build corresponding selector
-                    var selector = '[data-qv-product-attribute=' + '"' + key + '"' + ']';
-
-                    // Update elements
-                    $(selector).html(value);
-                }
+            success: function(response){
+                $("#quickViewModal .modal-body").html(response);
             }
         });
     });
