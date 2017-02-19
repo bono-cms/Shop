@@ -434,7 +434,6 @@ $(function(){
         });
     });
     
-    
     $("[data-basket-button='product-delete-without-confirm']").click(function(event){
         event.preventDefault();
         var id = view.grabProductId(this);
@@ -444,18 +443,18 @@ $(function(){
         });
     });
     
-    
-    $("[data-basket-button='product-recount']").click(function(event){
+    // Product recount button
+    $(document).on('click', "[data-basket-button='product-recount']", function(){
         event.preventDefault();
         // Current product's id
         var id = view.grabProductId(this);
-        
+
         // Find all nodes corresponding to current product id
         var $productNodes = view.getNodesByProductId(id);
-        
+
         // New quantity
         var qty = $productNodes.filter("[data-basket-input='recount']").val();
-        
+
         $.basket.recount(id, qty, function(data){
             if (data !== false) {
                 view.updateStat(data.all);
@@ -464,16 +463,16 @@ $(function(){
             }
         });
     });
-    
-    
-    $("[data-basket-button='add']").click(function(event){
+
+    // Add to basket button
+    $(document).on('click', "[data-basket-button='add']", function(){
         // We might be dealing with <a> tag, so it's better to ensure that default event is prevented
         event.preventDefault();
-        
+
         // Grab product's id we're adding to basket
         var id = view.grabProductId(this);
         var qty = view.grabQtyByProductId(id);
-        
+
         // Now just add it, and when its added, react to it using callback function (which holds data JSON object, or holds false)
         $.basket.add(id, qty, function(data){
             if (data !== false) {
@@ -483,9 +482,9 @@ $(function(){
             }
         });
     });
-    
-    
-    $('[data-button="quick-view"]').click(function(event){
+
+    // Quick view button
+    $(document).on('click', '[data-button="quick-view"]', function(event){
         event.preventDefault();
 
         $.ajax({
@@ -499,6 +498,5 @@ $(function(){
                 $("#quickViewModal .modal-body").html(response);
             }
         });
-    });
-    
+    })
 });
