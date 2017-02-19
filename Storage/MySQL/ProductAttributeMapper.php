@@ -27,6 +27,55 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     }
 
     /**
+     * Find products by attributes and associated category id
+     * 
+     * @param string $categoryId Category id
+     * @param array $attributes A collection of group IDs and their value IDs
+     * @param string $page Optional page number
+     * @param string $itemsPerPage Optional Per page count filter
+     * @return array
+     */
+    public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null)
+    {
+        $columns = array(
+            ProductMapper::getFullColumnName('id'),
+            ProductMapper::getFullColumnName('name'),
+            ProductMapper::getFullColumnName('lang_id'),
+            ProductMapper::getFullColumnName('web_page_id'),
+            ProductMapper::getFullColumnName('title'),
+            ProductMapper::getFullColumnName('regular_price'),
+            ProductMapper::getFullColumnName('stoke_price'),
+            ProductMapper::getFullColumnName('special_offer'),
+            ProductMapper::getFullColumnName('description'),
+            ProductMapper::getFullColumnName('published'),
+            ProductMapper::getFullColumnName('order'),
+            ProductMapper::getFullColumnName('seo'),
+            ProductMapper::getFullColumnName('keywords'),
+            ProductMapper::getFullColumnName('meta_description'),
+            ProductMapper::getFullColumnName('cover'),
+            ProductMapper::getFullColumnName('date'),
+            ProductMapper::getFullColumnName('views'),
+            ProductMapper::getFullColumnName('in_stock')
+        );
+
+        return $this->db->select($columns, true)
+                       ->from(ProductMapper::getTableName())
+                       ->innerJoin(self::getTableName())
+                       ->on()
+                       ->in(self::getFullColumnName('value_id'), array_values($attributes))
+                       ->rawAnd()
+                       ->in(self::getFullColumnName('group_id'), array_keys($attributes))
+                       ->rawAnd()
+                       ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
+                       ->innerJoin(ProductMapper::getJunctionTableName())
+                       ->on()
+                       ->equals(sprintf('%s.master_id', ProductMapper::getJunctionTableName()), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
+                       ->rawAnd()
+                       ->equals(sprintf('%s.slave_id', ProductMapper::getJunctionTableName()), $categoryId)
+                       ->queryAll();
+    }
+
+    /**
      * Find attached dynamic attributes by product ID
      * 
      * @param string $productId
