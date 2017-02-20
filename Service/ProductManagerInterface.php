@@ -176,9 +176,10 @@ interface ProductManagerInterface
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
      * @param string $sort Sorting constant
+     * @param string $keyword Optional keyword filter
      * @return array
      */
-    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort);
+    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword);
 
     /**
      * Fetches all product entities filtered by pagination

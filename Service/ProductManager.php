@@ -747,11 +747,12 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
      * @param string $sort Sorting constant
+     * @param string $keyword Optional keyword filter
      * @return array
      */
-    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort)
+    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword = null)
     {
-        return $this->prepareResults($this->productMapper->fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort));
+        return $this->prepareResults($this->productMapper->fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword));
     }
 
     /**

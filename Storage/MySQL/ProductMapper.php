@@ -419,9 +419,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
      * @param string $sort Sorting type (its constant)
+     * @param string $keyword Optional search keyword
      * @return array
      */
-    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort)
+    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword)
     {
         $desc = false;
 
@@ -460,18 +461,30 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         $db = $this->db->select('*')
-                       ->from(self::getTableName())
-                       ->innerJoin(self::getJunctionTableName())
-                       ->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId())
-                       ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'published'), '1')
-                       ->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
-                       ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN))
-                       ->orderBy(sprintf('%s.%s', self::getTableName(), $order));
+                       ->from(self::getTableName());
+
+        if ($keyword === null) {
+            $db->innerJoin(self::getJunctionTableName());
+        }
+
+        $db->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId())
+           ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'published'), '1');
+
+        if ($keyword === null) {
+            $db->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+               ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN));
+        }
+
+        if ($keyword !== null) {
+            $db->andWhereLike('name', '%'.$keyword.'%');
+        }
+
+        $db->orderBy(sprintf('%s.%s', self::getTableName(), $order));
 
         if ($desc === true) {
             $db->desc();
         }
-        
+
         return $db->paginate($page, $itemsPerPage)
                   ->queryAll();
     }
