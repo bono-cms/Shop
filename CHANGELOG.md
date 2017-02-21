@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added dedicated search by products
  * Support for similar and reccomended products
  * Added "Quick View" support
  * Added `getTopCategories()` that returns top category entities in `\Shop\Service\SiteService`

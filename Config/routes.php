@@ -10,6 +10,10 @@
  */
 
 return array(
+
+    '/module/shop/search/(:var)' => array(
+        'controller' => 'Search@searchAction'
+    ),
     
     '/module/shop/stokes' => array(
         'controller' => 'Stokes@indexAction'
@@ -93,7 +97,7 @@ return array(
     '/module/shop/category/do/change-sort-action' => array(
         'controller' => 'Category@changeSortAction'
     ),
-    
+
     // ------------------------------------------
     
     
