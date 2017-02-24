@@ -30,6 +30,26 @@ final class ProductEntity extends VirtualEntity
     }
 
     /**
+     * Checks whether a product has attached similar products
+     * 
+     * @return boolean
+     */
+    public function hasRecommendedProducts()
+    {
+        return (bool) $this->getRecommendedProducts();
+    }
+
+    /**
+     * Checks whether a product has attached similar products
+     * 
+     * @return boolean
+     */
+    public function hasSimilarProducts()
+    {
+        return (bool) $this->getSimilarProducts();
+    }
+
+    /**
      * Returns sale percentage
      * 
      * @return integer
