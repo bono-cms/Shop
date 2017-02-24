@@ -30,6 +30,26 @@ final class ProductEntity extends VirtualEntity
     }
 
     /**
+     * Checks whether product has static attributes
+     * 
+     * @return boolean
+     */
+    public function hasStaticAttributes()
+    {
+        return (bool) $this->getStaticAttributes();
+    }
+
+    /**
+     * Checks whether product has dynamic attributes
+     * 
+     * @return boolean
+     */
+    public function hasDynamicAttributes()
+    {
+        return (bool) $this->getDynamicAttributes();
+    }
+
+    /**
      * Checks whether a product has attached similar products
      * 
      * @return boolean

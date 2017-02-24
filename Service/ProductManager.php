@@ -824,8 +824,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $entity = $this->prepareResult($product); // Prepare entity
         $entity->setRecommendedProducts($product['recommended_products'])
                ->setSimilarProducts($product['similar_products'])
-               ->setHasStaticAttributes(!empty($staticAttrs))
-               ->setHasDynamicAttributes(!empty($dynamicAttrs))
                ->setStaticAttributes($staticAttrs)
                ->setDynamicAttributes($dynamicAttrs);
 
