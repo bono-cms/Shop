@@ -5,7 +5,7 @@ CHANGELOG
 ---
 
  * Added dedicated search by products
- * Support for similar and reccomended products
+ * Support for similar and recommended products
  * Added "Quick View" support
  * Added `getTopCategories()` that returns top category entities in `\Shop\Service\SiteService`
  * Replacement text inputs with textarea for `keywords` attribute
