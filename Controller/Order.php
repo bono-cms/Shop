@@ -23,7 +23,9 @@ final class Order extends AbstractShopController
     public function orderAction()
     {
         $input = $this->request->getPost();
-        $formValidator = $this->validatorFactory->build(array(
+
+        // Create form validator
+        $formValidator = $this->createValidator(array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
