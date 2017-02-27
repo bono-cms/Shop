@@ -49,6 +49,9 @@ final class Product extends AbstractShopController
 
         // If $product isn't false, then its an entity
         if ($product !== false) {
+            // Indicate that this is product page
+            $product->setProductPage(true);
+
             // Configure breadcrumbs
             $this->configureBreadcrumbs($product);
 

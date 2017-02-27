@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added page detection methods in entities - `getCategoryPage()`, `getBasketPage()`, `getProductPage()`
  * Added dedicated search by products
  * Support for similar and recommended products
  * Added "Quick View" support

@@ -25,6 +25,9 @@ final class Basket extends AbstractShopController
         $page = $pageManager->fetchById($id);
 
         if ($page !== false) {
+            // Declare that the page is basket
+            $page->setBasketPage(true);
+
             // Load view plugins
             $this->loadSitePlugins();
             $this->view->getBreadcrumbBag()

@@ -29,6 +29,9 @@ final class Category extends AbstractShopController
 
         // If $category isn't false, then right id is supplied, $category itself a bag
         if ($category !== false) {
+            // Indicated that this is a category page
+            $category->setCategoryPage(true);
+
             $this->loadPlugins($categoryManager->getBreadcrumbs($category));
 
             $productManager = $this->getModuleService('productManager');
