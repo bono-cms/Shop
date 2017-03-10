@@ -10,7 +10,7 @@ defined('KRYSTAL') or die;
         <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available delivery types'); ?></h2>
 
         <div class="table-responsive">
-            <table class="table table-stripped">
+            <table class="table table-stripped table-bordered table-hover">
                 <thead>
                     <tr>
                         <td class="text-center text-muted">#</td>
@@ -22,7 +22,7 @@ defined('KRYSTAL') or die;
 
                 <tbody>
                     <?php foreach ($deliveryTypes as $entity): ?>
-                    <tr class="<?php echo $entity->getId() == $deliveryType->getId() ? 'info' : ''; ?>">
+                    <tr class="<?php echo $entity->getId() == $deliveryType->getId() ? 'info' : null; ?>">
                         <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
                         <td class="text-center"><?php echo $entity->getName(); ?></td>
                         <td class="text-center"><?php echo $entity->getPrice(); ?></td>
