@@ -143,3 +143,11 @@ CREATE TABLE `bono_module_shop_product_similar` (
     `slave_id` INT NOT NULL COMMENT 'Attached product ID'
 ) DEFAULT CHARSET = UTF8;
 
+
+DROP TABLE IF EXISTS `bono_module_shop_delivery_types`;
+CREATE TABLE `bono_module_shop_delivery_types` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Delivery type ID',
+    `name` varchar(255) NOT NULL COMMENT 'Delivery type name',
+    `price` FLOAT NOT NULL COMMENT 'The price for'
+) DEFAULT CHARSET = UTF8;
+
