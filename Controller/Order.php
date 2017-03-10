@@ -60,6 +60,9 @@ final class Order extends AbstractShopController
     {
         $orderManager = $this->getModuleService('orderManager');
 
+        // Override delivery ID with its corresponding name
+        $input['delivery'] = $this->getModuleService('deliveryTypeManager')->fetchNameById($input['delivery']);
+
         // Prepare a message first
         $message = $this->view->renderRaw($this->moduleName, 'messages', 'order', array(
             'basketManager' => $this->getModuleService('basketManager'),

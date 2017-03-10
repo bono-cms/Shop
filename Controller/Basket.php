@@ -36,10 +36,7 @@ final class Basket extends AbstractShopController
             return $this->view->render('shop-basket', array(
                 'products' => $this->getBasketManager()->getProducts(),
                 'page' => $page,
-                'deliveryTypes' => array(
-                    'I will take myself',
-                    'Via courier'
-                ),
+                'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll()
             ));
 
         } else {
