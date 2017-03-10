@@ -31,7 +31,7 @@ final class Basket extends AbstractShopController
             // Load view plugins
             $this->loadSitePlugins();
             $this->view->getBreadcrumbBag()
-                       ->addOne($page->getTitle());
+                       ->addOne($page->getName());
 
             return $this->view->render('shop-basket', array(
                 'products' => $this->getBasketManager()->getProducts(),
@@ -101,7 +101,7 @@ final class Basket extends AbstractShopController
 
                 // Make sure, that quantity cannot be greater than a stocking value
                 if ($qty > $product->getInStock()) {
-                    // Error code that indicates aformentioned error
+                    // Error code that indicates aforementioned error
                     return -1;
                 } else {
                     $basketManager->add($id, $qty);
