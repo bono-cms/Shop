@@ -15,6 +15,7 @@ use Krystal\Image\Tool\ImageBagInterface;
 use Krystal\Image\Tool\ImageManager;
 use Krystal\Stdlib\VirtualEntity;
 use Cms\AbstractCmsModule;
+use Shop\Service\DeliveryTypeManager;
 use Shop\Service\AttributeGroupManager;
 use Shop\Service\AttributeValueManager;
 use Shop\Service\ProductImageManagerFactory;
@@ -46,6 +47,7 @@ final class Module extends AbstractCmsModule
         $orderInfoMapper = $this->getMapper('/Shop/Storage/MySQL/OrderInfoMapper', false);
         $orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
         $attributeMapper = $this->getMapper('/Shop/Storage/MySQL/ProductAttributeMapper', false);
+        $deliveryTypeMapper = $this->getMapper('/Shop/Storage/MySQL/DeliveryTypeMapper', false);
 
         // Now build required services
         $productImageManager = $this->getProductImageManager($config->getEntity());
@@ -78,11 +80,14 @@ final class Module extends AbstractCmsModule
             $productRemover
         );
 
+        $deliveryTypeManager = new DeliveryTypeManager($deliveryTypeMapper);
+
         $siteService = new SiteService($productManager, $categoryManager, $this->getRecentProduct($config->getEntity(), $productManager), $config->getEntity());
 
         return array(
             'siteService' => $siteService,
             'configManager' => $config,
+            'deliveryTypeManager' => $deliveryTypeManager,
             'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager),
             'basketManager' => $basketManager,
             'taskManager' => new TaskManager($productMapper, $categoryManager),
