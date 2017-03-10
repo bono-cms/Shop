@@ -100,6 +100,22 @@ return array(
 
     // ------------------------------------------
     
+    // Delivery types
+    '/%s/module/shop/delivery-type' => array(
+        'controller' => 'Admin:DeliveryType@indexAction'
+    ),
+    
+    '/%s/module/shop/delivery-type/edit/(:var)' => array(
+        'controller' => 'Admin:DeliveryType@editAction'
+    ),
+    
+    '/%s/module/shop/delivery-type/save' => array(
+        'controller' => 'Admin:DeliveryType@saveAction'
+    ),
+    
+    '/%s/module/shop/delivery-type/delete/(:var)' => array(
+        'controller' => 'Admin:DeliveryType@deleteAction'
+    ),
     
     '/%s/module/shop/statistic' => array(
         'controller' => 'Admin:Statistic@indexAction'
