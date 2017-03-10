@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Custom delivery methods support
  * Added page detection methods in entities - `getCategoryPage()`, `getBasketPage()`, `getProductPage()`
  * Added dedicated search by products
  * Support for similar and recommended products
