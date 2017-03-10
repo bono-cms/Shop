@@ -25,6 +25,17 @@ final class DeliveryTypeMapper extends AbstractMapper implements DeliveryTypeMap
     }
 
     /**
+     * Fetches delivery type name by its associated ID
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id)
+    {
+        return $this->findColumnByPk($id, 'name');
+    }
+
+    /**
      * Fetches delivery type meta data by its associated id
      * 
      * @param string $id

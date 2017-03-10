@@ -14,6 +14,14 @@ namespace Shop\Storage;
 interface DeliveryTypeMapperInterface
 {
     /**
+     * Fetches delivery type name by its associated ID
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id);
+
+    /**
      * Fetches delivery type meta data by its associated id
      * 
      * @param string $id

@@ -14,6 +14,14 @@ namespace Shop\Service;
 interface DeliveryTypeManagerInterface
 {
     /**
+     * Fetches delivery type name by its associated ID
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id);
+
+    /**
      * Updates the delivery type
      * 
      * @param array $input
