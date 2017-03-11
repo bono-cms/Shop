@@ -115,6 +115,11 @@ return array(
     '/%s/module/shop/coupons/delete/(:var)' => array(
         'controller' => 'Admin:Coupon@deleteAction'
     ),
+
+    // Coupon validation on site
+    '/module/shop/coupon/check/(:var)' => array(
+        'controller' => 'Checkout@couponAction'
+    ),
     
     // Delivery types
     '/%s/module/shop/delivery-type' => array(
