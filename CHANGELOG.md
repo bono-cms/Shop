@@ -5,6 +5,7 @@ CHANGELOG
 ---
 
  * Added optional `$limit` parameter in `BasketManager::getProducts()` to limit the result-set
+ * Added discount coupons
  * Custom delivery methods support
  * Added page detection methods in entities - `getCategoryPage()`, `getBasketPage()`, `getProductPage()`
  * Added dedicated search by products
