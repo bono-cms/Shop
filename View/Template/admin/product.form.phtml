@@ -264,7 +264,7 @@ use Shop\Service\AttributeProcessor;
                         sprintf('product[attributes][%s]', $attribute['group_id']), 
                         $attribute['attributes'], 
                         AttributeProcessor::findActiveAttribute($attribute['attributes'], $attributes, $activeAttributes),
-                        array('class' => 'form-control')
+                        array('class' => 'form-control', 'multiple' => $attribute['group_dynamic'])
                     ); ?>
                 </div>
             </div>
