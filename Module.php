@@ -16,6 +16,7 @@ use Krystal\Image\Tool\ImageManager;
 use Krystal\Stdlib\VirtualEntity;
 use Cms\AbstractCmsModule;
 use Shop\Service\DeliveryTypeManager;
+use Shop\Service\CouponManager;
 use Shop\Service\AttributeGroupManager;
 use Shop\Service\AttributeValueManager;
 use Shop\Service\ProductImageManagerFactory;
@@ -48,6 +49,7 @@ final class Module extends AbstractCmsModule
         $orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
         $attributeMapper = $this->getMapper('/Shop/Storage/MySQL/ProductAttributeMapper', false);
         $deliveryTypeMapper = $this->getMapper('/Shop/Storage/MySQL/DeliveryTypeMapper', false);
+        $couponMapper = $this->getMapper('/Shop/Storage/MySQL/CouponMapper', false);
 
         // Now build required services
         $productImageManager = $this->getProductImageManager($config->getEntity());
@@ -81,6 +83,7 @@ final class Module extends AbstractCmsModule
         );
 
         $deliveryTypeManager = new DeliveryTypeManager($deliveryTypeMapper);
+        $couponManager = new CouponManager($couponMapper);
 
         $siteService = new SiteService($productManager, $categoryManager, $this->getRecentProduct($config->getEntity(), $productManager), $config->getEntity());
 
@@ -88,6 +91,7 @@ final class Module extends AbstractCmsModule
             'siteService' => $siteService,
             'configManager' => $config,
             'deliveryTypeManager' => $deliveryTypeManager,
+            'couponManager' => $couponManager,
             'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager),
             'basketManager' => $basketManager,
             'taskManager' => new TaskManager($productMapper, $categoryManager),
