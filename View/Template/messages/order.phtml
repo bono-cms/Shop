@@ -19,7 +19,7 @@
 
 <?php foreach ($basketManager->getProducts() as $product): ?>
 <br />
-<p><?php $this->show('Product'); ?>: <?php echo $product->getTitle(); ?></p>
+<p><?php $this->show('Product'); ?>: <?php echo $product->getName(); ?></p>
 <p><?php $this->show('Quantity'); ?> : <?php echo $product->getQty(); ?></p>
 <p><?php $this->show('Sub-total price'); ?>: <?php echo $product->getSubTotalPrice(), ' ', $currency; ?></p>
 <br />
