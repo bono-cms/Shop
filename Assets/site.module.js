@@ -482,7 +482,7 @@ $(function(){
             }
         });
     });
-
+    
     // Quick view button
     $(document).on('click', '[data-button="quick-view"]', function(event){
         event.preventDefault();
@@ -498,5 +498,58 @@ $(function(){
                 $("#quickViewModal .modal-body").html(response);
             }
         });
-    })
+    });
+
+    // Discount coupon handler
+    (function(){
+
+        // Local configuration
+        var config = {
+            interval: 2000,
+            couponInputSelector: "[data-shop-input='coupon']",
+            discountLabelSelector: "[data-shop-label='coupon-discount']",
+            successInputClass: "checkout-promo-success"
+        };
+
+        var $coupon = $(config.couponInputSelector);
+        var timer = null;
+
+        // If the input found, handle it
+        if ($coupon.length) {
+            $coupon.blur(function(){
+                clearInterval(timer);
+                timer = null;
+            });
+
+            $coupon.keyup(function(){
+                var value = $(this).val();
+
+                // Lazy timer initialization
+                if (timer === null) {
+                    timer = setInterval(function(){
+                        $.ajax({
+                            cache: true,
+                            url: "/module/shop/coupon/check/",
+                            data: {
+                                code: $(config.couponInputSelector).val()
+                            },
+                            success: function(response){
+                                // 0 means failure
+                                if (response == 0) {
+                                    $coupon.removeClass(config.successInputClass);
+                                } else {
+                                    clearInterval(timer);
+                                    $coupon.addClass(config.successInputClass);
+
+                                    // Update the label
+                                    $(config.discountLabelSelector).text(response);
+                                }
+                            }
+                        });
+
+                    }, config.interval);
+                }
+            });
+        }
+    })($);
 });
