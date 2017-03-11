@@ -15,7 +15,7 @@ defined('KRYSTAL') or die;
                     <tr>
                         <td class="text-center text-muted">#</td>
                         <td class="text-center"><?php $this->show('Code'); ?></td>
-                        <td class="text-center"><?php $this->show('Discount percentage'); ?></td>
+                        <td class="text-center"><?php $this->show('Discount percentage'); ?> (%)</td>
                         <td class="text-center"><?php $this->show('Actions'); ?></td>
                     </tr>
                 </thead>
@@ -25,7 +25,7 @@ defined('KRYSTAL') or die;
                     <tr class="<?php echo $entity->getId() == $coupon->getId() ? 'info' : null; ?>">
                         <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
                         <td class="text-center"><?php echo $entity->getCode(); ?></td>
-                        <td class="text-center"><?php echo $entity->getPercentage(); ?></td>
+                        <td class="text-center"><?php echo $entity->getPercentage(); ?> %</td>
                         <td class="text-center">
                             <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this coupon'); ?>" href="<?php echo $this->url('Shop:Admin:Coupon@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
                             <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this coupon'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
