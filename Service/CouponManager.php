@@ -13,6 +13,7 @@ namespace Shop\Service;
 
 use Shop\Storage\CouponMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Text\Math;
 use Cms\Service\AbstractManager;
 
 final class CouponManager extends AbstractManager implements CouponManagerInterface
@@ -46,6 +47,24 @@ final class CouponManager extends AbstractManager implements CouponManagerInterf
                ->setPercentage($row['percentage'], VirtualEntity::FILTER_INT);
 
         return $coupon;
+    }
+
+    /**
+     * Find outs the discount price by coupon code
+     * 
+     * @param string $code Coupon code
+     * @param string $price Total price
+     * @return string|boolean
+     */
+    public function getDiscountByCode($code, $price)
+    {
+        $item = $this->couponMapper->findByCode($code);
+
+        if (!empty($item)) {
+            return Math::fromPercentage($price, $item['percentage']);
+        } else {
+            return false;
+        }
     }
 
     /**

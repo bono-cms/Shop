@@ -14,6 +14,15 @@ namespace Shop\Service;
 interface CouponManagerInterface
 {
     /**
+     * Find outs the discount price by coupon code
+     * 
+     * @param string $code Coupon code
+     * @param string $price Total price
+     * @return string|boolean
+     */
+    public function getDiscountByCode($code, $price);
+
+    /**
      * Fetches coupon entity by its associated ID
      * 
      * @param string $id
