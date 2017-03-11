@@ -552,4 +552,23 @@ $(function(){
             });
         }
     })($);
+    
+    
+    // Delivery payment changer
+    (function(){
+        // Local configuration
+        var config = {
+            sourceSelector: "select[data-delivery-type='input']",
+            deliveryPriceLabelSelector: "[data-shop-label='delivery-price']"
+        };
+
+        $(config.sourceSelector).change(function(){
+            // Find current active option
+            var $option = $(this).find(':selected');
+            var value = $option.data('delivery-price');
+
+            $(config.deliveryPriceLabelSelector).text(value);
+        }).trigger('change');
+        
+    })($);
 });
