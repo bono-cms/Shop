@@ -28,7 +28,7 @@ defined('KRYSTAL') or die;
                         <td class="text-center"><?php echo $entity->getPrice(); ?></td>
                         <td class="text-center">
                             <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this delivery method'); ?>" href="<?php echo $this->url('Shop:Admin:DeliveryType@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a data-button="delete" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this delivery type'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                            <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this delivery type'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
