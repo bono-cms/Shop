@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added optional `$limit` parameter in `BasketManager::getProducts()` to limit the result-set
  * Custom delivery methods support
  * Added page detection methods in entities - `getCategoryPage()`, `getBasketPage()`, `getProductPage()`
  * Added dedicated search by products

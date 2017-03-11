@@ -37,9 +37,10 @@ interface BasketManagerInterface
     /**
      * Returns all product entities stored in the basket
      * 
+     * @param integer $limit Whether to limit output
      * @return array
      */
-    public function getProducts();
+    public function getProducts($limit = false);
 
     /**
      * Returns static by associated product id stored in the basket

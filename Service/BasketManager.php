@@ -120,11 +120,18 @@ final class BasketManager implements BasketManagerInterface
     /**
      * Returns all product entities stored in the basket
      * 
+     * @param integer $limit Whether to limit output
      * @return array
      */
-    public function getProducts()
+    public function getProducts($limit = false)
     {
         $products = $this->collection->getContainer();
+
+        // If limit is provided, then trim the collection
+        if ($limit !== false && is_numeric($limit)) {
+            $products = array_slice($products, 0, $limit);
+        }
+
         $entities = array();
 
         foreach ($products as $id => $options) {
