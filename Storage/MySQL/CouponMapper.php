@@ -36,6 +36,20 @@ final class CouponMapper extends AbstractMapper implements CouponMapperInterface
     }
 
     /**
+     * Finds a coupon by its associated cod
+     * 
+     * @param string $code
+     * @return array
+     */
+    public function findByCode($code)
+    {
+        return $this->db->select('*')
+                        ->from(self::getTableName())
+                        ->whereEquals('code', $code)
+                        ->query();
+    }
+
+    /**
      * Finds a coupon by its associated ID
      * 
      * @param string $id Coupon ID

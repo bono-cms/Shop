@@ -14,6 +14,14 @@ namespace Shop\Storage;
 interface CouponMapperInterface
 {
     /**
+     * Finds a coupon by its associated cod
+     * 
+     * @param string $code
+     * @return array
+     */
+    public function findByCode($code);
+
+    /**
      * Deletes a coupon by its associated ID
      * 
      * @param string $id
