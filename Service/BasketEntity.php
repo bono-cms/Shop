@@ -16,6 +16,36 @@ use Krystal\Stdlib\VirtualEntity;
 final class BasketEntity extends VirtualEntity
 {
     /**
+     * Basket service
+     * 
+     * @var \Shop\Service\BasketManagerInterface
+     */
+    private $basketManager;
+
+    /**
+     * State initialization
+     * 
+     * @param \Shop\Service\BasketManagerInterface $basketManager
+     * @return void
+     */
+    public function __construct(BasketManagerInterface $basketManager = null)
+    {
+        $this->basketManager = $basketManager;
+        $this->once = true;
+    }
+
+    /**
+     * Returns all product entities stored in the basket
+     * 
+     * @param integer $limit Whether to limit output
+     * @return array
+     */
+    public function getProducts($limit = false)
+    {
+        return $this->basketManager->getProducts($limit);
+    }
+
+    /**
      * Checks whether basket is disabled
      * 
      * @return boolean

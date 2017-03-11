@@ -39,7 +39,7 @@ final class SiteBootstrapper extends AbstractSiteBootstrapper
         $basketUrl = $webPageManager->getUrlByWebPageId($basketWebPageId);
 
         // Now tweak basket's entity
-        $basket = new BasketEntity();
+        $basket = new BasketEntity($basketManager);
         $basket->setUrl($basketUrl);
         $basket->setTotalPrice($basketManager->getTotalPrice());
         $basket->setTotalQty($basketManager->getTotalQuantity());
