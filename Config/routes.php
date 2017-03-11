@@ -10,7 +10,6 @@
  */
 
 return array(
-
     '/module/shop/search/(:var)' => array(
         'controller' => 'Search@searchAction'
     ),
@@ -99,6 +98,23 @@ return array(
     ),
 
     // ------------------------------------------
+
+    // Coupons
+    '/%s/module/shop/coupons' => array(
+        'controller' => 'Admin:Coupon@indexAction'
+    ),
+
+    '/%s/module/shop/coupons/edit/(:var)' => array(
+        'controller' => 'Admin:Coupon@editAction'
+    ),
+
+    '/%s/module/shop/coupons/save' => array(
+        'controller' => 'Admin:Coupon@saveAction'
+    ),
+
+    '/%s/module/shop/coupons/delete/(:var)' => array(
+        'controller' => 'Admin:Coupon@deleteAction'
+    ),
     
     // Delivery types
     '/%s/module/shop/delivery-type' => array(

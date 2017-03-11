@@ -1,0 +1,82 @@
+<?php
+
+use Krystal\Form\Element;
+defined('KRYSTAL') or die;
+
+?>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available coupons'); ?> <small>(<?php echo count($coupons); ?>)</small></h2>
+
+        <div class="table-responsive">
+            <table class="table table-stripped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <td class="text-center text-muted">#</td>
+                        <td class="text-center"><?php $this->show('Code'); ?></td>
+                        <td class="text-center"><?php $this->show('Discount percentage'); ?></td>
+                        <td class="text-center"><?php $this->show('Actions'); ?></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($coupons as $entity): ?>
+                    <tr class="<?php echo $entity->getId() == $coupon->getId() ? 'info' : null; ?>">
+                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
+                        <td class="text-center"><?php echo $entity->getCode(); ?></td>
+                        <td class="text-center"><?php echo $entity->getPercentage(); ?></td>
+                        <td class="text-center">
+                            <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this coupon'); ?>" href="<?php echo $this->url('Shop:Admin:Coupon@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this coupon'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($coupon->getId() ? 'Update coupon' : 'Add new coupon'); ?></h3>
+
+        <form data-group="coupon">
+            <div class="well">
+                <input type="hidden" name="coupon[id]" value="<?php echo $coupon->getId(); ?>" />
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Code'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('coupon[code]', $coupon->getCode(), array('class' => 'form-control', 'placeholder' => $this->translate('Unique coupon code'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Percentage'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::number('coupon[percentage]', $coupon->getPercentage(), array('min' => 1, 'max' => 100, 'class' => 'form-control', 'placeholder' => $this->translate('Discount percentage'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php if (!$coupon->getId()): ?>
+
+            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+
+            <?php else: ?>
+
+            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+
+            <?php endif; ?>
+        </form>
+    </div>
+</div>
