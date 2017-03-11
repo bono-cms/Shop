@@ -129,7 +129,7 @@ final class BasketManager implements BasketManagerInterface
 
         // If limit is provided, then trim the collection
         if ($limit !== false && is_numeric($limit)) {
-            $products = array_slice($products, 0, $limit);
+            $products = array_slice($products, 0, $limit, true);
         }
 
         $entities = array();
