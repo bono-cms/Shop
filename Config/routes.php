@@ -116,6 +116,23 @@ return array(
         'controller' => 'Admin:Coupon@deleteAction'
     ),
 
+    // Currencies
+    '/%s/module/shop/currencies' => array(
+        'controller' => 'Admin:Currency@indexAction'
+    ),
+
+    '/%s/module/shop/currencies/edit/(:var)' => array(
+        'controller' => 'Admin:Currency@editAction'
+    ),
+
+    '/%s/module/shop/currencies/save' => array(
+        'controller' => 'Admin:Currency@saveAction'
+    ),
+
+    '/%s/module/shop/currencies/delete/(:var)' => array(
+        'controller' => 'Admin:Currency@deleteAction'
+    ),
+
     // Coupon validation on site
     '/module/shop/coupon/check/(:var)' => array(
         'controller' => 'Checkout@couponAction'

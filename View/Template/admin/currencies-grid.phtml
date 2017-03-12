@@ -1,0 +1,82 @@
+<?php
+
+use Krystal\Form\Element;
+defined('KRYSTAL') or die;
+
+?>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available currencies'); ?> <small>(<?php echo count($currencies); ?>)</small></h2>
+
+        <div class="table-responsive">
+            <table class="table table-stripped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <td class="text-center text-muted">#</td>
+                        <td class="text-center"><?php $this->show('Value'); ?></td>
+                        <td class="text-center"><?php $this->show('Currency code'); ?></td>
+                        <td class="text-center"><?php $this->show('Actions'); ?></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($currencies as $entity): ?>
+                    <tr class="<?php echo $entity->getId() == $currency->getId() ? 'info' : null; ?>">
+                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
+                        <td class="text-center"><?php echo $entity->getValue(); ?></td>
+                        <td class="text-center"><?php echo $entity->getCode(); ?></td>
+                        <td class="text-center">
+                            <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this currency'); ?>" href="<?php echo $this->url('Shop:Admin:Currency@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Currency@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this currency'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($currency->getId() ? 'Update currency' : 'Add new currency'); ?></h3>
+
+        <form data-group="currency">
+            <div class="well">
+                <input type="hidden" name="currency[id]" value="<?php echo $currency->getId(); ?>" />
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Code'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('currency[code]', $currency->getCode(), array('class' => 'form-control', 'placeholder' => $this->translate('Unique currency code'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Value'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('currency[value]', $currency->getValue(), array('class' => 'form-control', 'placeholder' => $this->translate('Currency value'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php if (!$currency->getId()): ?>
+
+            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Currency@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+
+            <?php else: ?>
+
+            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+
+            <?php endif; ?>
+        </form>
+    </div>
+</div>
