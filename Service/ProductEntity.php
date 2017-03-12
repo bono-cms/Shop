@@ -12,6 +12,7 @@
 namespace Shop\Service;
 
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Text\Math;
 
 final class ProductEntity extends VirtualEntity
 {
@@ -126,7 +127,13 @@ final class ProductEntity extends VirtualEntity
     public function getSalePercentage()
     {
         if ($this->hasStokePrice()) {
-            return (int) $this->getStokePrice() * 100 / $this->getPrice();
+            // Calculate relative percentage
+            $percentage = Math::percentage($this->getPrice(), $this->getStokePrice());
+
+            // Normalize the percentage
+            $percentage = abs(floor($percentage));
+
+            return 100 - $percentage;
         } else {
             return 0;
         }
