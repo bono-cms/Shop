@@ -11,6 +11,7 @@ CHANGELOG
  * Custom delivery methods support
  * Added page detection methods in entities - `getCategoryPage()`, `getBasketPage()`, `getProductPage()`
  * Added dedicated search by products
+ * Added support for dynamic attributes
  * Support for similar and recommended products
  * Added "Quick View" support
  * Added `getTopCategories()` that returns top category entities in `\Shop\Service\SiteService`

@@ -22,6 +22,8 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Recently viewed products
  - Best sellers
  - Latest products
+ - Attached similar products
+ - Attached recommended products
  - Description
  - View counter
  - Breadcrumbs
@@ -40,3 +42,6 @@ This module allows you to manage e-commerce store on your site. For details, ple
 
  - Shopping cart (Basket)
  - Order form  with built-in one click order
+ - Discount codes
+ - Dynamic delivery methods
+ 
