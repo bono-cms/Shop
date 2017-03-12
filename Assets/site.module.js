@@ -472,6 +472,20 @@ $(function(){
         // Grab product's id we're adding to basket
         var id = view.grabProductId(this);
         var qty = view.grabQtyByProductId(id);
+        var $self = $(this);
+
+        // If provided
+        var disabledClass = $self.data('basket-button-disabled-class');
+
+        // If has disabled class, then cancel all associated click events, and disable the button itself
+        if (disabledClass){
+            $self.addClass(disabledClass).click(function(event){
+                event.preventDefault();
+                event.stopPropagation();
+
+                return false;
+            });
+        }
 
         // Now just add it, and when its added, react to it using callback function (which holds data JSON object, or holds false)
         $.basket.add(id, qty, function(data){
