@@ -41,6 +41,21 @@ interface ProductManagerInterface
     public function fetchBestSales($qty, $limit);
 
     /**
+     * Count all available stoke products
+     * 
+     * @return integer
+     */
+    public function countAllStokes();
+
+    /**
+     * Fetch all stoke entities
+     * 
+     * @param integer $limit Limit of records to be returned
+     * @return array
+     */
+    public function fetchAllStokes($limit);
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page

@@ -235,6 +235,41 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Count all available stoke products
+     * 
+     * @return integer
+     */
+    public function countAllStokes()
+    {
+        return $this->db->select()
+                        ->count($this->getPk(), 'count')
+                        ->from(self::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->andWhereEquals('published', '1')
+                        ->andWhereNotEquals('stoke_price', '0')
+                        ->query('count');
+    }
+
+    /**
+     * Fetch all stokes
+     * 
+     * @param integer $limit Limit of records to be returned
+     * @return array
+     */
+    public function fetchAllStokes($limit)
+    {
+        return $this->db->select('*')
+                        ->from(self::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->andWhereEquals('published', '1')
+                        ->andWhereNotEquals('stoke_price', '0')
+                        ->orderBy($this->getPk())
+                        ->desc()
+                        ->limit($limit)
+                        ->queryAll();
+    }
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page

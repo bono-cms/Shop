@@ -190,6 +190,27 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Count all available stoke products
+     * 
+     * @return integer
+     */
+    public function countAllStokes()
+    {
+        return (int) $this->productMapper->countAllStokes();
+    }
+
+    /**
+     * Fetch all stoke entities
+     * 
+     * @param integer $limit Limit of records to be returned
+     * @return array
+     */
+    public function fetchAllStokes($limit)
+    {
+        return $this->prepareResults($this->productMapper->fetchAllStokes($limit));
+    }
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page

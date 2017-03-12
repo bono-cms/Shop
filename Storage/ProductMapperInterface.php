@@ -41,6 +41,21 @@ interface ProductMapperInterface
     public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null);
 
     /**
+     * Count all available stoke products
+     * 
+     * @return integer
+     */
+    public function countAllStokes();
+
+    /**
+     * Fetch all stokes
+     * 
+     * @param integer $limit
+     * @return array
+     */
+    public function fetchAllStokes($limit);
+
+    /**
      * Fetches all published products that have stoke price
      * 
      * @param integer $page Current page
