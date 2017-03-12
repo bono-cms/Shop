@@ -35,6 +35,17 @@ final class BasketEntity extends VirtualEntity
     }
 
     /**
+     * Checks whether product ID is already in basket
+     * 
+     * @param string $id Product ID
+     * @return boolean
+     */
+    public function hasProduct($id)
+    {
+        return $this->basketManager->has($id);
+    }
+
+    /**
      * Returns all product entities stored in the basket
      * 
      * @param integer $limit Whether to limit output
