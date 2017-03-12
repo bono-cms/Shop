@@ -30,7 +30,8 @@ final class Product extends AbstractShopController
             // Render partial
             return $this->view->disableLayout()->render('quick-view-modal', array(
                 'product' => $this->getModuleService('productManager')->fetchFullById($id),
-                'coverSize' => $coverSize
+                'coverSize' => $coverSize,
+                'basketManager' => $this->getModuleService('basketManager')
             ));
         }
     }
