@@ -77,6 +77,7 @@ final class Module extends AbstractCmsModule
             $productMapper, 
             $imageMapper, 
             $categoryMapper, 
+            $currencyMapper,
             $attributeMapper,
             $webPageManager, 
             $productImageManager, 

@@ -16,6 +16,55 @@ use Krystal\Stdlib\VirtualEntity;
 final class ProductEntity extends VirtualEntity
 {
     /**
+     * Returns converted price
+     * 
+     * @param string $code Currency code
+     * @param boolean $format Whether to format the outputting number
+     * @return string
+     */
+    public function getConvertedPrice($code, $format = true)
+    {
+        return $this->createConvertedPrice($this->getPrice(), $code, $format);
+    }
+
+    /**
+     * Returns converted stoke price
+     * 
+     * @param string $code Currency code
+     * @param boolean $format Whether to format the outputting number
+     * @return string
+     */
+    public function getConvertedStokePrice($code, $format = true)
+    {
+        return $this->createConvertedPrice($this->getStokePrice(), $code, $format);
+    }
+
+    /**
+     * Creates converted price
+     * 
+     * @param string $target Target price
+     * @param string $code Currency code
+     * @param boolean $format Whether to format the outputting number
+     * @return string
+     */
+    private function createConvertedPrice($target, $code, $format)
+    {
+        foreach ($this->getCurrencies() as $currency) {
+            if ($currency['code'] == $code) {
+                $price = round($target * $currency['value'], 2);
+
+                if ($format === true) {
+                    $price = number_format($price);
+                }
+
+                return $price;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns image URL
      * 
      * @param string $size

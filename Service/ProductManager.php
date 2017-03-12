@@ -21,6 +21,7 @@ use Shop\Storage\ProductMapperInterface;
 use Shop\Storage\ImageMapperInterface;
 use Shop\Storage\CategoryMapperInterface;
 use Shop\Storage\ProductAttributeMapperInterface;
+use Shop\Storage\CurrencyMapperInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
 use Cms\Service\WebPageManagerInterface;
@@ -89,6 +90,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * @param \Shop\Storage\ProductMapperInterface $productMapper
      * @param \Shop\Storage\ImageMapperInterface $imageMapper
      * @param \Shop\Storage\CategoryMapperInterface $categoryMapper
+     * @param \Shop\Storage\CurrencyMapperInterface $currencyMapper
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
      * @param \Krystal\Image\Tool\ImageManagerInterface $imageManager
      * @param \Cms\Service\HistoryManagerInterface $historyManager
@@ -99,6 +101,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         ProductMapperInterface $productMapper, 
         ImageMapperInterface $imageMapper, 
         CategoryMapperInterface $categoryMapper,
+        CurrencyMapperInterface $currencyMapper,
         ProductAttributeMapperInterface $attributeMapper,
         WebPageManagerInterface $webPageManager,
         ImageManagerInterface $imageManager,
@@ -108,6 +111,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $this->productMapper = $productMapper;
         $this->imageMapper = $imageMapper;
         $this->categoryMapper = $categoryMapper;
+        $this->currencyMapper = $currencyMapper;
         $this->attributeMapper = $attributeMapper;
         $this->webPageManager = $webPageManager;
         $this->imageManager = $imageManager;
@@ -315,6 +319,13 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             $entity->setSimilar($this->createCategoryPair($product['similar']));
         }
 
+        static $currencies = null;
+
+        if (is_null($currencies)) {
+            $currencies = $this->currencyMapper->fetchAll();
+        }
+
+        $entity->setCurrencies($currencies);
         return $entity;
     }
 

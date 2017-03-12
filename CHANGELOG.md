@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Multi-currencies support. Added `getConvertedPrice()` and `getConvertedStokePrice()` in product entity
  * Added optional `data-basket-button-disabled-class` attribute that can disable the "Add to basket" button by adding provided class
  * Added `BasketManager::has()` and its linked `BasketEntity::hasProduct()` method
  * Added optional `$limit` parameter in `BasketManager::getProducts()` to limit the result-set
