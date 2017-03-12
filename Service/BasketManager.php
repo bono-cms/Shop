@@ -260,6 +260,17 @@ final class BasketManager implements BasketManagerInterface
     }
 
     /**
+     * Checks whether product ID is already in basket
+     * 
+     * @param string $id Product ID
+     * @return boolean
+     */
+    public function has($id)
+    {
+        return $this->collection->hasKey($id);
+    }
+
+    /**
      * Adds product's id to the basket
      * 
      * @param string $id Product id
@@ -276,7 +287,7 @@ final class BasketManager implements BasketManagerInterface
             $price = $this->getPrice($product);
 
             // If we adding the same id twice, then we need to update its data instead
-            if ($this->collection->hasKey($id)) {
+            if ($this->has($id)) {
                 return $this->update($id, $qty, $price);
             } else {
                 return $this->insert($id, $qty, $price);

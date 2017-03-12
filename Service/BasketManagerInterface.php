@@ -81,6 +81,14 @@ interface BasketManagerInterface
     public function recount($id, $newQty);
 
     /**
+     * Checks whether product ID is already in basket
+     * 
+     * @param string $id Product ID
+     * @return boolean
+     */
+    public function has($id);
+
+    /**
      * Adds product's id to the basket
      * 
      * @param string $id Product id
