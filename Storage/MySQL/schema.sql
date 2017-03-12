@@ -159,3 +159,11 @@ CREATE TABLE `bono_module_shop_coupons` (
     `percentage` FLOAT NOT NULL COMMENT 'Discount percentage'
 ) DEFAULT CHARSET = UTF8;
 
+
+DROP TABLE IF EXISTS `bono_module_shop_currencies`;
+CREATE TABLE `bono_module_shop_currencies` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Currency ID',
+    `code` varchar(30) NOT NULL COMMENT 'Unique currency code',
+    `value` FLOAT NOT NULL COMMENT 'Currency value'
+) DEFAULT CHARSET = UTF8;
+
