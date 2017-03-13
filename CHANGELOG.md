@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added `countAllStokes()` and `getAllStokes()` in `\Shop\Service\SiteService`
  * Multi-currencies support. Added `getConvertedPrice()` and `getConvertedStokePrice()` in product entity
  * Added optional `data-basket-button-disabled-class` attribute that can disable the "Add to basket" button by adding provided class
  * Added `BasketManager::has()` and its linked `BasketEntity::hasProduct()` method
