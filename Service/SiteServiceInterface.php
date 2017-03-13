@@ -64,6 +64,21 @@ interface SiteServiceInterface
     public function getProductsWithMaxViewCount($limit, $categoryId = null);
 
     /**
+     * Count all available stoke products
+     * 
+     * @return integer
+     */
+    public function countAllStokes();
+
+    /**
+     * Return all stoke entities
+     * 
+     * @param string $limit Limit of records to be returned
+     * @return array
+     */
+    public function getAllStokes($limit);
+
+    /**
      * Returns best sale product entities
      * 
      * @return array

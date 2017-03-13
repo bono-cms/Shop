@@ -133,6 +133,27 @@ final class SiteService implements SiteServiceInterface
     }
 
     /**
+     * Count all available stoke products
+     * 
+     * @return integer
+     */
+    public function countAllStokes()
+    {
+        return $this->productManager->countAllStokes();
+    }
+
+    /**
+     * Return all stoke entities
+     * 
+     * @param string $limit Limit of records to be returned
+     * @return array
+     */
+    public function getAllStokes($limit)
+    {
+        return $this->productManager->fetchAllStokes($limit);
+    }
+
+    /**
      * Returns best sale product entities
      * 
      * @return array
