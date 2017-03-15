@@ -375,38 +375,65 @@ $(function(){
          * @return void
          */
         updateCurrency: function(){
-            // Local configuration
-            var config = {
-                inputSelector: "[data-currency-input-id]",
-                outputSelector: "[data-currency-output-for]",
-                currency: 6200
-            };
+            var $source = $("input[data-currency='source']");
 
-            $(config.inputSelector).each(function(){
-                var id = $(this).data('currency-input-id');
-                var value = $(this).data('currency-input-value');
-                var format = $(this).data('currency-format-value');
+            // Do processing in case source is found
+            if ($source.length) {
+                var jsonString = $source.val();
 
-                // If its undefined, fall back to text
-                if (!value) {
-                    value = $(this).text();
+                try {
+                    var currencies = $.parseJSON(jsonString);
+                } catch(e) {
+                    console.log('Error while paring source string');
+                    return false;
                 }
 
-                // If not provided, then assume true by default
-                if (format == undefined) {
-                    format = true;
-                }
+                // Local configuration
+                var config = {
+                    inputSelector: "[data-currency-input-id]",
+                    outputSelector: "[data-currency-output-for]",
+                    codeSelector: "[data-currency-code]"
+                };
 
-                var result = parseFloat(value) * config.currency;
+                $(config.inputSelector).each(function(){
+                    // Grab required parameters
+                    var id = $(this).data('currency-input-id');
+                    var value = $(this).data('currency-input-value');
+                    var format = $(this).data('currency-format-value');
+                    var code = $(this).data('currency-code');
 
-                // Format numbers by default
-                if (format) {
-                    result = parseFloat(result).toLocaleString();
-                }
+                    // Get currency value by its provided code
+                    var currency = typeof currencies[code] != undefined ? currencies[code] : null;
 
-                // Find associated outputting element
-                $("[data-currency-output-for='" + id + "']").text(result);
-            });
+                    // Make sure it's not null. If it is, then invalid code provided
+                    if (currency === null) {
+                        console.log('Invalid currency code provided. Halted processing');
+                        return false;
+                    }
+
+                    // If its undefined, fall back to text
+                    if (!value) {
+                        value = $(this).text();
+                    }
+
+                    // If not provided, then assume true by default
+                    if (format == undefined) {
+                        format = true;
+                    }
+
+                    var result = parseFloat(value) * currency;
+
+                    // Format numbers by default
+                    if (format) {
+                        result = parseFloat(result).toLocaleString();
+                    }
+
+                    // Find associated outputting element
+                    $("[data-currency-output-for='" + id + "']").text(result);
+                });
+            } else{
+                console.log('Currency source can not be found');
+            }
         }
     };
 
@@ -415,16 +442,15 @@ $(function(){
 
     $("a[data-product-large-image]").click(function(event){
         event.preventDefault();
-        
+
         // Get link to that larger image
         var src = $(this).data('product-large-image');
         var $cover = $("[data-product-image='cover']");
-        
+
         // Ensure cover element exists
         if ($cover.length == 0) {
             console.log('You need to provide data attribute to the cover image');
         } else {
-            
             // Now simply change src attribute value in cover image
             $cover.attr('src', src);
         }
@@ -434,7 +460,7 @@ $(function(){
     $("[data-category-option='per-page-count']").change(function(event){
         // New count
         var count = $(this).val();
-        
+
         category.updatePerPageCount(count, function(){
             window.location.reload();
         });
@@ -452,7 +478,7 @@ $(function(){
         event.preventDefault();
         // Grab parent form
         var $form = $(this).closest('form');
-        
+
         $.basket.order(function(response){
             // 1 means success
             if (response == "1"){
@@ -466,6 +492,7 @@ $(function(){
     
     $("[data-basket-button='clear-without-confirm']").click(function(event){
         event.preventDefault();
+
         $.basket.clear(function(data){
             window.location.reload();
         });
@@ -621,8 +648,8 @@ $(function(){
         }
 
     })($, view);
-    
-    
+
+
     // Delivery payment changer
     (function(){
         // Local configuration
