@@ -14,6 +14,7 @@ namespace Shop\Service;
 use Cms\Service\AbstractManager;
 use Shop\Storage\CurrencyMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 
 final class CurrencyManager extends AbstractManager implements CurrencyManagerInterface
 {
@@ -100,6 +101,16 @@ final class CurrencyManager extends AbstractManager implements CurrencyManagerIn
     public function fetchById($id)
     {
         return $this->prepareResult($this->currencyMapper->fetchById($id));
+    }
+
+    /**
+     * Fetch currencies as a list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return ArrayUtils::arrayList($this->currencyMapper->fetchAll(), 'code', 'value');
     }
 
     /**

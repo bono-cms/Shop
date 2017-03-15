@@ -53,6 +53,13 @@ interface CurrencyManagerInterface
     public function fetchById($id);
 
     /**
+     * Fetch currencies as a list
+     * 
+     * @return array
+     */
+    public function fetchList();
+
+    /**
      * Fetch all currency entities
      * 
      * @return array
