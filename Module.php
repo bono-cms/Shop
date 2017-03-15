@@ -89,7 +89,13 @@ final class Module extends AbstractCmsModule
         $couponManager = new CouponManager($couponMapper);
         $currencyManager = new CurrencyManager($currencyMapper);
 
-        $siteService = new SiteService($productManager, $categoryManager, $this->getRecentProduct($config->getEntity(), $productManager), $config->getEntity());
+        $siteService = new SiteService(
+            $productManager, 
+            $categoryManager, 
+            $this->getRecentProduct($config->getEntity(), $productManager), 
+            $currencyManager, 
+            $config->getEntity()
+        );
 
         return array(
             'siteService' => $siteService,

@@ -14,6 +14,7 @@ namespace Shop\Service;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 use Shop\View\CategoryDropdown;
+use Shop\Service\CurrencyManagerInterface;
 
 final class SiteService implements SiteServiceInterface
 {
@@ -30,6 +31,13 @@ final class SiteService implements SiteServiceInterface
      * @var \Shop\Service\CategoryManagerInterface
      */
     private $categoryManager;
+
+    /**
+     * Currency service
+     * 
+     * @var \Shop\Service\CurrencyManagerInterface
+     */
+    private $currencyManager;
 
     /**
      * Configuration entity
@@ -51,15 +59,49 @@ final class SiteService implements SiteServiceInterface
      * @param \Shop\Service\ProductManagerInterface $productManager
      * @param \Shop\Service\CategoryManagerInterface $categoryManager
      * @param \Shop\Service\RecentProductInterface $recentProduct
+     * @param \Shop\Service\CurrencyManagerInterface $currencyManager
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
-    public function __construct(ProductManagerInterface $productManager, CategoryManagerInterface $categoryManager, RecentProductInterface $recentProduct, VirtualEntity $config)
-    {
+    public function __construct(
+        ProductManagerInterface $productManager, 
+        CategoryManagerInterface $categoryManager, 
+        RecentProductInterface $recentProduct, 
+        CurrencyManagerInterface $currencyManager, 
+        VirtualEntity $config
+    ){
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
         $this->recentProduct = $recentProduct;
+        $this->currencyManager = $currencyManager;
         $this->config = $config;
+    }
+
+    /**
+     * Returns currency source string
+     * 
+     * @param boolean $encode
+     * @return string
+     */
+    public function getCurrencySourceString($encode = true)
+    {
+        $jsonString = json_encode($this->getCurrencies());
+
+        if ($encode === true) {
+            $jsonString = htmlspecialchars($jsonString);
+        }
+
+        return $jsonString;
+    }
+
+    /**
+     * Returns a collection of available currencies
+     * 
+     * @return array
+     */
+    public function getCurrencies()
+    {
+        return $this->currencyManager->fetchList();
     }
 
     /**

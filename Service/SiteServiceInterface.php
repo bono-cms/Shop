@@ -16,6 +16,20 @@ use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 interface SiteServiceInterface
 {
     /**
+     * Returns currency source string
+     * 
+     * @return string
+     */
+    public function getCurrencySourceString();
+
+    /**
+     * Returns a collection of available currencies
+     * 
+     * @return array
+     */
+    public function getCurrencies();
+
+    /**
      * Returns top categories (without children)
      * 
      * @return array
