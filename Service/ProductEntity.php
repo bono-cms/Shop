@@ -17,6 +17,28 @@ use Krystal\Text\Math;
 final class ProductEntity extends VirtualEntity
 {
     /**
+     * Returns product stoke price
+     * 
+     * @param boolean $format Whether to format the outputting number
+     * @return mixed
+     */
+    public function getStokePrice($format = false)
+    {
+        return $this->createPrice('stokeprice', $format);
+    }
+
+    /**
+     * Returns product price
+     * 
+     * @param boolean $format Whether to format the outputting number
+     * @return mixed
+     */
+    public function getPrice($format = false)
+    {
+        return $this->createPrice('price', $format);
+    }
+
+    /**
      * Returns converted price
      * 
      * @param string $code Currency code
@@ -38,6 +60,24 @@ final class ProductEntity extends VirtualEntity
     public function getConvertedStokePrice($code, $format = true)
     {
         return $this->createConvertedPrice($this->getStokePrice(), $code, $format);
+    }
+
+    /**
+     * Creates a price
+     * 
+     * @param string $property Virtual property
+     * @param boolean $format Whether to format the outputting number
+     * @return mixed
+     */
+    private function createPrice($property, $format)
+    {
+        $property = $this->container[$property];
+
+        if ($format === true) {
+            $property = number_format($property);
+        }
+
+        return $property;
     }
 
     /**
