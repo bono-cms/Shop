@@ -268,17 +268,26 @@ $(function(){
             } else {
                 var price = product.regularPrice;
             }
-            
+
+            // For QV
             $("[data-qv-product='name']").text(product.name);
             $("[data-qv-product='qty']").text(product.qty);
             $("[data-qv-product='price']").text(price);
             $("[data-qv-product='cover']").attr('src', product.cover);
         },
-        
+
+        /**
+         * Update statistic
+         * 
+         * @return void
+         */
         updateStat : function(data){
             // If we have special labels in a mark-up, then we need to update them accordingly
             $("[data-basket-label='total-products-qty']").text(data.totalQuantity);
             $("[data-basket-label='total-products-price']").text(data.totalPrice);
+
+            // Update currency as well
+            this.updateCurrency();
         },
 
         /**
@@ -358,10 +367,52 @@ $(function(){
             }
 
             return qty;
+        },
+
+        /**
+         * Update currency in real-time
+         * 
+         * @return void
+         */
+        updateCurrency: function(){
+            // Local configuration
+            var config = {
+                inputSelector: "[data-currency-input-id]",
+                outputSelector: "[data-currency-output-for]",
+                currency: 6200
+            };
+
+            $(config.inputSelector).each(function(){
+                var id = $(this).data('currency-input-id');
+                var value = $(this).data('currency-input-value');
+                var format = $(this).data('currency-format-value');
+
+                // If its undefined, fall back to text
+                if (!value) {
+                    value = $(this).text();
+                }
+
+                // If not provided, then assume true by default
+                if (format == undefined) {
+                    format = true;
+                }
+
+                var result = parseFloat(value) * config.currency;
+
+                // Format numbers by default
+                if (format) {
+                    result = parseFloat(result).toLocaleString();
+                }
+
+                // Find associated outputting element
+                $("[data-currency-output-for='" + id + "']").text(result);
+            });
         }
     };
-    
-    
+
+    // Update currency as well
+    view.updateCurrency();
+
     $("a[data-product-large-image]").click(function(event){
         event.preventDefault();
         
@@ -557,6 +608,9 @@ $(function(){
 
                                     // Update the label
                                     $(config.discountLabelSelector).text(response);
+
+                                    // Update currency as well
+                                    view.updateCurrency();
                                 }
                             }
                         });
@@ -565,7 +619,8 @@ $(function(){
                 }
             });
         }
-    })($);
+
+    })($, view);
     
     
     // Delivery payment changer
@@ -582,7 +637,11 @@ $(function(){
             var value = $option.data('delivery-price');
 
             $(config.deliveryPriceLabelSelector).text(value);
+
+            // Update currency as well
+            view.updateCurrency();
+
         }).trigger('change');
-        
-    })($);
+
+    })($, view);
 });
