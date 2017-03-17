@@ -258,7 +258,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
             $data = array(
                 'order_id' => $id,
                 'product_id' => $product->getId(),
-                'name' => $product->getTitle(),
+                'name' => $product->getName(),
                 'price' => $product->getPrice(),
                 'sub_total_price' => $product->getSubTotalPrice(),
                 'qty' => $product->getQty()
