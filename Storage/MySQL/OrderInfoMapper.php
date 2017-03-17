@@ -117,6 +117,20 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     }
 
     /**
+     * Fetches all orders associated with customer ID
+     * 
+     * @param string $customerId
+     * @return array
+     */
+    public function fetchAllByCustomerId($customerId)
+    {
+        return $this->db->select('*')
+                        ->from(self::getTableName())
+                        ->whereEquals('customer_id', $customerId)
+                        ->queryAll();
+    }
+
+    /**
      * Fetches latest orders
      * 
      * @param integer $limit

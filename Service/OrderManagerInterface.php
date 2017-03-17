@@ -67,6 +67,14 @@ interface OrderManagerInterface
     public function deleteByIds(array $ids);
 
     /**
+     * Fetches all orders associated with customer ID
+     * 
+     * @param string $customerId
+     * @return array
+     */
+    public function fetchAllByCustomerId($customerId);
+
+    /**
      * Fetches all order's details by its associated id
      * 
      * @param string $id Order id

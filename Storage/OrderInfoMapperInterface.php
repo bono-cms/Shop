@@ -37,6 +37,14 @@ interface OrderInfoMapperInterface
     public function insert(array $data);
 
     /**
+     * Fetches all orders associated with customer ID
+     * 
+     * @param string $customerId
+     * @return array
+     */
+    public function fetchAllByCustomerId($customerId);
+
+    /**
      * Fetches latest orders
      * 
      * @param integer $limit

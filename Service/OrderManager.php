@@ -164,7 +164,18 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
 
         return true;
     }
-    
+
+    /**
+     * Fetches all orders associated with customer ID
+     * 
+     * @param string $customerId
+     * @return array
+     */
+    public function fetchAllByCustomerId($customerId)
+    {
+        return $this->prepareResults($this->orderInfoMapper->fetchAllByCustomerId($customerId));
+    }
+
     /**
      * Fetches all order's details by its associated id
      * 
@@ -193,16 +204,17 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     {
         $entity = new VirtualEntity();
         $entity->setId($order['id'], VirtualEntity::FILTER_INT)
-                 ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
-                 ->setName($order['name'], VirtualEntity::FILTER_HTML)
-                 ->setEmail($order['email'], VirtualEntity::FILTER_HTML)
-                 ->setPhone($order['phone'], VirtualEntity::FILTER_HTML)
-                 ->setAddress($order['address'], VirtualEntity::FILTER_HTML)
-                 ->setComment($order['comment'], VirtualEntity::FILTER_HTML)
-                 ->setDelivery($order['delivery'], VirtualEntity::FILTER_HTML)
-                 ->setQty($order['qty'], VirtualEntity::FILTER_INT)
-                 ->setTotalPrice($order['total_price'], VirtualEntity::FILTER_FLOAT)
-                 ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL);
+               ->setCustomerId($order['customer_id'], VirtualEntity::FILTER_INT)
+               ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
+               ->setName($order['name'], VirtualEntity::FILTER_HTML)
+               ->setEmail($order['email'], VirtualEntity::FILTER_HTML)
+               ->setPhone($order['phone'], VirtualEntity::FILTER_HTML)
+               ->setAddress($order['address'], VirtualEntity::FILTER_HTML)
+               ->setComment($order['comment'], VirtualEntity::FILTER_HTML)
+               ->setDelivery($order['delivery'], VirtualEntity::FILTER_HTML)
+               ->setQty($order['qty'], VirtualEntity::FILTER_INT)
+               ->setTotalPrice($order['total_price'], VirtualEntity::FILTER_FLOAT)
+               ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL);
 
         return $entity;
     }
