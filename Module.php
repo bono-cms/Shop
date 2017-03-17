@@ -35,6 +35,9 @@ use Shop\Service\SiteService;
 
 final class Module extends AbstractCmsModule
 {
+    const PARAM_PRODUCTS_IMG_PATH = '/data/uploads/module/shop/products/';
+    const PARAM_CATEGORIES_IMG_PATH = '/data/uploads/module/shop/categories/';
+
     /**
      * {@inheritDoc}
      */
@@ -140,7 +143,7 @@ final class Module extends AbstractCmsModule
         );
 
         return new ImageManager(
-            '/data/uploads/module/shop/products/',
+            self::PARAM_PRODUCTS_IMG_PATH,
             $this->appConfig->getRootDir(),
             $this->appConfig->getRootUrl(),
             $plugins
@@ -170,7 +173,7 @@ final class Module extends AbstractCmsModule
         );
 
         return new ImageManager(
-            '/data/uploads/module/shop/categories/',
+            self::PARAM_CATEGORIES_IMG_PATH,
             $this->appConfig->getRootDir(),
             $this->appConfig->getRootUrl(),
             $plugins
