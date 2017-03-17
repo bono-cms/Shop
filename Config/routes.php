@@ -10,6 +10,14 @@
  */
 
 return array(
+    '/customer/orders' => array(
+        'controller' => 'Customer:Order@listAction'
+    ),
+
+    '/customer/order/(:var)' => array(
+        'controller' => 'Customer:Order@detailAction'
+    ),
+    
     '/module/shop/search/(:var)' => array(
         'controller' => 'Search@searchAction'
     ),
