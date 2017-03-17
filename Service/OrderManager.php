@@ -167,6 +167,17 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
+     * Fetches order entity by its associated ID
+     * 
+     * @param string $id Order id
+     * @return \Krystal\Stdlib\VirtualEntity
+     */
+    public function fetchById($id)
+    {
+        return $this->prepareResult($this->orderInfoMapper->findByPk($id));
+    }
+
+    /**
      * Fetches all orders associated with customer ID
      * 
      * @param string $customerId

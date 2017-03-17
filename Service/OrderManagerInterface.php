@@ -67,6 +67,14 @@ interface OrderManagerInterface
     public function deleteByIds(array $ids);
 
     /**
+     * Fetches order entity by its associated ID
+     * 
+     * @param string $id Order id
+     * @return \Krystal\Stdlib\VirtualEntity
+     */
+    public function fetchById($id);
+
+    /**
      * Fetches all orders associated with customer ID
      * 
      * @param string $customerId
