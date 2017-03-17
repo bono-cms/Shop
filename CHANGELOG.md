@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added optional customer cabinet (works only in conjunction with Members module)
  * In `Shop\Service\SiteService` added `getCurrencies()` and `getCurrencySourceString()`
  * Ability to return formatted prices from product entities
  * Added `countAllStokes()` and `getAllStokes()` in `\Shop\Service\SiteService`
