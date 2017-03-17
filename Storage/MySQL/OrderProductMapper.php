@@ -11,9 +11,11 @@
 
 namespace Shop\Storage\MySQL;
 
+use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\OrderMapperInterface;
 use Shop\Storage\OrderProductMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class OrderProductMapper extends AbstractMapper implements OrderProductMapperInterface
 {
@@ -106,16 +108,47 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     }
 
     /**
-     * Fetches all details by associated order's id
+     * Fetches all details by associated order ID
      * 
-     * @param string $id Order's id
+     * @param string $id Order's ID
+     * @param string $customerId Optional filter by customer ID
      * @return array
      */
-    public function fetchAllDetailsByOrderId($id)
+    public function fetchAllDetailsByOrderId($id, $customerId = null)
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->whereEquals('order_id', $id)
-                        ->queryAll();
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('order_id'),
+            self::getFullColumnName('product_id'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('price'),
+            self::getFullColumnName('sub_total_price'),
+            self::getFullColumnName('qty'),
+            ProductMapper::getFullColumnName('cover'),
+            WebPageMapper::getFullColumnName('slug'),
+            WebPageMapper::getFullColumnName('lang_id')
+        );
+
+        // Select by order id
+        $db = $this->db->select($columns)
+                       ->from(self::getTableName())
+                       ->innerJoin(ProductMapper::getTableName())
+                       ->on()
+                       ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
+                       ->rawAnd()
+                       ->equals(self::getFullColumnName('order_id'), $id);
+
+        // If provided, filter also by customer ID
+        if ($customerId !== null) {
+            $db->innerJoin(OrderInfoMapper::getTableName())
+               ->on()
+               ->equals(OrderInfoMapper::getFullColumnName('customer_id'), $customerId);
+        }
+
+        $db->leftJoin(WebPageMapper::getTableName())
+           ->on()
+           ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(ProductMapper::getFullColumnName('web_page_id')));
+
+        return $db->queryAll();
     }
 }

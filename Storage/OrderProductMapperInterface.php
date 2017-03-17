@@ -62,8 +62,9 @@ interface OrderProductMapperInterface
     /**
      * Fetches all details by associated order's id
      * 
-     * @param string $id Order's id
+     * @param string $id Order's ID
+     * @param string $customerId Optional filter by customer ID
      * @return array
      */
-    public function fetchAllDetailsByOrderId($id);
+    public function fetchAllDetailsByOrderId($id, $customerId = null);
 }
