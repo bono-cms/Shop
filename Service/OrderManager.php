@@ -19,6 +19,7 @@ use Krystal\Security\Filter;
 use Krystal\Db\Filter\FilterableServiceInterface;
 use Shop\Storage\OrderInfoMapperInterface;
 use Shop\Storage\OrderProductMapperInterface;
+use Shop\Module;
 
 final class OrderManager extends AbstractManager implements OrderManagerInterface, FilterableServiceInterface
 {
@@ -177,14 +178,23 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
-     * Fetches all order's details by its associated id
+     * Fetches all details by associated order ID
      * 
-     * @param string $id Order id
+     * @param string $id Order's ID
+     * @param string $customerId Optional filter by customer ID
+     * @param string $coverDimensions Cover dimensions for image covers to be returned
      * @return array
      */
-    public function fetchAllDetailsByOrderId($id)
+    public function fetchAllDetailsByOrderId($id, $customerId = null, $coverDimensions = '75x75')
     {
-        return $this->orderProductMapper->fetchAllDetailsByOrderId($id);
+        $data = $this->orderProductMapper->fetchAllDetailsByOrderId($id, $customerId);
+
+        // Prepare cover path
+        array_walk($data, function(&$row, $value) use ($coverDimensions) {
+            $row['cover'] = sprintf('%s%s/%s/%s', Module::PARAM_PRODUCTS_IMG_PATH, $row['product_id'], $coverDimensions, $row['cover']);
+        });
+
+        return $data;
     }
 
     /**

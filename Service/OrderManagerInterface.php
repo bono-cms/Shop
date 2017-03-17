@@ -75,12 +75,14 @@ interface OrderManagerInterface
     public function fetchAllByCustomerId($customerId);
 
     /**
-     * Fetches all order's details by its associated id
+     * Fetches all details by associated order ID
      * 
-     * @param string $id Order id
+     * @param string $id Order's ID
+     * @param string $customerId Optional filter by customer ID
+     * @param string $coverDimensions Cover dimensions for image covers to be returned
      * @return array
      */
-    public function fetchAllDetailsByOrderId($id);
+    public function fetchAllDetailsByOrderId($id, $customerId = null, $coverDimensions = '75x75');
 
     /**
      * Returns prepared paginator's instance
