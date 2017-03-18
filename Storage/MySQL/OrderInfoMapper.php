@@ -127,6 +127,8 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
         return $this->db->select('*')
                         ->from(self::getTableName())
                         ->whereEquals('customer_id', $customerId)
+                        ->orderBy($this->getPk())
+                        ->desc()
                         ->queryAll();
     }
 
