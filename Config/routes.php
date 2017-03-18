@@ -18,6 +18,10 @@ return array(
         'controller' => 'Customer:Order@detailAction'
     ),
     
+    '/module/shop/checkout' => array(
+        'controller' => 'Checkout@indexAction'
+    ),
+    
     '/module/shop/search/(:var)' => array(
         'controller' => 'Search@searchAction'
     ),
