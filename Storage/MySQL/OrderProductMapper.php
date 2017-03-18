@@ -130,7 +130,7 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
         );
 
         // Select by order id
-        $db = $this->db->select($columns)
+        $db = $this->db->select($columns, true)
                        ->from(self::getTableName())
                        ->innerJoin(ProductMapper::getTableName())
                        ->on()
