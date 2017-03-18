@@ -14,6 +14,43 @@ namespace Shop\Controller;
 final class Category extends AbstractShopController
 {
     /**
+     * Applies a filter
+     * 
+     * @return string
+     */
+    public function filterAction()
+    {
+        // Request data
+        $data = $this->request->getQuery();
+        $pageNumber = $this->request->hasQuery('page') ? $this->request->getQuery('page') : 1;
+
+        // Services
+        $productManager = $this->getModuleService('productManager');
+        $paginator = $productManager->getPaginator();
+
+        if (isset($data['attributes'])) {
+            $products = $productManager->findByAttributes(
+                $data['category_id'], 
+                $data['attributes'], 
+                $pageNumber, 
+                $this->getPerPageCountGadget()->getPerPageCount()
+            );
+        } else {
+            // If no attributes then filter was discarded
+            $products = $productManager->fetchAllPublishedByCategoryIdAndPage(
+                $data['category_id'], 
+                $pageNumber, 
+                $this->getPerPageCountGadget()->getPerPageCount(), 
+                $this->getCategorySortGadget()->getSortOption()
+            );
+        }
+
+        return $this->view->disableLayout()->render('partials/category-products', array(
+            'products' => $products
+        ));
+    }
+
+    /**
      * Renders a category by its associated id
      * 
      * @param string $id Category id

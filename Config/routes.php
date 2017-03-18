@@ -22,6 +22,10 @@ return array(
         'controller' => 'Checkout@indexAction'
     ),
     
+    '/module/shop/category/do/filter/(:var)' => array(
+        'controller' => 'Category@filterAction'
+    ),
+
     '/module/shop/search/(:var)' => array(
         'controller' => 'Search@searchAction'
     ),
