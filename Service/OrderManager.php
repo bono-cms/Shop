@@ -11,6 +11,7 @@
 
 namespace Shop\Service;
 
+use Cms\Service\WebPageManagerInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\MailerInterface;
 use Krystal\Stdlib\VirtualEntity;
@@ -45,21 +46,31 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     private $basketManager;
 
     /**
+     * Web page service
+     * 
+     * @var \Cms\Service\WebPageManagerInterface
+     */
+    private $webPageManager;
+
+    /**
      * State initialization
      * 
      * @param \Shop\Storage\OrderInfoMapperInterface $orderMapper
      * @param \Shop\Storage\OrderProductMapperInterface $orderProductMapper
      * @param \Shop\Service\BasketManagerInterface $basketManager
+     * @param \Cms\Service\WebPageManagerInterface $webPageManager
      * @return void
      */
     public function __construct(
         OrderInfoMapperInterface $orderInfoMapper, 
         OrderProductMapperInterface $orderProductMapper, 
-        BasketManagerInterface $basketManager
+        BasketManagerInterface $basketManager,
+        WebPageManagerInterface $webPageManager
     ){
         $this->orderInfoMapper = $orderInfoMapper;
         $this->orderProductMapper = $orderProductMapper;
         $this->basketManager = $basketManager;
+        $this->webPageManager = $webPageManager;
     }
 
     /**
@@ -198,14 +209,17 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
      */
     public function fetchAllDetailsByOrderId($id, $customerId = null, $coverDimensions = '75x75')
     {
-        $data = $this->orderProductMapper->fetchAllDetailsByOrderId($id, $customerId);
+        $rows = $this->orderProductMapper->fetchAllDetailsByOrderId($id, $customerId);
 
-        // Prepare cover path
-        array_walk($data, function(&$row, $value) use ($coverDimensions) {
-            $row['cover'] = sprintf('%s%s/%s/%s', Module::PARAM_PRODUCTS_IMG_PATH, $row['product_id'], $coverDimensions, $row['cover']);
-        });
+        foreach ($rows as $index => $row) {
+            $item =& $rows[$index];
 
-        return $data;
+            // Extra fields
+            $item['cover'] = sprintf('%s%s/%s/%s', Module::PARAM_PRODUCTS_IMG_PATH, $row['product_id'], $coverDimensions, $row['cover']);
+            $item['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
+        }
+
+        return $rows;
     }
 
     /**

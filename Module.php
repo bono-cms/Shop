@@ -106,7 +106,7 @@ final class Module extends AbstractCmsModule
             'deliveryTypeManager' => $deliveryTypeManager,
             'currencyManager' => $currencyManager,
             'couponManager' => $couponManager,
-            'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager),
+            'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager, $webPageManager),
             'basketManager' => $basketManager,
             'taskManager' => new TaskManager($productMapper, $categoryManager),
             'productManager' => $productManager,
