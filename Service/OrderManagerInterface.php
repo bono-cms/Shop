@@ -51,6 +51,14 @@ interface OrderManagerInterface
     public function approveById($id);
 
     /**
+     * Update order statuses
+     * 
+     * @param array $relations
+     * @return boolean
+     */
+    public function updateOrderStatuses(array $relations);
+
+    /**
      * Removes an order by its associated id
      * 
      * @param string $id Order's id

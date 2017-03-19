@@ -147,6 +147,24 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
+     * Update order statuses
+     * 
+     * @param array $relations
+     * @return boolean
+     */
+    public function updateOrderStatuses(array $relations)
+    {
+        foreach ($relations as $orderId => $statusId) {
+            // Do update only non-empty values
+            if (!empty($statusId)) {
+                $this->orderInfoMapper->updateOrderStatus($orderId, $statusId);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Removes an order by its associated id
      * 
      * @param string $id Order's id
@@ -240,6 +258,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
         $entity = new VirtualEntity();
         $entity->setId($order['id'], VirtualEntity::FILTER_INT)
                ->setCustomerId($order['customer_id'], VirtualEntity::FILTER_INT)
+               ->setStatusId($order['order_status_id'], VirtualEntity::FILTER_INT)
                ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
                ->setName($order['name'], VirtualEntity::FILTER_HTML)
                ->setEmail($order['email'], VirtualEntity::FILTER_HTML)
