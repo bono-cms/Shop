@@ -13,6 +13,7 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\OrderInfoMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInterface
 {
@@ -116,6 +117,43 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     public function insert(array $data)
     {
         return $this->persist($data);
+    }
+
+    /**
+     * Fetches order data by its associated ID
+     * 
+     * @param string $id Order ID
+     * @return array
+     */
+    public function fetchById($id)
+    {
+        $columns = array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('date'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('phone'),
+            self::getFullColumnName('address'),
+            self::getFullColumnName('comment'),
+            self::getFullColumnName('delivery'),
+            self::getFullColumnName('qty'),
+            self::getFullColumnName('total_price'),
+            self::getFullColumnName('approved'),
+            self::getFullColumnName('email'),
+            self::getFullColumnName('customer_id'),
+            self::getFullColumnName('order_status_id'),
+            OrderStatusMapper::getFullColumnName('name') => 'status_name',
+            OrderStatusMapper::getFullColumnName('description') => 'status_description',
+        );
+
+        return $this->db->select($columns)
+                        ->from(self::getTableName())
+                        ->leftJoin(OrderStatusMapper::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName('order_status_id'), new RawSqlFragment(OrderStatusMapper::getFullColumnName('id')))
+                        ->rawAnd()
+                        ->equals(self::getFullColumnName('id'), $id)
+                        ->limit(1)
+                        ->query();
     }
 
     /**
