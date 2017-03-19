@@ -7,6 +7,28 @@ use Krystal\Form\HtmlHelper;
 
 ?>
 
+<div class="btn-toolbar">
+	<div class="btn-group">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+		<span class="glyphicon glyphicon-list"></span> <?php $this->show('Menu'); ?> <span class="caret"></span>
+	  </button>
+      
+	  <ul class="dropdown-menu">
+         <li><a href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a></li>
+		 <li class="divider"></li>
+         <?php if (!empty($orders)): ?>
+		 <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Order@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Order@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+         
+         <?php else: ?>
+		 
+         <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+         <?php endif; ?>
+	  </ul>
+	</div>
+</div>
+
 <h2><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?> (<?php echo $paginator->getTotalAmount(); ?>)</h2>
 
 <div class="table-responsive">
@@ -19,6 +41,9 @@ use Krystal\Form\HtmlHelper;
                     <th></th>
                     <th class="text-center">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('id'); ?>"><i class="<?php echo $filter->isSortedByDesc('id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> #</a>
+                    </th>
+                    <th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('order_status_id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('order_status_id'); ?>"><i class="<?php echo $filter->isSortedByDesc('order_status_id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Order status'); ?></a>
                     </th>
                     <th class="text-center">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('date'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('date'); ?>"><i class="<?php echo $filter->isSortedByDesc('date') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Date'); ?></a>
@@ -56,6 +81,9 @@ use Krystal\Form\HtmlHelper;
                         <?php endif; ?>
                     </th>
                     <th class="col-md-1"><?php echo Element::number('filter[id]', $filter->get('id'), array('class' => 'form-control', 'min' => '1')); ?></th>
+                    <th class="col-md-2">
+                        <?php echo Element::select('filter[order_status_id]', $orderStatuses, $filter->get('order_status_id'), array('class' => 'form-control'), null); ?>
+                    </th>
                     <th><?php echo Element::text('filter[date]', $filter->get('date'), array('class' => 'form-control')); ?></th>
                     <th><?php echo Element::text('filter[name]', $filter->get('name'), array('class' => 'form-control')); ?></th>
                     <th><?php echo Element::text('filter[email]', $filter->get('email'), array('class' => 'form-control')); ?></th>
@@ -78,6 +106,9 @@ use Krystal\Form\HtmlHelper;
                         <input type="checkbox" name="toDelete[<?php echo $order->getId(); ?>]" />
                     </td>
                     <td class="text-center text-muted"><?php echo $order->getId(); ?></td>
+                    <td class="text-center text-muted">
+                        <?php echo Element::select(sprintf('order_status_id[%s]', $order->getId()), $orderStatuses, $order->getStatusId(), array('class' => 'form-control'), null); ?>
+                    </td>
                     <td class="text-center"><?php echo $order->getDate(); ?></td>
                     <td class="text-center"><?php echo $order->getName(); ?></td>
                     <td class="text-center"><?php echo $order->getEmail(); ?></td>
@@ -113,7 +144,6 @@ use Krystal\Form\HtmlHelper;
         <div>
             <a href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
             <?php endif; ?>
-            <button class="btn btn-danger" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Order@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></button>
             <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
             <br />
         </div>
@@ -121,8 +151,6 @@ use Krystal\Form\HtmlHelper;
     </form>
     
     <?php $this->loadPartial('paginator'); ?>
-    
-    
 </div>
 
 <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
