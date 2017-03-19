@@ -42,10 +42,12 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
 
         $db = $this->db->select('*')
                         ->from(static::getTableName())
-                        ->whereLike('name', '%'.$input['name'].'%', true)
+                        ->whereEquals('1', '1')
+                        ->andWhereLike('name', '%'.$input['name'].'%', true)
                         ->andWhereLike('phone', '%'.$input['phone'].'%', true)
                         ->andWhereLike('email', '%'.$input['email'].'%', true)
                         ->andWhereEquals('id', $input['id'], true)
+                        ->andWhereEquals('order_status_id', $input['order_status_id'], true)
                         ->andWhereEquals('date', $input['date'], true)
                         ->andWhereEquals('qty', $input['qty'], true)
                         ->andWhereEquals('total_price', $input['total_price'], true)
@@ -168,6 +170,18 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     public function deleteById($id)
     {
         return $this->deleteByPk($id);
+    }
+
+    /**
+     * Updates order status ID by associated order ID
+     * 
+     * @param string $orderId
+     * @param string $statusId
+     * @return boolean
+     */
+    public function updateOrderStatus($orderId, $statusId)
+    {
+        return $this->updateColumnByPk($orderId, 'order_status_id', $statusId);
     }
 
     /**

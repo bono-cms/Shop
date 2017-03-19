@@ -70,6 +70,15 @@ interface OrderInfoMapperInterface
     public function deleteById($id);
 
     /**
+     * Updates order status ID by associated order ID
+     * 
+     * @param string $orderId
+     * @param string $statusId
+     * @return boolean
+     */
+    public function updateOrderStatus($orderId, $statusId);
+
+    /**
      * Approves an order by its associated id
      * 
      * @param string $id Order's id
