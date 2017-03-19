@@ -13,9 +13,23 @@ namespace Shop\Service;
 
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Text\Math;
+use DateTime;
 
 final class ProductEntity extends VirtualEntity
 {
+    /**
+     * Determines whether product is new (added several days ago)
+     * 
+     * @return boolean
+     */
+    public function isNew()
+    {
+        $dateTime = new DateTime($this->getDate());
+        $dateInterval = $dateTime->diff(new DateTime());
+
+        return $dateInterval->format('%a') <= 3;
+    }
+
     /**
      * Returns product stoke price
      * 
