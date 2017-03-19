@@ -31,6 +31,7 @@ use Shop\Service\CategoryManager;
 use Shop\Service\TaskManager;
 use Shop\Service\OrderManager;
 use Shop\Service\ProductRemover;
+use Shop\Service\OrderStatusManager;
 use Shop\Service\SiteService;
 
 final class Module extends AbstractCmsModule
@@ -55,6 +56,7 @@ final class Module extends AbstractCmsModule
         $deliveryTypeMapper = $this->getMapper('/Shop/Storage/MySQL/DeliveryTypeMapper', false);
         $couponMapper = $this->getMapper('/Shop/Storage/MySQL/CouponMapper', false);
         $currencyMapper = $this->getMapper('/Shop/Storage/MySQL/CurrencyMapper', false);
+        $orderStatusMapper = $this->getMapper('/Shop/Storage/MySQL/OrderStatusMapper', false);
 
         // Now build required services
         $productImageManager = $this->getProductImageManager($config->getEntity());
@@ -104,6 +106,7 @@ final class Module extends AbstractCmsModule
             'siteService' => $siteService,
             'configManager' => $config,
             'deliveryTypeManager' => $deliveryTypeManager,
+            'orderStatusManager' => new OrderStatusManager($orderStatusMapper),
             'currencyManager' => $currencyManager,
             'couponManager' => $couponManager,
             'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager, $webPageManager),
