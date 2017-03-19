@@ -45,6 +45,13 @@ interface OrderStatusManagerInterface
     public function update(array $input);
 
     /**
+     * Fetch associative list
+     * 
+     * @return array
+     */
+    public function fetchList();
+
+    /**
      * Fetch all entities
      * 
      * @return array

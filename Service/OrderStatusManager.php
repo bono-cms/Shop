@@ -14,6 +14,7 @@ namespace Shop\Service;
 use Shop\Storage\OrderStatusMapperInterface;
 use Cms\Service\AbstractManager;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 
 final class OrderStatusManager extends AbstractManager implements OrderStatusManagerInterface
 {
@@ -89,6 +90,16 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
     public function update(array $input)
     {
         return $this->orderStatusMapper->persist($input);
+    }
+
+    /**
+     * Fetch associative list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return ArrayUtils::arrayList($this->orderStatusMapper->fetchAll(), 'id', 'name');
     }
 
     /**
