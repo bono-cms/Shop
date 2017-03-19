@@ -1,0 +1,88 @@
+<?php
+
+use Krystal\Form\Element;
+defined('KRYSTAL') or die;
+
+?>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available order statuses'); ?> <small>(<?php echo count($orderStatuses); ?>)</small></h2>
+
+        <div class="table-responsive">
+            <table class="table table-stripped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <td class="text-center text-muted">#</td>
+                        <td class="text-center"><?php $this->show('Name'); ?></td>
+                        <td class="text-center"><?php $this->show('Description'); ?></td>
+                        <td class="text-center"><?php $this->show('Actions'); ?></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($orderStatuses as $entity): ?>
+                    <tr class="<?php echo $entity->getId() == $orderStatus->getId() ? 'info' : null; ?>">
+                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
+                        <td class="text-center"><?php echo $entity->getName(); ?></td>
+                        <td class="text-center"><?php echo $entity->getDescription(); ?></td>
+                        <td class="text-center">
+                            <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this order status'); ?>" href="<?php echo $this->url('Shop:Admin:OrderStatus@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:OrderStatus@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this order status'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <?php if (empty($orderStatuses)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No order statuses'); ?></h2>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="col-lg-6">
+        <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($orderStatus->getId() ? 'Update order status' : 'Add order status'); ?></h3>
+
+        <form data-group="orderStatus">
+            <div class="well">
+                <?php echo Element::hidden('orderStatus[id]', $orderStatus->getId()); ?>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('orderStatus[name]', $orderStatus->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Order status name'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::textarea('orderStatus[description]', $orderStatus->getDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Order status description'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php if (!$orderStatus->getId()): ?>
+
+            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:OrderStatus@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:OrderStatus@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:OrderStatus@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+
+            <?php else: ?>
+
+            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:OrderStatus@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:OrderStatus@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+
+            <?php endif; ?>
+        </form>
+    </div>
+</div>
