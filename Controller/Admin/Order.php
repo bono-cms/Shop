@@ -131,6 +131,7 @@ final class Order extends AbstractController
                                        ->addOne('List of orders');
 
         return $this->view->render('orders', array(
+            'orderStatuses' => $this->getModuleService('orderStatusManager')->fetchList(),
             'orders' => $orders,
             'paginator' => $paginator,
             'config' => $this->getConfig(),
