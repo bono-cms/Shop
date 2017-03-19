@@ -155,10 +155,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     public function updateOrderStatuses(array $relations)
     {
         foreach ($relations as $orderId => $statusId) {
-            // Do update only non-empty values
-            if (!empty($statusId)) {
-                $this->orderInfoMapper->updateOrderStatus($orderId, $statusId);
-            }
+            $this->orderInfoMapper->updateOrderStatus($orderId, $statusId);
         }
 
         return true;
@@ -203,7 +200,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
      */
     public function fetchById($id)
     {
-        return $this->prepareResult($this->orderInfoMapper->findByPk($id));
+        return $this->prepareResult($this->orderInfoMapper->fetchById($id));
     }
 
     /**
@@ -268,7 +265,12 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
                ->setDelivery($order['delivery'], VirtualEntity::FILTER_HTML)
                ->setQty($order['qty'], VirtualEntity::FILTER_INT)
                ->setTotalPrice($order['total_price'], VirtualEntity::FILTER_FLOAT)
-               ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL);
+               ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL)
+               
+               // Order status fields
+               ->setStatusName(isset($order['status_name']) ? $order['status_name'] : null, VirtualEntity::FILTER_HTML)
+               ->setStatusDescription(isset($order['status_description']) ? $order['status_description'] : null, VirtualEntity::FILTER_HTML)
+               ->setHasStatus(!empty($order['order_status_id']));
 
         return $entity;
     }
