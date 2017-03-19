@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Dynamic order statuses
  * In `ProductEntity` added `isNews()` method that checks whether a product has been added recently or not
  * Added optional checkout page
  * Added optional customer cabinet (works only in conjunction with Members module)
