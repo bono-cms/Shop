@@ -132,6 +132,23 @@ return array(
         'controller' => 'Admin:Coupon@deleteAction'
     ),
 
+    // Order statuses
+    '/%s/module/shop/order-statuses' => array(
+        'controller' => 'Admin:OrderStatus@indexAction'
+    ),
+
+    '/%s/module/shop/order-statuses/edit/(:var)' => array(
+        'controller' => 'Admin:OrderStatus@editAction'
+    ),
+
+    '/%s/module/shop/order-statuses/save' => array(
+        'controller' => 'Admin:OrderStatus@saveAction'
+    ),
+
+    '/%s/module/shop/order-statuses/delete/(:var)' => array(
+        'controller' => 'Admin:OrderStatus@deleteAction'
+    ),
+    
     // Currencies
     '/%s/module/shop/currencies' => array(
         'controller' => 'Admin:Currency@indexAction'
