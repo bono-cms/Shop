@@ -61,6 +61,24 @@ final class Order extends AbstractController
     }
 
     /**
+     * Save incoming configuration
+     * 
+     * @return string
+     */
+    public function tweakAction()
+    {
+        if ($this->request->hasPost('order_status_id')) {
+            $relations = $this->request->getPost('order_status_id');
+
+            // Update relations
+            $this->getOrderManager()->updateOrderStatuses($relations);
+
+            $this->flashBag->set('success', 'Settings have been saved successfully');
+            return 1;
+        }
+    }
+
+    /**
      * Deletes an order by its associated id
      * 
      * @param string $id

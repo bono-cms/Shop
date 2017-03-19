@@ -72,7 +72,6 @@ return array(
         'controller' => 'Basket@clearAction'
     ),
     
-    
     //---- Orders
     '/module/shop/basket/order' => array(
         'controller' => 'Order@orderAction'
@@ -88,6 +87,10 @@ return array(
     
     '/%s/module/shop/orders' => array(
         'controller' => 'Admin:Order@indexAction'
+    ),
+
+    '/%s/module/shop/orders/tweak' => array(
+        'controller' => 'Admin:Order@tweakAction'
     ),
     
     '/%s/module/shop/orders/filter/(:var)' => array(
