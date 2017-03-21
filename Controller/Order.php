@@ -76,7 +76,7 @@ final class Order extends AbstractShopController
         $orderManager = $this->getModuleService('orderManager');
 
         // Override delivery ID with its corresponding name
-        $input['delivery'] = $this->getModuleService('deliveryTypeManager')->fetchNameById($input['delivery']);
+        $input['delivery'] = $this->getModuleService('deliveryTypeManager')->createDeliveryStatus($input['delivery']);
         $input['customer_id'] = $this->createCustomerId();
 
         // Prepare a message first
