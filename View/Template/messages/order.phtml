@@ -28,5 +28,9 @@
 <br />
 <hr />
 
+<?php if (!empty($input['discount'])): ?>
+<p><?php $this->show('Discount'); ?>: <?php echo $input['discount']; ?></p>
+<?php endif; ?>
+
 <p><?php $this->show('Total quantity of all products'); ?>: <?php echo $basketManager->getTotalQuantity(); ?></p>
 <p><?php $this->show('Total price'); ?>: <?php echo $basketManager->getTotalPrice(), ' ', $currency; ?></p>
