@@ -254,6 +254,70 @@ $(function(){
         }
     };
     
+    var currency = {
+        /**
+         * Returns all available currencies
+         * 
+         * @return object
+         */
+        getAll: function(){
+            var $source = $("input[data-currency='source']");
+
+            // Do processing in case source is found
+            if ($source.length) {
+                var jsonString = $source.val();
+
+                try {
+                    return $.parseJSON(jsonString);
+                } catch(e) {
+                    console.log('Error while paring source string');
+                    return false;
+                }
+
+            } else {
+                // No currency input
+                return false;
+            }
+        },
+
+        /**
+         * Converts current value to currency by code
+         * 
+         * @param string code Currency code
+         * @param string value
+         * @param boolean format Whether to format output
+         * @return float
+         */
+        convert: function(value, code, format){
+            // Get all currencies
+            var currencies = this.getAll();
+
+            // Get currency value by its provided code
+            var currency = typeof currencies[code] != undefined ? currencies[code] : null;
+
+            // Make sure it's not null. If it is, then invalid code provided
+            if (currency === null) {
+                console.log('Invalid currency code provided. Halted processing');
+                return false;
+            }
+
+            // Count result
+            result = parseFloat(value) * currency;
+
+            // If not provided, then assume true by default
+            if (format == undefined) {
+                format = true;
+            }
+
+            // Format numbers by default
+            if (format) {
+                result = parseFloat(result).toLocaleString();
+            }
+
+            return result;
+        }
+    };
+    
     // View-related logic
     var view = {
         /**
@@ -388,65 +452,31 @@ $(function(){
          * @return void
          */
         updateCurrency: function(){
-            var $source = $("input[data-currency='source']");
+            // Local configuration
+            var config = {
+                inputSelector: "[data-currency-input-id]",
+                outputSelector: "[data-currency-output-for]",
+                codeSelector: "[data-currency-code]"
+            };
 
-            // Do processing in case source is found
-            if ($source.length) {
-                var jsonString = $source.val();
+            $(config.inputSelector).each(function(){
+                // Grab required parameters
+                var id = $(this).data('currency-input-id');
+                var value = $(this).data('currency-input-value');
+                var format = $(this).data('currency-format-value');
+                var code = $(this).data('currency-code');
 
-                try {
-                    var currencies = $.parseJSON(jsonString);
-                } catch(e) {
-                    console.log('Error while paring source string');
-                    return false;
+                // If its undefined, fall back to text
+                if (!value) {
+                    value = $(this).text();
                 }
 
-                // Local configuration
-                var config = {
-                    inputSelector: "[data-currency-input-id]",
-                    outputSelector: "[data-currency-output-for]",
-                    codeSelector: "[data-currency-code]"
-                };
+                // Get currency value by its provided code
+                var result = currency.convert(value, code);
 
-                $(config.inputSelector).each(function(){
-                    // Grab required parameters
-                    var id = $(this).data('currency-input-id');
-                    var value = $(this).data('currency-input-value');
-                    var format = $(this).data('currency-format-value');
-                    var code = $(this).data('currency-code');
-
-                    // Get currency value by its provided code
-                    var currency = typeof currencies[code] != undefined ? currencies[code] : null;
-
-                    // Make sure it's not null. If it is, then invalid code provided
-                    if (currency === null) {
-                        console.log('Invalid currency code provided. Halted processing');
-                        return false;
-                    }
-
-                    // If its undefined, fall back to text
-                    if (!value) {
-                        value = $(this).text();
-                    }
-
-                    // If not provided, then assume true by default
-                    if (format == undefined) {
-                        format = true;
-                    }
-
-                    var result = parseFloat(value) * currency;
-
-                    // Format numbers by default
-                    if (format) {
-                        result = parseFloat(result).toLocaleString();
-                    }
-
-                    // Find associated outputting element
-                    $("[data-currency-output-for='" + id + "']").text(result);
-                });
-            } else{
-                console.log('Currency source can not be found');
-            }
+                // Find associated outputting element
+                $("[data-currency-output-for='" + id + "']").text(result);
+            });
         }
     };
 
@@ -679,7 +709,7 @@ $(function(){
 
             // Update currency as well
             view.updateCurrency();
-
+            
         }).trigger('change');
 
     })($, view);
