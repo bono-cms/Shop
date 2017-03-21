@@ -78,6 +78,7 @@ final class Order extends AbstractShopController
         // Override delivery ID with its corresponding name
         $input['delivery'] = $this->getModuleService('deliveryTypeManager')->createDeliveryStatus($input['delivery']);
         $input['customer_id'] = $this->createCustomerId();
+        $input['discount'] = $this->getModuleService('couponManager')->getAppliedDiscount();
 
         // Prepare a message first
         $message = $this->view->renderRaw($this->moduleName, 'messages', 'order', array(

@@ -56,7 +56,7 @@ final class Checkout extends AbstractShopController
             $couponManager = $this->getModuleService('couponManager');
             $basketManager = $this->getModuleService('basketManager');
 
-            $discount = $couponManager->getDiscountByCode($code, $basketManager->getTotalPrice());
+            $discount = $couponManager->applyDiscountByCode($code, $basketManager->getTotalPrice());
 
             if ($discount !== false) {
                 return $discount;
