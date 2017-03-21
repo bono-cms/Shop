@@ -15,6 +15,7 @@ CREATE TABLE `bono_module_shop_orders_info` (
 	`delivery` TEXT NOT NULL COMMENT 'Delivery type',
 	`qty` int NOT NULL COMMENT 'Ammount of products',
 	`total_price` FLOAT COMMENT 'Total price',
+    `discount` FLOAT COMMENT 'Discount price if applied',
 	`approved` varchar(1) NOT NULL COMMENT 'Whether this order is approved'
 	
 ) DEFAULT CHARSET = UTF8;
