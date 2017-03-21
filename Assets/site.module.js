@@ -317,6 +317,59 @@ $(function(){
             return result;
         }
     };
+
+    // Summary class
+    var summary = {
+        /**
+         * Returns summary element
+         * 
+         * @return object
+         */
+        getElement: function(){
+            return $("[data-basket-label='summary-price']");
+        },
+
+        /**
+         * Returns current value
+         * 
+         * @return string
+         */
+        getCurrentValue: function(){
+            return this.getElement().data('currency-input-value');
+        },
+
+        /**
+         * Update summary value
+         * 
+         * @param mixed newPrice
+         * @return void
+         */
+        updateValue: function(newPrice){
+            var $summary = this.getElement();
+
+            $summary.attr('data-currency-input-value', newPrice);
+            $summary.data('currency-input-value', newPrice);
+            $summary.text(newPrice.toLocaleString());
+        },
+
+        /**
+         * Updates summary element
+         * 
+         * @return void
+         */
+        increment: function(value){
+            var $summary = this.getElement();
+
+            if ($summary.data('currency-input-value')) {
+                // Grab initial price and add delivery price
+                var initialPrice = parseFloat($summary.data('summary-initial-price'));
+                var newPrice = initialPrice + parseFloat(value);
+
+                // Update currency value
+                this.updateValue(newPrice);
+            }
+        }
+    };
     
     // View-related logic
     var view = {
@@ -691,7 +744,6 @@ $(function(){
 
     })($, view);
 
-
     // Delivery payment changer
     (function(){
         // Local configuration
@@ -707,24 +759,12 @@ $(function(){
 
             $(config.deliveryPriceLabelSelector).text(value);
 
-            // Update summary label if provided
-            $summary = $("[data-basket-label='summary-price']");
-
-            if ($summary.data('currency-input-value')) {
-                // Grab initial price and add delivery price
-                var initialPrice = parseFloat($summary.data('summary-initial-price'));
-                var newPrice = initialPrice + parseFloat(value);
-
-                // Update currency value
-                $summary.attr('data-currency-input-value', newPrice);
-                $summary.data('currency-input-value', newPrice);
-                $summary.text(newPrice.toLocaleString());
-            }
+            summary.increment(value);
 
             // Update currency as well
             view.updateCurrency();
 
         }).trigger('change');
 
-    })($, view);
+    })($, view, summary);
 });
