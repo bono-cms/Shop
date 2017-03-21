@@ -134,13 +134,14 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * 
      * @param string $categoryId Category id
      * @param array $attributes A collection of group IDs and their value IDs
+     * @param string|boolean $sort Sorting column
      * @param string $page Optional page number
      * @param string $itemsPerPage Optional Per page count filter
      * @return array
      */
-    public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null)
+    public function findByAttributes($categoryId, array $attributes, $sort = null, $page = null, $itemsPerPage = null)
     {
-        return $this->prepareResults($this->attributeMapper->findByAttributes($categoryId, $attributes, $page, $itemsPerPage));
+        return $this->prepareResults($this->attributeMapper->findByAttributes($categoryId, $attributes, $sort, $page, $itemsPerPage));
     }
 
     /**
