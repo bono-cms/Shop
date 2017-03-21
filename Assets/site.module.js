@@ -707,9 +707,23 @@ $(function(){
 
             $(config.deliveryPriceLabelSelector).text(value);
 
+            // Update summary label if provided
+            $summary = $("[data-basket-label='summary-price']");
+
+            if ($summary.data('currency-input-value')) {
+                // Grab initial price and add delivery price
+                var initialPrice = parseFloat($summary.data('summary-initial-price'));
+                var newPrice = initialPrice + parseFloat(value);
+
+                // Update currency value
+                $summary.attr('data-currency-input-value', newPrice);
+                $summary.data('currency-input-value', newPrice);
+                $summary.text(newPrice.toLocaleString());
+            }
+
             // Update currency as well
             view.updateCurrency();
-            
+
         }).trigger('change');
 
     })($, view);
