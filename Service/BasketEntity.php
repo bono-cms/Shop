@@ -35,6 +35,16 @@ final class BasketEntity extends VirtualEntity
     }
 
     /**
+     * Determines whether basket is empty
+     * 
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return $this->basketManager->isEmpty();
+    }
+
+    /**
      * Checks whether product ID is already in basket
      * 
      * @param string $id Product ID

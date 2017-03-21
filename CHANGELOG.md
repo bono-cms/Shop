@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added `isEmpty()` in `$basket` service
  * Dynamic order statuses
  * In `ProductEntity` added `isNews()` method that checks whether a product has been added recently or not
  * Added optional checkout page
