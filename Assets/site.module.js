@@ -76,6 +76,7 @@ $(function(){
             try {
                 var data = $.parseJSON(response);
                 callback(data);
+                
             } catch(e){
                 console.log(response);
                 callback(false);
@@ -279,15 +280,26 @@ $(function(){
         /**
          * Update statistic
          * 
+         * @param object data
          * @return void
          */
         updateStat : function(data){
-            // If we have special labels in a mark-up, then we need to update them accordingly
-            $("[data-basket-label='total-products-qty']").text(data.totalQuantity);
-            $("[data-basket-label='total-products-price']").text(data.totalPrice);
+            var $qty = $("[data-basket-label='total-products-qty']");
+            var $price = $("[data-basket-label='total-products-price']");
 
-            // Update currency as well
-            this.updateCurrency();
+            if ($qty.data('inflect-count')) {
+                $qty.data('inflect-count', data.totalQuantity);
+            } else {
+                // Do not update the inner text if inflector is initialized
+                $qty.text(data.totalQuantity);
+            }
+
+            if ($price.data('currency-input-value')) {
+                $price.data('currency-input-value', parseFloat(data.totalPrice));
+            }
+
+            // If we have special labels in a mark-up, then we need to update them accordingly
+            $price.text(parseFloat(data.totalPrice).toLocaleString());
         },
 
         /**
@@ -335,6 +347,7 @@ $(function(){
                 } else {
                     // Otherwise just update a table
                     this.updateStat(data);
+                    this.updateCurrency();
 
                     $row = this.getNodesByProductIdWithFilter(id, "[data-basket-type='container']");
                     $row.hide(500, function(){
@@ -497,7 +510,6 @@ $(function(){
             window.location.reload();
         });
     });
-    
     
     
     $("[data-basket-button='product-delete-with-confirm']").click(function(event){
