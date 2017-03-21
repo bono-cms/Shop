@@ -14,6 +14,7 @@ namespace Shop\Service;
 use Shop\Storage\CouponMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Text\Math;
+use Krystal\Session\SessionBagInterface;
 use Cms\Service\AbstractManager;
 
 final class CouponManager extends AbstractManager implements CouponManagerInterface
@@ -26,14 +27,25 @@ final class CouponManager extends AbstractManager implements CouponManagerInterf
     private $couponMapper;
 
     /**
+     * Session bag service
+     * 
+     * @var \Krystal\Session\SessionBagInterface 
+     */
+    private $sessionBag;
+
+    const STORAGE_DISCOUNT_KEY = 'discount_applied';
+
+    /**
      * State initialization
      * 
      * @param \Shop\Storage\CouponMapperInterface $couponMapper
+     * @param \Krystal\Session\SessionBagInterface $sessionBag
      * @return void
      */
-    public function __construct(CouponMapperInterface $couponMapper)
+    public function __construct(CouponMapperInterface $couponMapper, SessionBagInterface $sessionBag)
     {
         $this->couponMapper = $couponMapper;
+        $this->sessionBag = $sessionBag;
     }
 
     /**
@@ -47,6 +59,50 @@ final class CouponManager extends AbstractManager implements CouponManagerInterf
                ->setPercentage($row['percentage'], VirtualEntity::FILTER_INT);
 
         return $coupon;
+    }
+
+    /**
+     * Returns applied discount price
+     * 
+     * @return string
+     */
+    public function getAppliedDiscount()
+    {
+        if ($this->isApplied()) {
+            return $this->sessionBag->get(self::STORAGE_DISCOUNT_KEY);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Determines whether discount has been applied
+     * 
+     * @return boolean
+     */
+    public function isApplied()
+    {
+        return $this->sessionBag->has(self::STORAGE_DISCOUNT_KEY);
+    }
+
+    /**
+     * Applies a discount price by coupon code
+     * 
+     * @param string $code Coupon code
+     * @param string $price Total price
+     * @return string|boolean
+     */
+    public function applyDiscountByCode($code, $price)
+    {
+        $discount = $this->getDiscountByCode($code, $price);
+
+        // Stop returning false, if wrong code supplied
+        if ($discount === false) {
+            return false;
+        } else {
+            $this->sessionBag->set(self::STORAGE_DISCOUNT_KEY, $discount);
+            return $discount;
+        }
     }
 
     /**

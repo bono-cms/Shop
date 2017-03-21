@@ -14,6 +14,29 @@ namespace Shop\Service;
 interface CouponManagerInterface
 {
     /**
+     * Returns applied discount price
+     * 
+     * @return string
+     */
+    public function getAppliedDiscount();
+
+    /**
+     * Determines whether discount has been applied
+     * 
+     * @return boolean
+     */
+    public function isApplied();
+
+    /**
+     * Applies a discount price by coupon code
+     * 
+     * @param string $code Coupon code
+     * @param string $price Total price
+     * @return string|boolean
+     */
+    public function applyDiscountByCode($code, $price);
+
+    /**
      * Find outs the discount price by coupon code
      * 
      * @param string $code Coupon code

@@ -91,7 +91,7 @@ final class Module extends AbstractCmsModule
         );
 
         $deliveryTypeManager = new DeliveryTypeManager($deliveryTypeMapper);
-        $couponManager = new CouponManager($couponMapper);
+        $couponManager = new CouponManager($couponMapper, $this->getServiceLocator()->get('sessionBag'));
         $currencyManager = new CurrencyManager($currencyMapper);
 
         $siteService = new SiteService(
