@@ -69,6 +69,9 @@ use Krystal\Form\HtmlHelper;
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('total_price'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('total_price'); ?>"><i class="<?php echo $filter->isSortedByDesc('total_price') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Total price'); ?></a>
                     </th>
                     <th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('discount'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('discount'); ?>"><i class="<?php echo $filter->isSortedByDesc('discount') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Discount'); ?></a>
+                    </th>
+                    <th class="text-center">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('approved'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('approved'); ?>"><i class="<?php echo $filter->isSortedByDesc('approved') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Approved'); ?></a>
                     </th>
                     <th class="text-center"><?php $this->show('Actions'); ?></th>
@@ -93,6 +96,7 @@ use Krystal\Form\HtmlHelper;
                     <th></th>
                     <th class="col-md-1"><?php echo Element::number('filter[qty]', $filter->get('qty'), array('class' => 'form-control', 'min' => '1')); ?></th>
                     <th><?php echo Element::number('filter[total_price]', $filter->get('total_price'), array('class' => 'form-control', 'step' => 'any', 'min' => '1')); ?></th>
+                    <th></th>
                     <th><?php echo BooleanWidget::render(array('name' => 'filter[approved]', 'class' => 'form-control'), $filter->get('approved'), $this->getTranslator()); ?></th>
                     <th></th>
                 </tr>
@@ -118,6 +122,7 @@ use Krystal\Form\HtmlHelper;
                     <td class="text-center"><?php echo $order->getDelivery(); ?></td>
                     <td class="text-center"><?php echo $order->getQty(); ?></td>
                     <td class="text-center"><?php echo $order->getTotalPrice(), PHP_EOL, $config->getCurrency(); ?></td>
+                    <td class="text-center"><?php echo $order->getDiscount(), PHP_EOL, $config->getCurrency(); ?></td>
                     <td class="text-center"><?php $this->show($order->getApproved() ? 'Yes' : 'No'); ?></td>
                     <td class="text-center">
                         <?php if (!$order->getApproved()):?>
