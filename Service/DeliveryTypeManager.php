@@ -49,6 +49,27 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
     }
 
     /**
+     * Creates delivery status (name +price)
+     * 
+     * @param string $id Delivery ID
+     * @return string
+     */
+    public function createDeliveryStatus($id)
+    {
+        $delivery = $this->fetchById($id);
+
+        if ($delivery !== false) {
+            if ($delivery->getPrice() == 0) {
+                return $delivery->getName();
+            } else {
+                return sprintf('%s (+%s)', $delivery->getName(), $delivery->getPrice());
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Fetches delivery type name by its associated ID
      * 
      * @param string $id

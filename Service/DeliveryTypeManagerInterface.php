@@ -14,6 +14,14 @@ namespace Shop\Service;
 interface DeliveryTypeManagerInterface
 {
     /**
+     * Creates delivery status (name +price)
+     * 
+     * @param string $id Delivery ID
+     * @return string
+     */
+    public function createDeliveryStatus($id);
+
+    /**
      * Fetches delivery type name by its associated ID
      * 
      * @param string $id
