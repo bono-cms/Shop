@@ -266,7 +266,10 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
                ->setQty($order['qty'], VirtualEntity::FILTER_INT)
                ->setTotalPrice($order['total_price'], VirtualEntity::FILTER_FLOAT)
                ->setApproved($order['approved'], VirtualEntity::FILTER_BOOL)
-               
+
+               // Discount price
+               ->setDiscount($order['discount'], VirtualEntity::FILTER_FLOAT)
+
                // Order status fields
                ->setStatusName(isset($order['status_name']) ? $order['status_name'] : null, VirtualEntity::FILTER_HTML)
                ->setStatusDescription(isset($order['status_description']) ? $order['status_description'] : null, VirtualEntity::FILTER_HTML)

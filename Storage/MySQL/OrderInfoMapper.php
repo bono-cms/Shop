@@ -41,6 +41,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
             self::getFullColumnName('comment'),
             self::getFullColumnName('delivery'),
             self::getFullColumnName('qty'),
+            self::getFullColumnName('discount'),
             self::getFullColumnName('total_price'),
             self::getFullColumnName('approved'),
             self::getFullColumnName('email'),
