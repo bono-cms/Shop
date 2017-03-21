@@ -731,6 +731,9 @@ $(function(){
                                     // Update the label
                                     $(config.discountLabelSelector).text(response);
 
+                                    // Update summary if possible
+                                    summary.updateValue(summary.getCurrentValue() - parseFloat(response));
+
                                     // Update currency as well
                                     view.updateCurrency();
                                 }
@@ -742,7 +745,7 @@ $(function(){
             });
         }
 
-    })($, view);
+    })($, view, summary);
 
     // Delivery payment changer
     (function(){
