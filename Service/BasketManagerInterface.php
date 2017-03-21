@@ -14,6 +14,13 @@ namespace Shop\Service;
 interface BasketManagerInterface
 {
     /**
+     * Determines whether basket is empty
+     * 
+     * @return boolean
+     */
+    public function isEmpty();
+
+    /**
      * Saves changes to a storage
      * 
      * @return \Shop\Service\BasketManager

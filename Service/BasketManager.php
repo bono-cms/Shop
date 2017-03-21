@@ -84,6 +84,16 @@ final class BasketManager implements BasketManagerInterface
     }
 
     /**
+     * Determines whether basket is empty
+     * 
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return $this->collection->isEmpty();
+    }
+
+    /**
      * Saves changes to a storage
      * 
      * @return \Shop\Service\BasketManager
