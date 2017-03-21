@@ -26,6 +26,32 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     }
 
     /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('date'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('phone'),
+            self::getFullColumnName('address'),
+            self::getFullColumnName('comment'),
+            self::getFullColumnName('delivery'),
+            self::getFullColumnName('qty'),
+            self::getFullColumnName('total_price'),
+            self::getFullColumnName('approved'),
+            self::getFullColumnName('email'),
+            self::getFullColumnName('customer_id'),
+            self::getFullColumnName('order_status_id'),
+            OrderStatusMapper::getFullColumnName('name') => 'status_name',
+            OrderStatusMapper::getFullColumnName('description') => 'status_description',
+        );
+    }
+
+    /**
      * Filters the raw input
      * 
      * @param array|\ArrayAccess $input Raw input data
@@ -127,25 +153,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public function fetchById($id)
     {
-        $columns = array(
-            self::getFullColumnName('id'),
-            self::getFullColumnName('date'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('phone'),
-            self::getFullColumnName('address'),
-            self::getFullColumnName('comment'),
-            self::getFullColumnName('delivery'),
-            self::getFullColumnName('qty'),
-            self::getFullColumnName('total_price'),
-            self::getFullColumnName('approved'),
-            self::getFullColumnName('email'),
-            self::getFullColumnName('customer_id'),
-            self::getFullColumnName('order_status_id'),
-            OrderStatusMapper::getFullColumnName('name') => 'status_name',
-            OrderStatusMapper::getFullColumnName('description') => 'status_description',
-        );
-
-        return $this->db->select($columns)
+        return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
                         ->leftJoin(OrderStatusMapper::getTableName())
                         ->on()
@@ -164,9 +172,12 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public function fetchAllByCustomerId($customerId)
     {
-        return $this->db->select('*')
+        return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
-                        ->whereEquals('customer_id', $customerId)
+                        ->leftJoin(OrderStatusMapper::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName('order_status_id'), new RawSqlFragment(OrderStatusMapper::getFullColumnName('id')))
+                        ->whereEquals(self::getFullColumnName('customer_id'), $customerId)
                         ->orderBy($this->getPk())
                         ->desc()
                         ->queryAll();
