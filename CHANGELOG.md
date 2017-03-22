@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * In `SiteService` added `getTree()` that returns tree instance
  * Added `isEmpty()` in `$basket` service
  * Dynamic order statuses
  * In `ProductEntity` added `isNews()` method that checks whether a product has been added recently or not

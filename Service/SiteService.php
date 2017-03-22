@@ -111,18 +111,29 @@ final class SiteService implements SiteServiceInterface
      */
     public function getTopCategories()
     {
-        return $this->getCategoryChildrenByParentId('0');
+        return $this->getCategoryChildrenByParentId('0', true);
     }
 
     /**
      * Returns category top children entities by its associated id
      * 
      * @param string $id Category id
+     * @param boolean $top Whether to return by ID or parent ID
      * @return array
      */
-    public function getCategoryChildrenByParentId($id)
+    public function getCategoryChildrenByParentId($id, $top = true)
     {
-        return $this->categoryManager->fetchChildrenByParentId($id);
+        return $this->categoryManager->fetchChildrenByParentId($id, $top);
+    }
+
+    /**
+     * Returns tree instance
+     * 
+     * @return \Krystal\Tree\AdjacencyList\Tree
+     */
+    public function getTree()
+    {
+        return $this->categoryManager->getTree();
     }
 
     /**

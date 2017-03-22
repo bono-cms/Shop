@@ -40,9 +40,17 @@ interface SiteServiceInterface
      * Returns category top children entities by its associated id
      * 
      * @param string $id Category id
+     * @param boolean $top Whether to return by ID or parent ID
      * @return array
      */
-    public function getCategoryChildrenByParentId($id);
+    public function getCategoryChildrenByParentId($id, $top = true);
+
+    /**
+     * Returns tree instance
+     * 
+     * @return \Krystal\Tree\AdjacencyList\Tree
+     */
+    public function getTree();
 
     /**
      * Renders category tree as array
