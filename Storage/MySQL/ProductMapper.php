@@ -16,6 +16,7 @@ use Shop\Storage\ProductMapperInterface;
 use Shop\Service\CategorySortGadget;
 use Krystal\Db\Sql\RawSqlFragment;
 use Krystal\Stdlib\ArrayUtils;
+use Krystal\Db\Sql\QueryBuilderInterface;
 
 final class ProductMapper extends AbstractMapper implements ProductMapperInterface
 {
@@ -141,53 +142,118 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Create attribute match queries
+     * 
+     * @param array $pair
+     * @param string $sort Sorting column
+     * @return string
+     */
+    private function createAttributeMatchQueries(array $pair, $categoryId, $sort)
+    {
+        $qb = $this->db->getQueryBuilder();
+
+        // Amount of registered mappers we have
+        $amount = count($pair);
+
+        // Iteration counter
+        $i = 0;
+
+        foreach ($pair as $groupId => $valueId) {
+            $this->appendAttributeMatchQuery($qb, $categoryId, $groupId, $valueId, $sort);
+
+            ++$i;
+
+            // Comparing iteration against number of mappers, tells whether this iteration is last
+            $last = $i == $amount;
+
+            // If we have more that one mapper, then we need to union results
+            // And also, we should never append UNION in last iteration
+            if ($amount > 1 && !$last) {
+                $qb->union();
+            }
+        }
+
+        return $qb->getQueryString();
+    }
+
+    /**
+     * Appends attribute match query
+     * 
+     * @param \Krystal\Db\Sql\QueryBuilderInterface
+     * @param string $categoryId
+     * @param string $groupId
+     * @param string $valueId
+     * @param string $sort Sorting column
+     * @return void
+     */
+    private function appendAttributeMatchQuery(QueryBuilderInterface $qb, $categoryId, $groupId, $valueId, $sort)
+    {
+        $columns = array(
+            ProductMapper::getFullColumnName('id'),
+            ProductMapper::getFullColumnName('name'),
+            ProductMapper::getFullColumnName('lang_id'),
+            ProductMapper::getFullColumnName('web_page_id'),
+            ProductMapper::getFullColumnName('title'),
+            ProductMapper::getFullColumnName('regular_price'),
+            ProductMapper::getFullColumnName('stoke_price'),
+            ProductMapper::getFullColumnName('special_offer'),
+            ProductMapper::getFullColumnName('description'),
+            ProductMapper::getFullColumnName('published'),
+            ProductMapper::getFullColumnName('order'),
+            ProductMapper::getFullColumnName('seo'),
+            ProductMapper::getFullColumnName('keywords'),
+            ProductMapper::getFullColumnName('meta_description'),
+            ProductMapper::getFullColumnName('cover'),
+            ProductMapper::getFullColumnName('date'),
+            ProductMapper::getFullColumnName('views'),
+            ProductMapper::getFullColumnName('in_stock')
+        );
+
+        // Create sorting rules
+        $sortingRules = CategorySortGadget::createSortingRules($sort);
+
+        $qb->openBracket();
+
+        $qb->select($columns, true)
+           ->from(ProductAttributeMapper::getTableName())
+           ->leftJoin(self::getTableName())
+           ->on()
+           ->equals(self::getFullColumnName('id'), ProductAttributeMapper::getFullColumnName('product_id'))
+
+           // Filter by category ID
+           ->innerJoin(self::getJunctionTableName())
+           ->on()
+           ->equals(sprintf('%s.master_id', self::getJunctionTableName()), self::getFullColumnName('id'))
+           ->rawAnd()
+           ->equals(sprintf('%s.slave_id', self::getJunctionTableName()), (int) $categoryId)
+
+           // Filter by group and value IDs
+           ->whereEquals('group_id', (int) $groupId)
+           ->andWhereEquals('value_id', (int) $valueId)
+           ->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
+
+        if ($sortingRules['desc'] === true) {
+            $qb->desc();
+        }
+
+        $qb->closeBracket();
+    }
+
+    /**
      * Find products by attributes and associated category id
      * 
      * @param string $categoryId Category id
      * @param array $attributes A collection of group IDs and their value IDs
+     * @param string $sort Sorting column
      * @param string $page Optional page number
      * @param string $itemsPerPage Optional Per page count filter
      * @return array
      */
-    public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null)
+    public function findByAttributes($categoryId, array $attributes, $sort, $page = null, $itemsPerPage = null)
     {
-        // Start building initial fragment
-        $db = $this->db->select('*')
-                       ->from(self::getTableName())
-                       ->innerJoin(ProductAttributeMapper::getTableName())
-                       ->on();
+        $query = $this->createAttributeMatchQueries($attributes, $categoryId, $sort);
 
-        // Dynamic values
-        foreach (array_values($attributes) as $valueId) {
-            $db->equals(sprintf('%s.value_id', ProductAttributeMapper::getTableName()), $valueId)
-               ->rawAnd();
-        }
-
-        // Iteration counter
-        $iteration = 0;
-        $count = count($attributes);
-
-        // Dynamic groups
-        foreach (array_keys($attributes) as $groupId) {
-            $db->equals(sprintf('%s.group_id', ProductAttributeMapper::getTableName()), $groupId);
-            $iteration++;
-
-            if ($count > 1 && $iteration != $count) {
-                $db->rawAnd();
-            }
-        }
-
-        $db->innerJoin(self::getJunctionTableName())
-           ->on()
-           ->equals(sprintf('%s.slave_id', self::getJunctionTableName()), $categoryId)
-           ->groupBy(sprintf('%s.id', self::getTableName()));
-
-        // Do pagination if both parameters provided
-        if (is_numeric($page) && is_numeric($itemsPerPage)) {
-            $db->paginate($page, $itemsPerPage);
-        }
-
-        return $db->queryAll();
+        return $this->db->raw($query)->queryAll();
     }
 
     /**
@@ -459,42 +525,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword)
     {
-        $desc = false;
-
-        switch ($sort) {
-
-            case CategorySortGadget::SORT_ORDER:
-                $order = 'order';
-            break;
-
-            case CategorySortGadget::SORT_TITLE:
-                $order = 'title';
-            break;
-
-            case CategorySortGadget::SORT_PRICE_DESC:
-                $order = 'regular_price, id';
-                $desc = true;
-            break;
-
-            case CategorySortGadget::SORT_PRICE_ASC:
-                $order = 'regular_price, id';
-            break;
-
-            case CategorySortGadget::SORT_DATE_DESC:
-                $order = 'date, id';
-                $desc = true;
-            break;
-
-            case CategorySortGadget::SORT_DATE_ASC:
-                $order = 'date, id';
-            break;
-
-            default:
-                // Invalid sorting constant's value provided. Probably a user attempted to do XSS
-                // We'd simply return empty result
-                return array();
-        }
-
+        $sortingRules = CategorySortGadget::createSortingRules($sort);
+        
         $db = $this->db->select('*')
                        ->from(self::getTableName());
 
@@ -514,9 +546,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $db->andWhereLike('name', '%'.$keyword.'%');
         }
 
-        $db->orderBy(sprintf('%s.%s', self::getTableName(), $order));
+        $db->orderBy(sprintf('%s.%s', self::getTableName(), $sortingRules['column']));
 
-        if ($desc === true) {
+        if ($sortingRules['desc'] === true) {
             $db->desc();
         }
 
