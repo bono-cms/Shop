@@ -45,7 +45,8 @@ final class Search extends AbstractShopController
         $page = new VirtualEntity();
         $page->setTitle($title)
              ->setName($title)
-             ->setSeo(false);
+             ->setSeo(false)
+             ->setSearchPage(true);
 
         return $page;
     }
