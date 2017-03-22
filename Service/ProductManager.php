@@ -141,7 +141,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     public function findByAttributes($categoryId, array $attributes, $sort = null, $page = null, $itemsPerPage = null)
     {
-        return $this->prepareResults($this->attributeMapper->findByAttributes($categoryId, $attributes, $sort, $page, $itemsPerPage));
+        return $this->prepareResults($this->productMapper->findByAttributes($categoryId, $attributes, $sort, $page, $itemsPerPage));
     }
 
     /**
