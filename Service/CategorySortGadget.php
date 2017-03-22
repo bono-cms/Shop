@@ -24,6 +24,53 @@ final class CategorySortGadget extends DataSorter
     const SORT_DATE_ASC = 'date_asc';
 
     /**
+     * Create sorting rules by column name
+     * 
+     * @param string $column
+     * @return array
+     */
+    public static function createSortingRules($column)
+    {
+        // Defaults
+        $desc = false;
+        $order = 'id';
+
+        switch ($column) {
+
+            case CategorySortGadget::SORT_ORDER:
+                $order = 'order';
+            break;
+
+            case CategorySortGadget::SORT_TITLE:
+                $order = 'title';
+            break;
+
+            case CategorySortGadget::SORT_PRICE_DESC:
+                $order = 'regular_price';
+                $desc = true;
+            break;
+
+            case CategorySortGadget::SORT_PRICE_ASC:
+                $order = 'regular_price';
+            break;
+
+            case CategorySortGadget::SORT_DATE_DESC:
+                $order = 'date, id';
+                $desc = true;
+            break;
+
+            case CategorySortGadget::SORT_DATE_ASC:
+                $order = 'date, id';
+            break;
+        }
+
+        return array(
+            'column' => $order,
+            'desc' => $desc
+        );
+    }
+
+    /**
      * State initialization
      * 
      * @param \Krystal\Http\PersistentStorageInterface $storage
