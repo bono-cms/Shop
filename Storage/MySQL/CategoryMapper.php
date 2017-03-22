@@ -12,6 +12,7 @@
 namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
+use Cms\Storage\MySQL\WebPageMapper;
 use Shop\Storage\CategoryMapperInterface;
 use Krystal\Db\Sql\RawSqlFragment;
 use Krystal\Db\Sql\RawBinding;
@@ -78,17 +79,48 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Fetches children by parent id
+     * Fetches child rows by associated parent id
      * 
      * @param string $parentId
+     * @param boolean $top Whether to return by ID or parent ID
      * @return array
      */
-    public function fetchChildrenByParentId($parentId)
+    public function fetchChildrenByParentId($parentId, $top)
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->whereEquals('parent_id', $parentId)
-                        ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'))
+        $top = $top ? 'id' : 'parent_id';
+
+        $columns = array(
+            self::getFullColumnName('cover'),
+            self::getFullColumnName('id'),
+            self::getFullColumnName('parent_id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('description'),
+            self::getFullColumnName('order'),
+            self::getFullColumnName('seo'),
+            self::getFullColumnName('description'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('title'),
+            self::getFullColumnName('keywords'),
+            self::getFullColumnName('meta_description'),
+            WebPageMapper::getFullColumnName('slug')
+        );
+
+        return $this->db->select($columns)
+                        ->append(', ')
+                        // Product counter
+                        ->count(self::PARAM_JUNCTION_MASTER_COLUMN, 'product_count')
+                        
+                        ->from(ProductMapper::getJunctionTableName())
+                        ->rightJoin(self::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName($top), new RawSqlFragment(sprintf('%s.%s', ProductMapper::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN)))
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
+                        ->whereEquals(self::getFullColumnName('parent_id'), $parentId)
+                        ->groupBy(self::getFullColumnName('id'))
+                        ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::getFullColumnName('id'))))
                         ->queryAll();
     }
 

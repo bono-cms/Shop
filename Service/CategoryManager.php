@@ -128,14 +128,15 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
-     * Fetches children by parent id
+     * Fetches child rows by associated parent id
      * 
      * @param string $parentId
+     * @param boolean $top Whether to return by ID or parent ID
      * @return array
      */
-    public function fetchChildrenByParentId($parentId)
+    public function fetchChildrenByParentId($parentId, $top = true)
     {
-        return $this->prepareResults($this->categoryMapper->fetchChildrenByParentId($parentId));
+        return $this->prepareResults($this->categoryMapper->fetchChildrenByParentId($parentId, $top));
     }
 
     /**
@@ -222,6 +223,9 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setPermanentUrl('/module/shop/category/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
             ->setCover($category['cover'], CategoryEntity::FILTER_TAGS)
+
+            // Product count
+            ->setProductCount(isset($category['product_count']) ? $category['product_count'] : null)
 
             // Meta data
             ->setTitle($category['title'], CategoryEntity::FILTER_HTML)

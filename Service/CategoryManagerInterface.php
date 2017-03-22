@@ -39,12 +39,13 @@ interface CategoryManagerInterface
     public function getCategoriesTree();
 
     /**
-     * Fetches children by parent id
+     * Fetches child rows by associated parent id
      * 
      * @param string $parentId
+     * @param boolean $top Whether to return by ID or parent ID
      * @return array
      */
-    public function fetchChildrenByParentId($parentId);
+    public function fetchChildrenByParentId($parentId, $top = true);
 
     /**
      * Returns category's breadcrumbs
