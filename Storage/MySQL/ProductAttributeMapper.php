@@ -13,6 +13,7 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductAttributeMapperInterface;
+use Shop\Service\CategorySortGadget;
 use Krystal\Db\Sql\RawSqlFragment;
 use Krystal\Db\Sql\RawBinding;
 
@@ -31,11 +32,12 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
      * 
      * @param string $categoryId Category id
      * @param array $attributes A collection of group IDs and their value IDs
+     * @param string|boolean $sort Sorting column
      * @param string $page Optional page number
      * @param string $itemsPerPage Optional Per page count filter
      * @return array
      */
-    public function findByAttributes($categoryId, array $attributes, $page = null, $itemsPerPage = null)
+    public function findByAttributes($categoryId, array $attributes, $sort = null, $page = null, $itemsPerPage = null)
     {
         $columns = array(
             ProductMapper::getFullColumnName('id'),
@@ -58,7 +60,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
             ProductMapper::getFullColumnName('in_stock')
         );
 
-        return $this->db->select($columns, true)
+        $db = $this->db->select($columns, true)
                        ->from(ProductMapper::getTableName())
                        ->innerJoin(self::getTableName())
                        ->on()
@@ -71,8 +73,20 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
                        ->on()
                        ->equals(sprintf('%s.master_id', ProductMapper::getJunctionTableName()), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
                        ->rawAnd()
-                       ->equals(sprintf('%s.slave_id', ProductMapper::getJunctionTableName()), $categoryId)
-                       ->queryAll();
+                       ->equals(sprintf('%s.slave_id', ProductMapper::getJunctionTableName()), $categoryId);
+
+        // Do sorting, if column provided
+        if ($sort !== null) {
+            $sortingRules = CategorySortGadget::createSortingRules($sort);
+
+            $db->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
+
+            if ($sortingRules['desc'] === true) {
+                $db->desc();
+            }
+        }
+
+        return $db->queryAll();
     }
 
     /**
