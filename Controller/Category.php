@@ -22,7 +22,8 @@ final class Category extends AbstractShopController
     {
         // Request data
         $data = $this->request->getQuery();
-        $pageNumber = $this->request->hasQuery('page') ? $this->request->getQuery('page') : 1;
+        $pageNumber = $this->request->getQuery('page', 1);
+        $sort = $this->request->getQuery('sort', null);
 
         // Services
         $productManager = $this->getModuleService('productManager');
@@ -32,16 +33,18 @@ final class Category extends AbstractShopController
             $products = $productManager->findByAttributes(
                 $data['category_id'], 
                 $data['attributes'], 
+                $sort,
                 $pageNumber, 
                 $this->getPerPageCountGadget()->getPerPageCount()
             );
         } else {
+
             // If no attributes then filter was discarded
             $products = $productManager->fetchAllPublishedByCategoryIdAndPage(
                 $data['category_id'], 
                 $pageNumber, 
                 $this->getPerPageCountGadget()->getPerPageCount(), 
-                $this->getCategorySortGadget()->getSortOption()
+                $sort
             );
         }
 
