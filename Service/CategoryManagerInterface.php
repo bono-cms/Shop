@@ -32,6 +32,13 @@ interface CategoryManagerInterface
     public function renderTree(AbstractRenderer $walker);
 
     /**
+     * Returns tree instance
+     * 
+     * @return \Krystal\Tree\AdjacencyList\Tree
+     */
+    public function getTree();
+
+    /**
      * Fetches all categories as a tree
      * 
      * @return array

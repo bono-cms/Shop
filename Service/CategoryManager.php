@@ -118,6 +118,17 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
+     * Returns tree instance
+     * 
+     * @return \Krystal\Tree\AdjacencyList\Tree
+     */
+    public function getTree()
+    {
+        $rows = $this->categoryMapper->fetchAll();
+        return new TreeBuilder($rows);
+    }
+
+    /**
      * Fetches all categories as a tree
      * 
      * @return array
