@@ -458,6 +458,27 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     /**
      * Finds category attributes by its associated id
      * 
+     * @param array $ids A collection of category IDs
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function fetchAttributesByIds(array $ids, $dynamic)
+    {
+        $attributes = array();
+
+        foreach ($ids as $id) {
+            $attributes = array_merge($attributes, $this->fetchAttributesById($id, $dynamic));
+        }
+
+        // Remove duplicates if any
+        $attributes = ArrayUtils::arrayUnique($attributes);
+
+        return $attributes;
+    }
+
+    /**
+     * Finds category attributes by its associated id
+     * 
      * @param string $id
      * @param boolean $dynamic Whether to include dynamic attributes
      * @return array
