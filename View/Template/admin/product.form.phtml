@@ -15,7 +15,10 @@ use Shop\Service\AttributeProcessor;
         <li role="presentation" class="active"><a href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
         <li role="presentation"><a href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
         <li role="presentation"><a href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
+
+        <?php if (!empty($attributes)): ?>
         <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
+        <?php endif; ?>
     </ul>
     
     <div class="tab-content">
@@ -253,6 +256,7 @@ use Shop\Service\AttributeProcessor;
         </div>
       </div>
       
+      <?php if (!empty($attributes)): ?>
       <div role="tabpanel" class="tab-pane" id="attrs">
         <div class="well">
             <?php foreach ($attributes as $attribute): ?>
@@ -272,7 +276,8 @@ use Shop\Service\AttributeProcessor;
             <?php endforeach; ?>
         </div>
       </div>
-
+      <?php endif; ?>
+      
       <!--Images tab-->
     </div>
 </form>
