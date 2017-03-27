@@ -100,7 +100,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function getPromtWithCategoriesTree($text)
     {
         $tree = $this->getCategoriesTree();
-        ArrayUtils::assocPrepend($tree, null, $text);
+        ArrayUtils::assocPrepend($tree, 0, $text);
 
         return $tree;
     }

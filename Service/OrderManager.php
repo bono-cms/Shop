@@ -155,7 +155,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     public function updateOrderStatuses(array $relations)
     {
         foreach ($relations as $orderId => $statusId) {
-            $this->orderInfoMapper->updateOrderStatus($orderId, $statusId);
+            $this->orderInfoMapper->updateOrderStatus((int) $orderId, (int) $statusId);
         }
 
         return true;
