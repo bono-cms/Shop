@@ -29,8 +29,8 @@
 
                     <?php endif; ?>
                 </td>
-                <td class="text-center"><?php echo $detail['price']; ?> <?php echo $currency; ?></td>
-                <td class="text-center"><?php echo $detail['sub_total_price']; ?> <?php echo $currency; ?></td>
+                <td class="text-center"><?php echo number_format($detail['price']); ?> <?php echo $currency; ?></td>
+                <td class="text-center"><?php echo number_format($detail['sub_total_price']); ?> <?php echo $currency; ?></td>
                 <td class="text-center"><?php echo $detail['qty']; ?></td>
             </tr>
             <?php endforeach; ?>
