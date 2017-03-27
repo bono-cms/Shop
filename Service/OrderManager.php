@@ -232,6 +232,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
             // Extra fields
             $item['cover'] = sprintf('%s%s/%s/%s', Module::PARAM_PRODUCTS_IMG_PATH, $row['product_id'], $coverDimensions, $row['cover']);
             $item['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
+            $item['exists'] = !empty($item['slug']);
         }
 
         return $rows;

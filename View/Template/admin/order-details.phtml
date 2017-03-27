@@ -1,3 +1,4 @@
+
 <?php defined('KRYSTAL') or die; ?>
 <h2><small># <?php echo $id; ?></small></h2>
 
@@ -11,12 +12,21 @@
                 <th class="text-center"><?php $this->show('Quantity'); ?></th>
             </tr>
         </thead>
-        
+
         <?php if (!empty($details)): ?>
         <tbody>
-            <?php foreach($details as $detail): ?>
-            <tr>
-                <td class="text-center"><?php echo $detail['name']; ?></td>
+            <?php foreach ($details as $detail): ?>
+
+            <tr class="<?php echo !$detail['exists'] ? 'danger' : null; ?>" title="<?php !$detail['exists'] ? $this->show('This product is no longer available') : null; ?>">
+                <td>
+                    <?php if ($detail['exists']): ?>
+                    <a target="_blank" href="<?php echo $detail['url']; ?>"><?php echo $detail['name']; ?></a>
+
+                    <?php else: ?>
+                    <?php echo $detail['name']; ?>
+
+                    <?php endif; ?>
+                </td>
                 <td class="text-center"><?php echo $detail['price']; ?> <?php echo $currency; ?></td>
                 <td class="text-center"><?php echo $detail['sub_total_price']; ?> <?php echo $currency; ?></td>
                 <td class="text-center"><?php echo $detail['qty']; ?></td>
