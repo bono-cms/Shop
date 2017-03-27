@@ -279,7 +279,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->db->innerJoin(self::getJunctionTableName());
         }
 
-        $db->whereLike('name', '%'.$input['name'].'%', true)
+        $db->whereEquals('1', '1');
+
+        $db->andWhereLike('name', '%'.$input['name'].'%', true)
            ->andWhereEquals('date', $input['date'], true)
            ->andWhereEquals('id', $input['id'], true)
            ->andWhereEquals('regular_price', $input['regular_price'], true)
