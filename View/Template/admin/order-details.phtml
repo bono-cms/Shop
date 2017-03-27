@@ -6,6 +6,7 @@
     <table class="table table-hover table-bordered table-striped">
         <thead>
             <tr>
+                <th class="text-center"><?php $this->show('#'); ?></th>
                 <th class="text-center"><?php $this->show('Product'); ?></th>
                 <th class="text-center"><?php $this->show('Price'); ?></th>
                 <th class="text-center"><?php $this->show('Sub total price'); ?></th>
@@ -18,6 +19,7 @@
             <?php foreach ($details as $detail): ?>
 
             <tr class="<?php echo !$detail['exists'] ? 'danger' : null; ?>" title="<?php !$detail['exists'] ? $this->show('This product is no longer available') : null; ?>">
+                <td class="text-center"><?php echo $detail['product_id']; ?></td>
                 <td>
                     <?php if ($detail['exists']): ?>
                     <a target="_blank" href="<?php echo $detail['url']; ?>"><?php echo $detail['name']; ?></a>
