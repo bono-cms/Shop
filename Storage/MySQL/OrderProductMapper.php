@@ -132,11 +132,9 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
         // Select by order id
         $db = $this->db->select($columns, true)
                        ->from(self::getTableName())
-                       ->innerJoin(ProductMapper::getTableName())
+                       ->leftJoin(ProductMapper::getTableName())
                        ->on()
-                       ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
-                       ->rawAnd()
-                       ->equals(self::getFullColumnName('order_id'), $id);
+                       ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')));
 
         // If provided, filter also by customer ID
         if ($customerId !== null) {
@@ -147,7 +145,8 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
 
         $db->leftJoin(WebPageMapper::getTableName())
            ->on()
-           ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(ProductMapper::getFullColumnName('web_page_id')));
+           ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(ProductMapper::getFullColumnName('web_page_id')))
+           ->whereEquals(self::getFullColumnName('order_id'), $id);
 
         return $db->queryAll();
     }
