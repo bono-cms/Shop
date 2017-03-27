@@ -626,8 +626,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         $this->track('Product "%s" has been added', $product['name']);
 
-        // Save attributes
-        $this->attributeMapper->store($id, $product['attributes']);
+        // Save attributes if present
+        if (isset($product['attributes'])) {
+            $this->attributeMapper->store($id, $product['attributes']);
+        }
 
         // Add a web page now
         return $this->webPageManager->add($id, $product['slug'], 'Shop (Products)', 'Shop:Product@indexAction', $this->productMapper);
@@ -721,9 +723,11 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $this->track('Product "%s" has been updated', $product['name']);
         $this->webPageManager->update($product['web_page_id'], $product['slug']);
 
-        // Update attributes
-        $this->attributeMapper->deleteByProductId($productId);
-        $this->attributeMapper->store($productId, $product['attributes']);
+        // Update attributes if present
+        if (isset($product['attributes'])) {
+            $this->attributeMapper->deleteByProductId($productId);
+            $this->attributeMapper->store($productId, $product['attributes']);
+        }
 
         return $this->productMapper->update(ArrayUtils::arrayWithout($product, array('slug', 'attributes')));
     }
