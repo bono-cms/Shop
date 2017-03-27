@@ -187,7 +187,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
         $collection = array();
 
         foreach ($values as $groupId => $valueId) {
-            $collection[] = array($id, $groupId, $valueId);
+            $collection[] = array($id, $groupId, (int) $valueId);
         }
 
         return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), $collection)
