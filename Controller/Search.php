@@ -88,7 +88,8 @@ final class Search extends AbstractShopController
                 $pageNumber, 
                 $this->getPerPageCountGadget()->getPerPageCount(), 
                 $this->getCategorySortGadget()->getSortOption(),
-                $this->request->getQuery('keyword')
+                $this->request->getQuery('keyword'),
+                $this->createCustomerId()
             );
 
             // Load site plugins
