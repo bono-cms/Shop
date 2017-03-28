@@ -187,9 +187,10 @@ interface ProductMapperInterface
      * 
      * @param string $id Product id
      * @param boolean $junction Whether to grab meta information about its categories
+     * @param integer $customerId Optional customer ID
      * @return array
      */
-    public function fetchById($id, $junction = true);
+    public function fetchById($id, $junction = true, $customerId = null);
 
     /**
      * Fetches basic product info by its associated id

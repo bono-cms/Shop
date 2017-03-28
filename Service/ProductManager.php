@@ -840,14 +840,15 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
-     * Fetches product's entity by its associated id with its associated attachements
+     * Fetches product's entity by its associated id with its associated attachments
      * 
      * @param string $id
+     * @param mixed $customerId Optional customer ID
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchFullById($id)
+    public function fetchFullById($id, $customerId = null)
     {
-        $product = $this->productMapper->fetchById($id);
+        $product = $this->productMapper->fetchById($id, true, $customerId);
 
         $product['recommended_products'] = $this->createAttachedEntity($product['recommended']);
         $product['similar_products'] = $this->createAttachedEntity($product['similar']);

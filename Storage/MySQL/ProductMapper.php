@@ -144,11 +144,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     /**
      * Returns shared columns to be selected
      * 
+     * @param mixed $customerId
      * @return array
      */
-    private function getSharedColumns()
+    private function getSharedColumns($customerId)
     {
-        return array(
+        // Shared columns to be selected
+        $columns = array(
             ProductMapper::getFullColumnName('id'),
             ProductMapper::getFullColumnName('name'),
             ProductMapper::getFullColumnName('lang_id'),
@@ -168,6 +170,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             ProductMapper::getFullColumnName('views'),
             ProductMapper::getFullColumnName('in_stock')
         );
+
+        if ($customerId != null) {
+            // Columns to be selected
+            $columns = array_merge($columns, array(WishlistMapper::getFullColumnName('product_id') => 'product_wishlist_id'));
+        }
+
+        return $columns;
     }
 
     /**
@@ -245,6 +254,22 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         $qb->closeBracket();
+    }
+
+    /**
+     * Append customer relation
+     * 
+     * @param integer $customerId
+     * @return void
+     */
+    private function appendCustomerRelation($customerId)
+    {
+        // Wish list relation
+        $this->db->leftJoin(WishlistMapper::getTableName())
+                 ->on()
+                 ->equals(WishlistMapper::getFullColumnName('product_id'), new RawSqlFragment(self::getFullColumnName('id')))
+                 ->rawAnd()
+                 ->equals(WishlistMapper::getFullColumnName('customer_id'), $customerId);
     }
 
     /**
@@ -417,19 +442,27 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * 
      * @param string $id Product id
      * @param boolean $junction Whether to grab meta information about its categories
+     * @param integer $customerId Optional customer ID
      * @return array
      */
-    public function fetchById($id, $junction = true)
+    public function fetchById($id, $junction = true, $customerId = null)
     {
-        $db = $this->db->select('*')
-                       ->from(self::getTableName())
-                       ->whereEquals('id', $id)
-                       ->andWhereEquals('published', '1');
+        $db = $this->db->select($this->getSharedColumns($customerId))
+                       ->from(self::getTableName());
+
+        if ($customerId != null) {
+            $this->appendCustomerRelation($customerId);
+        }
+
+        $db->whereEquals('id', $id)
+           ->andWhereEquals('published', '1');
 
         if ($junction === true) {
-            $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', array('id', 'name'));
-            $db->asManyToMany('similar', self::getSimilarTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', array('id', 'name'));
-            $db->asManyToMany('recommended', self::getRecommendedTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', array('id', 'name'));
+            $columns = array('id', 'name');
+
+            $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
+            $db->asManyToMany('similar', self::getSimilarTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
+            $db->asManyToMany('recommended', self::getRecommendedTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
         }
 
         return $db->query();
@@ -537,12 +570,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword, $customerId)
     {
         // Grab shared columns to be selected
-        $columns = $this->getSharedColumns();
-
-        if ($customerId != null) {
-            // Columns to be selected
-            $columns = array_merge($columns, array(WishlistMapper::getFullColumnName('product_id') => 'product_wishlist_id'));
-        }
+        $columns = $this->getSharedColumns($customerId);
 
         $sortingRules = CategorySortGadget::createSortingRules($sort);
 
@@ -550,12 +578,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                        ->from(self::getTableName());
 
         if ($customerId != null) {
-            // Wish list relation
-            $db->leftJoin(WishlistMapper::getTableName())
-               ->on()
-               ->equals(WishlistMapper::getFullColumnName('product_id'), new RawSqlFragment(self::getFullColumnName('id')))
-               ->rawAnd()
-               ->equals(WishlistMapper::getFullColumnName('customer_id'), $customerId);
+            $this->appendCustomerRelation($customerId);
         }
 
         if ($keyword === null) {
