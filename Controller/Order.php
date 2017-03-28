@@ -51,21 +51,6 @@ final class Order extends AbstractShopController
     }
 
     /**
-     * Creates customer ID if possible
-     * 
-     * @return string
-     */
-    private function createCustomerId()
-    {
-        if ($this->moduleManager->isLoaded('Members')) {
-            $memberManager = $this->getService('Members', 'memberManager');
-            return $memberManager->getMember('id');
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Makes an order
      * 
      * @param array $input Raw input data

@@ -19,6 +19,21 @@ use Krystal\Form\Gadget\PerPageCount;
 abstract class AbstractShopController extends AbstractController
 {
     /**
+     * Creates customer ID if possible
+     * 
+     * @return integer
+     */
+    final protected function createCustomerId()
+    {
+        if ($this->moduleManager->isLoaded('Members')) {
+            $memberManager = $this->getService('Members', 'memberManager');
+            return (int) $memberManager->getMember('id');
+        } else {
+            return 0;
+        }
+    }
+
+    /**
      * Returns per page count
      * 
      * @return \Shop\Service\PerPageCountProvider
