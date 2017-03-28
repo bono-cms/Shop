@@ -215,6 +215,29 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
+     * Creates the summary from products collection
+     * 
+     * @param array $products
+     * @return array
+     */
+    public function createSummary(array $products)
+    {
+        // Initial values
+        $totalPrice = 0;
+        $totalQty = 0;
+
+        foreach ($products as $product) {
+            $totalPrice += $product['sub_total_price'];
+            $totalQty += $product['qty'];
+        }
+
+        return array(
+            'totalPrice' => $totalPrice,
+            'totalQty' => $totalQty
+        );
+    }
+
+    /**
      * Fetches all details by associated order ID
      * 
      * @param string $id Order's ID

@@ -91,6 +91,14 @@ interface OrderManagerInterface
     public function fetchAllByCustomerId($customerId);
 
     /**
+     * Creates the summary from products collection
+     * 
+     * @param array $products
+     * @return array
+     */
+    public function createSummary(array $products);
+
+    /**
      * Fetches all details by associated order ID
      * 
      * @param string $id Order's ID
