@@ -13,5 +13,11 @@ namespace Shop\Storage;
 
 interface WishlistMapperInterface
 {
-    
+    /**
+     * Fetches all products associated by customer ID
+     * 
+     * @param string $customerId
+     * @return array
+     */
+    public function fetchAllByCustomerId($customerId);
 }

@@ -25,4 +25,34 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
     {
         return self::getWithPrefix('bono_module_shop_wishlist');
     }
+
+    /**
+     * Fetches all products associated by customer ID
+     * 
+     * @param string $customerId
+     * @return array
+     */
+    public function fetchAllByCustomerId($customerId)
+    {
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('name'),
+            self::getFullColumnName('regular_price'),
+            self::getFullColumnName('stoke_price'),
+            self::getFullColumnName('cover'),
+            self::getFullColumnName('lang_id'),
+            WebPageMapper::getFullColumnName('slug'),
+        );
+
+        return $this->db->select($columns)
+                        ->from(self::getTableName())
+                        ->leftJoin(Product::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(WebPageMapper::getFullColumnName('id'))
+                        ->whereEquals(self::getFullColumnName('customer_id'), $customerId)
+                        ->queryAll();
+    }
 }
