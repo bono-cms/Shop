@@ -11,12 +11,12 @@
 
 namespace Shop\Controller\Customer;
 
-use Site\Controller\AbstractController;
+use Shop\Controller\AbstractShopController;
 use Krystal\Stdlib\VirtualEntity;
 use RuntimeException;
 use LogicException;
 
-final class Order extends AbstractController
+final class Order extends AbstractShopController
 {
     /**
      * {@inheritDoc}
@@ -34,16 +34,6 @@ final class Order extends AbstractController
         }
 
         parent::bootstrap();
-    }
-
-    /**
-     * Returns customer ID
-     * 
-     * @return string
-     */
-    private function getCustomerId()
-    {
-        return $this->getService('Members', 'memberManager')->getMember('id');
     }
 
     /**
@@ -66,7 +56,7 @@ final class Order extends AbstractController
 
         return $this->view->render('shop-order-list', array(
             'page' => $page,
-            'orders' => $this->getModuleService('orderManager')->fetchAllByCustomerId($this->getCustomerId())
+            'orders' => $this->getModuleService('orderManager')->fetchAllByCustomerId($this->createCustomerId())
         ));
     }
 
@@ -95,7 +85,7 @@ final class Order extends AbstractController
 
             return $this->view->render('shop-order-details', array(
                 'page' => $page,
-                'products' => $orderManager->fetchAllDetailsByOrderId($id, $this->getCustomerId()),
+                'products' => $orderManager->fetchAllDetailsByOrderId($id, $this->createCustomerId()),
                 'order' => $order
             ));
 
