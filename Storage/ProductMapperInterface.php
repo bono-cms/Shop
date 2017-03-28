@@ -90,9 +90,10 @@ interface ProductMapperInterface
      * @param integer $itemsPerPage Per page count
      * @param string $sort Sorting type (its constant)
      * @param string $keyword Optional search keyword
+     * @param integer $customerId Optional customer ID
      * @return array
      */
-    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword);
+    public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword, $customerId);
 
     /**
      * Fetches all product filtered by pagination
