@@ -178,3 +178,13 @@ CREATE TABLE `bono_module_shop_orders_status` (
     `description` TEXT COMMENT 'Order Status Description'
 ) DEFAULT CHARSET = UTF8;
 
+
+
+DROP TABLE IF EXISTS `bono_module_shop_wishlist`;
+CREATE TABLE `bono_module_shop_wishlist` (
+
+    `customer_id` INT NOT NULL COMMENT 'Customer ID',
+    `product_id` INT NOT NULL COMMENT 'Product ID'
+
+) DEFAULT CHARSET = UTF8;
+
