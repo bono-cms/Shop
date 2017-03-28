@@ -18,6 +18,16 @@ use DateTime;
 final class ProductEntity extends VirtualEntity
 {
     /**
+     * Checks whether product has been added to wishlist
+     * 
+     * @return boolean
+     */
+    public function inWishlist()
+    {
+        return $this->getWishlistProductId() == $this->getId();
+    }
+
+    /**
      * Determines whether product is new (added several days ago)
      * 
      * @return boolean

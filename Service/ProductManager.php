@@ -322,7 +322,8 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setDate($product['date'])
             ->setPermanentUrl('/module/shop/product/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setViewCount($product['views'], ProductEntity::FILTER_INT);
+            ->setViewCount($product['views'], ProductEntity::FILTER_INT)
+            ->setWishlistProductId(isset($product['product_wishlist_id']) ? $product['product_wishlist_id'] : null);
 
         // It's only set in valid entities
         if (isset($product['categories'])) {
