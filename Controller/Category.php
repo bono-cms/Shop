@@ -89,7 +89,9 @@ final class Category extends AbstractShopController
                 $id, 
                 $pageNumber, 
                 $this->getPerPageCountGadget()->getPerPageCount(), 
-                $this->getCategorySortGadget()->getSortOption()
+                $this->getCategorySortGadget()->getSortOption(),
+                null,
+                $this->createCustomerId()
             );
 
             $vars = array(
