@@ -32,6 +32,7 @@ final class Category extends AbstractShopController
         if (isset($data['attributes'])) {
             $products = $productManager->findByAttributes(
                 $data['category_id'], 
+                $this->createCustomerId(),
                 $data['attributes'], 
                 $sort,
                 $pageNumber, 
@@ -44,7 +45,9 @@ final class Category extends AbstractShopController
                 $data['category_id'], 
                 $pageNumber, 
                 $this->getPerPageCountGadget()->getPerPageCount(), 
-                $sort
+                $sort,
+                null,
+                $this->createCustomerId()
             );
         }
 
