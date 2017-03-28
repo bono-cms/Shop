@@ -102,6 +102,7 @@ final class Order extends AbstractController
         return $this->view->disableLayout()->render('order-details', array(
             'id' => $id,
             'currency' => $this->getConfig()->getCurrency(),
+            'summary' => $this->getOrderManager()->createSummary($details),
             'details' => $details
         ));
     }
