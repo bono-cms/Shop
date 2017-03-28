@@ -539,7 +539,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Grab shared columns to be selected
         $columns = $this->getSharedColumns();
 
-        if ($customerId !== null) {
+        if ($customerId != null) {
             // Columns to be selected
             $columns = array_merge($columns, array(WishlistMapper::getFullColumnName('product_id') => 'product_wishlist_id'));
         }
@@ -549,7 +549,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select($columns)
                        ->from(self::getTableName());
 
-        if ($customerId !== null) {
+        if ($customerId != null) {
             // Wish list relation
             $db->leftJoin(WishlistMapper::getTableName())
                ->on()
