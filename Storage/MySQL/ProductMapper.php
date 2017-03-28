@@ -375,19 +375,25 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * 
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
+     * @param mixed $customerId Optional customer ID
      * @return array
      */
-    public function fetchAllPublishedStokesByPage($page, $itemsPerPage)
+    public function fetchAllPublishedStokesByPage($page, $itemsPerPage, $customerId)
     {
-        return $this->db->select('*')
-                        ->from(static::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->andWhereEquals('published', '1')
-                        ->andWhereNotEquals('stoke_price', '0')
-                        ->orderBy('id')
-                        ->desc()
-                        ->paginate($page, $itemsPerPage)
-                        ->queryAll();
+        $db = $this->db->select($this->getSharedColumns($customerId))
+                       ->from(self::getTableName());
+
+        if ($customerId != null) {
+            $this->appendCustomerRelation($customerId);
+        }
+
+        return $db->whereEquals('lang_id', $this->getLangId())
+                  ->andWhereEquals('published', '1')
+                  ->andWhereNotEquals('stoke_price', '0')
+                  ->orderBy('id')
+                  ->desc()
+                  ->paginate($page, $itemsPerPage)
+                  ->queryAll();
     }
 
     /**

@@ -61,9 +61,10 @@ interface ProductManagerInterface
      * 
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
+     * @param mixed $customerId Optional customer ID
      * @return array
      */
-    public function fetchAllPublishedStokesByPage($page, $itemsPerPage);
+    public function fetchAllPublishedStokesByPage($page, $itemsPerPage, $customerId = null);
 
     /**
      * Returns product's breadcrumbs collection

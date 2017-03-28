@@ -216,11 +216,12 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * 
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
+     * @param mixed $customerId Optional customer ID
      * @return array
      */
-    public function fetchAllPublishedStokesByPage($page, $itemsPerPage)
+    public function fetchAllPublishedStokesByPage($page, $itemsPerPage, $customerId = null)
     {
-        return $this->prepareResults($this->productMapper->fetchAllPublishedStokesByPage($page, $itemsPerPage));
+        return $this->prepareResults($this->productMapper->fetchAllPublishedStokesByPage($page, $itemsPerPage, $customerId));
     }
 
     /**
