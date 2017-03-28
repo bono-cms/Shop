@@ -33,7 +33,10 @@ final class Stokes extends AbstractShopController
             $productManager = $this->getModuleService('productManager');
             $products = $productManager->fetchAllPublishedStokesByPage($pageNumber, $this->getConfig()->getStokePerPageCount());
 
-            $this->loadPlugins($page->getTitle());
+            // Load view plugins
+            $this->loadSitePlugins();
+            $this->view->getBreadcrumbBag()
+                       ->addOne($page->getName());
 
             // Grab and configure pagination component
             $paginator = $productManager->getPaginator();
@@ -50,20 +53,8 @@ final class Stokes extends AbstractShopController
             ));
 
         } else {
-
+            // Return false will trigger 404 immediately
             return false;
         }
-    }
-
-    /**
-     * Loads category plugins
-     * 
-     * @param string $title Page title
-     * @return void
-     */
-    private function loadPlugins($title)
-    {
-        $this->loadSitePlugins();
-        $this->view->getBreadcrumbBag()->addOne($title);
     }
 }
