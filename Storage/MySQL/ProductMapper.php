@@ -147,7 +147,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * @param mixed $customerId
      * @return array
      */
-    private function getSharedColumns($customerId)
+    private function getSharedColumns($customerId = null)
     {
         // Shared columns to be selected
         $columns = array(
@@ -183,10 +183,12 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Create attribute match queries
      * 
      * @param array $pair
+     * @param string $categoryId
+     * @param mixed $customerId Optional customer ID
      * @param string $sort Sorting column
      * @return string
      */
-    private function createAttributeMatchQueries(array $pair, $categoryId, $sort)
+    private function createAttributeMatchQueries(array $pair, $categoryId, $customerId, $sort)
     {
         $qb = $this->db->getQueryBuilder();
 
@@ -197,7 +199,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $i = 0;
 
         foreach ($pair as $groupId => $valueId) {
-            $this->appendAttributeMatchQuery($qb, $categoryId, $groupId, $valueId, $sort);
+            $this->appendAttributeMatchQuery($qb, $categoryId, $customerId, $groupId, $valueId, $sort);
 
             ++$i;
 
@@ -219,19 +221,20 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * 
      * @param \Krystal\Db\Sql\QueryBuilderInterface
      * @param string $categoryId
+     * @param mixed $customerId
      * @param string $groupId
      * @param string $valueId
      * @param string $sort Sorting column
      * @return void
      */
-    private function appendAttributeMatchQuery(QueryBuilderInterface $qb, $categoryId, $groupId, $valueId, $sort)
+    private function appendAttributeMatchQuery(QueryBuilderInterface $qb, $categoryId, $customerId, $groupId, $valueId, $sort)
     {
         // Create sorting rules
         $sortingRules = CategorySortGadget::createSortingRules($sort);
 
         $qb->openBracket();
 
-        $qb->select($this->getSharedColumns(), true)
+        $qb->select($this->getSharedColumns($customerId), true)
            ->from(ProductAttributeMapper::getTableName())
            ->leftJoin(self::getTableName())
            ->on()
@@ -242,12 +245,20 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
            ->on()
            ->equals(sprintf('%s.master_id', self::getJunctionTableName()), self::getFullColumnName('id'))
            ->rawAnd()
-           ->equals(sprintf('%s.slave_id', self::getJunctionTableName()), (int) $categoryId)
+           ->equals(sprintf('%s.slave_id', self::getJunctionTableName()), (int) $categoryId);
 
-           // Filter by group and value IDs
-           ->whereEquals('group_id', (int) $groupId)
-           ->andWhereEquals('value_id', (int) $valueId)
-           ->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
+            if ($customerId != null) {
+                $qb->leftJoin(WishlistMapper::getTableName())
+                   ->on()
+                   ->equals(WishlistMapper::getFullColumnName('product_id'), self::getFullColumnName('id'))
+                   ->rawAnd()
+                   ->equals(WishlistMapper::getFullColumnName('customer_id'), $customerId);
+            }
+
+            // Filter by group and value IDs
+            $qb->whereEquals('group_id', (int) $groupId)
+               ->andWhereEquals('value_id', (int) $valueId)
+               ->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
 
         if ($sortingRules['desc'] === true) {
             $qb->desc();
@@ -276,15 +287,16 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * Find products by attributes and associated category id
      * 
      * @param string $categoryId Category id
+     * @param mixed $customerId Optional customer ID
      * @param array $attributes A collection of group IDs and their value IDs
      * @param string $sort Sorting column
      * @param string $page Optional page number
      * @param string $itemsPerPage Optional Per page count filter
      * @return array
      */
-    public function findByAttributes($categoryId, array $attributes, $sort, $page = null, $itemsPerPage = null)
+    public function findByAttributes($categoryId, $customerId, array $attributes, $sort, $page = null, $itemsPerPage = null)
     {
-        $query = $this->createAttributeMatchQueries($attributes, $categoryId, $sort);
+        $query = $this->createAttributeMatchQueries($attributes, $categoryId, $customerId, $sort);
 
         return $this->db->raw($query)->queryAll();
     }

@@ -33,13 +33,14 @@ interface ProductMapperInterface
      * Find products by attributes and associated category id
      * 
      * @param string $categoryId Category id
+     * @param mixed $customerId Optional customer ID
      * @param array $attributes A collection of group IDs and their value IDs
      * @param string $sort Sorting column
      * @param string $page Optional page number
      * @param string $itemsPerPage Optional Per page count filter
      * @return array
      */
-    public function findByAttributes($categoryId, array $attributes, $sort, $page = null, $itemsPerPage = null);
+    public function findByAttributes($categoryId, $customerId, array $attributes, $sort, $page = null, $itemsPerPage = null);
 
     /**
      * Count all available stoke products
