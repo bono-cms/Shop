@@ -185,6 +185,15 @@ interface ProductMapperInterface
     public function fetchAllPublishedWithMaxViewCount($limit, $categoryId = null);
 
     /**
+     * Fetch published products by a collection of their associated IDs
+     * 
+     * @param array $ids A collection of product IDs
+     * @param string $customerId Optional customer ID
+     * @return array
+     */
+    public function fetchByIds(array $ids, $customerId = null);
+
+    /**
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id

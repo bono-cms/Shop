@@ -486,6 +486,30 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Fetch published products by a collection of their associated IDs
+     * 
+     * @param array $ids A collection of product IDs
+     * @param string $customerId Optional customer ID
+     * @return array
+     */
+    public function fetchByIds(array $ids, $customerId = null)
+    {
+        $db = $this->db->select(self::getSharedColumns($customerId, false))
+                       ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
+
+        if ($customerId != null) {
+            $this->appendCustomerRelation($customerId);
+        }
+
+        $db->whereIn(self::getFullColumnName('id'), $ids)
+           ->andWhereEquals(self::getFullColumnName('published'), '1');
+
+        return $db->queryAll();
+    }
+
+    /**
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id
