@@ -14,6 +14,15 @@ namespace Shop\Storage;
 interface WishlistMapperInterface
 {
     /**
+     * Removes a product from wishlist
+     * 
+     * @param string $customerId
+     * @param string $productId
+     * @return boolean
+     */
+    public function remove($customerId, $productId);
+
+    /**
      * Adds a product to whishlist
      * 
      * @param string $customerId

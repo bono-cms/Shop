@@ -27,6 +27,22 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
     }
 
     /**
+     * Removes a product from wishlist
+     * 
+     * @param string $customerId
+     * @param string $productId
+     * @return boolean
+     */
+    public function remove($customerId, $productId)
+    {
+        return $this->db->delete()
+                        ->from(self::getTableName())
+                        ->whereEquals('customer_id', $customerId)
+                        ->andWhereEquals('product_id', $productId)
+                        ->execute();
+    }
+
+    /**
      * Adds a product to whishlist
      * 
      * @param string $customerId
