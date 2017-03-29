@@ -183,6 +183,7 @@ CREATE TABLE `bono_module_shop_orders_status` (
 DROP TABLE IF EXISTS `bono_module_shop_wishlist`;
 CREATE TABLE `bono_module_shop_wishlist` (
 
+    `wishlist_item_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `customer_id` INT NOT NULL COMMENT 'Customer ID',
     `product_id` INT NOT NULL COMMENT 'Product ID'
 
