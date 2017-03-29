@@ -33,39 +33,39 @@ final class CategorySortGadget extends DataSorter
     {
         // Defaults
         $desc = false;
-        $order = 'id';
+        $order = array('id');
 
         switch ($column) {
 
             case CategorySortGadget::SORT_ORDER:
-                $order = 'order';
+                $order = array('order');
             break;
 
             case CategorySortGadget::SORT_TITLE:
-                $order = 'title';
+                $order = array('title');
             break;
 
             case CategorySortGadget::SORT_PRICE_DESC:
-                $order = 'regular_price';
+                $order = array('regular_price');
                 $desc = true;
             break;
 
             case CategorySortGadget::SORT_PRICE_ASC:
-                $order = 'regular_price';
+                $order = array('regular_price');
             break;
 
             case CategorySortGadget::SORT_DATE_DESC:
-                $order = 'date, id';
+                $order = array('date', 'id');
                 $desc = true;
             break;
 
             case CategorySortGadget::SORT_DATE_ASC:
-                $order = 'date, id';
+                $order = array('date', 'id');
             break;
         }
 
         return array(
-            'column' => $order,
+            'columns' => $order,
             'desc' => $desc
         );
     }
