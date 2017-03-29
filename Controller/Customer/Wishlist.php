@@ -29,9 +29,11 @@ final class Wishlist extends AbstractShopController
         if ($page !== false) {
             $this->loadSitePlugins();
 
+            $products = $this->getModuleService('wishlistManager')->fetchAllByCustomerId($this->createCustomerId());
+
             return $this->view->render('shop-wishlist', array(
                 'page' => $page,
-                'products' => $this->getModuleService('wishlistManager')->fetchAllByCustomerId($this->createCustomerId())
+                'products' => $products
             ));
 
         } else {
