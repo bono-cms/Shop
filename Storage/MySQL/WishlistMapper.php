@@ -65,20 +65,7 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
      */
     public function fetchAllByCustomerId($customerId)
     {
-        // Columns to be selected
-        $columns = array(
-            ProductMapper::getFullColumnName('id'),
-            ProductMapper::getFullColumnName('lang_id'),
-            ProductMapper::getFullColumnName('web_page_id'),
-            ProductMapper::getFullColumnName('name'),
-            ProductMapper::getFullColumnName('regular_price'),
-            ProductMapper::getFullColumnName('stoke_price'),
-            ProductMapper::getFullColumnName('special_offer'),
-            ProductMapper::getFullColumnName('cover'),
-            WebPageMapper::getFullColumnName('slug'),
-        );
-
-        return $this->db->select($columns)
+        return $this->db->select(ProductMapper::getSharedColumns(null, false))
                         ->from(self::getTableName())
                         ->leftJoin(ProductMapper::getTableName())
                         ->on()

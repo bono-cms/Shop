@@ -11,6 +11,7 @@
 
 namespace Shop\Storage\MySQL;
 
+use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductMapperInterface;
 use Shop\Service\CategorySortGadget;
@@ -20,6 +21,54 @@ use Krystal\Db\Sql\QueryBuilderInterface;
 
 final class ProductMapper extends AbstractMapper implements ProductMapperInterface
 {
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @param mixed $customerId
+     * @param boolean $extraColumns Whether to selected extra columns or not
+     * @return array
+     */
+    public static function getSharedColumns($customerId = null, $extraColumns = true)
+    {
+        // Basic columns to be selected (required for most selections)
+        $columns = array(
+            ProductMapper::getFullColumnName('id'),
+            ProductMapper::getFullColumnName('lang_id'),
+            ProductMapper::getFullColumnName('web_page_id'),
+            ProductMapper::getFullColumnName('name'),
+            ProductMapper::getFullColumnName('regular_price'),
+            ProductMapper::getFullColumnName('stoke_price'),
+            ProductMapper::getFullColumnName('in_stock'),
+            ProductMapper::getFullColumnName('special_offer'),
+            ProductMapper::getFullColumnName('cover'),
+            WebPageMapper::getFullColumnName('slug'),
+        );
+
+        // Do extra columns need to be appended?
+        if ($extraColumns === true) {
+            $columns = array_merge($columns, array(
+                ProductMapper::getFullColumnName('title'),
+                ProductMapper::getFullColumnName('description'),
+                ProductMapper::getFullColumnName('published'),
+                ProductMapper::getFullColumnName('order'),
+                ProductMapper::getFullColumnName('seo'),
+                ProductMapper::getFullColumnName('keywords'),
+                ProductMapper::getFullColumnName('meta_description'),
+                ProductMapper::getFullColumnName('date'),
+                ProductMapper::getFullColumnName('views'),
+            ));
+        }
+
+        if ($customerId != null) {
+            // Columns to be selected
+            $columns = array_merge($columns, array(
+                WishlistMapper::getFullColumnName('product_id') => 'product_wishlist_id'
+            ));
+        }
+
+        return $columns;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -142,44 +191,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Returns shared columns to be selected
-     * 
-     * @param mixed $customerId
-     * @return array
-     */
-    private function getSharedColumns($customerId = null)
-    {
-        // Shared columns to be selected
-        $columns = array(
-            ProductMapper::getFullColumnName('id'),
-            ProductMapper::getFullColumnName('name'),
-            ProductMapper::getFullColumnName('lang_id'),
-            ProductMapper::getFullColumnName('web_page_id'),
-            ProductMapper::getFullColumnName('title'),
-            ProductMapper::getFullColumnName('regular_price'),
-            ProductMapper::getFullColumnName('stoke_price'),
-            ProductMapper::getFullColumnName('special_offer'),
-            ProductMapper::getFullColumnName('description'),
-            ProductMapper::getFullColumnName('published'),
-            ProductMapper::getFullColumnName('order'),
-            ProductMapper::getFullColumnName('seo'),
-            ProductMapper::getFullColumnName('keywords'),
-            ProductMapper::getFullColumnName('meta_description'),
-            ProductMapper::getFullColumnName('cover'),
-            ProductMapper::getFullColumnName('date'),
-            ProductMapper::getFullColumnName('views'),
-            ProductMapper::getFullColumnName('in_stock')
-        );
-
-        if ($customerId != null) {
-            // Columns to be selected
-            $columns = array_merge($columns, array(WishlistMapper::getFullColumnName('product_id') => 'product_wishlist_id'));
-        }
-
-        return $columns;
-    }
-
-    /**
      * Create attribute match queries
      * 
      * @param array $pair
@@ -234,7 +245,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $qb->openBracket();
 
-        $qb->select($this->getSharedColumns($customerId), true)
+        $qb->select(self::getSharedColumns($customerId), true)
            ->from(ProductAttributeMapper::getTableName())
            ->leftJoin(self::getTableName())
            ->on()
@@ -255,16 +266,33 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                    ->equals(WishlistMapper::getFullColumnName('customer_id'), $customerId);
             }
 
-            // Filter by group and value IDs
-            $qb->whereEquals('group_id', (int) $groupId)
-               ->andWhereEquals('value_id', (int) $valueId)
-               ->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
+        // Slug
+        $qb->leftJoin(WebPageMapper::getTableName())
+           ->on()
+           ->equals(self::getFullColumnName('web_page_id'), WebPageMapper::getFullColumnName('id'));
+
+        // Filter by group and value IDs
+        $qb->whereEquals('group_id', (int) $groupId)
+           ->andWhereEquals('value_id', (int) $valueId)
+           ->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
 
         if ($sortingRules['desc'] === true) {
             $qb->desc();
         }
 
         $qb->closeBracket();
+    }
+
+    /**
+     * Append web page relation by linked IDs
+     * 
+     * @return void
+     */
+    private function appendWebPageRelation()
+    {
+        $this->db->leftJoin(WebPageMapper::getTableName())
+                 ->on()
+                 ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')));
     }
 
     /**
@@ -392,8 +420,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllPublishedStokesByPage($page, $itemsPerPage, $customerId)
     {
-        $db = $this->db->select($this->getSharedColumns($customerId))
+        $db = $this->db->select(self::getSharedColumns($customerId))
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
@@ -465,8 +495,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchById($id, $junction = true, $customerId = null)
     {
-        $db = $this->db->select($this->getSharedColumns($customerId))
+        $db = $this->db->select(self::getSharedColumns($customerId))
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
@@ -588,12 +620,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchAllPublishedByCategoryIdAndPage($categoryId, $page, $itemsPerPage, $sort, $keyword, $customerId)
     {
         // Grab shared columns to be selected
-        $columns = $this->getSharedColumns($customerId);
+        $columns = self::getSharedColumns($customerId);
 
         $sortingRules = CategorySortGadget::createSortingRules($sort);
 
         $db = $this->db->select($columns)
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
