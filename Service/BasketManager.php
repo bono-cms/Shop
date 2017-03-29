@@ -128,6 +128,33 @@ final class BasketManager implements BasketManagerInterface
     }
 
     /**
+     * Fetch product meta-data
+     * 
+     * @param array $ids A collection of product IDs
+     * @param string $id Product ID
+     * @return array
+     */
+    private function fetchProduct(array $ids, $id)
+    {
+        static $rows = null;
+
+        // Cache calls
+        if ($rows === null) {
+            $rows = $this->productMapper->fetchByIds($ids);
+        }
+
+        // Linear search by product ID
+        foreach ($rows as $row) {
+            if ($row['id'] == $id) {
+                return $row;
+            }
+        }
+
+        // Can not be found by default
+        return false;
+    }
+
+    /**
      * Returns all product entities stored in the basket
      * 
      * @param integer $limit Whether to limit output
@@ -143,11 +170,13 @@ final class BasketManager implements BasketManagerInterface
         }
 
         $entities = array();
+        $ids = array_keys($products);
 
         foreach ($products as $id => $options) {
-            $product = $this->productMapper->fetchById($id);
+            $product = $this->fetchProduct($ids, $id);
 
-            if (count($product) === 1) {
+            // Make sure the product hasn't been removed
+            if ($product === false) {
                 // If a product itself has been removed. We'd simply ignore it and remove it from collection
                 $this->removeById($id);
             } else {
@@ -167,7 +196,7 @@ final class BasketManager implements BasketManagerInterface
                 $entity->setId($product['id'], BasketEntity::FILTER_INT)
                        ->setName($product['name'], BasketEntity::FILTER_HTML)
                        ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
-                       ->setUrl($this->webPageManager->getUrl($product['web_page_id'], $product['lang_id']))
+                       ->setUrl($this->webPageManager->surround($product['slug'], $product['lang_id']))
                        ->setImageBag($imageBag)
                        ->setQty($qty)
                        ->setPrice($price)
