@@ -27,6 +27,21 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
     }
 
     /**
+     * Adds a product to whishlist
+     * 
+     * @param string $customerId
+     * @param string $productId
+     * @return boolean
+     */
+    public function add($customerId, $productId)
+    {
+        return $this->persist(array(
+            'customer_id' => $customerId,
+            'product_id' => $productId
+        ));
+    }
+
+    /**
      * Fetches all products associated by customer ID
      * 
      * @param string $customerId

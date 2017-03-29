@@ -14,6 +14,15 @@ namespace Shop\Storage;
 interface WishlistMapperInterface
 {
     /**
+     * Adds a product to whishlist
+     * 
+     * @param string $customerId
+     * @param string $productId
+     * @return boolean
+     */
+    public function add($customerId, $productId);
+
+    /**
      * Fetches all products associated by customer ID
      * 
      * @param string $customerId
