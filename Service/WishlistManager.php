@@ -12,10 +12,9 @@
 namespace Shop\Service;
 
 use Shop\Storage\WishlistMapperInterface;
-use Cms\Service\AbstractManager;
 use Krystal\Stdlib\VirtualEntity;
 
-final class WishlistManager extends AbstractManager implements WishlistManagerInterface
+final class WishlistManager implements WishlistManagerInterface
 {
     /**
      * Any compliant mapper
@@ -25,14 +24,23 @@ final class WishlistManager extends AbstractManager implements WishlistManagerIn
     private $wishlistMapper;
 
     /**
+     * Product service
+     * 
+     * @var \Shop\Service\ProductManagerInterface
+     */
+    private $productManager;
+
+    /**
      * State initialization
      * 
      * @param \Shop\Storage\WishlistMapperInterface $wishlistMapper
+     * @param \Shop\Service\ProductManagerInterface $productManager
      * @return void
      */
-    public function __construct(WishlistMapperInterface $wishlistMapper)
+    public function __construct(WishlistMapperInterface $wishlistMapper, ProductManagerInterface $productManager)
     {
         $this->wishlistMapper = $wishlistMapper;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -67,6 +75,6 @@ final class WishlistManager extends AbstractManager implements WishlistManagerIn
      */
     public function fetchAllByCustomerId($customerId)
     {
-        return ($this->wishlistMapper->fetchAllByCustomerId($customerId));
+        return $this->productManager->hydrateCollection($this->wishlistMapper->fetchAllByCustomerId($customerId));
     }
 }

@@ -105,7 +105,7 @@ final class Module extends AbstractCmsModule
         );
 
         return array(
-            'wishlistManager' => new WishlistManager($wishlistMapper),
+            'wishlistManager' => new WishlistManager($wishlistMapper, $productManager),
             'siteService' => $siteService,
             'configManager' => $config,
             'deliveryTypeManager' => $deliveryTypeManager,
