@@ -155,6 +155,37 @@ final class BasketManager implements BasketManagerInterface
     }
 
     /**
+     * Creates basket entity
+     * 
+     * @param array $product Raw product data
+     * @param integer $qty Total product quantity
+     * @param float $price Total product price
+     * @return \Shop\Service\BasketEntity
+     */
+    private function createEntity(array $product, $qty, $price)
+    {
+        $imageBag = clone $this->imageBag;
+        $imageBag->setId((int) $product['id'])
+                 ->setCover(Filter::escape($product['cover']));
+
+        // Grab actual price
+        $price = $this->getPrice($product);
+
+        // Now finally prepare the entity
+        $entity = new BasketEntity();
+        $entity->setId($product['id'], BasketEntity::FILTER_INT)
+               ->setName($product['name'], BasketEntity::FILTER_HTML)
+               ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
+               ->setUrl($this->webPageManager->surround($product['slug'], $product['lang_id']))
+               ->setImageBag($imageBag)
+               ->setQty($qty)
+               ->setPrice($price)
+               ->setSubTotalPrice($qty * $price);
+
+        return $entity;
+    }
+
+    /**
      * Returns all product entities stored in the basket
      * 
      * @param integer $limit Whether to limit output
@@ -184,26 +215,8 @@ final class BasketManager implements BasketManagerInterface
                 $qty = (int) $options[self::BASKET_STATIC_OPTION_QTY];
                 $price =& $options[self::BASKET_STATIC_OPTION_SUBTOTAL_PRICE];
 
-                $imageBag = clone $this->imageBag;
-                $imageBag->setId((int) $product['id'])
-                         ->setCover(Filter::escape($product['cover']));
-
-                // Grab actual price
-                $price = $this->getPrice($product);
-
-                // Now finally prepare the entity
-                $entity = new BasketEntity();
-                $entity->setId($product['id'], BasketEntity::FILTER_INT)
-                       ->setName($product['name'], BasketEntity::FILTER_HTML)
-                       ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
-                       ->setUrl($this->webPageManager->surround($product['slug'], $product['lang_id']))
-                       ->setImageBag($imageBag)
-                       ->setQty($qty)
-                       ->setPrice($price)
-                       ->setSubTotalPrice($qty * $price);
-
-                // Finally add prepared entity
-                array_push($entities, $entity);
+                // Finally append the entity
+                array_push($entities, $this->createEntity($product, $qty, $price));
             }
         }
 
