@@ -68,11 +68,13 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
         // Columns to be selected
         $columns = array(
             ProductMapper::getFullColumnName('id'),
+            ProductMapper::getFullColumnName('lang_id'),
+            ProductMapper::getFullColumnName('web_page_id'),
             ProductMapper::getFullColumnName('name'),
             ProductMapper::getFullColumnName('regular_price'),
             ProductMapper::getFullColumnName('stoke_price'),
+            ProductMapper::getFullColumnName('special_offer'),
             ProductMapper::getFullColumnName('cover'),
-            ProductMapper::getFullColumnName('lang_id'),
             WebPageMapper::getFullColumnName('slug'),
         );
 
