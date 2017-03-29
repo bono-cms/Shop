@@ -10,6 +10,19 @@
  */
 
 return array(
+    // Wishlist
+    '/module/shop/wishlist/delete' => array(
+        'controller' => 'Customer:Wishlist@deleteAction'
+    ),
+    
+    '/module/shop/wishlist/add' => array(
+        'controller' => 'Customer:Wishlist@addAction'
+    ),
+    
+    '/module/shop/wishlist' => array(
+        'controller' => 'Customer:Wishlist@indexAction'
+    ),
+    
     '/customer/orders' => array(
         'controller' => 'Customer:Order@listAction'
     ),
