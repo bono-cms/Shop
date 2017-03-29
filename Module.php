@@ -33,6 +33,7 @@ use Shop\Service\OrderManager;
 use Shop\Service\ProductRemover;
 use Shop\Service\OrderStatusManager;
 use Shop\Service\SiteService;
+use Shop\Service\WishlistManager;
 
 final class Module extends AbstractCmsModule
 {
@@ -57,6 +58,7 @@ final class Module extends AbstractCmsModule
         $couponMapper = $this->getMapper('/Shop/Storage/MySQL/CouponMapper', false);
         $currencyMapper = $this->getMapper('/Shop/Storage/MySQL/CurrencyMapper', false);
         $orderStatusMapper = $this->getMapper('/Shop/Storage/MySQL/OrderStatusMapper', false);
+        $wishlistMapper = $this->getMapper('/Shop/Storage/MySQL/WishlistMapper', false);
 
         // Now build required services
         $productImageManager = $this->getProductImageManager($config->getEntity());
@@ -103,6 +105,7 @@ final class Module extends AbstractCmsModule
         );
 
         return array(
+            'wishlistManager' => new WishlistManager($wishlistMapper),
             'siteService' => $siteService,
             'configManager' => $config,
             'deliveryTypeManager' => $deliveryTypeManager,
