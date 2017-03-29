@@ -67,23 +67,26 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
     {
         // Columns to be selected
         $columns = array(
-            self::getFullColumnName('name'),
-            self::getFullColumnName('regular_price'),
-            self::getFullColumnName('stoke_price'),
-            self::getFullColumnName('cover'),
-            self::getFullColumnName('lang_id'),
+            ProductMapper::getFullColumnName('id'),
+            ProductMapper::getFullColumnName('name'),
+            ProductMapper::getFullColumnName('regular_price'),
+            ProductMapper::getFullColumnName('stoke_price'),
+            ProductMapper::getFullColumnName('cover'),
+            ProductMapper::getFullColumnName('lang_id'),
             WebPageMapper::getFullColumnName('slug'),
         );
 
         return $this->db->select($columns)
                         ->from(self::getTableName())
-                        ->leftJoin(Product::getTableName())
+                        ->leftJoin(ProductMapper::getTableName())
                         ->on()
                         ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
                         ->leftJoin(WebPageMapper::getTableName())
                         ->on()
-                        ->equals(WebPageMapper::getFullColumnName('id'))
+                        ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(ProductMapper::getFullColumnName('web_page_id')))
                         ->whereEquals(self::getFullColumnName('customer_id'), $customerId)
+                        ->orderBy(self::getFullColumnName('wishlist_item_id'))
+                        ->desc()
                         ->queryAll();
     }
 }
