@@ -14,6 +14,14 @@ namespace Shop\Service;
 interface ProductManagerInterface
 {
     /**
+     * Hydrate a raw product collection into entities
+     * 
+     * @param array $rows
+     * @return array
+     */
+    public function hydrateCollection($rows);
+
+    /**
      * Fetches all product ids with their corresponding names
      * 
      * @return array

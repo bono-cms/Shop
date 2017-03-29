@@ -120,6 +120,17 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Hydrate a raw product collection into entities
+     * 
+     * @param array $rows
+     * @return array
+     */
+    public function hydrateCollection($rows)
+    {
+        return $this->prepareResults($rows, true);
+    }
+
+    /**
      * Fetches all product ids with their corresponding names
      * 
      * @return array
@@ -288,7 +299,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     /**
      * {@inheritDoc}
      */
-    protected function toEntity(array $product)
+    protected function toEntity(array $product, $basicOnly = false)
     {
         // If the $id isn't set, then the product isn't valid
         if (!isset($product['id'])) {
@@ -306,26 +317,28 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setWebPageId($product['web_page_id'], ProductEntity::FILTER_INT)
             ->setPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
             ->setStokePrice($product['stoke_price'], ProductEntity::FILTER_FLOAT)
-            ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
             ->setSpecialOffer($product['special_offer'], ProductEntity::FILTER_BOOL)
-            ->setDescription($product['description'], ProductEntity::FILTER_SAFE_TAGS)
-            ->setPublished($product['published'], ProductEntity::FILTER_BOOL)
-            ->setOrder($product['order'], ProductEntity::FILTER_INT)
-            ->setSeo($product['seo'], ProductEntity::FILTER_BOOL)
-            ->setSlug($this->webPageManager->fetchSlugByWebPageId($product['web_page_id']))
-
-            // Meta data
-            ->setTitle($product['title'], ProductEntity::FILTER_HTML)
             ->setName($product['name'], ProductEntity::FILTER_HTML)
-            ->setKeywords($product['keywords'], ProductEntity::FILTER_HTML)
-            ->setMetaDescription($product['meta_description'], ProductEntity::FILTER_HTML)
-
+            ->setSlug(isset($product['slug']) ? $product['slug'] : $this->webPageManager->fetchSlugByWebPageId($product['web_page_id']))
             ->setCover($product['cover'], ProductEntity::FILTER_TAGS)
-            ->setDate($product['date'])
             ->setPermanentUrl('/module/shop/product/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setViewCount($product['views'], ProductEntity::FILTER_INT)
             ->setWishlistProductId(isset($product['product_wishlist_id']) ? $product['product_wishlist_id'] : null);
+
+        if ($basicOnly === false) {
+            $entity->setDescription($product['description'], ProductEntity::FILTER_SAFE_TAGS)
+                   ->setPublished($product['published'], ProductEntity::FILTER_BOOL)
+                   ->setOrder($product['order'], ProductEntity::FILTER_INT)
+                   ->setDate($product['date'])
+                   ->setViewCount($product['views'], ProductEntity::FILTER_INT)
+                   ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
+                   ->setSeo($product['seo'], ProductEntity::FILTER_BOOL)
+
+                   // Meta data
+                   ->setTitle($product['title'], ProductEntity::FILTER_HTML)
+                   ->setKeywords($product['keywords'], ProductEntity::FILTER_HTML)
+                   ->setMetaDescription($product['meta_description'], ProductEntity::FILTER_HTML);
+        }
 
         // It's only set in valid entities
         if (isset($product['categories'])) {
