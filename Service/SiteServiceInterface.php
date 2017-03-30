@@ -16,6 +16,14 @@ use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 interface SiteServiceInterface
 {
     /**
+     * Returns wishlist count
+     * 
+     * @param integer $customerId
+     * @return integer
+     */
+    public function getWishlistCount($customerId);
+
+    /**
      * Returns currency source string
      * 
      * @return string

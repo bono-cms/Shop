@@ -15,6 +15,7 @@ use Krystal\Stdlib\VirtualEntity;
 use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 use Shop\View\CategoryDropdown;
 use Shop\Service\CurrencyManagerInterface;
+use Shop\Storage\WishlistMapperInterface;
 
 final class SiteService implements SiteServiceInterface
 {
@@ -54,12 +55,20 @@ final class SiteService implements SiteServiceInterface
     private $recentProduct;
 
     /**
+     * Any compliant wishlist mapper
+     * 
+     * @var \Shop\Storage\WishlistMapperInterface
+     */
+    private $wishlistMapper;
+
+    /**
      * State initialization
      * 
      * @param \Shop\Service\ProductManagerInterface $productManager
      * @param \Shop\Service\CategoryManagerInterface $categoryManager
      * @param \Shop\Service\RecentProductInterface $recentProduct
      * @param \Shop\Service\CurrencyManagerInterface $currencyManager
+     * @param \Shop\Storage\WishlistMapperInterface $wishlistMapper
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
@@ -68,13 +77,26 @@ final class SiteService implements SiteServiceInterface
         CategoryManagerInterface $categoryManager, 
         RecentProductInterface $recentProduct, 
         CurrencyManagerInterface $currencyManager, 
+        WishlistMapperInterface $wishlistMapper,
         VirtualEntity $config
     ){
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
         $this->recentProduct = $recentProduct;
         $this->currencyManager = $currencyManager;
+        $this->wishlistMapper = $wishlistMapper;
         $this->config = $config;
+    }
+
+    /**
+     * Returns wishlist count
+     * 
+     * @param integer $customerId
+     * @return integer
+     */
+    public function getWishlistCount($customerId)
+    {
+        return $this->wishlistMapper->countByCustomerId($customerId);
     }
 
     /**

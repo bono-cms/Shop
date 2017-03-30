@@ -101,6 +101,7 @@ final class Module extends AbstractCmsModule
             $categoryManager, 
             $this->getRecentProduct($config->getEntity(), $productManager), 
             $currencyManager, 
+            $wishlistMapper, 
             $config->getEntity()
         );
 
