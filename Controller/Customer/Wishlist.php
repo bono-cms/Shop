@@ -28,6 +28,7 @@ final class Wishlist extends AbstractShopController
 
         if ($page !== false) {
             $this->loadSitePlugins();
+            $this->loadBreadcrumbs();
 
             $products = $this->getModuleService('wishlistManager')->fetchAllByCustomerId($this->createCustomerId());
 
@@ -39,6 +40,25 @@ final class Wishlist extends AbstractShopController
         } else {
             return false;
         }
+    }
+
+    /**
+     * Load breadcrumbs
+     * 
+     * @return void
+     */
+    private function loadBreadcrumbs()
+    {
+        // Different caption for logged in and non-logged in users
+        if (!$this->getService('Members', 'memberManager')->isLoggedIn()) {
+            $caption = 'Wishlist';
+        } else {
+            $caption = 'My wishlist';
+        }
+
+        // Append a breadcrumb
+        $this->view->getBreadcrumbBag()
+                   ->addOne($this->translator->translate($caption));
     }
 
     /**
