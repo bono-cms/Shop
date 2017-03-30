@@ -44,6 +44,17 @@ final class WishlistManager implements WishlistManagerInterface
     }
 
     /**
+     * Returns product count associated with customer ID
+     * 
+     * @param string $customerId
+     * @return integer
+     */
+    public function getCount($customerId)
+    {
+        return $this->wishlistMapper->countByCustomerId($customerId);
+    }
+
+    /**
      * Removes a product from wishlist
      * 
      * @param string $customerId
