@@ -58,7 +58,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     }
 
     /**
-     * Finds attached static attributes. Primarily used to render atttbutes on product page
+     * Finds attached static attributes. Primarily used to render attributes on product page
      * 
      * @param string $productId
      * @return array
