@@ -52,19 +52,20 @@ final class Wishlist extends AbstractShopController
         if ($this->request->hasPost('id')) {
             // Grab product ID from request
             $id = $this->request->getPost('id');
+            $customerId = $this->createCustomerId();
 
             $wishlistManager = $this->getModuleService('wishlistManager');
-            call_user_func(array($wishlistManager, $method), $this->createCustomerId(), $id);
+            call_user_func(array($wishlistManager, $method), $customerId, $id);
 
             // Indicate success back to client
-            return 1;
+            return $wishlistManager->getCount($customerId);
         }
     }
 
     /**
      * Adds a product to wishlist
      * 
-     * @return string
+     * @return string A new product count in wishlist
      */
     public function addAction()
     {
@@ -74,7 +75,7 @@ final class Wishlist extends AbstractShopController
     /**
      * Deletes a product from wishlist
      * 
-     * @return string
+     * @return string A new product count in wishlist
      */
     public function deleteAction()
     {
