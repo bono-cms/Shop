@@ -58,6 +58,21 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
     }
 
     /**
+     * Count quantity of products associated with customer ID
+     * 
+     * @param string $customerId
+     * @return string
+     */
+    public function countByCustomerId($customerId)
+    {
+        return $this->db->select()
+                        ->count('wishlist_item_id', 'count')
+                        ->from(self::getTableName())
+                        ->whereEquals('customer_id', $customerId)
+                        ->query('count');
+    }
+
+    /**
      * Fetches all products associated by customer ID
      * 
      * @param string $customerId

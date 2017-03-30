@@ -32,6 +32,14 @@ interface WishlistMapperInterface
     public function add($customerId, $productId);
 
     /**
+     * Count quantity of products associated with customer ID
+     * 
+     * @param string $customerId
+     * @return string
+     */
+    public function countByCustomerId($customerId);
+
+    /**
      * Fetches all products associated by customer ID
      * 
      * @param string $customerId
