@@ -240,9 +240,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendAttributeMatchQuery(QueryBuilderInterface $qb, $categoryId, $customerId, $groupId, $valueId, $sort)
     {
-        // Create sorting rules
-        $sortingRules = CategorySortGadget::createSortingRules($sort);
-
         $qb->openBracket();
 
         $qb->select(self::getSharedColumns($customerId), true)
@@ -273,8 +270,17 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         // Filter by group and value IDs
         $qb->whereEquals('group_id', (int) $groupId)
-           ->andWhereEquals('value_id', (int) $valueId)
-           ->orderBy(ProductMapper::getFullColumnName($sortingRules['column']));
+           ->andWhereEquals('value_id', (int) $valueId);
+
+        // Create sorting rules
+        $sortingRules = CategorySortGadget::createSortingRules($sort);
+
+        // Prepend table name to sorting columns
+        foreach ($sortingRules['columns'] as &$sortingColumn) {
+            $sortingColumn = self::getFullColumnName($sortingColumn);
+        }
+
+        $qb->orderBy(implode(', ', $sortingRules['columns']));
 
         if ($sortingRules['desc'] === true) {
             $qb->desc();
@@ -528,8 +534,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->appendCustomerRelation($customerId);
         }
 
-        $db->whereEquals('id', $id)
-           ->andWhereEquals('published', '1');
+        $db->whereEquals(self::getFullColumnName('id'), $id)
+           ->andWhereEquals(self::getFullColumnName('published'), '1');
 
         if ($junction === true) {
             $columns = array('id', 'name');
@@ -646,8 +652,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Grab shared columns to be selected
         $columns = self::getSharedColumns($customerId);
 
-        $sortingRules = CategorySortGadget::createSortingRules($sort);
-
         $db = $this->db->select($columns)
                        ->from(self::getTableName());
 
@@ -670,10 +674,17 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         if ($keyword !== null) {
-            $db->andWhereLike('name', '%'.$keyword.'%');
+            $db->andWhereLike(self::getFullColumnName('name'), '%'.$keyword.'%');
         }
 
-        $db->orderBy(sprintf('%s.%s', self::getTableName(), $sortingRules['column']));
+        $sortingRules = CategorySortGadget::createSortingRules($sort);
+
+        // Prepend table name to sorting columns
+        foreach ($sortingRules['columns'] as &$sortingColumn) {
+            $sortingColumn = self::getFullColumnName($sortingColumn);
+        }
+
+        $db->orderBy(implode(', ', $sortingRules['columns']));
 
         if ($sortingRules['desc'] === true) {
             $db->desc();
