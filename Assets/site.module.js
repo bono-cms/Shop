@@ -371,6 +371,127 @@ $(function(){
         }
     };
     
+    // Wishlist handler
+    (function(){
+        var wishlist = {
+            // Shared request maker
+            makeRequest: function(id, url, callback){
+                return $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        id: id
+                    },
+                    success: function(response){
+                        if ($.isNumeric(response)) {
+                            // And apply a custom callback
+                            callback(response);
+                        } else {
+                            // Log the error
+                            console.log(response)
+                        }
+                    }
+                });
+            },
+
+            // Update count in view
+            updateCount: function(newCount){
+                $("[data-wishlist-label='count']").text(newCount);
+            },
+            
+            // Adds a product in wishlist
+            add: function(id, callback){
+                return this.makeRequest(id, '/module/shop/wishlist/add', callback);
+            },
+
+            // Removes a product from wishlist
+            remove: function(id, callback){
+                return this.makeRequest(id, '/module/shop/wishlist/delete', callback);
+            }
+        };
+
+        // Listener for wishlist removal
+        $(document).on('click', "[data-button='wishlist-remove']", function(event){
+            event.preventDefault();
+
+            var $self = $(this);
+            var id = $(this).data('product-id');
+            var addedClass = $(this).data('added-class');
+
+            wishlist.remove(id, function(newCount){
+                $self.removeClass(addedClass);
+
+                // Change the type of the button
+                $self.attr('data-button', 'wishlist-add');
+
+                // Update the counter
+                wishlist.updateCount(newCount);
+            });
+        });
+
+        // Listener for adding button
+        $(document).on('click', "[data-button='wishlist-add']", function(event){
+            event.preventDefault();
+
+            var $self = $(this);
+            var id = $(this).data('product-id');
+            var addedClass = $(this).data('added-class');
+
+            wishlist.add(id, function(newCount){
+                // Success
+                $self.addClass(addedClass);
+
+                // Change the type of the button
+                $self.attr('data-button', 'wishlist-remove');
+
+                // Update the counter
+                wishlist.updateCount(newCount);
+            });
+        });
+
+        // Listener for removal button
+        $(document).on('click', "[data-button='wishlist-delete-with-confirm']", function(event){
+            event.preventDefault();
+
+            // Selected product ID
+            var id = $(this).data('product-id');
+
+            // Find closest corresponding row wrapper
+            var $wrapper = $(this).closest('[data-wrapper="row"]');
+
+            // Ensure the previous listener is removed, and attach a new one
+            $("[data-button='product-wishlist-delete-confirm-yes']").off('click').click(function(event){
+                wishlist.remove(id, function(newCount){
+                    $wrapper.hide('slow', function(){
+                        // Update counter on animation complete
+                        wishlist.updateCount(newCount);
+                    });
+                });
+            });
+        });
+
+        // Listener for removal button
+        $(document).on('click', "[data-button='to-wishlist']", function(event){
+            event.preventDefault();
+
+            // Attached product ID
+            var id = $(this).data('product-id');
+
+            $.post("/module/shop/basket/wishlist", { id : id }, function(response){
+                var data = $.parseJSON(response);
+
+                // Update with new statistic
+                view.onRemoval(id, data.basket)
+
+                // Update counter
+                wishlist.updateCount(data.wishlistCount);
+            });
+        });
+        
+    })($, view, console);
+    
+
+    
     // View-related logic
     var view = {
         /**
@@ -598,7 +719,7 @@ $(function(){
     $("[data-basket-button='product-delete-with-confirm']").click(function(event){
         event.preventDefault();
         var id = view.grabProductId(this);
-        
+
         // Ensure the previous listener is removed, and attach a new one
         $("[data-basket-button='product-delete-confirm-yes']").off('click').click(function(event){
             $.basket.delete(id, function(data){
