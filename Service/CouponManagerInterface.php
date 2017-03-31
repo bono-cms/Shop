@@ -21,6 +21,13 @@ interface CouponManagerInterface
     public function getAppliedDiscount();
 
     /**
+     * Clear the mark from storage
+     * 
+     * @return boolean
+     */
+    public function clearIfApplied();
+
+    /**
      * Determines whether discount has been applied
      * 
      * @return boolean
@@ -59,7 +66,7 @@ interface CouponManagerInterface
      * @return array
      */
     public function fetchAll();
-    
+
     /**
      * Deletes a coupon by its associated ID
      * 

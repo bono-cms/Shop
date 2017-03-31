@@ -76,6 +76,21 @@ final class CouponManager extends AbstractManager implements CouponManagerInterf
     }
 
     /**
+     * Clear the mark from storage
+     * 
+     * @return boolean
+     */
+    public function clearIfApplied()
+    {
+        if ($this->isApplied()) {
+            $this->sessionBag->remove(self::STORAGE_DISCOUNT_KEY);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Determines whether discount has been applied
      * 
      * @return boolean
