@@ -125,6 +125,35 @@ final class Basket extends AbstractShopController
     }
 
     /**
+     * Removes a product from the basket and adds it to wishlist
+     * 
+     * @return string
+     */
+    public function wishlistAction()
+    {
+        if ($this->request->hasPost('id')) {
+            // Request variables
+            $id = $this->request->getPost('id');
+            $customerId = $this->createCustomerId();
+
+            // Remove a product from basket
+            $basketManager = $this->getBasketManager();
+            $basketManager->removeById($id);
+            $basketManager->save();
+
+            // Then add it to wishlist
+            $wishlistManager = $this->getModuleService('wishlistManager');
+            $wishlistManager->add($customerId, $id);
+
+            // Return new statistic
+            return json_encode(array(
+                'wishlistCount' => $wishlistManager->getCount($customerId),
+                'basket' => $basketManager->getAllStat()
+            ));
+        }
+    }
+
+    /**
      * Removes a product by its associated id
      * 
      * @return string

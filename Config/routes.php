@@ -67,6 +67,10 @@ return array(
         'controller' => 'Basket@addAction'
     ),
     
+    '/module/shop/basket/wishlist' => array(
+        'controller' => 'Basket@wishlistAction'
+    ),
+    
     '/module/shop/basket/get-stat' => array(
         'ajax' => true,
         'controller' => 'Basket@getStatAction'
