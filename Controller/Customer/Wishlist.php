@@ -69,6 +69,9 @@ final class Wishlist extends AbstractShopController
      */
     private function handleAction($method)
     {
+        // Validate requirement
+        $this->validateCustomerRequirement();
+
         if ($this->request->hasPost('id')) {
             // Grab product ID from request
             $id = $this->request->getPost('id');

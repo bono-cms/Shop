@@ -131,6 +131,9 @@ final class Basket extends AbstractShopController
      */
     public function wishlistAction()
     {
+        // Validate requirement
+        $this->validateCustomerRequirement();
+
         if ($this->request->hasPost('id')) {
             // Request variables
             $id = $this->request->getPost('id');
