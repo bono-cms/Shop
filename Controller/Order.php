@@ -41,6 +41,10 @@ final class Order extends AbstractShopController
 
         if ($formValidator->isValid()) {
             if ($this->makeOrder($input)) {
+                // Do not remember current discount for next orders
+                $this->getModuleService('couponManager')->clearIfApplied();
+
+                // Success back to client
                 $this->flashBag->set('success', 'Your order has been sent! We will contact you soon. Thank you!');
                 return '1';
             }
