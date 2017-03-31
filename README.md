@@ -37,11 +37,29 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Description
  - Ability to sort applying several options when viewing on the site
  - Ability to change per page count on the site as well
- 
+
 ## Orders
 
  - Shopping cart (Basket)
  - Order form  with built-in one click order
  - Discount codes
  - Dynamic delivery methods
+ - Ability to order right in the basket page or via standalone Checkout page
  
+## Customers
+
+This is optional feature. Orders can be done without registration.
+
+ - Personal cabinet (Login / Registration / Password recovery)
+ - Wishlist
+ - Order statuses
+ - Order history
+ 
+## Coming soon:
+
+ - Dynamic fields in attributes (WYSIWYG, select, etc)
+ - Colors and image attaches
+ - Full internalization support
+ - Catalogue mode
+ - Product ratings
+ - Product reviews
