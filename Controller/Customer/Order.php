@@ -23,16 +23,7 @@ final class Order extends AbstractShopController
      */
     protected function bootstrap()
     {
-        // Make sure "Members" module is loaded
-        if (!$this->moduleManager->isLoaded('Members')) {
-            throw new RuntimeException('Customer order controller required "Members" module to be properly installed');
-        }
-
-        // Make sure, the customer is logged in
-        if (!$this->getService('Members', 'memberManager')->isLoggedIn()) {
-            throw new LogicException('A customer must be logged in to access their orders');
-        }
-
+        $this->validateCustomerRequirement();
         parent::bootstrap();
     }
 

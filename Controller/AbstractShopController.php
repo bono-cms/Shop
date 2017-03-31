@@ -19,6 +19,24 @@ use Krystal\Form\Gadget\PerPageCount;
 abstract class AbstractShopController extends AbstractController
 {
     /**
+     * Validate major customer requirement (this validation is used when performing customer-related operations)
+     * 
+     * @return void
+     */
+    final protected function validateCustomerRequirement()
+    {
+        // Make sure "Members" module is loaded
+        if (!$this->moduleManager->isLoaded('Members')) {
+            throw new RuntimeException('Customer order controller requires "Members" module to be properly installed');
+        }
+
+        // Make sure, the customer is logged in
+        if (!$this->getService('Members', 'memberManager')->isLoggedIn()) {
+            throw new LogicException('A customer must be logged in to make customer-related operations');
+        }
+    }
+
+    /**
      * Creates customer ID if possible
      * 
      * @return integer
