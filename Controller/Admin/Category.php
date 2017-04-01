@@ -43,7 +43,7 @@ final class Category extends AbstractController
         $this->loadMenuWidget();
 
         $this->view->getPluginBag()
-                   ->load($this->getWysiwygPluginName())
+                   ->load(array($this->getWysiwygPluginName(), 'chosen'))
                    ->appendScript('@Shop/admin/category.form.js');
 
         // Append breadcrumbs

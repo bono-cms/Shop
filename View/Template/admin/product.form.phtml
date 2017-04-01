@@ -63,7 +63,7 @@ use Shop\Service\AttributeProcessor;
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
                     <div class="col-lg-10">
-                        <?php echo Element::select('product[category_id][]', $categories, $product->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'id' => 'categories')); ?>
+                        <?php echo Element::select('product[category_id][]', $categories, $product->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
                     </div>
                 </div>
 
@@ -177,14 +177,14 @@ use Shop\Service\AttributeProcessor;
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Recommended products'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('product[recommended_ids][]', $names, $product->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true)); ?>
+                    <?php echo Element::select('product[recommended_ids][]', $names, $product->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Similar products'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('product[similar_ids][]', $names, $product->getSimilarIds(), array('class' => 'form-control', 'multiple' => true)); ?>
+                    <?php echo Element::select('product[similar_ids][]', $names, $product->getSimilarIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
                 </div>
             </div>
         </div>

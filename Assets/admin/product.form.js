@@ -1,6 +1,5 @@
-$(function(){
-    $("#categories").select2();
 
+$(function(){
     /**
 	 * Creates row in the image table
 	 * 

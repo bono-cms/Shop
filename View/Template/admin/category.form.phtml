@@ -41,7 +41,7 @@ use Krystal\Form\Element;
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Attribute groups'); ?></label>
                     <div class="col-lg-10">
-                        <?php echo Element::select('category[attribute_group_id][]', $attributeGroups, $category->getAttributeGroupIds(), array('class' => 'form-control', 'multiple' => true, 'id' => 'groups')); ?>
+                        <?php echo Element::select('category[attribute_group_id][]', $attributeGroups, $category->getAttributeGroupIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Attach at least one attribute group'), 'id' => 'groups')); ?>
                     </div>
                 </div>
 				
