@@ -25,46 +25,6 @@ final class ImageMapper extends AbstractMapper implements ImageMapperInterface
     }
 
     /**
-     * Returns shared select
-     * 
-     * @param string $productId
-     * @param boolean $published
-     * @return \Krystal\Db\Sql\Db
-     */
-    private function getSelectQuery($productId, $published)
-    {
-        $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('product_id', $productId);
-
-        if ($published === true) {
-
-            $db->andWhereEquals('published', '1')
-               ->orderBy('order');
-
-        } else {
-
-            $db->orderBy('id')
-               ->desc();
-        }
-
-        return $db;
-    }
-
-    /**
-     * Queries for result-set
-     * 
-     * @param string $productId
-     * @param boolean $published
-     * @return array
-     */
-    private function getResults($productId, $published)
-    {
-        return $this->getSelectQuery($productId, $published)
-                    ->queryAll();
-    }
-
-    /**
      * Fetches image's file name by its associated id
      * 
      * @param string $id Image's id
@@ -76,25 +36,32 @@ final class ImageMapper extends AbstractMapper implements ImageMapperInterface
     }
 
     /**
-     * Fetches all published images by associated product id
+     * Fetches all images by associated product ID
      * 
-     * @param string $productId
+     * @param string $productId Product ID
+     * @param boolean $published Whether to fetch only published items
+     * @param integer|boolean $limit Optional images limit to be returned
      * @return array
      */
-    public function fetchAllPublishedByProductId($productId)
+    public function fetchAllByProductId($productId, $published, $limit)
     {
-        return $this->getResults($productId, true);
-    }
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('product_id', $productId);
 
-    /**
-     * Fetches all images by associated product id
-     * 
-     * @param string $productId
-     * @return array
-     */
-    public function fetchAllByProductId($productId)
-    {
-        return $this->getResults($productId, false);
+        if ($published === true) {
+            $db->andWhereEquals('published', '1')
+               ->orderBy('order');
+        } else {
+            $db->orderBy('id')
+               ->desc();
+        }
+
+        if ($limit !== false) {
+            $db->limit($limit);
+        }
+
+        return $db->queryAll();
     }
 
     /**

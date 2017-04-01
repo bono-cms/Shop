@@ -22,20 +22,14 @@ interface ImageMapperInterface
     public function fetchFileNameById($id);
 
     /**
-     * Fetches all published images by associated product id
-     * 
-     * @param string $productId
-     * @return array
-     */
-    public function fetchAllPublishedByProductId($productId);
-
-    /**
      * Fetches all images by associated product id
      * 
-     * @param string $productId
+     * @param string $productId Product ID
+     * @param boolean $published Whether to fetch only published items
+     * @param integer|boolean $limit Optional images limit to be returned
      * @return array
      */
-    public function fetchAllByProductId($productId);
+    public function fetchAllByProductId($productId, $published, $limit);
 
     /**
      * Adds an image
