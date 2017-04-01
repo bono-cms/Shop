@@ -95,9 +95,10 @@ interface ProductManagerInterface
      * Fetches all published product's photo entities by its associated id
      * 
      * @param string $id Product id
+     * @param integer|boolean $limit Optional images limit to be returned
      * @return array
      */
-    public function fetchAllPublishedImagesById($id);
+    public function fetchAllPublishedImagesById($id, $limit = false);
 
     /**
      * Increments view count by product's id

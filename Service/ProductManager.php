@@ -408,7 +408,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     public function fetchAllImagesById($id)
     {
-        $images = $this->imageMapper->fetchAllByProductId($id);
+        $images = $this->imageMapper->fetchAllByProductId($id, false, false);
         return $this->preparePhotos($id, $images);
     }
 
@@ -416,11 +416,12 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * Fetches all published product's photo entities by its associated id
      * 
      * @param string $id Product id
+     * @param integer|boolean $limit Optional images limit to be returned
      * @return array
      */
-    public function fetchAllPublishedImagesById($id)
+    public function fetchAllPublishedImagesById($id, $limit = false)
     {
-        $images = $this->imageMapper->fetchAllByProductId($id);
+        $images = $this->imageMapper->fetchAllByProductId($id, true, $limit);
         return $this->preparePhotos($id, $images);
     }
 
