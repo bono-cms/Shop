@@ -31,7 +31,7 @@ final class Product extends AbstractController
     {
         // Load view plugins
         $this->view->getPluginBag()
-                   ->load(array('preview', 'select2', $this->getWysiwygPluginName()))
+                   ->load(array('preview', 'chosen' ,$this->getWysiwygPluginName()))
                    ->appendScript('@Shop/admin/product.form.js')
                    ->appendStylesheet('@Shop/admin/product.form.css');
 
