@@ -23,13 +23,18 @@ final class Product extends AbstractShopController
     public function quickViewAction()
     {
         if ($this->request->hasQuery('id') && $this->request->hasQuery('size')) {
-
+            // Request variables
             $id = $this->request->getQuery('id');
             $coverSize = $this->request->getQuery('size');
+            $thumbsLimit = (int) $this->request->getQuery('thumbsLimit', 4);
+
+            // Grab the service
+            $productManager = $this->getModuleService('productManager');
 
             // Render partial
             return $this->view->disableLayout()->render('quick-view-modal', array(
-                'product' => $this->getModuleService('productManager')->fetchFullById($id, $this->createCustomerId()),
+                'product' => $productManager->fetchFullById($id, $this->createCustomerId()),
+                'images' => $productManager->fetchAllPublishedImagesById($id, $thumbsLimit),
                 'coverSize' => $coverSize,
                 'basketManager' => $this->getModuleService('basketManager')
             ));
