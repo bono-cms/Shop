@@ -370,6 +370,53 @@ $(function(){
             }
         }
     };
+
+    // Quick view modal
+    (function(){
+        // Configuration
+        var qvLinkSelector = '[data-qv-type="thumb-list"] > li > a';
+        var qvButtonSelector = '[data-button="quick-view"]';
+        var qvBodySelector = "#quickViewModal .modal-body";
+        var coverImageSelector = 'img[data-qv-type="cover"]';
+        var activeClass = 'active';
+
+        // Image handler
+        $(document).on('click', qvLinkSelector, function(event){
+            event.preventDefault();
+
+            var $img = $(this).find('img');
+            var coverImage = $img.data('qv-original-image');
+
+            // Update cover image
+            $(coverImageSelector).attr('src', coverImage);
+
+            // Remove previous active classes
+            $(qvLinkSelector).each(function(){
+                $(this).parent().removeClass(activeClass);
+            });
+
+            // Add to current one
+            $(this).parent().addClass(activeClass);
+        });
+
+        // Quick view button
+        $(document).on('click', qvButtonSelector, function(event){
+            event.preventDefault();
+
+            $.ajax({
+                cache: true,
+                url: '/module/shop/product/quick-view/',
+                data: {
+                    id: $(this).attr('data-product-id'),
+                    size: $(this).attr('data-cover-size'),
+                    thumbsLimit: $(this).attr('data-thumbs-limit')
+                },
+                success: function(response){
+                    $(qvBodySelector).html(response);
+                }
+            });
+        });
+    })($);
     
     // Wishlist handler
     (function(){
@@ -791,23 +838,6 @@ $(function(){
         });
     });
     
-    // Quick view button
-    $(document).on('click', '[data-button="quick-view"]', function(event){
-        event.preventDefault();
-
-        $.ajax({
-            cache: true,
-            url: '/module/shop/product/quick-view/',
-            data: {
-                id: $(this).attr('data-product-id'),
-                size: $(this).attr('data-cover-size')
-            },
-            success: function(response){
-                $("#quickViewModal .modal-body").html(response);
-            }
-        });
-    });
-
     // Discount coupon handler
     (function(){
 
