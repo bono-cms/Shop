@@ -28,6 +28,31 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     }
 
     /**
+     * Fetch associated names by group and value IDs
+     * 
+     * @param string $groupId
+     * @param string $valueId
+     * @return array
+     */
+    public function fetchNames($groupId, $valueId)
+    {
+        // Columns to be selected
+        $columns = array(
+            AttributeGroupMapper::getFullColumnName('name') => 'name',
+            AttributeValueMapper::getFullColumnName('name') => 'value'
+        );
+
+        return $this->db->select($columns)
+                        ->from(AttributeGroupMapper::getTableName())
+                        ->innerJoin(AttributeValueMapper::getTableName())
+                        ->on()
+                        ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
+                        ->whereEquals(AttributeGroupMapper::getFullColumnName('id'), $groupId)
+                        ->andWhereEquals(AttributeValueMapper::getFullColumnName('id'), $valueId)
+                        ->query();
+    }
+
+    /**
      * Counts the sum of sold products
      * 
      * @return float
@@ -124,6 +149,7 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
             self::getFullColumnName('price'),
             self::getFullColumnName('sub_total_price'),
             self::getFullColumnName('qty'),
+            self::getFullColumnName('attributes'),
             ProductMapper::getFullColumnName('cover'),
             WebPageMapper::getFullColumnName('slug'),
             WebPageMapper::getFullColumnName('lang_id')

@@ -14,6 +14,15 @@ namespace Shop\Storage;
 interface OrderProductMapperInterface
 {
     /**
+     * Fetch associated names by group and value IDs
+     * 
+     * @param string $groupId
+     * @param string $valueId
+     * @return array
+     */
+    public function fetchNames($groupId, $valueId);
+
+    /**
      * Counts the sum of sold products
      * 
      * @return float
