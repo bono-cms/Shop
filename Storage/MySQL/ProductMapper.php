@@ -487,6 +487,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->appendJunctionCategory($categoryId);
         }
 
+        $db->orderBy(self::getFullColumnName('views'))
+           ->desc();
+
         return $db->limit($limit)
                   ->queryAll();
     }
