@@ -100,9 +100,10 @@ interface BasketManagerInterface
      * 
      * @param string $id Product id
      * @param integer $qty Quantity of product ids to be added
+     * @param array $attributes Optional product attributes
      * @return boolean
      */
-    public function add($id, $qty);
+    public function add($id, $qty, array $attributes);
 
     /**
      * Removes a product from a basket by its associated id

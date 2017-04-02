@@ -58,6 +58,7 @@ final class BasketManager implements BasketManagerInterface
 
     const BASKET_STATIC_OPTION_QTY = 'c';
     const BASKET_STATIC_OPTION_SUBTOTAL_PRICE = 'p';
+    const BASKET_OPTION_ATTRS = 'attrs';
 
     /**
      * State initialization
@@ -160,9 +161,10 @@ final class BasketManager implements BasketManagerInterface
      * @param array $product Raw product data
      * @param integer $qty Total product quantity
      * @param float $price Total product price
+     * @param array $attributes Optional attributes
      * @return \Shop\Service\BasketEntity
      */
-    private function createEntity(array $product, $qty, $price)
+    private function createEntity(array $product, $qty, $price, array $attributes)
     {
         $imageBag = clone $this->imageBag;
         $imageBag->setId((int) $product['id'])
@@ -180,7 +182,8 @@ final class BasketManager implements BasketManagerInterface
                ->setImageBag($imageBag)
                ->setQty($qty)
                ->setPrice($price)
-               ->setSubTotalPrice($qty * $price);
+               ->setSubTotalPrice($qty * $price)
+               ->setAttributes($attributes);
 
         return $entity;
     }
@@ -211,12 +214,13 @@ final class BasketManager implements BasketManagerInterface
                 // If a product itself has been removed. We'd simply ignore it and remove it from collection
                 $this->removeById($id);
             } else {
-
-                $qty = (int) $options[self::BASKET_STATIC_OPTION_QTY];
-                $price =& $options[self::BASKET_STATIC_OPTION_SUBTOTAL_PRICE];
-
                 // Finally append the entity
-                array_push($entities, $this->createEntity($product, $qty, $price));
+                array_push($entities, $this->createEntity(
+                    $product, 
+                    $options[self::BASKET_STATIC_OPTION_QTY], 
+                    $options[self::BASKET_STATIC_OPTION_SUBTOTAL_PRICE], 
+                    $options[self::BASKET_OPTION_ATTRS]
+                ));
             }
         }
 
@@ -327,9 +331,10 @@ final class BasketManager implements BasketManagerInterface
      * 
      * @param string $id Product id
      * @param integer $qty Quantity of product ids to be added
+     * @param array $attributes Optional product attributes
      * @return boolean
      */
-    public function add($id, $qty)
+    public function add($id, $qty, array $attributes)
     {
         // Ensure product id exists, firstly. This is for synchronization
         $product = $this->productMapper->fetchById($id);
@@ -342,7 +347,7 @@ final class BasketManager implements BasketManagerInterface
             if ($this->has($id)) {
                 return $this->update($id, $qty, $price);
             } else {
-                return $this->insert($id, $qty, $price);
+                return $this->insert($id, $qty, $price, $attributes);
             }
 
         } else {
@@ -387,15 +392,17 @@ final class BasketManager implements BasketManagerInterface
      * @param string $id Product id
      * @param integer $qty Quantity of products
      * @param float $price Product's price
+     * @param array $attributes
      * @return boolean
      */
-    private function insert($id, $qty, $price)
+    private function insert($id, $qty, $price, array $attributes)
     {
         $qty = (int) $qty;
 
         // We're adding a product for the first time
         $this->collection->addWithOption($id, self::BASKET_STATIC_OPTION_QTY, $qty)
-                         ->addWithOption($id, self::BASKET_STATIC_OPTION_SUBTOTAL_PRICE, $qty * $price);
+                         ->addWithOption($id, self::BASKET_STATIC_OPTION_SUBTOTAL_PRICE, $qty * $price)
+                         ->addWithOption($id, self::BASKET_OPTION_ATTRS, $attributes);
 
         return true;
     }
