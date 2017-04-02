@@ -15,6 +15,8 @@ use Site\Controller\AbstractController;
 use Shop\Service\CategorySortGadget;
 use Krystal\Form\Gadget\LastCategoryKeeper;
 use Krystal\Form\Gadget\PerPageCount;
+use RuntimeException;
+use LogicException;
 
 abstract class AbstractShopController extends AbstractController
 {
