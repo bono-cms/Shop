@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Send notification to users on their order confirmation
  * In `SiteService` added `getTree()` that returns tree instance
  * Added `isEmpty()` in `$basket` service
  * Dynamic order statuses

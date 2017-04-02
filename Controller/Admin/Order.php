@@ -17,6 +17,25 @@ use Krystal\Db\Filter\QueryContainer;
 final class Order extends AbstractController
 {
     /**
+     * Create and send confirmation message
+     * 
+     * @param string $receiver Email of receiver
+     * @param string $name Customer name
+     * @return string
+     */
+    private function sendConfirmationMessage($receiver, $name)
+    {
+        // Prepare a message first
+        $body = $this->view->renderRaw($this->moduleName, 'messages', 'order-approved', array(
+            'name' => $name
+        ));
+
+        // Grab the service and do email
+        $mailer = $this->getService('Cms', 'mailer');
+        $mailer->sendTo($receiver, $this->translator->translate('Your order has been approved'), $body);
+    }
+
+    /**
      * Applies the filter
      * 
      * @return string
@@ -49,12 +68,19 @@ final class Order extends AbstractController
     /**
      * Approves an order by its id
      * 
-     * @param string $id
+     * @param string $id Order ID
      * @return string
      */
     public function approveAction($id)
     {
-        if ($this->getOrderManager()->approveById($id)) {
+        $orderManager = $this->getOrderManager();
+        $order = $orderManager->fetchById($id);
+
+        if ($order !== false && $orderManager->approveById($id)) {
+
+            // Notify a customer via their email
+            $this->sendConfirmationMessage($order->getEmail(), $order->getName());
+
             $this->flashBag->set('success', 'Selected order marked as approved now');
             return '1';
         }
