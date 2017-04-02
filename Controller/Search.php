@@ -73,8 +73,10 @@ final class Search extends AbstractShopController
     public function searchAction()
     {
         if ($this->request->hasQuery('keyword')) {
-            // Page number
+            // Request variables
             $pageNumber = $this->request->hasQuery('page') ? $this->request->getQuery('page') : 1;
+            $keyword = $this->request->getQuery('keyword');
+            $sort = $this->request->getQuery('sort', $this->getCategorySortGadget()->getSortOption());
 
             $productManager = $this->getModuleService('productManager');
 
@@ -87,8 +89,8 @@ final class Search extends AbstractShopController
                 null, 
                 $pageNumber, 
                 $this->getPerPageCountGadget()->getPerPageCount(), 
-                $this->getCategorySortGadget()->getSortOption(),
-                $this->request->getQuery('keyword'),
+                $sort,
+                $keyword,
                 $this->createCustomerId()
             );
 
@@ -96,17 +98,26 @@ final class Search extends AbstractShopController
             $this->loadPlugins();
             $page = $this->createPageEntity();
 
-            // Done. Now just render them
-            return $this->view->render('shop-category', array(
+            // Variables to be passed to template
+            $vars = array(
                 'paginator' => $paginator,
                 'products' => $products,
                 'page' => $page,
                 'category' => $page,
+                'keyword' => $keyword,
 
                 // Form gadgets
                 'ppc' => $this->getPerPageCountGadget(),
                 'sorter' => $this->getCategorySortGadget()
-            ));
+            );
+
+            if ($this->request->isAjax()){
+                // Render shared fragment for AJAX request
+                return $this->view->disableLayout()->render('partials/category-products', $vars);
+            } else {
+                // For regular request, render a category template
+                return $this->view->render('shop-category', $vars);
+            }
 
         } else {
             return false;
