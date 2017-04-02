@@ -51,6 +51,8 @@ final class Category extends AbstractShopController
             );
         }
 
+        $this->loadSitePlugins();
+
         return $this->view->disableLayout()->render('partials/category-products', array(
             'products' => $products
         ));
