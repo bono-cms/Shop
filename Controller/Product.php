@@ -31,6 +31,9 @@ final class Product extends AbstractShopController
             // Grab the service
             $productManager = $this->getModuleService('productManager');
 
+            // Load view
+            $this->loadSitePlugins();
+
             // Render partial
             return $this->view->disableLayout()->render('quick-view-modal', array(
                 'product' => $productManager->fetchFullById($id, $this->createCustomerId()),
