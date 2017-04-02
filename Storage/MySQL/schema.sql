@@ -24,14 +24,15 @@ CREATE TABLE `bono_module_shop_orders_info` (
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_products`;
 CREATE TABLE `bono_module_shop_orders_products` (
-	
+    
 	`order_id` INT NOT NULL,
 	`product_id` INT NOT NULL COMMENT 'Product id',
 	`name` varchar(255) NOT NULL COMMENT 'Product name',
 	`price` float NOT NULL COMMENT 'Product price',
 	`sub_total_price` float NOT NULL COMMENT 'Sub-total price',
-	`qty` INT NOT NULL COMMENT 'Amount of ordered products'
-	
+	`qty` INT NOT NULL COMMENT 'Amount of ordered products',
+    `attributes` TEXT COMMENT 'JSON string representing a collection of Group ID => Value ID'
+    
 ) DEFAULT CHARSET = UTF8;
 
 
