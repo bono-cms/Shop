@@ -561,7 +561,7 @@ $(function(){
             // For QV
             $("[data-qv-product='name']").text(product.name);
             $("[data-qv-product='qty']").text(product.qty);
-            $("[data-qv-product='price']").text(price);
+            $("[data-qv-product='price']").text(new Number(price).toLocaleString());
             $("[data-qv-product='cover']").attr('src', product.cover);
         },
 
