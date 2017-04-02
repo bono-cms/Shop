@@ -14,6 +14,7 @@
                         <th class="text-center"><?php $this->show('Price'); ?></th>
                         <th class="text-center"><?php $this->show('Sub total price'); ?></th>
                         <th class="text-center"><?php $this->show('Quantity'); ?></th>
+                        <th class="text-center"><?php $this->show('Attributes'); ?></th>
                     </tr>
                 </thead>
 
@@ -35,6 +36,11 @@
                         <td class="text-center"><?php echo number_format($detail['price']); ?> <?php echo $currency; ?></td>
                         <td class="text-center"><?php echo number_format($detail['sub_total_price']); ?> <?php echo $currency; ?></td>
                         <td class="text-center"><?php echo $detail['qty']; ?></td>
+                        <td class="text-center">
+                            <?php foreach ($detail['attributes'] as $name => $value): ?>
+                            <p><?php echo $name; ?> : <?php echo $value; ?></p>
+                            <?php endforeach; ?>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

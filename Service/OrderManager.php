@@ -238,6 +238,25 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     }
 
     /**
+     * Prepare attributes to readable view
+     * 
+     * @param string JSON string
+     * @return array
+     */
+    private function prepareAttributes($attributes)
+    {
+        $attributes = json_decode($attributes);
+        $output = array();
+
+        foreach ($attributes as $groupId => $valueId) {
+            $row = $this->orderProductMapper->fetchNames($groupId, $valueId);
+            $output[$row['name']] = $row['value'];
+        }
+
+        return $output;
+    }
+
+    /**
      * Fetches all details by associated order ID
      * 
      * @param string $id Order's ID
@@ -256,6 +275,8 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
             $item['cover'] = sprintf('%s%s/%s/%s', Module::PARAM_PRODUCTS_IMG_PATH, $row['product_id'], $coverDimensions, $row['cover']);
             $item['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
             $item['exists'] = !empty($item['slug']);
+
+            $item['attributes'] = $this->prepareAttributes($item['attributes']);
         }
 
         return $rows;
@@ -356,9 +377,10 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
                 'sub_total_price' => $product->getSubTotalPrice(),
-                'qty' => $product->getQty()
+                'qty' => $product->getQty(),
+                'attributes' => json_encode($product->getAttributes())
             );
-            
+
             $this->orderProductMapper->insert($data);
         }
 
