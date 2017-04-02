@@ -143,16 +143,19 @@ $(function(){
          * @param integer qty Quantity of ids to be added
          * @return void
          */
-        add : function(id, qty, callback){
+        add: function(id, qty, callback){
             var self = this;
 
+            var formData = new FormData($("form[data-form-type='attributes']")[0]);
+            formData.append('id', id);
+            formData.append('qty', qty);
+
             $.ajax({
+                processData : false,
+				contentType : false,
                 type : "POST",
                 url : "/module/shop/basket/add",
-                data : {
-                    id : id,
-                    qty : qty
-                },
+                data : formData,
                 beforeSend : function(){
                     // This should not invoke global beforeSend() handler, so we'd override it with empty function
                 },
