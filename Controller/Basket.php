@@ -87,6 +87,7 @@ final class Basket extends AbstractShopController
             // Get HTTP POST variables
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
+            $attributes = $this->request->getPost('attributes', array()); // Optional attributes
 
             $productManager = $this->getModuleService('productManager');
             $product = $productManager->fetchBasicById($id);
@@ -101,7 +102,7 @@ final class Basket extends AbstractShopController
                     // Error code that indicates aforementioned error
                     return -1;
                 } else {
-                    $basketManager->add($id, $qty);
+                    $basketManager->add($id, $qty, $attributes);
                     $basketManager->save();
 
                     return json_encode(array(
