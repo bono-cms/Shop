@@ -474,6 +474,9 @@ $(function(){
                 // Change the type of the button
                 $self.attr('data-button', 'wishlist-add');
 
+                // Update the heart icon, if provided
+                $self.find('.glyphicon').attr('class', 'glyphicon glyphicon-heart-empty');
+
                 // Update the counter
                 wishlist.updateCount(newCount);
             });
@@ -493,6 +496,9 @@ $(function(){
 
                 // Change the type of the button
                 $self.attr('data-button', 'wishlist-remove');
+
+                // Update the heart icon, if provided
+                $self.find('.glyphicon').attr('class', 'glyphicon glyphicon-heart');
 
                 // Update the counter
                 wishlist.updateCount(newCount);
