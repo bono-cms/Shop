@@ -248,9 +248,12 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
         $attributes = json_decode($attributes);
         $output = array();
 
-        foreach ($attributes as $groupId => $valueId) {
-            $row = $this->orderProductMapper->fetchNames($groupId, $valueId);
-            $output[$row['name']] = $row['value'];
+        // Safely process attributes
+        if (is_array($attributes)) {
+            foreach ($attributes as $groupId => $valueId) {
+                $row = $this->orderProductMapper->fetchNames($groupId, $valueId);
+                $output[$row['name']] = $row['value'];
+            }
         }
 
         return $output;
