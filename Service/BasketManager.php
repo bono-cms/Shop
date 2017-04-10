@@ -214,6 +214,12 @@ final class BasketManager implements BasketManagerInterface
                 // If a product itself has been removed. We'd simply ignore it and remove it from collection
                 $this->removeById($id);
             } else {
+
+                // If no attributes, then insert an empty array
+                if (!isset($options[self::BASKET_OPTION_ATTRS]) || !is_array($options[self::BASKET_OPTION_ATTRS])) {
+                    $options[self::BASKET_OPTION_ATTRS] = array();
+                }
+
                 // Finally append the entity
                 array_push($entities, $this->createEntity(
                     $product, 
