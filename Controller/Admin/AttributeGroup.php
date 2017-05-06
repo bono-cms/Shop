@@ -73,7 +73,7 @@ final class AttributeGroup extends AbstractController
     {
         $input = $this->request->getPost('group');
 
-        return $this->invokeSave('attributeGroupManager', $input['id'], $input, array(
+        $formValidator = $this->createValidator(array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -81,6 +81,26 @@ final class AttributeGroup extends AbstractController
                 )
             )
         ));
+
+        if ($formValidator->isValid()) {
+            $service = $this->getModuleService('attributeGroupManager');
+
+            if (!empty($input['id'])) {
+                if ($service->update($input)) {
+                    $this->flashBag->set('success', 'The element has been updated successfully');
+                    return '1';
+                }
+
+            } else {
+                if ($service->add($input)) {
+                    $this->flashBag->set('success', 'The element has been created successfully');
+                    return $service->getLastId();
+                }
+            }
+
+        } else {
+            return $formValidator->getErrors();
+        }
     }
 
     /**
@@ -91,6 +111,10 @@ final class AttributeGroup extends AbstractController
      */
     public function deleteAction($id)
     {
-        return $this->invokeRemoval('attributeGroupManager', $id);
+        $service = $this->getModuleService('attributeGroupManager');
+        $service->deleteById($id);
+
+        $this->flashBag->set('success', 'Selected element has been removed successfully');
+        return '1';
     }
 }

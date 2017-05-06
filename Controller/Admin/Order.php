@@ -112,7 +112,26 @@ final class Order extends AbstractController
      */
     public function deleteAction($id)
     {
-        return $this->invokeRemoval('orderManager', $id);
+        $service = $this->getModuleService('orderManager');
+
+        // Batch removal
+        if ($this->request->hasPost('toDelete')) {
+            $ids = array_keys($this->request->getPost('toDelete'));
+
+            $service->deleteByIds($ids);
+            $this->flashBag->set('success', 'Selected elements have been removed successfully');
+
+        } else {
+            $this->flashBag->set('warning', 'You should select at least one element to remove');
+        }
+
+        // Single removal
+        if (!empty($id)) {
+            $service->deleteById($id);
+            $this->flashBag->set('success', 'Selected element has been removed successfully');
+        }
+
+        return '1';
     }
 
     /**

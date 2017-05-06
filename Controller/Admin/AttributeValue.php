@@ -46,7 +46,12 @@ final class AttributeValue extends AbstractController
      */
     public function deleteAction($id)
     {
-        return $this->invokeRemoval('attributeValueManager', $id);
+        $service = $this->getModuleService('attributeValueManager');
+        $service->deleteById($id);
+
+        $this->flashBag->set('success', 'Selected element has been removed successfully');
+        return '1';
+        
     }
 
     /**
@@ -85,7 +90,7 @@ final class AttributeValue extends AbstractController
     {
         $input = $this->request->getPost('value');
 
-        return $this->invokeSave('attributeValueManager', $input['id'], $input, array(
+        $formValidator = $this->createValidator(array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -93,5 +98,25 @@ final class AttributeValue extends AbstractController
                 )
             )
         ));
+
+        if ($formValidator->isValid()) {
+            $service = $this->getModuleService('attributeValueManager');
+
+            if (!empty($input['id'])) {
+                if ($service->update($input)) {
+                    $this->flashBag->set('success', 'The element has been updated successfully');
+                    return '1';
+                }
+
+            } else {
+                if ($service->add($input)) {
+                    $this->flashBag->set('success', 'The element has been created successfully');
+                    return $service->getLastId();
+                }
+            }
+
+        } else {
+            return $formValidator->getErrors();
+        }
     }
 }
