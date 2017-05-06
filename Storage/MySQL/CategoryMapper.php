@@ -181,7 +181,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function insert(array $data)
     {
-        // Substitube with empty if din't receive
+        // Substitute with empty if didn't receive
         if (!isset($data['attribute_group_id'])) {
             $data['attribute_group_id'] = array();
         }
@@ -210,6 +210,8 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     {
         if (!empty($data['attribute_group_id'])) {
             $this->syncWithJunction(self::getJunctionTableName(), $data['id'], $data['attribute_group_id']);
+        } else {
+            $this->removeFromJunction(self::getJunctionTableName(), $data['id']);
         }
 
         unset($data['attribute_group_id']);
