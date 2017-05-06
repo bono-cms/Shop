@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <h4><i class="glyphicon glyphicon-tags"></i> <?php $this->show('Values'); ?></h4>
+        <h4><i class="glyphicon glyphicon-tags"></i> <?php $this->show('Values'); ?> <small>(<?php echo count($values); ?>)</small></h4>
 
         <table class="table table-bordered">
             <thead>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="col-lg-6">
-        <h4><i class="glyphicon glyphicon-book"></i> <?php $this->show('Groups'); ?></h4>
+        <h4><i class="glyphicon glyphicon-book"></i> <?php $this->show('Groups'); ?> <small>(<?php echo count($groups); ?>)</small></h4>
         <table class="table table-bordered">
             <thead>
                 <tr>
