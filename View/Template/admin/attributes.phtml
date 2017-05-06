@@ -19,7 +19,7 @@
                 <?php foreach ($values as $value): ?>
                 <tr>
                     <td class="text-center text-muted"><?php echo $value->getId(); ?></td>
-                    <td class="text-center"><?php echo $value->getName(); ?></td>
+                    <td><?php echo $value->getName(); ?></td>
                     <td class="text-center">
                         <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this attribute'); ?>" data-button="edit" href="<?php echo $this->url('Shop:Admin:AttributeValue@editAction', $value->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
                         <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this attribute'); ?>" data-button="delete" data-url="<?php echo $this->url('Shop:Admin:AttributeValue@deleteAction', $value->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
@@ -46,7 +46,7 @@
                 <?php foreach ($groups as $group): ?>
                 <tr class="<?php echo $groupId == $group->getId() ? 'info' : ''; ?>">
                     <td class="text-center text-muted"><?php echo $group->getId(); ?></td>
-                    <td class="text-center">
+                    <td>
                         <a href="<?php echo $this->url('Shop:Admin:Attributes@groupAction', $group->getId()); ?>"><?php echo $group->getName(); ?></a>
                     </td>
                     <td class="text-center"><?php $this->show($group->getDynamic() ? 'Yes' : 'No') ;?></td>
