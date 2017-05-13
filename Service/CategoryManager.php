@@ -135,7 +135,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function getCategoriesTree()
     {
-        return $this->renderTree(new PhpArray('name'));
+        return $this->renderTree(new PhpArray('name', str_repeat('&nbsp;', 4)));
     }
 
     /**
@@ -269,6 +269,11 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         }
 
         $category['slug'] = $this->webPageManager->sluggify($category['slug']);
+
+        // Numeric attributes
+        $category['order'] = (int) $category['order'];
+        $category['web_page_id'] = (int) $category['web_page_id'];
+
         return $input;
     }
 
@@ -346,8 +351,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             // Override empty cover's value now
             $category['cover'] = $file[0]->getName();
         }
-
-        $category['web_page_id'] = '';
 
         if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug', 'menu')))) {
             $id = $this->getLastId();

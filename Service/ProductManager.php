@@ -598,6 +598,11 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         // Make it now look like a slug
         $product['slug'] = $this->webPageManager->sluggify($product['slug']);
 
+        // Numeric attributes
+        $product['order'] = (int) $product['order'];
+        $product['web_page_id'] = (int) $product['web_page_id'];
+        $product['in_stock'] = (int) $product['in_stock'];
+
         return $input;
     }
 
@@ -616,6 +621,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         // Initial view count
         $product['views'] = 0;
+
         // For cross-database compatibility, the date must be generated here, not in the mapper
         $product['date'] = date('Y-m-d', time());
 
