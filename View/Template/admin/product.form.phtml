@@ -1,9 +1,10 @@
-<?php defined('KRYSTAL') or die; ?>
 <?php
 
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
 use Shop\Service\AttributeProcessor;
+
+defined('KRYSTAL') or die;
 
 ?>
 
@@ -25,11 +26,10 @@ use Shop\Service\AttributeProcessor;
         <!--Product tab-->
         <div role="tabpanel" class="tab-pane active" id="product">
             <div class="well">
-                
                 <?php echo Element::hidden('product[id]', $product->getId()); ?>
                 <?php echo Element::hidden('product[cover]', $product->getCover()); ?>
                 <?php echo Element::hidden('product[web_page_id]', $product->getWebPageId()); ?>
-                
+
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
                     <div class="col-lg-10">
@@ -39,33 +39,6 @@ use Shop\Service\AttributeProcessor;
                         </div>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Price'); ?></label>
-                    <div class="col-lg-10">
-                        <div class="input-group">
-                            <?php echo Element::number('product[regular_price]', $product->getPrice(), array('class' => 'form-control', 'min' => '1', 'step' => '0.01', 'placeholder' => $this->translate('Price of the product to be added'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group <?php echo !$config->getStokePriceEnabled() ? 'hidden' : ''; ?>">
-                    <label class="col-lg-2 control-label"><?php $this->show('Stoke price'); ?></label>
-                    <div class="col-lg-10">
-                        <div class="input-group">
-                            <?php echo Element::number('product[stoke_price]', $product->getStokePrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Stoke price'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::select('product[category_id][]', $categories, $product->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
@@ -73,22 +46,8 @@ use Shop\Service\AttributeProcessor;
                         <?php echo Element::textarea('product[description]', $product->getDescription(), array('data-wysiwyg' => 'true')); ?>
                     </div>
                 </div>
-                
+
                 <div class="options">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::checkbox('product[published]', $product->getPublished(), array('class' => 'form-control')); ?>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::checkbox('product[seo]', $product->getSeo(), array('class' => 'form-control')); ?>
-                        </div>
-                    </div>
-                    
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
                         <div class="col-lg-10">
@@ -100,7 +59,7 @@ use Shop\Service\AttributeProcessor;
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
                         <div class="col-lg-10">
@@ -110,14 +69,14 @@ use Shop\Service\AttributeProcessor;
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
                         <div class="col-lg-10">
                             <?php echo Element::textarea('product[keywords]', $product->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
                         <div class="col-lg-10">
@@ -128,12 +87,10 @@ use Shop\Service\AttributeProcessor;
             </div>
 
             <?php if (!$product->getId()): ?>
-
             <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Product@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Add'); ?></button>
             <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
 
             <?php else: ?>
-
             <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Save'); ?></button>
             <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
 
@@ -143,10 +100,51 @@ use Shop\Service\AttributeProcessor;
             <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
         </div>
         <!--/Home tab-->
-
+        
       <!--Images tab-->
       <div role="tabpanel" class="tab-pane" id="configuration">
         <div class="well">
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Price'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::number('product[regular_price]', $product->getPrice(), array('class' => 'form-control', 'min' => '1', 'step' => '0.01', 'placeholder' => $this->translate('Price of the product to be added'))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group <?php echo !$config->getStokePriceEnabled() ? 'hidden' : ''; ?>">
+                <label class="col-lg-2 control-label"><?php $this->show('Stoke price'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::number('product[stoke_price]', $product->getStokePrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Stoke price'))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[category_id][]', $categories, $product->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::checkbox('product[published]', $product->getPublished(), array('class' => 'form-control')); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::checkbox('product[seo]', $product->getSeo(), array('class' => 'form-control')); ?>
+                </div>
+            </div>
+
             <div class="form-group <?php HtmlHelper::addOnDemand($config->getSpecialSupport(), 'hidden'); ?>">
                 <label class="col-lg-2 control-label"><?php $this->show('Special offer'); ?></label>
                 <div class="col-lg-10">

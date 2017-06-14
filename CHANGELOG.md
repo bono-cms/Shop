@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Compact view in product and category templates in (administration panel)
  * Added shortcut in administration panel
  * Send notification to users on their order confirmation
  * In `SiteService` added `getTree()` that returns tree instance
