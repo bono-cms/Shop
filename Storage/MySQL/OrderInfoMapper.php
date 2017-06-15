@@ -69,14 +69,11 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
         }
 
         $db = $this->db->select('*')
-                        ->from(static::getTableName())
+                        ->from(self::getTableName())
                         ->whereEquals('1', '1')
                         ->andWhereLike('name', '%'.$input['name'].'%', true)
-                        ->andWhereLike('phone', '%'.$input['phone'].'%', true)
-                        ->andWhereLike('email', '%'.$input['email'].'%', true)
                         ->andWhereEquals('id', $input['id'], true)
                         ->andWhereEquals('order_status_id', $input['order_status_id'], true)
-                        ->andWhereEquals('date', $input['date'], true)
                         ->andWhereEquals('qty', $input['qty'], true)
                         ->andWhereEquals('total_price', $input['total_price'], true)
                         ->andWhereEquals('approved', $input['approved'], true)
@@ -86,7 +83,8 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
             $db->desc();
         }
 
-        return $db->paginate($page, $itemsPerPage)->queryAll();
+        return $db->paginate($page, $itemsPerPage)
+                  ->queryAll();
     }
 
     /**
