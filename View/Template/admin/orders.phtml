@@ -46,21 +46,8 @@ use Krystal\Form\HtmlHelper;
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('order_status_id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('order_status_id'); ?>"><i class="<?php echo $filter->isSortedByDesc('order_status_id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Order status'); ?></a>
                     </th>
                     <th class="text-center">
-                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('date'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('date'); ?>"><i class="<?php echo $filter->isSortedByDesc('date') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Date'); ?></a>
-                    </th>
-                    <th class="text-center">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('name'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('name'); ?>"><i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Customer'); ?></a>
                     </th>
-                    <th class="text-center">
-                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('email'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('email'); ?>"><i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Email'); ?></a>
-                    </th>
-                    <th class="text-center">
-                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('phone'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('phone'); ?>"><i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Phone'); ?></a>
-                    </th>
-                    <th class="text-center">
-                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('address'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('address'); ?>"><i class="<?php echo $filter->isSortedByDesc('address') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Address'); ?></a>
-                    </th>
-                    <th class="text-center"><?php $this->show('Comment'); ?></th>
                     <th class="text-center"><?php $this->show('Delivery type'); ?></th>
                     <th class="text-center">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('qty'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('qty'); ?>"><i class="<?php echo $filter->isSortedByDesc('address') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Qty'); ?></a>
@@ -87,12 +74,7 @@ use Krystal\Form\HtmlHelper;
                     <th class="col-md-2">
                         <?php echo Element::select('filter[order_status_id]', $orderStatuses, $filter->get('order_status_id'), array('class' => 'form-control'), null); ?>
                     </th>
-                    <th><?php echo Element::text('filter[date]', $filter->get('date'), array('class' => 'form-control')); ?></th>
                     <th><?php echo Element::text('filter[name]', $filter->get('name'), array('class' => 'form-control')); ?></th>
-                    <th><?php echo Element::text('filter[email]', $filter->get('email'), array('class' => 'form-control')); ?></th>
-                    <th><?php echo Element::text('filter[phone]', $filter->get('phone'), array('class' => 'form-control')); ?></th>
-                    <th><?php echo Element::text('filter[address]', $filter->get('address'), array('class' => 'form-control')); ?></th>
-                    <th></th>
                     <th></th>
                     <th class="col-md-1"><?php echo Element::number('filter[qty]', $filter->get('qty'), array('class' => 'form-control', 'min' => '1')); ?></th>
                     <th><?php echo Element::number('filter[total_price]', $filter->get('total_price'), array('class' => 'form-control', 'step' => 'any', 'min' => '1')); ?></th>
@@ -113,12 +95,7 @@ use Krystal\Form\HtmlHelper;
                     <td class="text-center text-muted">
                         <?php echo Element::select(sprintf('order_status_id[%s]', $order->getId()), $orderStatuses, $order->getStatusId(), array('class' => 'form-control'), null); ?>
                     </td>
-                    <td class="text-center"><?php echo $order->getDate(); ?></td>
                     <td class="text-center"><?php echo $order->getName(); ?></td>
-                    <td class="text-center"><?php echo $order->getEmail(); ?></td>
-                    <td class="text-center"><?php echo $order->getPhone(); ?></td>
-                    <td class="text-center"><?php echo $order->getAddress(); ?></td>
-                    <td class="text-center"><?php echo $order->getComment(); ?></td>
                     <td class="text-center"><?php echo $order->getDelivery(); ?></td>
                     <td class="text-center"><?php echo $order->getQty(); ?></td>
                     <td class="text-center"><?php echo $order->getTotalPrice(), PHP_EOL, $config->getCurrency(); ?></td>

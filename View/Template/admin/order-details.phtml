@@ -1,58 +1,65 @@
 
 <?php defined('KRYSTAL') or die; ?>
-<h2><small># <?php echo $id; ?></small></h2>
+<style>
 
-<div class="row">
-    
-    <div class="col-lg-8">
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center"><?php $this->show('#'); ?></th>
-                        <th class="text-center"><?php $this->show('Product'); ?></th>
-                        <th class="text-center"><?php $this->show('Price'); ?></th>
-                        <th class="text-center"><?php $this->show('Sub total price'); ?></th>
-                        <th class="text-center"><?php $this->show('Quantity'); ?></th>
-                        <th class="text-center"><?php $this->show('Attributes'); ?></th>
-                    </tr>
-                </thead>
+.table-wrapper {
+    overflow-y: scroll;
+    max-height: 174px;
+}
 
-                <?php if (!empty($details)): ?>
-                <tbody>
-                    <?php foreach ($details as $detail): ?>
+</style>
 
-                    <tr class="<?php echo !$detail['exists'] ? 'danger' : null; ?>" title="<?php !$detail['exists'] ? $this->show('This product is no longer available') : null; ?>">
-                        <td class="text-center"><?php echo $detail['product_id']; ?></td>
-                        <td>
-                            <?php if ($detail['exists']): ?>
-                            <a target="_blank" href="<?php echo $detail['url']; ?>"><?php echo $detail['name']; ?></a>
+<div class="">
 
-                            <?php else: ?>
-                            <?php echo $detail['name']; ?>
+    <h4><i class="fa fa-shopping-cart"></i> <?php $this->show('Order details'); ?> <small># <?php echo $id; ?></small></h4>
 
-                            <?php endif; ?>
-                        </td>
-                        <td class="text-center"><?php echo number_format($detail['price']); ?> <?php echo $currency; ?></td>
-                        <td class="text-center"><?php echo number_format($detail['sub_total_price']); ?> <?php echo $currency; ?></td>
-                        <td class="text-center"><?php echo $detail['qty']; ?></td>
-                        <td class="text-center">
-                            <?php foreach ($detail['attributes'] as $name => $value): ?>
-                            <p><?php echo $name; ?> : <?php echo $value; ?></p>
-                            <?php endforeach; ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <?php endif; ?>
-            </table>
-        </div>
+    <div class="table-wrapper">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th class="text-center text-muted"><?php $this->show('#'); ?></th>
+                    <th class="text-center"><?php $this->show('Product'); ?></th>
+                    <th class="text-center"><?php $this->show('Price'); ?></th>
+                    <th class="text-center"><?php $this->show('Sub total price'); ?></th>
+                    <th class="text-center"><?php $this->show('Quantity'); ?></th>
+                    <th class="text-center"><?php $this->show('Attributes'); ?></th>
+                </tr>
+            </thead>
+
+            <?php if (!empty($details)): ?>
+            <tbody>
+                <?php foreach ($details as $detail): ?>
+
+                <tr class="<?php echo !$detail['exists'] ? 'danger' : null; ?>" title="<?php !$detail['exists'] ? $this->show('This product is no longer available') : null; ?>">
+                    <td class="text-center text-muted"><?php echo $detail['product_id']; ?></td>
+                    <td>
+                        <?php if ($detail['exists']): ?>
+                        <a target="_blank" href="<?php echo $detail['url']; ?>"><?php echo $detail['name']; ?></a>
+
+                        <?php else: ?>
+                        <?php echo $detail['name']; ?>
+
+                        <?php endif; ?>
+                    </td>
+                    <td class="text-center"><?php echo number_format($detail['price']); ?> <?php echo $currency; ?></td>
+                    <td class="text-center"><?php echo number_format($detail['sub_total_price']); ?> <?php echo $currency; ?></td>
+                    <td class="text-center"><?php echo $detail['qty']; ?></td>
+                    <td class="text-center">
+                        <?php foreach ($detail['attributes'] as $name => $value): ?>
+                        <p><?php echo $name; ?> : <?php echo $value; ?></p>
+                        <?php endforeach; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <?php endif; ?>
+        </table>
     </div>
 
-    <div class="col-lg-4">
-        <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Order details'); ?></h4>
+    <h4><i class="glyphicon glyphicon-user"></i> <?php $this->show('Customer details'); ?></h4>
 
-        <table class="table table-bordered table-hover">
+    <div class="table-wrapper">
+        <table class="table table-bordered table-hover table-condensed">
             <tbody>
                 <tr>
                     <td><?php $this->show('Order ID'); ?></td>
@@ -60,13 +67,51 @@
                 </tr>
 
                 <tr>
-                    <td><?php $this->show('Total quantity'); ?></td>
-                    <td><?php echo $summary['totalQty']; ?></td>
+                    <td><?php $this->show('Customer'); ?></td>
+                    <td><?php echo $order->getName(); ?></td>
                 </tr>
 
                 <tr>
-                    <td><?php $this->show('Total price'); ?></td>
-                    <td><?php echo number_format($summary['totalPrice']); ?> <?php echo $currency; ?></td>
+                    <td><?php $this->show('Customer email'); ?></td>
+                    <td><?php echo $order->getEmail(); ?></td>
+                </tr>
+
+                <tr>
+                    <td><?php $this->show('Customer address'); ?></td>
+                    <td><?php echo $order->getAddress(); ?></td>
+                </tr>
+
+                <tr>
+                    <td><?php $this->show('Customer phone'); ?></td>
+                    <td><?php echo $order->getPhone(); ?></td>
+                </tr>
+
+                <tr>
+                    <td><?php $this->show('Order date'); ?></td>
+                    <td><?php echo $order->getDate(); ?></td>
+                </tr>
+
+                <tr>
+                    <td><?php $this->show('Order comment'); ?></td>
+                    <td><?php echo $order->getComment(); ?></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <strong><?php $this->show('Total quantity'); ?></strong>
+                    </td>
+                    <td>
+                        <strong><?php echo $summary['totalQty']; ?></strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <strong><?php $this->show('Total price'); ?></strong>
+                    </td>
+                    <td>
+                        <strong><?php echo number_format($summary['totalPrice']); ?> <?php echo $currency; ?></strong>
+                    </td>
                 </tr>
             </tbody>
         </table>

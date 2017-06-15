@@ -143,9 +143,11 @@ final class Order extends AbstractController
     public function detailsAction($id)
     {
         $details = $this->getOrderManager()->fetchAllDetailsByOrderId($id);
+        $order = $this->getOrderManager()->fetchById($id);
 
         return $this->view->disableLayout()->render('order-details', array(
             'id' => $id,
+            'order' => $order,
             'currency' => $this->getConfig()->getCurrency(),
             'summary' => $this->getOrderManager()->createSummary($details),
             'details' => $details
