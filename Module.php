@@ -28,7 +28,6 @@ use Shop\Service\BasketManager;
 use Shop\Service\ProductManagerInterface;
 use Shop\Service\ProductManager;
 use Shop\Service\CategoryManager;
-use Shop\Service\TaskManager;
 use Shop\Service\OrderManager;
 use Shop\Service\ProductRemover;
 use Shop\Service\OrderStatusManager;
@@ -115,7 +114,6 @@ final class Module extends AbstractCmsModule
             'couponManager' => $couponManager,
             'orderManager' => new OrderManager($orderInfoMapper, $orderProductMapper, $basketManager, $webPageManager),
             'basketManager' => $basketManager,
-            'taskManager' => new TaskManager($productMapper, $categoryManager),
             'productManager' => $productManager,
             'categoryManager' => $categoryManager,
             'attributeGroupManager' => new AttributeGroupManager($this->getMapper('/Shop/Storage/MySQL/AttributeGroupMapper', false)),
