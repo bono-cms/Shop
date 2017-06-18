@@ -41,9 +41,10 @@ interface CategoryManagerInterface
     /**
      * Fetches all categories as a tree
      * 
+     * @param boolean $extended Whether to return extended tree or not
      * @return array
      */
-    public function getCategoriesTree();
+    public function getCategoriesTree($extended = false);
 
     /**
      * Fetches child rows by associated parent id

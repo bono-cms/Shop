@@ -131,11 +131,38 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     /**
      * Fetches all categories as a tree
      * 
+     * @param boolean $extended Whether to return extended tree or not
      * @return array
      */
-    public function getCategoriesTree()
+    public function getCategoriesTree($extended = false)
     {
-        return $this->renderTree(new PhpArray('name', str_repeat('&nbsp;', 4)));
+        if ($extended == true) {
+            $rows = $this->categoryMapper->fetchTree();
+            $walker = new PhpArray('name', str_repeat('&nbsp;', 4));
+
+            $treeBuilder = new TreeBuilder($rows);
+            $treeBuilder->render($walker);
+
+            $raw = $treeBuilder->render($walker);
+
+            $output = array();
+
+            foreach ($raw as $id => $name) {
+                foreach ($rows as $index => $row) {
+                    if ($row['id'] == $id) {
+                        $rows[$index]['name'] = $raw[$row['id']];
+                        $rows[$index]['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
+
+                        $output[] = $rows[$index];
+                    }
+                }
+            }
+            
+            return $output;
+
+        } else {
+            return $this->renderTree(new PhpArray('name', str_repeat('&nbsp;', 4)));
+        }
     }
 
     /**
