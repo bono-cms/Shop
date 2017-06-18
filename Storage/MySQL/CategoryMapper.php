@@ -52,12 +52,12 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         );
 
         return $this->db->select($columns)
-                        ->count(sprintf('%s.%s', ProductMapper::getJunctionTableName(), ProductMapper::PARAM_JUNCTION_MASTER_COLUMN), 'product_count')
+                        ->count(ProductMapper::getFullColumnName(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN, ProductMapper::getJunctionTableName()), 'product_count')
                         ->from(self::getTableName())
                         ->leftJoin(ProductMapper::getJunctionTableName())
                         ->on()
                         ->equals(
-                            sprintf('%s.%s', ProductMapper::getJunctionTableName(), ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN), 
+                            ProductMapper::getFullColumnName(ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN, ProductMapper::getJunctionTableName()),
                             new RawSqlFragment(self::getFullColumnName('id'))
                         )
                         ->leftJoin(WebPageMapper::getTableName())
@@ -93,11 +93,11 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->leftJoin(AttributeGroupMapper::getTableName())
                         ->on()
                         ->equals(
-                            sprintf('%s.id', AttributeGroupMapper::getTableName()), 
-                            new RawSqlFragment(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN))
+                            AttributeGroupMapper::getFullColumnName('id'),
+                            new RawSqlFragment(self::getFullColumnName(self::PARAM_JUNCTION_SLAVE_COLUMN, self::getJunctionTableName()))
                         )
                         ->rawAnd()
-                        ->equals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN), $id);
+                        ->equals(self::getFullColumnName(self::PARAM_JUNCTION_MASTER_COLUMN, self::getJunctionTableName()), $id);
 
         if ($dynamic === false) {
             $db->rawAnd()
@@ -107,8 +107,8 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         return $db->innerJoin(AttributeValueMapper::getTableName())
                   ->on()
                   ->equals(
-                    sprintf('%s.group_id', AttributeValueMapper::getTableName()), 
-                    new RawSqlFragment(sprintf('%s.id', AttributeGroupMapper::getTableName()))
+                    AttributeValueMapper::getFullColumnName('group_id'),
+                    new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id'))
                   )
                   ->queryAll();
     }
@@ -142,14 +142,15 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         );
 
         return $this->db->select($columns)
-                        ->append(', ')
                         // Product counter
                         ->count(self::PARAM_JUNCTION_MASTER_COLUMN, 'product_count')
-                        
                         ->from(ProductMapper::getJunctionTableName())
                         ->rightJoin(self::getTableName())
                         ->on()
-                        ->equals(self::getFullColumnName($top), new RawSqlFragment(sprintf('%s.%s', ProductMapper::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN)))
+                        ->equals(
+                            self::getFullColumnName($top), 
+                            new RawSqlFragment(ProductMapper::getFullColumnName(self::PARAM_JUNCTION_SLAVE_COLUMN, ProductMapper::getJunctionTableName()))
+                        )
                         ->leftJoin(WebPageMapper::getTableName())
                         ->on()
                         ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
@@ -168,7 +169,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function fetchBcData()
     {
         return $this->db->select(array('name', 'web_page_id', 'lang_id', 'parent_id', 'id'))
-                        ->from(static::getTableName())
+                        ->from(self::getTableName())
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
     }
@@ -192,7 +193,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function fetchAll()
     {
         return $this->db->select('*')
-                        ->from(static::getTableName())
+                        ->from(self::getTableName())
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
     }
