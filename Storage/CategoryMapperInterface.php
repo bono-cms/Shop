@@ -14,6 +14,13 @@ namespace Shop\Storage;
 interface CategoryMapperInterface
 {
     /**
+     * Fetches category tree with product count and URLs
+     * 
+     * @return array
+     */
+    public function fetchTree();
+
+    /**
      * Finds category attributes by its associated id
      * 
      * @param string $id Category id

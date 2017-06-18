@@ -36,6 +36,41 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
+     * Fetches category tree with product count and URLs
+     * 
+     * @return array
+     */
+    public function fetchTree()
+    {
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('parent_id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('name'),
+            WebPageMapper::getFullColumnName('slug')
+        );
+
+        return $this->db->select($columns)
+                        ->count(sprintf('%s.%s', ProductMapper::getJunctionTableName(), ProductMapper::PARAM_JUNCTION_MASTER_COLUMN), 'product_count')
+                        ->from(self::getTableName())
+                        ->leftJoin(ProductMapper::getJunctionTableName())
+                        ->on()
+                        ->equals(
+                            sprintf('%s.%s', ProductMapper::getJunctionTableName(), ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN), 
+                            new RawSqlFragment(self::getFullColumnName('id'))
+                        )
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            WebPageMapper::getFullColumnName('id'), 
+                            new RawSqlFragment(self::getFullColumnName('web_page_id'))
+                        )
+                        ->groupBy(self::getFullColumnName('id'))
+                        ->queryAll();
+    }
+
+    /**
      * Finds category attributes by its associated id
      * 
      * @param string $id Category id
