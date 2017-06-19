@@ -875,7 +875,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $product['recommended_products'] = $this->createAttachedEntity($product['recommended']);
         $product['similar_products'] = $this->createAttachedEntity($product['similar']);
 
-        // Avoid assignement
+        // Avoid assignment
         unset($product['recommended'], $product['similar']);
 
         $staticAttrs  = $this->attributeMapper->findStaticAttributes($id);
