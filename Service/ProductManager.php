@@ -319,7 +319,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setStokePrice($product['stoke_price'], ProductEntity::FILTER_FLOAT)
             ->setSpecialOffer($product['special_offer'], ProductEntity::FILTER_BOOL)
             ->setName($product['name'], ProductEntity::FILTER_HTML)
-            ->setSlug(isset($product['slug']) ? $product['slug'] : $this->webPageManager->fetchSlugByWebPageId($product['web_page_id']))
+            ->setSlug($product['slug'])
             ->setCover($product['cover'], ProductEntity::FILTER_TAGS)
             ->setPermanentUrl('/module/shop/product/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))

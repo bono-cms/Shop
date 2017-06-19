@@ -143,8 +143,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function querySet($page, $itemsPerPage, $published, $categoryId, $order, $desc)
     {
-        $db = $this->db->select('*')
+        $db = $this->db->select(self::getSharedColumns(null, true))
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
             $this->db->innerJoin(self::getJunctionTableName());
@@ -348,11 +350,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc)
     {
         if (!$sortingColumn) {
-            $sortingColumn = 'id';
+            $sortingColumn = self::getFullColumnName('id');
         }
 
-        $db = $this->db->select('*')
+        $db = $this->db->select(self::getSharedColumns(null, true))
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if (!empty($input['category_id'])) {
             $this->db->innerJoin(self::getJunctionTableName());
@@ -405,15 +409,18 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllStokes($limit)
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->andWhereEquals('published', '1')
-                        ->andWhereNotEquals('stoke_price', '0')
-                        ->orderBy($this->getPk())
-                        ->desc()
-                        ->limit($limit)
-                        ->queryAll();
+        $db = $this->db->select(self::getSharedColumns(null, true))
+                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
+
+        return $db->whereEquals('lang_id', $this->getLangId())
+                  ->andWhereEquals('published', '1')
+                  ->andWhereNotEquals('stoke_price', '0')
+                  ->orderBy($this->getPk())
+                  ->desc()
+                  ->limit($limit)
+                  ->queryAll();
     }
 
     /**
@@ -474,6 +481,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     {
         $db = $this->db->select('*')
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
             $this->db->innerJoin(self::getJunctionTableName());
@@ -619,8 +628,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchLatestPublished($limit, $categoryId = null)
     {
-        $db = $this->db->select('*')
+        $db = $this->db->select(self::getSharedColumns(null, true))
                        ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
             $this->db->innerJoin(self::getJunctionTableName());
