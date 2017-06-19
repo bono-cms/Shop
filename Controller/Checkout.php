@@ -27,6 +27,9 @@ final class Checkout extends AbstractShopController
         $page = $pageManager->fetchById($id);
 
         if ($page !== false) {
+            // Indicated that this is checkout page
+            $page->setCheckoutPage(true);
+
             // Load view plugins
             $this->loadSitePlugins();
             $this->view->getBreadcrumbBag()
