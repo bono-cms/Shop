@@ -109,6 +109,7 @@ final class AttributeGroupManager extends AbstractManager
      */
     public function deleteById($id)
     {
+        // @TODO Delete attributes as well
         return $this->attributeGroupMapper->deleteById($id);
     }
 
