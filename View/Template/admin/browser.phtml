@@ -1,4 +1,3 @@
-<?php defined('KRYSTAL') or die; ?>
 <?php
 
 use Krystal\Form\Widget\BooleanWidget;
@@ -6,7 +5,8 @@ use Krystal\Form\Widget\DropdownWidget;
 use Krystal\Form\HtmlHelper;
 use Krystal\Form\Element;
 
-$categoryId = !empty($filter->get('category_id')) ? $filter->get('category_id') : $categoryId;
+defined('KRYSTAL') or die;
+$categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categoryId;
 
 ?>
 
