@@ -75,8 +75,7 @@ final class Module extends AbstractCmsModule
             $productMapper, 
             $webPageManager, 
             $this->getCategoryImageManager($config->getEntity()), 
-            $historyManager, 
-            $this->getMenuWidget()
+            $historyManager
         );
 
         $productManager = new ProductManager(

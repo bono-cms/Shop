@@ -71,7 +71,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * @param \Cms\Service\WebPageManager $webPageManager
      * @param \Krystal\Image\ImageManagerInterface $imageManager
      * @param \Cms\Service\HistoryManagerInterface $historyManager
-     * @param \Menu\Service\MenuWidgetInterface $menuWidget
      * @return void
      */
     public function __construct(
@@ -79,16 +78,13 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         ProductMapperInterface $productMapper, 
         WebPageManagerInterface $webPageManager, 
         ImageManagerInterface $imageManager,
-        HistoryManagerInterface $historyManager,
-        MenuWidgetInterface $menuWidget = null
+        HistoryManagerInterface $historyManager
     ){
         $this->categoryMapper = $categoryMapper;
         $this->productMapper = $productMapper;
         $this->webPageManager = $webPageManager;
         $this->imageManager = $imageManager;
         $this->historyManager = $historyManager;
-
-        $this->setMenuWidget($menuWidget);
     }
 
     /**
@@ -344,11 +340,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         }
 
         $this->webPageManager->update($category['web_page_id'], $category['slug']);
-        $this->categoryMapper->update(ArrayUtils::arrayWithout($category, array('slug', 'menu', 'remove_cover')));
-
-        if ($this->hasMenuWidget() && isset($input['data']['menu'])) {
-            $this->updateMenuItem($category['web_page_id'], $category['name'], $input['data']['menu']);
-        }
+        $this->categoryMapper->update(ArrayUtils::arrayWithout($category, array('slug', 'remove_cover')));
 
         $this->track('Category "%s" has been updated', $category['name']);
         return true;
@@ -379,7 +371,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             $category['cover'] = $file[0]->getName();
         }
 
-        if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug', 'menu')))) {
+        if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug')))) {
             $id = $this->getLastId();
 
             // If we have a cover, then we need to upload it
@@ -388,13 +380,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             }
 
             $this->track('Added category "%s"', $category['name']);
-
-            if ($this->webPageManager->add($id, $category['slug'], 'Shop (Categories)', 'Shop:Category@indexAction', $this->categoryMapper)) {
-                // Do the work in case menu widget was injected
-                if ($this->hasMenuWidget()) {
-                    $this->addMenuItem($this->webPageManager->getLastId(), $category['name'], $input['data']);
-                }
-            }
+            $this->webPageManager->add($id, $category['slug'], 'Shop (Categories)', 'Shop:Category@indexAction', $this->categoryMapper);
 
             return true;
         }

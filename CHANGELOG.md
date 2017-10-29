@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Removed menu widget from category form
  * Improved modal of order detail
  * Compact view in product and category templates in (administration panel)
  * Added shortcut in administration panel
