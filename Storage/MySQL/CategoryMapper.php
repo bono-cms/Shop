@@ -30,6 +30,14 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     /**
      * {@inheritDoc}
      */
+    public static function getTranslationTable()
+    {
+        return CategoryTranslationMapper::getTableName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public static function getJunctionTableName()
     {
         return self::getWithPrefix('bono_module_shop_categories_attr_groups');

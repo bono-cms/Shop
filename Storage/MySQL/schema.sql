@@ -38,18 +38,26 @@ CREATE TABLE `bono_module_shop_orders_products` (
 
 DROP TABLE IF EXISTS `bono_module_shop_categories`;
 CREATE TABLE `bono_module_shop_categories` (
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `parent_id` INT NOT NULL COMMENT 'Parent category id this category id refers to',
+    `order` INT NOT NULL COMMENT 'Sort order for this category',
+    `seo` varchar(1) NOT NULL COMMENT 'Whether SEO enabled or not',
+    `cover` varchar(254) NOT NULL COMMENT 'Cover image base name'
+
+) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_shop_categories_translations`;
+CREATE TABLE `bono_module_shop_categories_translations` (
+    `id` INT NOT NULL,
 	`lang_id` INT NOT NULL,
-	`parent_id` INT NOT NULL COMMENT 'Parent category id this category id refers to',
 	`web_page_id` INT NOT NULL COMMENT 'Sluggable web page id this category refers to',
 	`title` varchar(255) NOT NULL COMMENT 'Title of the category',
 	`name` varchar(255) NOT NULL COMMENT 'Name of the category',
 	`description` LONGTEXT NOT NULL COMMENT 'Full description of this category',
-	`order` INT NOT NULL COMMENT 'Sort order for this category',
-	`seo` varchar(1) NOT NULL COMMENT 'Whether SEO enabled or not',
 	`keywords` TEXT NOT NULL COMMENT 'Keywords for search engines',
 	`meta_description` TEXT COMMENT 'Meta description for search engines',
-	`cover` varchar(254) NOT NULL COMMENT 'Cover image base name'
 
 ) DEFAULT CHARSET = UTF8;
 
