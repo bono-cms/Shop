@@ -121,11 +121,11 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     {
         // Data to be selected
         $columns = array(
-            sprintf('%s.id', AttributeGroupMapper::getTableName()) => 'group_id',
-            sprintf('%s.name', AttributeGroupMapper::getTableName()) => 'group_name',
-            sprintf('%s.dynamic', AttributeGroupMapper::getTableName()) => 'dynamic',
-            sprintf('%s.id', AttributeValueMapper::getTableName()) => 'value_id',
-            sprintf('%s.name', AttributeValueMapper::getTableName()) => 'value_name'
+            AttributeGroupMapper::getFullColumnName('id') => 'group_id',
+            AttributeGroupMapper::getFullColumnName('name') => 'group_name',
+            AttributeGroupMapper::getFullColumnName('dynamic') => 'dynamic',
+            AttributeValueMapper::getFullColumnName('id') => 'value_id',
+            AttributeValueMapper::getFullColumnName('name') => 'value_name'
         );
 
         $db = $this->db->select($columns)
@@ -134,7 +134,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->on()
                         ->equals(
                             AttributeGroupMapper::getFullColumnName('id'),
-                            new RawSqlFragment(self::getFullColumnName(self::PARAM_JUNCTION_SLAVE_COLUMN, self::getJunctionTableName()))
+                            self::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN, self::getJunctionTableName())
                         )
                         ->rawAnd()
                         ->equals(self::getFullColumnName(self::PARAM_JUNCTION_MASTER_COLUMN, self::getJunctionTableName()), $id);
@@ -148,7 +148,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                   ->on()
                   ->equals(
                     AttributeValueMapper::getFullColumnName('group_id'),
-                    new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id'))
+                    AttributeGroupMapper::getRawColumn('id')
                   )
                   ->queryAll();
     }
