@@ -70,7 +70,7 @@ final class Category extends AbstractShopController
     public function indexAction($id = false, $pageNumber = 1, $code = null, $slug = null)
     {
         $categoryManager = $this->getModuleService('categoryManager');
-        $category = $categoryManager->fetchById($id);
+        $category = $categoryManager->fetchById($id, false);
 
         // If $category isn't false, then right id is supplied, $category itself a bag
         if ($category !== false) {

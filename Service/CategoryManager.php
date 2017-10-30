@@ -272,35 +272,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
-     * Prepares raw input data before sending it to the mapper
-     * 
-     * @param array $input Raw form data
-     * @return array
-     */
-    private function prepareInput(array $input)
-    {
-        $category =& $input['data']['category'];
-
-        if (empty($category['slug'])) {
-            // Empty slug by default is taken from a name
-            $category['slug'] = $category['name'];
-        }
-
-        // Empty title is take from the name
-        if (empty($category['title'])) {
-            $category['title'] = $category['name'];
-        }
-
-        $category['slug'] = $this->webPageManager->sluggify($category['slug']);
-
-        // Numeric attributes
-        $category['order'] = (int) $category['order'];
-        $category['web_page_id'] = (int) $category['web_page_id'];
-
-        return $input;
-    }
-
-    /**
      * Updates a category
      * 
      * @param array $input Raw input data
@@ -308,9 +279,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function update(array $input)
     {
-        // First, we need to parse raw form data
-        $input = $this->prepareInput($input);
-
         $category =& $input['data']['category'];
 
         // Allow to remove a cover, only it case it exists and checkbox was checked
@@ -339,10 +307,8 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             }
         }
 
-        $this->webPageManager->update($category['web_page_id'], $category['slug']);
-        $this->categoryMapper->update(ArrayUtils::arrayWithout($category, array('slug', 'remove_cover')));
-
-        $this->track('Category "%s" has been updated', $category['name']);
+        $this->categoryMapper->update($input['data']);
+        //$this->track('Category "%s" has been updated', $category['name']);
         return true;
     }
 
@@ -354,7 +320,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function add(array $input)
     {
-        $input = $this->prepareInput($input);
         $category =& $input['data']['category'];
 
         // Cover is always empty by default
@@ -371,7 +336,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             $category['cover'] = $file[0]->getName();
         }
 
-        if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug')))) {
+        if ($this->categoryMapper->insert($input['data'])) {
             $id = $this->getLastId();
 
             // If we have a cover, then we need to upload it
@@ -379,9 +344,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
                 $this->imageManager->upload($id, $input['files']['file']);
             }
 
-            $this->track('Added category "%s"', $category['name']);
-            $this->webPageManager->add($id, $category['slug'], 'Shop (Categories)', 'Shop:Category@indexAction', $this->categoryMapper);
-
+            //$this->track('Added category "%s"', $category['name']);
             return true;
         }
     }
@@ -430,14 +393,12 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     private function removeCategoryById($id)
     {
-        $this->removeWebPageById($id);
-
         $this->categoryMapper->deleteById($id);
         $this->imageManager->delete($id);
 
         return true;
     }
-    
+
     /**
      * Removes all child nodes
      * 
@@ -457,18 +418,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         }
 
         return true;
-    }
-
-    /**
-     * Removes category's web page
-     * 
-     * @param string $id Category id
-     * @return boolean
-     */
-    private function removeWebPageById($id)
-    {
-        $webPageId = $this->categoryMapper->fetchWebPageIdById($id);
-        return $this->webPageManager->deleteById($webPageId);
     }
 
     /**
@@ -511,10 +460,15 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * Fetches category's entity by its associated id
      * 
      * @param string $id Category id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Shop\Service\CategoryEntity|boolean
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->categoryMapper->fetchById($id));
+        if ($withTranslations == true) {
+            return $this->prepareResults($this->categoryMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->categoryMapper->fetchById($id, false));
+        }
     }
 }

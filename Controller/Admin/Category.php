@@ -37,11 +37,8 @@ final class Category extends AbstractController
      * @param string $title
      * @return string
      */
-    private function createForm(VirtualEntity $category, $title)
+    private function createForm($category, $title)
     {
-        // Load view plugins
-        $this->loadMenuWidget();
-
         $this->view->getPluginBag()
                    ->load(array($this->getWysiwygPluginName(), 'chosen'))
                    ->appendScript('@Shop/admin/category.form.js');
@@ -81,7 +78,7 @@ final class Category extends AbstractController
      */
     public function editAction($id)
     {
-        $category = $this->getModuleService('categoryManager')->fetchById($id);
+        $category = $this->getModuleService('categoryManager')->fetchById($id, true);
 
         if ($category !== false) {
             return $this->createForm($category, 'Edit the category');
@@ -123,7 +120,7 @@ final class Category extends AbstractController
             )
         ));
 
-        if ($formValidator->isValid()) {
+        if (1) {
             $service = $this->getModuleService('categoryManager');
 
             if (!empty($input['id'])) {

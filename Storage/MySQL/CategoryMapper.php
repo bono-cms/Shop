@@ -44,6 +44,29 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::getFullColumnName('cover'),
+            self::getFullColumnName('id'),
+            self::getFullColumnName('parent_id'),
+            self::getFullColumnName('order'),
+            self::getFullColumnName('seo'),
+            CategoryTranslationMapper::getFullColumnName('lang_id'),
+            CategoryTranslationMapper::getFullColumnName('web_page_id'),
+            CategoryTranslationMapper::getFullColumnName('description'),
+            CategoryTranslationMapper::getFullColumnName('name'),
+            CategoryTranslationMapper::getFullColumnName('title'),
+            CategoryTranslationMapper::getFullColumnName('keywords'),
+            CategoryTranslationMapper::getFullColumnName('meta_description'),
+        );
+    }
+
+    /**
      * Fetches category tree with product count and URLs
      * 
      * @return array
@@ -54,25 +77,34 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         $columns = array(
             self::getFullColumnName('id'),
             self::getFullColumnName('parent_id'),
-            self::getFullColumnName('lang_id'),
-            self::getFullColumnName('name'),
+            CategoryTranslationMapper::getFullColumnName('lang_id'),
+            CategoryTranslationMapper::getFullColumnName('name'),
             WebPageMapper::getFullColumnName('slug')
         );
 
         return $this->db->select($columns)
                         ->count(ProductMapper::getFullColumnName(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN, ProductMapper::getJunctionTableName()), 'product_count')
                         ->from(self::getTableName())
+                        // Product relation
                         ->leftJoin(ProductMapper::getJunctionTableName())
                         ->on()
                         ->equals(
                             ProductMapper::getFullColumnName(ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN, ProductMapper::getJunctionTableName()),
-                            new RawSqlFragment(self::getFullColumnName('id'))
+                            self::getRawColumn('id')
                         )
+                        // Category translation relation
+                        ->leftJoin(CategoryTranslationMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            self::getFullColumnName('id'),
+                            CategoryTranslationMapper::getRawColumn('id')
+                        )
+                        // Web page relation
                         ->leftJoin(WebPageMapper::getTableName())
                         ->on()
                         ->equals(
                             WebPageMapper::getFullColumnName('id'), 
-                            new RawSqlFragment(self::getFullColumnName('web_page_id'))
+                            CategoryTranslationMapper::getRawColumn('web_page_id')
                         )
                         ->groupBy(self::getFullColumnName('id'))
                         ->queryAll();
@@ -130,24 +162,10 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchChildrenByParentId($parentId, $top)
     {
-        $top = $top ? 'id' : 'parent_id';
+        $top = $top ? self::getFullColumnName('id') : self::getFullColumnName('parent_id');
 
-        $columns = array(
-            self::getFullColumnName('cover'),
-            self::getFullColumnName('id'),
-            self::getFullColumnName('parent_id'),
-            self::getFullColumnName('lang_id'),
-            self::getFullColumnName('web_page_id'),
-            self::getFullColumnName('description'),
-            self::getFullColumnName('order'),
-            self::getFullColumnName('seo'),
-            self::getFullColumnName('description'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('title'),
-            self::getFullColumnName('keywords'),
-            self::getFullColumnName('meta_description'),
-            WebPageMapper::getFullColumnName('slug')
-        );
+        // Columns to be selected
+        $columns = array_merge($this->getColumns(), array(WebPageMapper::getFullColumnName('slug')));
 
         return $this->db->select($columns)
                         // Product counter
@@ -159,6 +177,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                             self::getFullColumnName($top), 
                             new RawSqlFragment(ProductMapper::getFullColumnName(self::PARAM_JUNCTION_SLAVE_COLUMN, ProductMapper::getJunctionTableName()))
                         )
+                        // Web page relation
                         ->leftJoin(WebPageMapper::getTableName())
                         ->on()
                         ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
@@ -176,9 +195,25 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchBcData()
     {
-        return $this->db->select(array('name', 'web_page_id', 'lang_id', 'parent_id', 'id'))
+        // Columns to be selected
+        $columns = array(
+            CategoryTranslationMapper::getFullColumnName('name'),
+            CategoryTranslationMapper::getFullColumnName('web_page_id'), 
+            CategoryTranslationMapper::getFullColumnName('lang_id'), 
+            self::getFullColumnName('parent_id'), 
+            self::getFullColumnName('id')
+        );
+
+        return $this->db->select($columns)
                         ->from(self::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
+                        // Category translation relation
+                        ->leftJoin(CategoryMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            self::getFullColumnName('id'), 
+                            CategoryTranslationMapper::getRawColumn('id')
+                        )
+                        ->whereEquals(CategoryTranslationMapper::getFullColumnName('lang_id'), $this->getLangId())
                         ->queryAll();
     }
 
@@ -200,8 +235,15 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchAll()
     {
-        return $this->db->select('*')
+        return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
+                        // Category translation relation
+                        ->leftJoin(CategoryTranslationMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            self::getFullColumnName('id'),
+                            CategoryTranslationMapper::getRawColumn('id')
+                        )
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
     }
@@ -210,11 +252,24 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      * Fetches category's data by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return array_merge($this->findByPk($id), array('attribute_group_id' => $this->getSlaveIdsFromJunction(self::getJunctionTableName(), $id)));
+        $category = $this->findWebPage($this->getColumns(), $id, $withTranslations);
+        $attrs = $this->getSlaveIdsFromJunction(self::getJunctionTableName(), $id);
+
+        if ($withTranslations === true) {
+            foreach ($category as $index => $entity) {
+                $category[$index]['attribute_group_id'] = $attrs;
+            }
+
+            return $category;
+
+        } else {
+            return array_merge($category, array('attribute_group_id' => $attrs));
+        }
     }
 
     /**
@@ -223,18 +278,21 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      * @param array $input Raw input data
      * @return boolean
      */
-    public function insert(array $data)
+    public function insert(array $input)
     {
+        $category =& $input['category'];
+        $translations =& $input['translation'];
+
         // Substitute with empty if didn't receive
-        if (!isset($data['attribute_group_id'])) {
-            $data['attribute_group_id'] = array();
+        if (!isset($category['attribute_group_id'])) {
+            $category['attribute_group_id'] = array();
         }
 
-        $groups = $data['attribute_group_id'];
-        unset($data['attribute_group_id']);
+        $groups = $category['attribute_group_id'];
+        unset($category['attribute_group_id']);
 
         // Insert a category
-        $this->persist($this->getWithLang($data));
+        $this->savePage('Shop', 'Shop:Category@indexAction', $category, $translations);
 
         // If there's at least one selected group, then insert into the junction table
         if (!empty($groups)) {
@@ -250,16 +308,19 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      * @param array $input Raw input data
      * @return boolean
      */
-    public function update(array $data)
+    public function update(array $input)
     {
-        if (!empty($data['attribute_group_id'])) {
-            $this->syncWithJunction(self::getJunctionTableName(), $data['id'], $data['attribute_group_id']);
+        $category =& $input['category'];
+        $translations =& $input['translation'];
+
+        if (!empty($category['attribute_group_id'])) {
+            $this->syncWithJunction(self::getJunctionTableName(), $category['id'], $category['attribute_group_id']);
         } else {
-            $this->removeFromJunction(self::getJunctionTableName(), $data['id']);
+            $this->removeFromJunction(self::getJunctionTableName(), $category['id']);
         }
 
-        unset($data['attribute_group_id']);
-        return $this->persist($data);
+        unset($category['attribute_group_id']);
+        return $this->savePage('Shop', 'Shop:Category@indexAction', $category, $translations);
     }
 
     /**
@@ -283,7 +344,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function deleteById($id)
     {
-        return $this->deleteByPk($id) && $this->removeFromJunction(self::getJunctionTableName(), $id);
+        return $this->deletePage($id) && $this->removeFromJunction(self::getJunctionTableName(), $id);
     }
 
     /**
