@@ -20,6 +20,6 @@ final class CategoryTranslationMapper extends AbstractMapper
      */
     public static function getTableName()
     {
-        return self::getWithPrefix('bono_module_shop_categories');
+        return self::getWithPrefix('bono_module_shop_categories_translations');
     }
 }
