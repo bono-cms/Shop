@@ -84,26 +84,34 @@ CREATE TABLE `bono_module_shop_product_images` (
 
 DROP TABLE IF EXISTS `bono_module_shop_products`;
 CREATE TABLE `bono_module_shop_products` (
+
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`lang_id` INT NOT NULL,
+    `regular_price` FLOAT NOT NULL COMMENT 'Regular price of this product',
+    `stoke_price` FLOAT NOT NULL COMMENT 'Whether this product is considered as a special offer',
+    `in_stock` INT NOT NULL COMMENT 'Quantity of the product in stoke',
+    `special_offer` varchar(1) NOT NULL COMMENT 'Whether this product is considered as a special offer',
+    `published` varchar(1) NOT NULL COMMENT 'Whether this product should be visible on site',
+    `order` INT NOT NULL COMMENT 'Sort order of this product',
+    `seo` varchar(1) NOT NULL COMMENT 'Whether SEO tool is enabled or not',
+    `cover` varchar(254) NOT NULL COMMENT 'Basename of image file',
+    `date` DATE NOT NULL COMMENT 'Date when added',
+    `views` INT NOT NULL COMMENT 'View couter'
+
+) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_shop_products_translations`;
+CREATE TABLE `bono_module_shop_products_translations` (
+
+    `id` INT NOT NULL,
+    `lang_id` INT NOT NULL,
     `web_page_id` INT NOT NULL COMMENT 'Web page id this product refers to',
 	`title` varchar(255) NOT NULL COMMENT 'Title of the product',
 	`name` varchar(255) NOT NULL COMMENT 'Name of the product',
-	`regular_price` FLOAT NOT NULL COMMENT 'Regular price of this product',
-	`stoke_price` FLOAT NOT NULL COMMENT 'Whether this product is considered as a special offer',
-    `in_stock` INT NOT NULL COMMENT 'Quantity of the product in stoke',
-	`special_offer` varchar(1) NOT NULL COMMENT 'Whether this product is considered as a special offer',
 	`description` LONGTEXT NOT NULL COMMENT 'Full description` of this product',
-	`published` varchar(1) NOT NULL COMMENT 'Whether this product should be visible on site',
-	`order` INT NOT NULL COMMENT 'Sort order of this product',
-	`seo` varchar(1) NOT NULL COMMENT 'Whether SEO tool is enabled or not',
 	`keywords` TEXT NOT NULL COMMENT 'Keywords for search engines',
-	`meta_description` TEXT NOT NULL COMMENT 'Meta-description for search engines',
-	`cover` varchar(254) NOT NULL COMMENT 'Basename of image file',
-	`date` DATE NOT NULL COMMENT 'Date when added',
-	`views` INT NOT NULL COMMENT 'View couter'
-	
-) DEFAULT CHARSET = UTF8;
+    `meta_description` TEXT NOT NULL COMMENT 'Meta-description for search engines'
+);
 
 
 DROP TABLE IF EXISTS `bono_module_shop_product_category_relations`;
