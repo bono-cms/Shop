@@ -33,9 +33,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Basic columns to be selected (required for most selections)
         $columns = array(
             ProductMapper::getFullColumnName('id'),
-            ProductMapper::getFullColumnName('lang_id'),
-            ProductMapper::getFullColumnName('web_page_id'),
-            ProductMapper::getFullColumnName('name'),
+            ProductTranslationMapper::getFullColumnName('lang_id'),
+            ProductTranslationMapper::getFullColumnName('web_page_id'),
+            ProductTranslationMapper::getFullColumnName('name'),
             ProductMapper::getFullColumnName('regular_price'),
             ProductMapper::getFullColumnName('stoke_price'),
             ProductMapper::getFullColumnName('in_stock'),
@@ -47,13 +47,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Do extra columns need to be appended?
         if ($extraColumns === true) {
             $columns = array_merge($columns, array(
-                ProductMapper::getFullColumnName('title'),
-                ProductMapper::getFullColumnName('description'),
+                ProductTranslationMapper::getFullColumnName('title'),
+                ProductTranslationMapper::getFullColumnName('description'),
                 ProductMapper::getFullColumnName('published'),
                 ProductMapper::getFullColumnName('order'),
                 ProductMapper::getFullColumnName('seo'),
-                ProductMapper::getFullColumnName('keywords'),
-                ProductMapper::getFullColumnName('meta_description'),
+                ProductTranslationMapper::getFullColumnName('keywords'),
+                ProductTranslationMapper::getFullColumnName('meta_description'),
                 ProductMapper::getFullColumnName('date'),
                 ProductMapper::getFullColumnName('views'),
             ));
@@ -113,7 +113,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchAllNames()
     {
         return $this->db->select(array('id', 'name'))
-                        ->from(self::getTableName())
+                        ->from(ProductTranslationMapper::getTableName())
                         ->orderBy('name')
                         ->queryAll();
     }
@@ -146,13 +146,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns(null, true))
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
             $this->db->innerJoin(self::getJunctionTableName());
         }
 
-        $db->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId());
+        $db->whereEquals(ProductTranslationMapper::getFullColumnName('lang_id'), $this->getLangId());
 
         if ($published === true) {
             $db->andWhereEquals(self::getFullColumnName('published'), '1');
@@ -292,6 +293,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Appends translation relation
+     * 
+     * @return void
+     */
+    private function appendTranslationRelation()
+    {
+        $this->db->leftJoin(ProductTranslationMapper::getTableName())
+                 ->on()
+                 ->equals(
+                    self::getFullColumnName('id'),
+                    ProductTranslationMapper::getRawColumn('id')
+                );
+    }
+
+    /**
      * Append web page relation by linked IDs
      * 
      * @return void
@@ -300,7 +316,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     {
         $this->db->leftJoin(WebPageMapper::getTableName())
                  ->on()
-                 ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')));
+                 ->equals(
+                    ProductTranslationMapper::getFullColumnName('web_page_id'), 
+                    new RawSqlFragment(WebPageMapper::getFullColumnName('id'))
+                );
     }
 
     /**
@@ -356,6 +375,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns(null, true))
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if (!empty($input['category_id'])) {
@@ -364,12 +384,12 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $db->whereEquals('1', '1');
 
-        $db->andWhereLike('name', '%'.$input['name'].'%', true)
-           ->andWhereEquals('date', $input['date'], true)
-           ->andWhereEquals('id', $input['id'], true)
-           ->andWhereEquals('regular_price', $input['regular_price'], true)
-           ->andWhereEquals('published', $input['published'], true)
-           ->andWhereEquals('seo', $input['seo'], true);
+        $db->andWhereLike(ProductTranslationMapper::getFullColumnName('name'), '%'.$input['name'].'%', true)
+           ->andWhereEquals(self::getFullColumnName('date'), $input['date'], true)
+           ->andWhereEquals(self::getFullColumnName('id'), $input['id'], true)
+           ->andWhereEquals(self::getFullColumnName('regular_price'), $input['regular_price'], true)
+           ->andWhereEquals(self::getFullColumnName('published'), $input['published'], true)
+           ->andWhereEquals(self::getFullColumnName('seo'), $input['seo'], true);
 
         if (!empty($input['category_id'])) {
             $this->appendJunctionCategory($input['category_id']);
@@ -392,13 +412,16 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function countAllStokes()
     {
-        return $this->db->select()
+        $db = $this->db->select()
                         ->count($this->getPk(), 'count')
-                        ->from(self::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->andWhereEquals('published', '1')
-                        ->andWhereNotEquals('stoke_price', '0')
-                        ->query('count');
+                        ->from(self::getTableName());
+
+        $this->appendTranslationRelation();
+
+        return $db->whereEquals(ProductTranslationMapper::getFullColumnName('lang_id'), $this->getLangId())
+                  ->andWhereEquals(self::getFullColumnName('published'), '1')
+                  ->andWhereNotEquals(self::getFullColumnName('stoke_price'), '0')
+                  ->query('count');
     }
 
     /**
@@ -412,12 +435,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns(null, true))
                         ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
-        return $db->whereEquals('lang_id', $this->getLangId())
-                  ->andWhereEquals('published', '1')
-                  ->andWhereNotEquals('stoke_price', '0')
-                  ->orderBy($this->getPk())
+        return $db->whereEquals(ProductTranslationMapper::getFullColumnName('lang_id'), $this->getLangId())
+                  ->andWhereEquals(self::getFullColumnName('published'), '1')
+                  ->andWhereNotEquals(self::getFullColumnName('stoke_price'), '0')
+                  ->orderBy(self::getFullColumnName($this->getPk()))
                   ->desc()
                   ->limit($limit)
                   ->queryAll();
@@ -436,13 +460,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns($customerId))
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
         }
 
-        return $db->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId())
+        return $db->whereEquals(ProductTranslationMapper::getFullColumnName('lang_id'), $this->getLangId())
                   ->andWhereEquals(self::getFullColumnName('published'), '1')
                   ->andWhereNotEquals(self::getFullColumnName('stoke_price'), '0')
                   ->orderBy(self::getFullColumnName('id'))
@@ -461,10 +486,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function getMinCategoryPriceCount($categoryId)
     {
         $db = $this->db->select()
-                        ->min('regular_price', 'min_price')
+                        ->min(self::getFullColumnName('regular_price'), 'min_price')
                         ->from(self::getTableName())
                         ->innerJoin(self::getJunctionTableName())
-                        ->whereEquals('published', '1');
+                        ->whereEquals(self::getFullColumnName('published'), '1');
 
         $this->appendJunctionCategory($categoryId);
         return $db->query('min_price');
@@ -482,6 +507,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select('*')
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
@@ -515,6 +541,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns($customerId, false))
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($customerId != null) {
@@ -540,6 +567,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns($customerId))
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($customerId != null) {
@@ -550,7 +578,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
            ->andWhereEquals(self::getFullColumnName('published'), '1');
 
         if ($junction === true) {
-            $columns = array('id', 'name');
+            $columns = array(
+                self::getFullColumnName('id'), 
+                ProductTranslationMapper::getFullColumnName('name')
+            );
 
             $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
             $db->asManyToMany('similar', self::getSimilarTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
@@ -568,11 +599,17 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchBasicById($id)
     {
-        $columns = array('name', 'regular_price', 'stoke_price', 'in_stock', 'cover');
+        $columns = array(
+            ProductTranslationMapper::getFullColumnName('name'), 
+            self::getFullColumnName('regular_price'), 
+            self::getFullColumnName('stoke_price'), 
+            self::getFullColumnName('in_stock'), 
+            self::getFullColumnName('cover')
+        );
 
         return $this->db->select($columns)
                         ->from(self::getTableName())
-                        ->whereEquals('id', $id)
+                        ->whereEquals(self::getFullColumnName('id'), $id)
                         ->query();
     }
 
@@ -584,7 +621,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function countAll()
     {
         return (int) $this->db->select()
-                              ->count('id', 'count')
+                              ->count(self::getFullColumnName('id'), 'count')
                               ->from(self::getTableName())
                               ->query('count');
     }
@@ -598,14 +635,20 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchProductIdsByCategoryId($categoryId)
     {
         // To be selected
-        $column = 'id';
+        $column = self::getFullColumnName('id');
 
-        return $this->db->select($column)
-                        ->from(self::getTableName())
-                        ->innerJoin(self::getJunctionTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->appendJunctionCategory($categoryId)
-                        ->query($column);
+        $db = $this->db->select($column)
+                       ->from(self::getTableName());
+
+        $this->appendTranslationRelation();
+
+        return $db->innerJoin(self::getJunctionTableName())
+                  ->whereEquals(
+                    ProductTranslationMapper::getFullColumnName('lang_id'), 
+                    $this->getLangId()
+                )
+                ->appendJunctionCategory($categoryId)
+                ->query($column);
     }
 
     /**
@@ -631,6 +674,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select(self::getSharedColumns(null, true))
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
@@ -669,6 +713,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select($columns)
                        ->from(self::getTableName());
 
+        $this->appendTranslationRelation();
         $this->appendWebPageRelation();
 
         if ($customerId != null) {
@@ -679,8 +724,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $db->innerJoin(self::getJunctionTableName());
         }
 
-        $db->whereEquals(sprintf('%s.%s', self::getTableName(), 'lang_id'), $this->getLangId())
-           ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'published'), '1');
+        $db->whereEquals(ProductTranslationMapper::getFullColumnName('lang_id'), $this->getLangId())
+           ->andWhereEquals(self::getFullColumnName('published'), '1');
 
         if ($keyword === null) {
             $db->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
