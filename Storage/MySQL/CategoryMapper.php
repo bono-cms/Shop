@@ -93,7 +93,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                             self::getRawColumn('id')
                         )
                         // Category translation relation
-                        ->leftJoin(CategoryTranslationMapper::getTableName())
+                        ->innerJoin(CategoryTranslationMapper::getTableName())
                         ->on()
                         ->equals(
                             self::getFullColumnName('id'),
