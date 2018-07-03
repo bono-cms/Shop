@@ -84,12 +84,12 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
                         ->from(self::getTableName())
                         ->leftJoin(ProductMapper::getTableName())
                         ->on()
-                        ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')))
+                        ->equals(self::column('product_id'), new RawSqlFragment(ProductMapper::column('id')))
                         ->leftJoin(WebPageMapper::getTableName())
                         ->on()
-                        ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(ProductMapper::getFullColumnName('web_page_id')))
-                        ->whereEquals(self::getFullColumnName('customer_id'), $customerId)
-                        ->orderBy(self::getFullColumnName('wishlist_item_id'))
+                        ->equals(WebPageMapper::column('id'), new RawSqlFragment(ProductMapper::column('web_page_id')))
+                        ->whereEquals(self::column('customer_id'), $customerId)
+                        ->orderBy(self::column('wishlist_item_id'))
                         ->desc()
                         ->queryAll();
     }

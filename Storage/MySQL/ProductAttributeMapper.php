@@ -36,24 +36,24 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     public function findDynamicAttributes($productId)
     {
         $columns = array(
-            AttributeGroupMapper::getFullColumnName('id') => 'group_id',
-            AttributeGroupMapper::getFullColumnName('name') => 'group_name',
-            AttributeValueMapper::getFullColumnName('name') => 'value_name',
-            AttributeValueMapper::getFullColumnName('id') => 'value_id'
+            AttributeGroupMapper::column('id') => 'group_id',
+            AttributeGroupMapper::column('name') => 'group_name',
+            AttributeValueMapper::column('name') => 'value_name',
+            AttributeValueMapper::column('id') => 'value_id'
         );
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
                         ->innerJoin(AttributeValueMapper::getTableName())
                         ->on()
-                        ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
+                        ->equals(AttributeGroupMapper::column('id'), new RawSqlFragment(AttributeValueMapper::column('group_id')))
                         ->innerJoin(self::getTableName())
                         ->on()
-                        ->equals(AttributeGroupMapper::getFullColumnName('dynamic'), new RawBinding('1'))
+                        ->equals(AttributeGroupMapper::column('dynamic'), new RawBinding('1'))
                         ->rawAnd()
-                        ->equals(self::getFullColumnName('product_id'), $productId)
+                        ->equals(self::column('product_id'), $productId)
                         ->rawAnd()
-                        ->equals(self::getFullColumnName('group_id'), new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id')))
+                        ->equals(self::column('group_id'), new RawSqlFragment(AttributeGroupMapper::column('id')))
                         ->queryAll();
     }
 
@@ -67,24 +67,24 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     {
         // Columns to be selected
         $columns = array(
-            AttributeGroupMapper::getFullColumnName('name') => 'group',
-            AttributeValueMapper::getFullColumnName('name') => 'attribute'
+            AttributeGroupMapper::column('name') => 'group',
+            AttributeValueMapper::column('name') => 'attribute'
         );
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
                         ->innerJoin(AttributeValueMapper::getTableName())
                         ->on()
-                        ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
+                        ->equals(AttributeGroupMapper::column('id'), new RawSqlFragment(AttributeValueMapper::column('group_id')))
                         ->innerJoin(self::getTableName())
                         ->on()
-                        ->equals(AttributeGroupMapper::getFullColumnName('dynamic'), new RawSqlFragment('0'))
+                        ->equals(AttributeGroupMapper::column('dynamic'), new RawSqlFragment('0'))
                         ->rawAnd()
-                        ->equals(self::getFullColumnName('product_id'), $productId)
+                        ->equals(self::column('product_id'), $productId)
                         ->rawAnd()
-                        ->equals(self::getFullColumnName('group_id'), new RawSqlFragment(AttributeGroupMapper::getFullColumnName('id')))
+                        ->equals(self::column('group_id'), new RawSqlFragment(AttributeGroupMapper::column('id')))
                         ->rawAnd()
-                        ->equals(self::getFullColumnName('value_id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('id')))
+                        ->equals(self::column('value_id'), new RawSqlFragment(AttributeValueMapper::column('id')))
                         ->queryAll();
     }
 

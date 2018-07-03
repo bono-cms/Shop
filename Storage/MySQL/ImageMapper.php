@@ -52,7 +52,7 @@ final class ImageMapper extends AbstractMapper implements ImageMapperInterface
 
         if ($published === true) {
             $db->andWhereEquals('published', '1')
-               ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::getFullColumnName('id'))));
+               ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::column('id'))));
         } else {
             $db->orderBy('id')
                ->desc();

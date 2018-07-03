@@ -38,17 +38,17 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     {
         // Columns to be selected
         $columns = array(
-            AttributeGroupMapper::getFullColumnName('name') => 'name',
-            AttributeValueMapper::getFullColumnName('name') => 'value'
+            AttributeGroupMapper::column('name') => 'name',
+            AttributeValueMapper::column('name') => 'value'
         );
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
                         ->innerJoin(AttributeValueMapper::getTableName())
                         ->on()
-                        ->equals(AttributeGroupMapper::getFullColumnName('id'), new RawSqlFragment(AttributeValueMapper::getFullColumnName('group_id')))
-                        ->whereEquals(AttributeGroupMapper::getFullColumnName('id'), $groupId)
-                        ->andWhereEquals(AttributeValueMapper::getFullColumnName('id'), $valueId)
+                        ->equals(AttributeGroupMapper::column('id'), new RawSqlFragment(AttributeValueMapper::column('group_id')))
+                        ->whereEquals(AttributeGroupMapper::column('id'), $groupId)
+                        ->andWhereEquals(AttributeValueMapper::column('id'), $valueId)
                         ->query();
     }
 
@@ -143,16 +143,16 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     {
         // Columns to be selected
         $columns = array(
-            self::getFullColumnName('order_id'),
-            self::getFullColumnName('product_id'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('price'),
-            self::getFullColumnName('sub_total_price'),
-            self::getFullColumnName('qty'),
-            self::getFullColumnName('attributes'),
-            ProductMapper::getFullColumnName('cover'),
-            WebPageMapper::getFullColumnName('slug'),
-            WebPageMapper::getFullColumnName('lang_id')
+            self::column('order_id'),
+            self::column('product_id'),
+            self::column('name'),
+            self::column('price'),
+            self::column('sub_total_price'),
+            self::column('qty'),
+            self::column('attributes'),
+            ProductMapper::column('cover'),
+            WebPageMapper::column('slug'),
+            WebPageMapper::column('lang_id')
         );
 
         // Select by order id
@@ -160,19 +160,19 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
                        ->from(self::getTableName())
                        ->leftJoin(ProductMapper::getTableName())
                        ->on()
-                       ->equals(self::getFullColumnName('product_id'), new RawSqlFragment(ProductMapper::getFullColumnName('id')));
+                       ->equals(self::column('product_id'), new RawSqlFragment(ProductMapper::column('id')));
 
         // If provided, filter also by customer ID
         if ($customerId !== null) {
             $db->innerJoin(OrderInfoMapper::getTableName())
                ->on()
-               ->equals(OrderInfoMapper::getFullColumnName('customer_id'), $customerId);
+               ->equals(OrderInfoMapper::column('customer_id'), $customerId);
         }
 
         $db->leftJoin(WebPageMapper::getTableName())
            ->on()
-           ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(ProductMapper::getFullColumnName('web_page_id')))
-           ->whereEquals(self::getFullColumnName('order_id'), $id);
+           ->equals(WebPageMapper::column('id'), new RawSqlFragment(ProductMapper::column('web_page_id')))
+           ->whereEquals(self::column('order_id'), $id);
 
         return $db->queryAll();
     }

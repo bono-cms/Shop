@@ -33,22 +33,22 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     private function getColumns()
     {
         return array(
-            self::getFullColumnName('id'),
-            self::getFullColumnName('date'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('phone'),
-            self::getFullColumnName('address'),
-            self::getFullColumnName('comment'),
-            self::getFullColumnName('delivery'),
-            self::getFullColumnName('qty'),
-            self::getFullColumnName('discount'),
-            self::getFullColumnName('total_price'),
-            self::getFullColumnName('approved'),
-            self::getFullColumnName('email'),
-            self::getFullColumnName('customer_id'),
-            self::getFullColumnName('order_status_id'),
-            OrderStatusMapper::getFullColumnName('name') => 'status_name',
-            OrderStatusMapper::getFullColumnName('description') => 'status_description',
+            self::column('id'),
+            self::column('date'),
+            self::column('name'),
+            self::column('phone'),
+            self::column('address'),
+            self::column('comment'),
+            self::column('delivery'),
+            self::column('qty'),
+            self::column('discount'),
+            self::column('total_price'),
+            self::column('approved'),
+            self::column('email'),
+            self::column('customer_id'),
+            self::column('order_status_id'),
+            OrderStatusMapper::column('name') => 'status_name',
+            OrderStatusMapper::column('description') => 'status_description',
         );
     }
 
@@ -156,9 +156,9 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
                         ->from(self::getTableName())
                         ->leftJoin(OrderStatusMapper::getTableName())
                         ->on()
-                        ->equals(self::getFullColumnName('order_status_id'), new RawSqlFragment(OrderStatusMapper::getFullColumnName('id')))
+                        ->equals(self::column('order_status_id'), new RawSqlFragment(OrderStatusMapper::column('id')))
                         ->rawAnd()
-                        ->equals(self::getFullColumnName('id'), $id)
+                        ->equals(self::column('id'), $id)
                         ->limit(1)
                         ->query();
     }
@@ -175,8 +175,8 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
                         ->from(self::getTableName())
                         ->leftJoin(OrderStatusMapper::getTableName())
                         ->on()
-                        ->equals(self::getFullColumnName('order_status_id'), new RawSqlFragment(OrderStatusMapper::getFullColumnName('id')))
-                        ->whereEquals(self::getFullColumnName('customer_id'), $customerId)
+                        ->equals(self::column('order_status_id'), new RawSqlFragment(OrderStatusMapper::column('id')))
+                        ->whereEquals(self::column('customer_id'), $customerId)
                         ->orderBy($this->getPk())
                         ->desc()
                         ->queryAll();
