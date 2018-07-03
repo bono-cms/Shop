@@ -35,6 +35,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
      */
     public function findDynamicAttributes($productId)
     {
+        // Columns to be selected
         $columns = array(
             AttributeGroupMapper::column('id') => 'group_id',
             AttributeGroupMapper::column('name') => 'group_name',
@@ -44,16 +45,15 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
-                        ->innerJoin(AttributeValueMapper::getTableName())
-                        ->on()
-                        ->equals(AttributeGroupMapper::column('id'), new RawSqlFragment(AttributeValueMapper::column('group_id')))
-                        ->innerJoin(self::getTableName())
-                        ->on()
-                        ->equals(AttributeGroupMapper::column('dynamic'), new RawBinding('1'))
-                        ->rawAnd()
-                        ->equals(self::column('product_id'), $productId)
-                        ->rawAnd()
-                        ->equals(self::column('group_id'), new RawSqlFragment(AttributeGroupMapper::column('id')))
+                        // Attribute value relation
+                        ->innerJoin(AttributeValueMapper::getTableName(), array(
+                            AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
+                        ))
+                        ->innerJoin(self::getTableName(), array(
+                            AttributeGroupMapper::column('dynamic') => new RawBinding('1'),
+                            self::column('product_id') => $productId,
+                            self::column('group_id') => AttributeGroupMapper::getRawColumn('id')
+                        ))
                         ->queryAll();
     }
 
@@ -73,18 +73,15 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
-                        ->innerJoin(AttributeValueMapper::getTableName())
-                        ->on()
-                        ->equals(AttributeGroupMapper::column('id'), new RawSqlFragment(AttributeValueMapper::column('group_id')))
-                        ->innerJoin(self::getTableName())
-                        ->on()
-                        ->equals(AttributeGroupMapper::column('dynamic'), new RawSqlFragment('0'))
-                        ->rawAnd()
-                        ->equals(self::column('product_id'), $productId)
-                        ->rawAnd()
-                        ->equals(self::column('group_id'), new RawSqlFragment(AttributeGroupMapper::column('id')))
-                        ->rawAnd()
-                        ->equals(self::column('value_id'), new RawSqlFragment(AttributeValueMapper::column('id')))
+                        ->innerJoin(AttributeValueMapper::getTableName(), array(
+                            AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
+                        ))
+                        ->innerJoin(self::getTableName(), array(
+                            AttributeGroupMapper::column('dynamic') => new RawSqlFragment('0'),
+                            self::column('product_id') => $productId,
+                            self::column('group_id') => AttributeGroupMapper::getRawColumn('id'),
+                            self::column('value_id') => AttributeValueMapper::getRawColumn('id')
+                        ))
                         ->queryAll();
     }
 

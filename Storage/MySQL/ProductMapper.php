@@ -185,10 +185,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         return $this->db->select(array(OrderProductMapper::column('product_id') => 'id'), true)
                         ->from(OrderProductMapper::getTableName())
                         ->innerJoin(OrderInfoMapper::getTableName())
-                        ->whereEquals(sprintf('%s.%s', OrderInfoMapper::getTableName(), 'id'), new RawSqlFragment(OrderProductMapper::column('order_id')))
-                        ->andWhereEquals(sprintf('%s.%s', OrderInfoMapper::getTableName(), 'approved'), new RawSqlFragment("'1'"))
+                        ->whereEquals(OrderInfoMapper::column('id'), OrderProductMapper::getRawColumn('order_id'))
+                        ->andWhereEquals(OrderInfoMapper::column('approved'), new RawSqlFragment("'1'"))
                         ->groupBy('id')
-                        ->having('SUM', sprintf('%s.%s', OrderProductMapper::getTableName(), 'qty'), '>=', $qty)
+                        ->having('SUM', OrderProductMapper::column('qty'), '>=', $qty)
                         ->limit($limit)
                         ->queryAll('id');
     }
@@ -247,29 +247,27 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $qb->select(self::getSharedColumns($customerId), true)
            ->from(ProductAttributeMapper::getTableName())
-           ->leftJoin(self::getTableName())
-           ->on()
-           ->equals(self::column('id'), ProductAttributeMapper::column('product_id'))
+           ->leftJoin(self::getTableName(), array(
+                self::column('id') =>ProductAttributeMapper::column('product_id')
+           ));
 
            // Filter by category ID
-           ->innerJoin(self::getJunctionTableName())
-           ->on()
-           ->equals(sprintf('%s.master_id', self::getJunctionTableName()), self::column('id'))
-           ->rawAnd()
-           ->equals(sprintf('%s.slave_id', self::getJunctionTableName()), (int) $categoryId);
+           ->innerJoin(self::getJunctionTableName(), array(
+                sprintf('%s.master_id', self::getJunctionTableName()) => self::column('id'),
+                sprintf('%s.slave_id', self::getJunctionTableName()) => (int) $categoryId
+            ));
 
             if ($customerId != null) {
-                $qb->leftJoin(WishlistMapper::getTableName())
-                   ->on()
-                   ->equals(WishlistMapper::column('product_id'), self::column('id'))
-                   ->rawAnd()
-                   ->equals(WishlistMapper::column('customer_id'), $customerId);
+                $qb->leftJoin(WishlistMapper::getTableName(), array(
+                    WishlistMapper::column('product_id') => self::column('id'),
+                    WishlistMapper::column('customer_id') => $customerId
+                ));
             }
 
         // Slug
-        $qb->leftJoin(WebPageMapper::getTableName())
-           ->on()
-           ->equals(self::column('web_page_id'), WebPageMapper::column('id'));
+        $qb->leftJoin(WebPageMapper::getTableName(), array(
+            self::column('web_page_id') => WebPageMapper::column('id')
+        ));
 
         // Filter by group and value IDs
         $qb->whereEquals('group_id', (int) $groupId)
@@ -299,12 +297,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendTranslationRelation()
     {
-        $this->db->leftJoin(ProductTranslationMapper::getTableName())
-                 ->on()
-                 ->equals(
-                    self::column('id'),
-                    ProductTranslationMapper::getRawColumn('id')
-                );
+        $this->db->leftJoin(ProductTranslationMapper::getTableName(), array(
+            self::column('id') => ProductTranslationMapper::getRawColumn('id')
+        ));
     }
 
     /**
@@ -314,12 +309,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendWebPageRelation()
     {
-        $this->db->leftJoin(WebPageMapper::getTableName())
-                 ->on()
-                 ->equals(
-                    ProductTranslationMapper::column('web_page_id'), 
-                    new RawSqlFragment(WebPageMapper::column('id'))
-                );
+        $this->db->leftJoin(WebPageMapper::getTableName(), array(
+            ProductTranslationMapper::column('web_page_id') => WebPageMapper::getRawColumn('id')
+        ));
     }
 
     /**
@@ -331,11 +323,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     private function appendCustomerRelation($customerId)
     {
         // Wish list relation
-        $this->db->leftJoin(WishlistMapper::getTableName())
-                 ->on()
-                 ->equals(WishlistMapper::column('product_id'), new RawSqlFragment(self::column('id')))
-                 ->rawAnd()
-                 ->equals(WishlistMapper::column('customer_id'), $customerId);
+        $this->db->leftJoin(WishlistMapper::getTableName(), array(
+            WishlistMapper::column('product_id') => self::getRawColumn('id'),
+            WishlistMapper::column('customer_id') => $customerId
+        ));
     }
 
     /**

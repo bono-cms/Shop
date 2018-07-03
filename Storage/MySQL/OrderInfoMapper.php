@@ -154,11 +154,10 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     {
         return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
-                        ->leftJoin(OrderStatusMapper::getTableName())
-                        ->on()
-                        ->equals(self::column('order_status_id'), new RawSqlFragment(OrderStatusMapper::column('id')))
-                        ->rawAnd()
-                        ->equals(self::column('id'), $id)
+                        ->leftJoin(OrderStatusMapper::getTableName(), array(
+                            self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id')),
+                            self::column('id') => $id
+                        ))
                         ->limit(1)
                         ->query();
     }
@@ -173,9 +172,9 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     {
         return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
-                        ->leftJoin(OrderStatusMapper::getTableName())
-                        ->on()
-                        ->equals(self::column('order_status_id'), new RawSqlFragment(OrderStatusMapper::column('id')))
+                        ->leftJoin(OrderStatusMapper::getTableName(), array(
+                            self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id'))
+                        ))
                         ->whereEquals(self::column('customer_id'), $customerId)
                         ->orderBy($this->getPk())
                         ->desc()

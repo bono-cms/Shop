@@ -44,9 +44,9 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
-                        ->innerJoin(AttributeValueMapper::getTableName())
-                        ->on()
-                        ->equals(AttributeGroupMapper::column('id'), new RawSqlFragment(AttributeValueMapper::column('group_id')))
+                        ->innerJoin(AttributeValueMapper::getTableName(), array(
+                            AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
+                        ))
                         ->whereEquals(AttributeGroupMapper::column('id'), $groupId)
                         ->andWhereEquals(AttributeValueMapper::column('id'), $valueId)
                         ->query();
@@ -158,21 +158,21 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
         // Select by order id
         $db = $this->db->select($columns, true)
                        ->from(self::getTableName())
-                       ->leftJoin(ProductMapper::getTableName())
-                       ->on()
-                       ->equals(self::column('product_id'), new RawSqlFragment(ProductMapper::column('id')));
+                       ->leftJoin(ProductMapper::getTableName(), array(
+                            self::column('product_id') => ProductMapper::getRawColumn('id')
+                       ));
 
         // If provided, filter also by customer ID
         if ($customerId !== null) {
-            $db->innerJoin(OrderInfoMapper::getTableName())
-               ->on()
-               ->equals(OrderInfoMapper::column('customer_id'), $customerId);
+            $db->innerJoin(OrderInfoMapper::getTableName(), array(
+                OrderInfoMapper::column('customer_id') => $customerId
+            ));
         }
 
-        $db->leftJoin(WebPageMapper::getTableName())
-           ->on()
-           ->equals(WebPageMapper::column('id'), new RawSqlFragment(ProductMapper::column('web_page_id')))
-           ->whereEquals(self::column('order_id'), $id);
+        $db->leftJoin(WebPageMapper::getTableName(), array(
+            WebPageMapper::column('id') => ProductMapper::getRawColumn('web_page_id')
+        ))
+        ->whereEquals(self::column('order_id'), $id);
 
         return $db->queryAll();
     }

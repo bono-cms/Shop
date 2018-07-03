@@ -76,12 +76,11 @@ final class ImageMapper extends AbstractMapper implements ImageMapperInterface
      */
     public function insert($productId, $image, $order, $published)
     {
-        return $this->db->insert(static::getTableName(), array(
+        return $this->db->insert(self::getTableName(), array(
             'product_id' => $productId,
             'image' => $image,
             'order' => $order,
             'published' => $published
-            
         ))->execute();
     }
 
