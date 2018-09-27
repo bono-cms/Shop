@@ -249,8 +249,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
            ->from(ProductAttributeMapper::getTableName())
            ->leftJoin(self::getTableName(), array(
                 self::column('id') =>ProductAttributeMapper::column('product_id')
-           ));
-
+           ))
            // Filter by category ID
            ->innerJoin(self::getJunctionTableName(), array(
                 sprintf('%s.master_id', self::getJunctionTableName()) => self::column('id'),
