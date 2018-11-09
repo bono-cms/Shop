@@ -158,8 +158,13 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
         // Select by order id
         $db = $this->db->select($columns, true)
                        ->from(self::getTableName())
+                       // Product relation
                        ->leftJoin(ProductMapper::getTableName(), array(
                             self::column('product_id') => ProductMapper::getRawColumn('id')
+                       ))
+                       // Product translation relation
+                       ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                            ProductTranslationMapper::column('id') => ProductMapper::getRawColumn('id')
                        ));
 
         // If provided, filter also by customer ID
@@ -170,9 +175,10 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
         }
 
         $db->leftJoin(WebPageMapper::getTableName(), array(
-            WebPageMapper::column('id') => ProductMapper::getRawColumn('web_page_id')
+            WebPageMapper::column('id') => ProductTranslationMapper::getRawColumn('web_page_id')
         ))
-        ->whereEquals(self::column('order_id'), $id);
+        ->whereEquals(self::column('order_id'), $id)
+        ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
 
         return $db->queryAll();
     }
