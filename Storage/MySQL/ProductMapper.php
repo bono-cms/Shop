@@ -22,6 +22,14 @@ use Krystal\Db\Sql\QueryBuilderInterface;
 final class ProductMapper extends AbstractMapper implements ProductMapperInterface
 {
     /**
+     * {@inheritDoc}
+     */
+    public static function getTableName()
+    {
+        return self::getWithPrefix('bono_module_shop_products');
+    }
+
+    /**
      * Returns shared columns to be selected
      * 
      * @param mixed $customerId
@@ -67,14 +75,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         return $columns;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public static function getTableName()
-    {
-        return self::getWithPrefix('bono_module_shop_products');
     }
 
     /**
