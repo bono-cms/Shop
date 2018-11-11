@@ -78,16 +78,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Returns table name for similar products (junction table)
-     * 
-     * @return string
-     */
-    public static function getSimilarTableName()
-    {
-        return self::getWithPrefix('bono_module_shop_product_similar');
-    }
-
-    /**
      * Returns table name for recommended products (junction table)
      * 
      * @return string
@@ -566,7 +556,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             );
 
             $db->asManyToMany('categories', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
-            $db->asManyToMany('similar', self::getSimilarTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
+            $db->asManyToMany('similar', ProductSimilarRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
             $db->asManyToMany('recommended', self::getRecommendedTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
         }
 
@@ -825,7 +815,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         // Update into similar junction table
         if (isset($input['similar_ids'])) {
-            $this->syncWithJunction(self::getSimilarTableName(), $input['id'], $input['similar_ids']);
+            $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $input['id'], $input['similar_ids']);
         }
 
         return $this->persist(ArrayUtils::arrayWithout($input, array('category_id', 'recommended_ids', 'similar_ids')));
@@ -853,7 +843,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         // Insert into similar junction table
         if (isset($input['similar_ids'])) {
-            $this->insertIntoJunction(self::getSimilarTableName(), $id, $input['similar_ids']);
+            $this->insertIntoJunction(ProductSimilarRelationMapper::getTableName(), $id, $input['similar_ids']);
         }
 
         return true;
@@ -871,7 +861,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $this->removeFromJunction(ProductCategoryRelationMapper::getTableName(), $id);
         $this->removeFromJunction(self::getRecommendedTableName(), $id);
-        $this->removeFromJunction(self::getSimilarTableName(), $id);
+        $this->removeFromJunction(ProductSimilarRelationMapper::getTableName(), $id);
 
         return true;
     }

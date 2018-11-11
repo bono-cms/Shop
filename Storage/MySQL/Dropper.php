@@ -33,7 +33,7 @@ final class Dropper extends AbstractStorageDropper
             AttributeGroupMapper::getTableName(),
             AttributeValueMapper::getTableName(),
             ProductAttributeMapper::getTableName(),
-            ProductMapper::getSimilarTableName(),
+            ProductSimilarRelationMapper::getTableName(),
             ProductMapper::getRecommendedTableName(),
             DeliveryTypeMapper::getTableName(),
             CouponMapper::getTableName(),
