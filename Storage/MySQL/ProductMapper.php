@@ -84,10 +84,13 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllNames()
     {
-        return $this->db->select(array('id', 'name'))
+        $db = $this->db->select(array('id', 'name'))
                         ->from(ProductTranslationMapper::getTableName())
-                        ->orderBy('name')
-                        ->queryAll();
+                        // Language constraint
+                        ->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId())
+                        ->orderBy('name');
+
+        return $db->queryAll();
     }
 
     /**
