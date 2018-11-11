@@ -78,16 +78,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Returns table name for recommended products (junction table)
-     * 
-     * @return string
-     */
-    public static function getRecommendedTableName()
-    {
-        return self::getWithPrefix('bono_module_shop_product_recommended');
-    }
-
-    /**
      * Fetches all product ids with their corresponding names
      *
      * @return array
@@ -557,7 +547,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
             $db->asManyToMany('categories', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
             $db->asManyToMany('similar', ProductSimilarRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
-            $db->asManyToMany('recommended', self::getRecommendedTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
+            $db->asManyToMany('recommended', ProductRecommendedMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
         }
 
         return $db->query();
@@ -810,7 +800,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         // Update into reccomended junction table
         if (isset($input['recommended_ids'])) {
-            $this->syncWithJunction(self::getRecommendedTableName(), $input['id'], $input['recommended_ids']);
+            $this->syncWithJunction(ProductRecommendedMapper::getTableName(), $input['id'], $input['recommended_ids']);
         }
 
         // Update into similar junction table
@@ -838,7 +828,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         // Insert into reccomended junction table
         if (isset($input['recommended_ids'])) {
-            $this->insertIntoJunction(self::getRecommendedTableName(), $id, $input['recommended_ids']);
+            $this->insertIntoJunction(ProductRecommendedMapper::getTableName(), $id, $input['recommended_ids']);
         }
 
         // Insert into similar junction table
@@ -860,7 +850,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->deleteByPk($id);
 
         $this->removeFromJunction(ProductCategoryRelationMapper::getTableName(), $id);
-        $this->removeFromJunction(self::getRecommendedTableName(), $id);
+        $this->removeFromJunction(ProductRecommendedMapper::getTableName(), $id);
         $this->removeFromJunction(ProductSimilarRelationMapper::getTableName(), $id);
 
         return true;
