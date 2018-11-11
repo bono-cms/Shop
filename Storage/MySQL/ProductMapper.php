@@ -78,14 +78,6 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public static function getJunctionTableName()
-    {
-        return self::getWithPrefix('bono_module_shop_product_category_relations');
-    }
-
-    /**
      * Returns table name for similar products (junction table)
      * 
      * @return string
@@ -126,7 +118,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendJunctionCategory($categoryId)
     {
-        $this->db->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+        $this->db->andWhereEquals(sprintf('%s.%s', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
                  ->andWhereEquals(self::column('id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN));
     }
 
@@ -150,7 +142,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
-            $this->db->innerJoin(self::getJunctionTableName());
+            $this->db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
         $db->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
@@ -251,9 +243,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 self::column('id') =>ProductAttributeMapper::column('product_id')
            ))
            // Filter by category ID
-           ->innerJoin(self::getJunctionTableName(), array(
-                sprintf('%s.master_id', self::getJunctionTableName()) => self::column('id'),
-                sprintf('%s.slave_id', self::getJunctionTableName()) => (int) $categoryId
+           ->innerJoin(ProductCategoryRelationMapper::getTableName(), array(
+                sprintf('%s.master_id', ProductCategoryRelationMapper::getTableName()) => self::column('id'),
+                sprintf('%s.slave_id', ProductCategoryRelationMapper::getTableName()) => (int) $categoryId
             ));
 
             if ($customerId != null) {
@@ -369,7 +361,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->appendWebPageRelation();
 
         if (!empty($input['category_id'])) {
-            $this->db->innerJoin(self::getJunctionTableName());
+            $this->db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
         $db->whereEquals('1', '1');
@@ -478,7 +470,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db = $this->db->select()
                         ->min(self::column('regular_price'), 'min_price')
                         ->from(self::getTableName())
-                        ->innerJoin(self::getJunctionTableName())
+                        ->innerJoin(ProductCategoryRelationMapper::getTableName())
                         ->whereEquals(self::column('published'), '1');
 
         $this->appendJunctionCategory($categoryId);
@@ -501,7 +493,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
-            $this->db->innerJoin(self::getJunctionTableName());
+            $this->db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
         $db->whereEquals(self::column('lang_id'), $this->getLangId())
@@ -573,7 +565,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 ProductTranslationMapper::column('name')
             );
 
-            $db->asManyToMany('categories', self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
+            $db->asManyToMany('categories', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
             $db->asManyToMany('similar', self::getSimilarTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
             $db->asManyToMany('recommended', self::getRecommendedTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
         }
@@ -632,7 +624,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $this->appendTranslationRelation();
 
-        return $db->innerJoin(self::getJunctionTableName())
+        return $db->innerJoin(ProductCategoryRelationMapper::getTableName())
                   ->whereEquals(
                     ProductTranslationMapper::column('lang_id'), 
                     $this->getLangId()
@@ -668,7 +660,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->appendWebPageRelation();
 
         if ($categoryId !== null) {
-            $this->db->innerJoin(self::getJunctionTableName());
+            $this->db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
         $db->whereEquals(self::column('lang_id'), $this->getLangId())
@@ -711,14 +703,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         if ($keyword === null) {
-            $db->innerJoin(self::getJunctionTableName());
+            $db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
         $db->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId())
            ->andWhereEquals(self::column('published'), '1');
 
         if ($keyword === null) {
-            $db->andWhereEquals(sprintf('%s.%s', self::getJunctionTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+            $db->andWhereEquals(sprintf('%s.%s', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
                ->andWhereEquals(sprintf('%s.%s', self::getTableName(), 'id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN));
         }
 
@@ -765,7 +757,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function countAllByCategoryId($categoryId)
     {
         //@TODO Optimize
-        return count($this->getMasterIdsFromJunction(self::getJunctionTableName(), $categoryId));
+        return count($this->getMasterIdsFromJunction(ProductCategoryRelationMapper::getTableName(), $categoryId));
     }
 
     /**
@@ -824,7 +816,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function update(array $input)
     {
         // Synchronize relations
-        $this->syncWithJunction(self::getJunctionTableName(), $input['id'], $input['category_id']);
+        $this->syncWithJunction(ProductCategoryRelationMapper::getTableName(), $input['id'], $input['category_id']);
 
         // Update into reccomended junction table
         if (isset($input['recommended_ids'])) {
@@ -852,7 +844,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $id = $this->getLastId(); // Last product ID
 
         // Insert into categories table
-        $this->insertIntoJunction(self::getJunctionTableName(), $id, $input['category_id']);
+        $this->insertIntoJunction(ProductCategoryRelationMapper::getTableName(), $id, $input['category_id']);
 
         // Insert into reccomended junction table
         if (isset($input['recommended_ids'])) {
@@ -877,7 +869,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     {
         $this->deleteByPk($id);
 
-        $this->removeFromJunction(self::getJunctionTableName(), $id);
+        $this->removeFromJunction(ProductCategoryRelationMapper::getTableName(), $id);
         $this->removeFromJunction(self::getRecommendedTableName(), $id);
         $this->removeFromJunction(self::getSimilarTableName(), $id);
 
