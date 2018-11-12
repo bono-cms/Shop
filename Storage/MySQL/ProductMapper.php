@@ -30,6 +30,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return ProductTranslationMapper::getTableName();
+    }
+
+    /**
      * Returns shared columns to be selected
      * 
      * @param mixed $customerId
@@ -871,20 +879,28 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function update(array $input)
     {
-        // Synchronize relations
-        $this->syncWithJunction(ProductCategoryRelationMapper::getTableName(), $input['id'], $input['category_id']);
+        // References
+        $data = $input['data'];
+        $product =& $data['product'];
+        $translations =& $data['translation'];
 
-        // Update into reccomended junction table
-        if (isset($input['recommended_ids'])) {
-            $this->syncWithJunction(ProductRecommendedMapper::getTableName(), $input['id'], $input['recommended_ids']);
+        // Synchronize relations
+        $this->syncWithJunction(ProductCategoryRelationMapper::getTableName(), $product['id'], $product['category_id']);
+
+        // Update into recommended junction table
+        if (isset($product['recommended_ids'])) {
+            $this->syncWithJunction(ProductRecommendedMapper::getTableName(), $product['id'], $product['recommended_ids']);
         }
 
         // Update into similar junction table
-        if (isset($input['similar_ids'])) {
-            $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $input['id'], $input['similar_ids']);
+        if (isset($product['similar_ids'])) {
+            $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $product['id'], $product['similar_ids']);
         }
 
-        return $this->persist(ArrayUtils::arrayWithout($input, array('category_id', 'recommended_ids', 'similar_ids')));
+        // Remove extra keys
+        $product = ArrayUtils::arrayWithout($product, array('slug', 'attributes', 'category_id', 'recommended_ids', 'similar_ids'));
+
+        return $this->savePage('Shop', 'Shop:Product@indexAction', $product, $translations);
     }
 
     /**

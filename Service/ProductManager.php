@@ -541,27 +541,14 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $product =& $input['data']['product'];
         $files =& $input['files'];
 
-        if (empty($product['slug'])) {
-            $product['slug'] = $product['name'];
-        }
-
         // If a cover has been selected, then we need to override its base name right now
         if (!empty($files['file'])) {
             $this->filterFileInput($files['file']);
             $product['cover'] = $files['file'][0]->getName();
         }
 
-        // Empty title is taken from the name
-        if (empty($product['title'])) {
-            $product['title'] = $product['name'];
-        }
-
-        // Make it now look like a slug
-        $product['slug'] = $this->webPageManager->sluggify($product['slug']);
-
         // Numeric attributes
         $product['order'] = (int) $product['order'];
-        $product['web_page_id'] = (int) $product['web_page_id'];
         $product['in_stock'] = (int) $product['in_stock'];
 
         return $input;
@@ -653,6 +640,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
                         $this->imageMapper->updateFileNameById($imageId, $fileBag[0]->getName());
                     }
                 }
+
                 // PHP hasn't block scope, so we have to remove it manually
                 unset($fileBag);
             }
@@ -704,8 +692,8 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             $product['cover'] = $photos['cover'];
         }
 
-        $this->track('Product "%s" has been updated', $product['name']);
-        $this->webPageManager->update($product['web_page_id'], $product['slug']);
+        //$this->track('Product "%s" has been updated', $product['name']);
+        //$this->webPageManager->update($product['web_page_id'], $product['slug']);
 
         // Update attributes if present
         if (isset($product['attributes'])) {
@@ -713,7 +701,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             $this->attributeMapper->store($productId, $product['attributes']);
         }
 
-        return $this->productMapper->update(ArrayUtils::arrayWithout($product, array('slug', 'attributes')));
+        return $this->productMapper->update($input);
     }
 
     /**
