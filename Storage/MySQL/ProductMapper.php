@@ -611,7 +611,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         return $db->queryAll();
     }
-    
+
     /**
      * Fetches product's data by its associated id
      * 
@@ -655,6 +655,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchBasicById($id)
     {
+        // To be selected
         $columns = array(
             ProductTranslationMapper::column('name'), 
             self::column('regular_price'), 
@@ -663,10 +664,16 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             self::column('cover')
         );
 
-        return $this->db->select($columns)
+        $db = $this->db->select($columns)
                         ->from(self::getTableName())
+                        // Translation relation
+                        ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                            ProductTranslationMapper::column('id') => self::getRawColumn('id')
+                        ))
                         ->whereEquals(self::column('id'), $id)
-                        ->query();
+                        ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
+
+        return $db->query();
     }
 
     /**
