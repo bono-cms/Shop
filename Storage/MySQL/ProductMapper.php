@@ -684,9 +684,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function countAll()
     {
         return (int) $this->db->select()
-                              ->count(self::column('id'), 'count')
+                              ->count(self::column('id'))
                               ->from(self::getTableName())
-                              ->query('count');
+                              ->queryScalar();
     }
 
     /**
