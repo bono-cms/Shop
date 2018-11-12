@@ -48,7 +48,7 @@ final class ProductEntity extends VirtualEntity
      */
     public function getStokePrice($format = false)
     {
-        return $this->createPrice('stokeprice', $format);
+        return $this->createPrice('stoke_price', $format);
     }
 
     /**
