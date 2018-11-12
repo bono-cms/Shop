@@ -3,6 +3,7 @@
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
 use Shop\Service\AttributeProcessor;
+use Cms\Service\LanguageManager;
 
 defined('KRYSTAL') or die;
 
@@ -21,68 +22,80 @@ defined('KRYSTAL') or die;
         <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
         <?php endif; ?>
     </ul>
-    
+
     <div class="tab-content">
         <!--Product tab-->
         <div role="tabpanel" class="tab-pane active" id="product">
             <div class="well">
-                <?php echo Element::hidden('product[id]', $product->getId()); ?>
-                <?php echo Element::hidden('product[cover]', $product->getCover()); ?>
-                <?php echo Element::hidden('product[web_page_id]', $product->getWebPageId()); ?>
+                <?php $this->loadPartial('language-tabs'); ?>
 
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                    <div class="col-lg-10">
-                        <div class="input-group">
-                            <?php echo Element::text('product[name]', $product->getName(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product name'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                <div class="tab-content">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
+                        <?php $entity = LanguageManager::findByLangId($language->getId(), $product); ?>
+
+                        <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
+                        <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
+                        <?php echo Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
+
+                        <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                            <div class="col-lg-10">
+                                <div class="input-group">
+                                    <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product name'))); ?>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::textarea('product[description]', $product->getDescription(), array('data-wysiwyg' => 'true')); ?>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
+                            <div class="col-lg-10">
+                                <?php echo Element::textarea(sprintf('translation[%s][description]', $language->getId()), $entity->getDescription(), array('data-wysiwyg' => 'true')); ?>
+                            </div>
+                        </div>
 
-                <div class="options">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text('product[slug]', $product->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this product. By default is taken from a title'))); ?>
-                                <span class="input-group-addon">
-                                    <a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh the slug'); ?>"></i></a>
-                                </span>
+                        <div class="options">
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <?php echo Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this product. By default is taken from a title'))); ?>
+                                        <span class="input-group-addon">
+                                            <a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh the slug'); ?>"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <?php echo Element::text(sprintf('translation[%s][title]', $language->getId()), $entity->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product title'))); ?>
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
+                                <div class="col-lg-10">
+                                    <?php echo Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
+                                <div class="col-lg-10">
+                                    <?php echo Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text('product[title]', $product->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product title'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::textarea('product[keywords]', $product->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::textarea('product[meta_description]', $product->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
@@ -187,11 +200,13 @@ defined('KRYSTAL') or die;
             </div>
         </div>
       </div>
-        
+
       <!--Images tab-->
       <div role="tabpanel" class="tab-pane" id="images">
         <div class="well">
-            
+            <?php echo Element::hidden('product[cover]', $entity->getCover()); ?>
+            <?php echo Element::hidden('product[id]', $entity->getId()); ?>
+
             <div id="file-input-container">
                 <?php echo Element::file('file[]', 'image/x-png, image/gif, image/jpeg'); ?>
             </div>
