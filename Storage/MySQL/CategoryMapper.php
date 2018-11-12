@@ -83,11 +83,11 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         );
 
         return $this->db->select($columns)
-                        ->count(ProductMapper::column(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN, ProductMapper::getJunctionTableName()), 'product_count')
+                        ->count(ProductMapper::column(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN, ProductCategoryRelationMapper::getTableName()), 'product_count')
                         ->from(self::getTableName())
                         // Product relation
-                        ->leftJoin(ProductMapper::getJunctionTableName(), array(
-                            ProductMapper::column(ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN, ProductMapper::getJunctionTableName()) => self::getRawColumn('id')
+                        ->leftJoin(ProductCategoryRelationMapper::getTableName(), array(
+                            ProductMapper::column(ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN, ProductCategoryRelationMapper::getTableName()) => self::getRawColumn('id')
                         ))
                         // Category translation relation
                         ->innerJoin(CategoryTranslationMapper::getTableName(), array(
@@ -154,9 +154,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         return $this->db->select($columns)
                         // Product counter
                         ->count(self::PARAM_JUNCTION_MASTER_COLUMN, 'product_count')
-                        ->from(ProductMapper::getJunctionTableName())
+                        ->from(ProductCategoryRelationMapper::getTableName())
                         ->rightJoin(self::getTableName(), array(
-                            self::column($top) => new RawSqlFragment(ProductMapper::column(self::PARAM_JUNCTION_SLAVE_COLUMN, ProductMapper::getJunctionTableName()))
+                            self::column($top) => new RawSqlFragment(ProductMapper::column(self::PARAM_JUNCTION_SLAVE_COLUMN, ProductCategoryRelationMapper::getTableName()))
                         ))
                         // Web page relation
                         ->leftJoin(WebPageMapper::getTableName(), array(
