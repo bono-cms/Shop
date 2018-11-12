@@ -520,10 +520,103 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Find attached category names by product ID
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    private function queryCategoryRelation($id)
+    {
+        // To be selected
+        $columns = array(
+            CategoryMapper::column('id'),
+            CategoryTranslationMapper::column('name')
+        );
+
+        $db = $this->db->select($columns)
+                       ->from(ProductCategoryRelationMapper::getTableName())
+                       // Category relation
+                       ->innerJoin(CategoryMapper::getTableName(), array(
+                            CategoryMapper::column('id') => ProductCategoryRelationMapper::getRawColumn('slave_id')
+                       ))
+                       // Category translation relation
+                       ->leftJoin(CategoryTranslationMapper::getTableName(), array(
+                            CategoryTranslationMapper::column('id') => CategoryMapper::getRawColumn('id')
+                       ))
+                       // Constraints
+                       ->whereEquals(ProductCategoryRelationMapper::column('master_id'), $id)
+                       ->andWhereEquals(CategoryTranslationMapper::column('lang_id'), $this->getLangId());
+
+        return $db->queryAll();
+    }
+
+    /**
+     * Find similar attached products
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    private function querySimilarRelation($id)
+    {
+        // Columns to be selected
+        $columns = array(
+            self::column('id'), 
+            ProductTranslationMapper::column('name')
+        );
+
+        $db = $this->db->select($columns)
+                       ->from(ProductSimilarRelationMapper::getTableName())
+                       // Product relation
+                       ->innerJoin(self::getTableName(), array(
+                            self::column('id') => ProductSimilarRelationMapper::getRawColumn('slave_id')
+                       ))
+                       // Product translation relation
+                       ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                            ProductTranslationMapper::column('id') => self::getRawColumn('id')
+                       ))
+                       // Constraints
+                       ->whereEquals(ProductSimilarRelationMapper::column('master_id'), $id)
+                       ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
+
+        return $db->queryAll();
+    }
+
+    /**
+     * Find recommended products
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    private function queryRecommendedRelation($id)
+    {
+        // Columns to be selected
+        $columns = array(
+            self::column('id'), 
+            ProductTranslationMapper::column('name')
+        );
+
+        $db = $this->db->select($columns)
+                       ->from(ProductRecommendedMapper::getTableName())
+                       // Product relation
+                       ->innerJoin(self::getTableName(), array(
+                            self::column('id') => ProductRecommendedMapper::getRawColumn('slave_id')
+                       ))
+                       // Product translation relation
+                       ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                            ProductTranslationMapper::column('id') => self::getRawColumn('id')
+                       ))
+                       // Constraints
+                       ->whereEquals(ProductRecommendedMapper::column('master_id'), $id)
+                       ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
+
+        return $db->queryAll();
+    }
+    
+    /**
      * Fetches product's data by its associated id
      * 
      * @param string $id Product id
-     * @param boolean $junction Whether to grab meta information about its categories
+     * @param boolean $junction Whether to grab meta information about its relation data
      * @param integer $customerId Optional customer ID
      * @return array
      */
@@ -542,18 +635,16 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db->whereEquals(self::column('id'), $id)
            ->andWhereEquals(self::column('published'), '1');
 
-        if ($junction === true) {
-            $columns = array(
-                self::column('id'), 
-                ProductTranslationMapper::column('name')
-            );
+        $row = $db->query();
 
-            $db->asManyToMany('categories', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, CategoryMapper::getTableName(), 'id', $columns);
-            $db->asManyToMany('similar', ProductSimilarRelationMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
-            $db->asManyToMany('recommended', ProductRecommendedMapper::getTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', $columns);
+        // Append relation data if required
+        if ($row && $junction === true) {
+            $row['categories'] = $this->queryCategoryRelation($id);
+            $row['recommended'] = $this->queryRecommendedRelation($id);
+            $row['similar'] = $this->querySimilarRelation($id);
         }
 
-        return $db->query();
+        return $row;
     }
 
     /**
