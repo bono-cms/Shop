@@ -160,8 +160,6 @@ final class Product extends AbstractController
             'input' => array(
                 'source' => $input['product'],
                 'definition' => array(
-                    'name' => new Pattern\Name(),
-
                     // Custom case for category id
                     'category_id' => array(
                         'required' => true,
@@ -171,9 +169,7 @@ final class Product extends AbstractController
                             )
                         )
                     ),
-                    
-                    'regular_price' => new Pattern\Price(),
-                    'description' => new Pattern\Description()
+                    'regular_price' => new Pattern\Price()
                 )
             )
         ));
