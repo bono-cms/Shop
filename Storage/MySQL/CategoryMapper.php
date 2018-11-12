@@ -36,14 +36,6 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public static function getJunctionTableName()
-    {
-        return self::getWithPrefix('bono_module_shop_categories_attr_groups');
-    }
-
-    /**
      * Returns shared columns to be selected
      * 
      * @return array
@@ -83,11 +75,11 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         );
 
         return $this->db->select($columns)
-                        ->count(ProductMapper::column(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN, ProductCategoryRelationMapper::getTableName()), 'product_count')
+                        ->count(ProductCategoryRelationMapper::getRawColumn(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN), 'product_count')
                         ->from(self::getTableName())
                         // Product relation
                         ->leftJoin(ProductCategoryRelationMapper::getTableName(), array(
-                            ProductMapper::column(ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN, ProductCategoryRelationMapper::getTableName()) => self::getRawColumn('id')
+                            ProductCategoryRelationMapper::column(ProductMapper::PARAM_JUNCTION_SLAVE_COLUMN) => self::getRawColumn('id')
                         ))
                         // Category translation relation
                         ->innerJoin(CategoryTranslationMapper::getTableName(), array(
@@ -120,10 +112,10 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         );
 
         $db = $this->db->select($columns)
-                        ->from(self::getJunctionTableName())
+                        ->from(CategoryAttributeGroupRelationMapper::getTableName())
                         ->leftJoin(AttributeGroupMapper::getTableName(), array(
-                            AttributeGroupMapper::column('id') => self::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN, self::getJunctionTableName()),
-                            self::column(self::PARAM_JUNCTION_MASTER_COLUMN, self::getJunctionTableName()) => $id
+                            AttributeGroupMapper::column('id') => CategoryAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
+                            CategoryAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
                         ));
 
         if ($dynamic === false) {
@@ -156,11 +148,11 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->count(self::PARAM_JUNCTION_MASTER_COLUMN, 'product_count')
                         ->from(ProductCategoryRelationMapper::getTableName())
                         ->rightJoin(self::getTableName(), array(
-                            self::column($top) => new RawSqlFragment(ProductMapper::column(self::PARAM_JUNCTION_SLAVE_COLUMN, ProductCategoryRelationMapper::getTableName()))
+                            self::column($top) => ProductCategoryRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN)
                         ))
                         // Web page relation
                         ->leftJoin(WebPageMapper::getTableName(), array(
-                            WebPageMapper::column('id') => new RawSqlFragment(self::column('web_page_id'))
+                            WebPageMapper::column('id') => self::getRawColumn('web_page_id')
                         ))
                         ->whereEquals(self::column('parent_id'), $parentId)
                         ->groupBy(self::column('id'))
@@ -233,7 +225,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function fetchById($id, $withTranslations)
     {
         $category = $this->findWebPage($this->getColumns(), $id, $withTranslations);
-        $attrs = $this->getSlaveIdsFromJunction(self::getJunctionTableName(), $id);
+        $attrs = $this->getSlaveIdsFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
 
         if ($withTranslations === true) {
             foreach ($category as $index => $entity) {
@@ -271,7 +263,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         // If there's at least one selected group, then insert into the junction table
         if (!empty($groups)) {
-            return $this->insertIntoJunction(self::getJunctionTableName(), $this->getLastId(), $groups);
+            return $this->insertIntoJunction(CategoryAttributeGroupRelationMapper::getTableName(), $this->getLastId(), $groups);
         }
 
         return true;
@@ -289,9 +281,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         $translations =& $input['translation'];
 
         if (!empty($category['attribute_group_id'])) {
-            $this->syncWithJunction(self::getJunctionTableName(), $category['id'], $category['attribute_group_id']);
+            $this->syncWithJunction(CategoryAttributeGroupRelationMapper::getTableName(), $category['id'], $category['attribute_group_id']);
         } else {
-            $this->removeFromJunction(self::getJunctionTableName(), $category['id']);
+            $this->removeFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $category['id']);
         }
 
         unset($category['attribute_group_id']);
@@ -319,7 +311,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function deleteById($id)
     {
-        return $this->deletePage($id) && $this->removeFromJunction(self::getJunctionTableName(), $id);
+        return $this->deletePage($id) && $this->removeFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
     }
 
     /**
