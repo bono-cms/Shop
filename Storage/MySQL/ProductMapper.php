@@ -853,39 +853,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Updates a price by associated id
+     * Update settings
      * 
-     * @param string $id Product's id
-     * @param string $price New price
+     * @param array $settings
      * @return boolean
      */
-    public function updatePriceById($id, $price)
+    public function updateSettings(array $settings)
     {
-        return $this->updateColumnByPk($id, 'regular_price', $price);
-    }
-
-    /**
-     * Updates published state by associated product's id
-     * 
-     * @param string $id Product's id
-     * @param string $published New state, either 0 or 1
-     * @return boolean
-     */
-    public function updatePublishedById($id, $published)
-    {
-        return $this->updateColumnByPk($id, 'published', $published);
-    }
-
-    /**
-     * Updates SEO state by associated product's id
-     * 
-     * @param integer $id Product id
-     * @param string $published New state, either 0 or 1
-     * @return boolean
-     */
-    public function updateSeoById($id, $seo)
-    {
-        return $this->updateColumnByPk($id, 'seo', $seo);
+        return $this->updateColumns($settings, array('regular_price', 'published', 'seo'));
     }
 
     /**

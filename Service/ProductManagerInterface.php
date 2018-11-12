@@ -109,28 +109,12 @@ interface ProductManagerInterface
     public function incrementViewCount($id);
 
     /**
-     * Updates prices by their associated ids and values
+     * Update settings
      * 
-     * @param array $pair
+     * @param array $settings
      * @return boolean
      */
-    public function updatePrices(array $pair);
-
-    /**
-     * Updates published state by their associated ids
-     * 
-     * @param array $pair
-     * @return boolean
-     */
-    public function updatePublished(array $pair);
-
-    /**
-     * Update SEO state by their associated ids
-     * 
-     * @param array $pair
-     * @return boolean
-     */
-    public function updateSeo(array $pair);
+    public function updateSettings(array $settings);
 
     /**
      * Removes products by their associated ids

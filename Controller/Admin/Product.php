@@ -132,18 +132,12 @@ final class Product extends AbstractController
      */
     public function tweakAction()
     {
-        if ($this->request->hasPost('price', 'published', 'seo')) {
-            // Grab request data
-            $prices = $this->request->getPost('price');
-            $published = $this->request->getPost('published');
-            $seo = $this->request->getPost('seo');
+        if ($this->request->hasPost('regular_price', 'published', 'seo')) {
+            $input = $this->request->getPost();
+            unset($input['filter']);
 
-            // Grab a manager
-            $productManager = $this->getModuleService('productManager');
-
-            $productManager->updatePrices($prices);
-            $productManager->updatePublished($published);
-            $productManager->updateSeo($seo);
+            // Update settings
+            $this->getModuleService('productManager')->updateSettings($input);
 
             $this->flashBag->set('success', 'Settings have been updated successfully');
             return '1';
