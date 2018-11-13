@@ -76,7 +76,14 @@ final class ProductRemover implements ProductRemoverInterface
      */
     public function removeAllById($id)
     {
-        return $this->removeWebPageById($id) && $this->removeById($id);
+        // Remove from a storage first
+        $this->productMapper->deletePage($id);
+        $this->imageMapper->deleteAllByProductId($id);
+
+        // Now remove from the file-system
+        $this->imageManager->delete($id);
+
+        return true;
     }
 
     /**
@@ -95,36 +102,6 @@ final class ProductRemover implements ProductRemoverInterface
                 $this->removeAllById($id);
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Removes product's web page
-     * 
-     * @param string $id Product's id
-     * @return boolean
-     */
-    private function removeWebPageById($id)
-    {
-        $webPageId = $this->productMapper->fetchWebPageIdById($id);
-        return $this->webPageManager->deleteById($webPageId);
-    }
-
-    /**
-     * Removes a product by its associated id
-     * 
-     * @param string $id Product id
-     * @return boolean
-     */
-    private function removeById($id)
-    {
-        // Remove from a storage first
-        $this->productMapper->deleteById($id);
-        $this->imageMapper->deleteAllByProductId($id);
-
-        // Now remove from the file-system
-        $this->imageManager->delete($id);
 
         return true;
     }

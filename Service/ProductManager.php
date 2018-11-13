@@ -488,10 +488,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     public function deleteById($id)
     {
-        $name = Filter::escape($this->productMapper->fetchNameById($id));
+        #$name = Filter::escape($this->productMapper->fetchNameById($id));
 
         if ($this->removeAllById($id)) {
-            $this->track('Product "%s" has been removed', $name);
+            #$this->track('Product "%s" has been removed', $name);
             return true;
         } else {
             return false;
