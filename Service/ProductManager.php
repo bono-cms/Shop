@@ -537,7 +537,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     private function prepareInput(array $input)
     {
-        // Request's data
+        // Request data
         $product =& $input['data']['product'];
         $files =& $input['files'];
 
