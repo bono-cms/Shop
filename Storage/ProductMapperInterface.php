@@ -132,20 +132,12 @@ interface ProductMapperInterface
     public function updateSettings(array $settings);
 
     /**
-     * Updates a product
+     * Updates or inserts a product (depending on value of PK)
      * 
-     * @param array $data
+     * @param array $input Raw input data
      * @return boolean
      */
-    public function update(array $data);
-
-    /**
-     * Adds a product
-     *  
-     * @param array $data
-     * @return boolean Depending on success
-     */
-    public function insert(array $data);
+    public function save(array $input);
 
     /**
      * Returns minimal product's price associated with provided category id

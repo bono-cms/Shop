@@ -872,60 +872,35 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
-     * Updates a product
+     * Updates or inserts a product (depending on value of PK)
      * 
      * @param array $input Raw input data
      * @return boolean
      */
-    public function update(array $input)
+    public function save(array $input)
     {
         // References
         $data = $input['data'];
         $product =& $data['product'];
         $translations =& $data['translation'];
 
+        // Save data
+        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attributes', 'slug', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
+
+        // Last product ID
+        $id = !empty($product['id']) ? $product['id'] : $this->getLastId();
+
         // Synchronize relations
-        $this->syncWithJunction(ProductCategoryRelationMapper::getTableName(), $product['id'], $product['category_id']);
+        $this->syncWithJunction(ProductCategoryRelationMapper::getTableName(), $id, $product['category_id']);
 
         // Update into recommended junction table
         if (isset($product['recommended_ids'])) {
-            $this->syncWithJunction(ProductRecommendedMapper::getTableName(), $product['id'], $product['recommended_ids']);
+            $this->syncWithJunction(ProductRecommendedMapper::getTableName(), $id, $product['recommended_ids']);
         }
 
         // Update into similar junction table
         if (isset($product['similar_ids'])) {
-            $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $product['id'], $product['similar_ids']);
-        }
-
-        // Remove extra keys
-        $product = ArrayUtils::arrayWithout($product, array('slug', 'attributes', 'category_id', 'recommended_ids', 'similar_ids'));
-
-        return $this->savePage('Shop', 'Shop:Product@indexAction', $product, $translations);
-    }
-
-    /**
-     * Adds a product
-     *  
-     * @param array $input Raw input data
-     * @return boolean Depending on success
-     */
-    public function insert(array $input)
-    {
-        // Save the product data first
-        $this->persist($this->getWithLang(ArrayUtils::arrayWithout($input, array('category_id', 'recommended_ids', 'similar_ids'))));
-        $id = $this->getLastId(); // Last product ID
-
-        // Insert into categories table
-        $this->insertIntoJunction(ProductCategoryRelationMapper::getTableName(), $id, $input['category_id']);
-
-        // Insert into reccomended junction table
-        if (isset($input['recommended_ids'])) {
-            $this->insertIntoJunction(ProductRecommendedMapper::getTableName(), $id, $input['recommended_ids']);
-        }
-
-        // Insert into similar junction table
-        if (isset($input['similar_ids'])) {
-            $this->insertIntoJunction(ProductSimilarRelationMapper::getTableName(), $id, $input['similar_ids']);
+            $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $id, $product['similar_ids']);
         }
 
         return true;

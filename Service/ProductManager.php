@@ -576,7 +576,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $files =& $input['files']['file'];
 
         // Insert should be first, because we need to provide an id
-        $this->productMapper->insert(ArrayUtils::arrayWithout($product, array('slug', 'attributes')));
+        $this->productMapper->save($input);
 
         // After insert, now we can get an id
         $id = $this->getLastId();
@@ -595,15 +595,14 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             }
         }
 
-        $this->track('Product "%s" has been added', $product['name']);
+        //$this->track('Product "%s" has been added', $product['name']);
 
         // Save attributes if present
         if (isset($product['attributes'])) {
             $this->attributeMapper->store($id, $product['attributes']);
         }
 
-        // Add a web page now
-        return $this->webPageManager->add($id, $product['slug'], 'Shop (Products)', 'Shop:Product@indexAction', $this->productMapper);
+        return true;
     }
 
     /**
@@ -701,7 +700,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             $this->attributeMapper->store($productId, $product['attributes']);
         }
 
-        return $this->productMapper->update($input);
+        return $this->productMapper->save($input);
     }
 
     /**
