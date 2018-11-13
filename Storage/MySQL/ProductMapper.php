@@ -386,7 +386,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function countAllStokes()
     {
         $db = $this->db->select()
-                        ->count($this->getPk(), 'count')
+                        ->count($this->getPk())
                         ->from(self::getTableName());
 
         $this->appendTranslationRelation();
@@ -394,7 +394,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         return $db->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId())
                   ->andWhereEquals(self::column('published'), '1')
                   ->andWhereNotEquals(self::column('stoke_price'), '0')
-                  ->query('count');
+                  ->queryScalar();
     }
 
     /**
