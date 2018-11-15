@@ -68,7 +68,7 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
                    ->whereEquals(OrderStatusTranslationMapper::column('lang_id'), $this->getLangId())
                    ->orderBy($this->getPk())
                    ->desc();
-
+                   
         return $db->queryAll();
     }
 }
