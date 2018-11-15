@@ -43,6 +43,7 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
     {
         $entity = new VirtualEntity();
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
+               ->setLangId($row['lang_id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'])
                ->setDescription($row['description']);
 
@@ -71,25 +72,14 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
     }
 
     /**
-     * Adds new order status entry
+     * Adds or updates new order status entry
      * 
      * @param array $input
      * @return boolean
      */
-    public function add(array $input)
+    public function save(array $input)
     {
-        return $this->orderStatusMapper->persist($input);
-    }
-
-    /**
-     * Updates order status entry
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->orderStatusMapper->persist($input);
+        return $this->orderStatusMapper->saveEntity($input['orderStatus'], $input['translation']);
     }
 
     /**
@@ -99,7 +89,7 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
      */
     public function fetchList()
     {
-        return ArrayUtils::arrayList($this->orderStatusMapper->fetchAll(), 'id', 'name');
+        return ArrayUtils::arrayList($this->fetchAll(), 'id', 'name');
     }
 
     /**
@@ -116,10 +106,15 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
      * Fetches order status entity by its associated ID
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->orderStatusMapper->fetchById($id));
+        if ($withTranslations === true) {
+            return $this->prepareResults($this->orderStatusMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->orderStatusMapper->fetchById($id, false));
+        }
     }
 }

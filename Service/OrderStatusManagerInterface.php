@@ -29,20 +29,12 @@ interface OrderStatusManagerInterface
     public function deleteById($id);
 
     /**
-     * Adds new order status entry
+     * Adds or updates new order status entry
      * 
      * @param array $input
      * @return boolean
      */
-    public function add(array $input);
-
-    /**
-     * Updates order status entry
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input);
+    public function save(array $input);
 
     /**
      * Fetch associative list
@@ -62,7 +54,8 @@ interface OrderStatusManagerInterface
      * Fetches order status entity by its associated ID
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 }
