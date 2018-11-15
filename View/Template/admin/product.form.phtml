@@ -99,7 +99,7 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <?php if (!$product->getId()): ?>
+            <?php if ($new): ?>
             <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Product@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Add'); ?></button>
             <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
 
@@ -121,7 +121,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 control-label"><?php $this->show('Price'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <?php echo Element::number('product[regular_price]', $product->getPrice(), array('class' => 'form-control', 'min' => '1', 'step' => '0.01', 'placeholder' => $this->translate('Price of the product to be added'))); ?>
+                        <?php echo Element::number('product[regular_price]', $entity->getPrice(), array('class' => 'form-control', 'min' => '1', 'step' => '0.01', 'placeholder' => $this->translate('Price of the product to be added'))); ?>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
                     </div>
                 </div>
@@ -131,7 +131,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 control-label"><?php $this->show('Stoke price'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <?php echo Element::number('product[stoke_price]', $product->getStokePrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Stoke price'))); ?>
+                        <?php echo Element::number('product[stoke_price]', $entity->getStokePrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Stoke price'))); ?>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
                     </div>
                 </div>
@@ -140,28 +140,28 @@ defined('KRYSTAL') or die;
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('product[category_id][]', $categories, $product->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
+                    <?php echo Element::select('product[category_id][]', $categories, $entity->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::checkbox('product[published]', $product->getPublished(), array('class' => 'form-control')); ?>
+                    <?php echo Element::checkbox('product[published]', $entity->getPublished(), array('class' => 'form-control')); ?>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::checkbox('product[seo]', $product->getSeo(), array('class' => 'form-control')); ?>
+                    <?php echo Element::checkbox('product[seo]', $entity->getSeo(), array('class' => 'form-control')); ?>
                 </div>
             </div>
 
             <div class="form-group <?php HtmlHelper::addOnDemand($config->getSpecialSupport(), 'hidden'); ?>">
                 <label class="col-lg-2 control-label"><?php $this->show('Special offer'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::checkbox('product[special_offer]', $product->getSpecialOffer(), array('class' => 'form-control')); ?>
+                    <?php echo Element::checkbox('product[special_offer]', $entity->getSpecialOffer(), array('class' => 'form-control')); ?>
                 </div>
             </div>
             
@@ -169,7 +169,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <?php echo Element::number('product[order]', $product->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Product sorting order'))); ?>
+                        <?php echo Element::number('product[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Product sorting order'))); ?>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                     </div>
                 </div>
@@ -179,7 +179,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 control-label"><?php $this->show('In stock'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <?php echo Element::number('product[in_stock]', $product->getInStock(), array('class' => 'form-control', 'placeholder' => $this->translate('Quantity of this product in stock'))); ?>
+                        <?php echo Element::number('product[in_stock]', $entity->getInStock(), array('class' => 'form-control', 'placeholder' => $this->translate('Quantity of this product in stock'))); ?>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                     </div>
                 </div>
@@ -188,14 +188,14 @@ defined('KRYSTAL') or die;
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Recommended products'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('product[recommended_ids][]', $names, $product->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
+                    <?php echo Element::select('product[recommended_ids][]', $names, $entity->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Similar products'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('product[similar_ids][]', $names, $product->getSimilarIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
+                    <?php echo Element::select('product[similar_ids][]', $names, $entity->getSimilarIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
                 </div>
             </div>
         </div>
@@ -246,13 +246,13 @@ defined('KRYSTAL') or die;
                             </td>
                             
                             <td class="text-center">
-                                <?php echo Element::radio('photos[cover]', $photo->getImage(), $product->getCover() == $photo->getImage()); ?>
+                                <?php echo Element::radio('photos[cover]', $photo->getImage(), $entity->getCover() == $photo->getImage()); ?>
                             </td>
                             
                             <td class="text-center">
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Replace this image'); ?>" data-button="edit" data-image="<?php echo $photo->getImage(); ?>" href="#"><i class="glyphicon glyphicon-pencil"></i></a>
                                 
-                                <?php if ($product->getCover() != $photo->getImage()): ?>
+                                <?php if ($entity->getCover() != $photo->getImage()): ?>
                                 <?php echo Element::checkbox(sprintf('photos[toDelete][%s]', $photo->getId()), false, array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Check if you want to remove this image')), false); ?> <span class="product-remove-caption"><?php $this->show('Remove'); ?></span>
                                 <?php endif; ?>
                                 

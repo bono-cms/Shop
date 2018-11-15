@@ -23,12 +23,22 @@ final class Product extends AbstractController
     /**
      * Creates a form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $product
+     * @param \Krystal\Stdlib\VirtualEntity|array $product
      * @param string $title
      * @return string
      */
-    private function createForm(VirtualEntity $product, $title)
+    private function createForm($product, $title)
     {
+        $new = !is_array($product); // Whether it's new product form
+
+        if (!$new) {
+            $id = $product[0]->getId();
+            $categoryIds = $product[0]->getCategoryIds();
+        } else {
+            $id = $product->getId();
+            $categoryIds = $product->getCategoryIds();
+        }
+
         // Load view plugins
         $this->view->getPluginBag()
                    ->load(array('preview', 'chosen' ,$this->getWysiwygPluginName()))
@@ -40,26 +50,27 @@ final class Product extends AbstractController
                                        ->addOne($title);
 
         // If viewing edit form, then grab product photos as well
-        if ($product->getId()) {
-            $photos = $this->getModuleService('productManager')->fetchAllImagesById($product->getId());
+        if ($id) {
+            $photos = $this->getModuleService('productManager')->fetchAllImagesById($id);
         } else {
             $photos = array();
         }
 
-        if ($product->getCategoryIds()) {
-            $attributes = $this->getModuleService('categoryManager')->fetchAttributesByIds($product->getCategoryIds(), true);
+        if ($id && $categoryIds) {
+            $attributes = $this->getModuleService('categoryManager')->fetchAttributesByIds($categoryIds, true);
         } else {
             $attributes = array();
         }
 
         return $this->view->render('product.form', array(
+            'new' => $new,
             'names' => $this->getModuleService('productManager')->fetchAllNames(),
             'photos' => $photos,
             'product' => $product,
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'config' => $this->getModuleService('configManager')->getEntity(),
             'attributes' => $attributes,
-            'activeAttributes' => $product->getId() ? $this->getModuleService('productManager')->findAttributesByProductId($product->getId()) : array()
+            'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : array()
         ));
     }
 
@@ -86,7 +97,7 @@ final class Product extends AbstractController
      */
     public function editAction($id)
     {
-        $product = $this->getModuleService('productManager')->fetchById($id);
+        $product = $this->getModuleService('productManager')->fetchById($id, true);
 
         if ($product !== false) {
             return $this->createForm($product, 'Edit the product');
