@@ -25,6 +25,14 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return OrderStatusTranslationMapper::getTableName();
+    }
+
+    /**
      * Deletes a row by its associated ID
      * 
      * @param string $id
