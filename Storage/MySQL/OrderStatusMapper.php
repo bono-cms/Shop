@@ -33,6 +33,19 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
     }
 
     /**
+     * {@inheritDoc}
+     */
+    private function getColumns()
+    {
+        return array(
+            self::column('id'),
+            OrderStatusTranslationMapper::column('lang_id'),
+            OrderStatusTranslationMapper::column('name'),
+            OrderStatusTranslationMapper::column('description')
+        );
+    }
+
+    /**
      * Deletes a row by its associated ID
      * 
      * @param string $id
@@ -47,11 +60,12 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
      * Fetches a row by its associated ID
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->findByPk($id);
+        return $this->findEntity($this->getColumns(), $id, $withTranslations);
     }
 
     /**
@@ -61,10 +75,11 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
      */
     public function fetchAll()
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->orderBy($this->getPk())
-                        ->desc()
-                        ->queryAll();
+        $db = $this->createEntitySelect($this->getColumns())
+                   ->whereEquals(OrderStatusTranslationMapper::column('lang_id'), $this->getLangId())
+                   ->orderBy($this->getPk())
+                   ->desc();
+
+        return $db->queryAll();
     }
 }
