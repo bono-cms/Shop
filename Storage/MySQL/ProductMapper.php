@@ -626,15 +626,12 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * @param string $id Product id
      * @param boolean $junction Whether to grab meta information about its relation data
      * @param integer $customerId Optional customer ID
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id, $junction = true, $customerId = null)
+    public function fetchById($id, $junction = true, $customerId = null, $withTranslations = false)
     {
-        $db = $this->db->select(self::getSharedColumns($customerId))
-                       ->from(self::getTableName());
-
-        $this->appendTranslationRelation();
-        $this->appendWebPageRelation();
+        $db = $this->createWebPageSelect(self::getSharedColumns($customerId));
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
@@ -643,16 +640,24 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $db->whereEquals(self::column('id'), $id)
            ->andWhereEquals(self::column('published'), '1');
 
-        $row = $db->query();
+        $rows = $withTranslations === true ? $db->queryAll() : array($db->query());
 
         // Append relation data if required
-        if ($row && $junction === true) {
-            $row['categories'] = $this->queryCategoryRelation($id);
-            $row['recommended'] = $this->queryRecommendedRelation($id);
-            $row['similar'] = $this->querySimilarRelation($id);
+        if ($rows && $junction === true) {
+            foreach ($rows as &$row) {
+                $row['categories'] = $this->queryCategoryRelation($id);
+                $row['recommended'] = $this->queryRecommendedRelation($id);
+                $row['similar'] = $this->querySimilarRelation($id);
+            }
         }
 
-        return $row;
+        if ($withTranslations === false && isset($rows[0])) {
+            return $rows[0];
+        } else if ($withTranslations === true) {
+            return $rows;
+        } else {
+            return false;
+        }
     }
 
     /**
