@@ -14,14 +14,6 @@ namespace Shop\Storage;
 interface OrderStatusMapperInterface
 {
     /**
-     * Deletes a row by its associated ID
-     * 
-     * @param string $id
-     * @return boolean
-     */
-    public function deleteById($id);
-
-    /**
      * Fetches a row by its associated ID
      * 
      * @param string $id

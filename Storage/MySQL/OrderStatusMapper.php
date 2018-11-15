@@ -46,17 +46,6 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
     }
 
     /**
-     * Deletes a row by its associated ID
-     * 
-     * @param string $id
-     * @return boolean
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
-    }
-
-    /**
      * Fetches a row by its associated ID
      * 
      * @param string $id

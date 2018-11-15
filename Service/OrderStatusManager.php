@@ -68,7 +68,7 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
      */
     public function deleteById($id)
     {
-        return $this->orderStatusMapper->deleteById($id);
+        return $this->orderStatusMapper->deleteEntity($id);
     }
 
     /**
