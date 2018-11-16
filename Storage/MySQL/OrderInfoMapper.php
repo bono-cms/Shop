@@ -95,8 +95,18 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     private function getSelectQuery()
     {
         return $this->db->select('*')
-                        ->from(static::getTableName())
-                        ->orderBy('id')
+                        ->from(self::getTableName())
+                        // Order status relation
+                        ->leftJoin(OrderStatusMapper::getTableName(), array(
+                            OrderStatusMapper::column('id') => self::getRawColumn('order_status_id')
+                        ))
+                        // Order status translation
+                        ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                            OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
+                        ))
+                        // Language constraint
+                        ->whereEquals(OrderStatusTranslationMapper::column('lang_id'), $this->getLangId())
+                        ->orderBy(self::column('id'))
                         ->desc();
     }
 

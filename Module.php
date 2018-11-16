@@ -50,7 +50,7 @@ final class Module extends AbstractCmsModule
         $imageMapper = $this->getMapper('/Shop/Storage/MySQL/ImageMapper', false);
         $productMapper = $this->getMapper('/Shop/Storage/MySQL/ProductMapper');
         $categoryMapper = $this->getMapper('/Shop/Storage/MySQL/CategoryMapper');
-        $orderInfoMapper = $this->getMapper('/Shop/Storage/MySQL/OrderInfoMapper', false);
+        $orderInfoMapper = $this->getMapper('/Shop/Storage/MySQL/OrderInfoMapper');
         $orderProductMapper = $this->getMapper('/Shop/Storage/MySQL/OrderProductMapper', false);
         $attributeMapper = $this->getMapper('/Shop/Storage/MySQL/ProductAttributeMapper', false);
         $deliveryTypeMapper = $this->getMapper('/Shop/Storage/MySQL/DeliveryTypeMapper', false);
