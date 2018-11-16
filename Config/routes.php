@@ -325,5 +325,22 @@ return array(
     '/%s/module/shop/config/save.ajax' => array(
         'controller' => 'Admin:Config@saveAction',
         'disallow' => array('guest')
+    ),
+
+    // Specification category
+    '/%s/module/shop/specification/category/add' => array(
+        'controller' => 'Admin:SpecificationCategory@addAction'
+    ),
+
+    '/%s/module/shop/specification/category/edit/(:var)' => array(
+        'controller' => 'Admin:SpecificationCategory@editAction'
+    ),
+
+    '/%s/module/shop/specification/category/delete/(:var)' => array(
+        'controller' => 'Admin:SpecificationCategory@deleteAction'
+    ),
+
+    '/%s/module/shop/specification/category/save' => array(
+        'controller' => 'Admin:SpecificationCategory@saveAction'
     )
 );
