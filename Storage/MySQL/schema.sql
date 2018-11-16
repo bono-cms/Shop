@@ -229,3 +229,23 @@ CREATE TABLE `bono_module_shop_specification_category_translation` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
 
 ) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_item`;
+CREATE TABLE `bono_module_shop_specification_item` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `category_id` INT NOT NULL COMMENT 'Attached category ID',
+    `order` INT NOT NULL COMMENT 'Sorting order',
+
+    FOREIGN KEY (category_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_item_translation`;
+CREATE TABLE `bono_module_shop_specification_item_translation` (
+    `id` INT NOT NULL,
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Category name',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
