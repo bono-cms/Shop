@@ -13,6 +13,7 @@ namespace Shop\Service;
 
 use Shop\Storage\SpecificationCategoryMapperInterface;
 use Cms\Service\AbstractManager;
+use Krystal\Stdlib\VirtualEntity;
 
 final class SpecificationCategoryService extends AbstractManager
 {
@@ -35,6 +36,57 @@ final class SpecificationCategoryService extends AbstractManager
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function toEntity(array $row)
+    {
+        $entity = new VirtualEntity();
+        $entity->setId($row['id'])
+               ->setLangId($row['lang_id'])
+               ->setName($row['name'])
+               ->setOrder($row['order']);
+        
+        return $entity;
+    }
+
+    /**
+     * Deletes a category by its ID
+     * 
+     * @param int $id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->specificationCategoryMapper->deleteEntity($id);
+    }
+
+    /**
+     * Fetch category by its ID
+     * 
+     * @param int $id
+     * @param boolean $withTranslations
+     * @return array
+     */
+    public function fetchById($id, $withTranslations)
+    {
+        if ($withTranslations == true) {
+            return $this->prepareResults($this->specificationCategoryMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->specificationCategoryMapper->fetchById($id, false));
+        }
+    }
+
+    /**
+     * Fetch all categories
+     * 
+     * @return array
+     */
+    public function fetchAll()
+    {
+        return $this->specificationCategoryMapper->fetchAll();
+    }
+
+    /**
      * Returns last id
      * 
      * @return integer
@@ -42,5 +94,16 @@ final class SpecificationCategoryService extends AbstractManager
     public function getLastId()
     {
         return $this->specificationCategoryMapper->getLastId();
+    }
+
+    /**
+     * Saves a category
+     * 
+     * @param array $input
+     * @return mixed
+     */
+    public function save(array $input)
+    {
+        return $this->specificationCategoryMapper->saveEntity($input['category'], $input['translation']);
     }
 }
