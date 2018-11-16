@@ -109,7 +109,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendJunctionCategory($categoryId)
     {
-        $this->db->andWhereEquals(sprintf('%s.%s', ProductCategoryRelationMapper::getTableName(), self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
+        $this->db->andWhereEquals(ProductCategoryRelationMapper::column(self::PARAM_JUNCTION_SLAVE_COLUMN), $categoryId)
                  ->andWhereEquals(self::column('id'), new RawSqlFragment(self::PARAM_JUNCTION_MASTER_COLUMN));
     }
 
