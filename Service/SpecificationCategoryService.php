@@ -14,6 +14,7 @@ namespace Shop\Service;
 use Shop\Storage\SpecificationCategoryMapperInterface;
 use Cms\Service\AbstractManager;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 
 final class SpecificationCategoryService extends AbstractManager
 {
@@ -74,6 +75,16 @@ final class SpecificationCategoryService extends AbstractManager
         } else {
             return $this->prepareResult($this->specificationCategoryMapper->fetchById($id, false));
         }
+    }
+
+    /**
+     * Fetches as a list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return ArrayUtils::arrayList($this->specificationCategoryMapper->fetchAll(), 'id', 'name');
     }
 
     /**
