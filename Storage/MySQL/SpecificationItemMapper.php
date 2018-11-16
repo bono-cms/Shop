@@ -31,4 +31,47 @@ final class SpecificationItemMapper extends AbstractMapper implements Specificat
     {
         return SpecificationItemTranslationMapper::getTableName();
     }
+    
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::column('id'),
+            self::column('category_id'),
+            self::column('order'),
+            SpecificationItemTranslationMapper::column('lang_id'),
+            SpecificationItemTranslationMapper::column('name')
+        );
+    }
+
+    /**
+     * Fetch all items
+     * 
+     * @return array
+     */
+    public function fetchAll()
+    {
+        $db = $this->createEntitySelect($this->getColumns())
+                   ->whereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId())
+                   ->orderBy(self::column('id'))
+                   ->desc();
+
+        return $db->queryAll();
+    }
+
+    /**
+     * Fetches item by its ID
+     * 
+     * @param int $id Item id
+     * @param boolean $withTranslations Whether to fetch translations or not
+     * @return array
+     */
+    public function fetchById($id, $withTranslations)
+    {
+        return $this->findEntity($this->getColumns(), $id, $withTranslations);
+    }
 }

@@ -13,4 +13,19 @@ namespace Shop\Storage;
 
 interface SpecificationItemMapperInterface
 {
+    /**
+     * Fetch all items
+     * 
+     * @return array
+     */
+    public function fetchAll();
+
+    /**
+     * Fetches item by its ID
+     * 
+     * @param int $id Item id
+     * @param boolean $withTranslations Whether to fetch translations or not
+     * @return array
+     */
+    public function fetchById($id, $withTranslations);
 }
