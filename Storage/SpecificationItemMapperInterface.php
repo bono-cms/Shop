@@ -16,9 +16,10 @@ interface SpecificationItemMapperInterface
     /**
      * Fetch all items
      * 
+     * @param int $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll($categoryId = null);
 
     /**
      * Fetches item by its ID
