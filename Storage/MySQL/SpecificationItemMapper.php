@@ -51,14 +51,21 @@ final class SpecificationItemMapper extends AbstractMapper implements Specificat
     /**
      * Fetch all items
      * 
+     * @param int $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($categoryId = null)
     {
         $db = $this->createEntitySelect($this->getColumns())
-                   ->whereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId())
-                   ->orderBy(self::column('id'))
-                   ->desc();
+                   ->whereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId());
+
+        // Apply on demand
+        if ($categoryId !== null) {
+            $db->andWhereEquals(self::column('category_id'), $categoryId);
+        }
+
+        $db->orderBy(self::column('id'))
+           ->desc();
 
         return $db->queryAll();
     }
