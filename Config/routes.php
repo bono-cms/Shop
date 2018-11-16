@@ -342,5 +342,22 @@ return array(
 
     '/%s/module/shop/specification/category/save' => array(
         'controller' => 'Admin:SpecificationCategory@saveAction'
+    ),
+
+    // Specification item
+    '/%s/module/shop/specification/item/add' => array(
+        'controller' => 'Admin:SpecificationItem@addAction'
+    ),
+
+    '/%s/module/shop/specification/item/edit/(:var)' => array(
+        'controller' => 'Admin:SpecificationItem@editAction'
+    ),
+
+    '/%s/module/shop/specification/item/delete/(:var)' => array(
+        'controller' => 'Admin:SpecificationItem@deleteAction'
+    ),
+
+    '/%s/module/shop/specification/item/save' => array(
+        'controller' => 'Admin:SpecificationItem@saveAction'
     )
 );
