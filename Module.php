@@ -34,6 +34,7 @@ use Shop\Service\OrderStatusManager;
 use Shop\Service\SiteService;
 use Shop\Service\WishlistManager;
 use Shop\Service\SpecificationCategoryService;
+use Shop\Service\SpecificationItemService;
 
 final class Module extends AbstractCmsModule
 {
@@ -118,7 +119,8 @@ final class Module extends AbstractCmsModule
             'categoryManager' => $categoryManager,
             'attributeGroupManager' => new AttributeGroupManager($this->getMapper('/Shop/Storage/MySQL/AttributeGroupMapper', false)),
             'attributeValueManager' => new AttributeValueManager($this->getMapper('/Shop/Storage/MySQL/AttributeValueMapper', false)),
-            'specificationCategoryService' => new SpecificationCategoryService($this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper'))
+            'specificationCategoryService' => new SpecificationCategoryService($this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper')),
+            'specificationItemService' => new SpecificationItemService($this->getMapper('/Shop/Storage/MySQL/SpecificationItemMapper'))
         );
     }
 
