@@ -11,6 +11,7 @@
 
 namespace Shop\Service;
 
+use Krystal\Stdlib\VirtualEntity;
 use Cms\Service\AbstractManager;
 use Shop\Storage\SpecificationItemMapperInterface;
 
@@ -35,6 +36,21 @@ final class SpecificationItemService extends AbstractManager
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function toEntity(array $row)
+    {
+        $entity = new VirtualEntity();
+        $entity->setId($row['id'])
+               ->setCategoryId($row['category_id'])
+               ->setLangId($row['lang_id'])
+               ->setOrder($row['order'])
+               ->setName($row['name']);
+
+        return $entity;
+    }
+
+    /**
      * Returns last ID
      * 
      * @return int
@@ -42,5 +58,53 @@ final class SpecificationItemService extends AbstractManager
     public function getLastId()
     {
         return $this->specificationItemMapper->getMaxId();
+    }
+
+    /**
+     * Deletes an item by its ID
+     * 
+     * @param int $id Item ID
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->specificationItemMapper->deleteById($id);
+    }
+
+    /**
+     * Fetch all items
+     * 
+     * @param int $categoryId Optional category ID filter
+     * @return array
+     */
+    public function fetchAll($categoryId = null)
+    {
+        return $this->prepareResults($this->specificationItemMapper->fetchAll($categoryId));
+    }
+
+    /**
+     * Fetch item by its ID
+     * 
+     * @param int $id Item ID
+     * @return mixed
+     */
+    public function fetchById($id, $withTranslations)
+    {
+        if ($withTranslations === true) {
+            return $this->prepareResults($this->specificationItemMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->specificationItemMapper->fetchById($id, false));
+        }
+    }
+
+    /**
+     * Saves an item
+     * 
+     * @param array $input
+     * @return boolean
+     */
+    public function save(array $input)
+    {
+        return $this->specificationItemMapper->saveEntity($input['item'], $input['translation']);
     }
 }
