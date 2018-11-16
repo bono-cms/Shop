@@ -327,6 +327,10 @@ return array(
         'disallow' => array('guest')
     ),
 
+    '/%s/module/shop/specification/' => array(
+        'controller' => 'Admin:SpecificationItem@indexAction'
+    ),
+    
     // Specification category
     '/%s/module/shop/specification/category/add' => array(
         'controller' => 'Admin:SpecificationCategory@addAction'

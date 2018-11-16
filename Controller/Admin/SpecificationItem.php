@@ -17,6 +17,23 @@ use Krystal\Stdlib\VirtualEntity;
 final class SpecificationItem extends AbstractController
 {
     /**
+     * Renders grid
+     * 
+     * @return string
+     */
+    public function indexAction()
+    {
+        // Append breadcrumb
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('Specifications');
+
+        return $this->view->render('specification/index', array(
+            'categories' => $this->getModuleService('specificationCategoryService')->fetchAll(),
+            'items' => $this->getModuleService('specificationItemService')->fetchAll()
+        ));
+    }
+
+    /**
      * Renders a form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $category
