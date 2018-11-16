@@ -1,0 +1,88 @@
+<?php
+
+use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h3><?php $this->show('Items'); ?> <small>(<?= count($items); ?>)</small></h3>
+    
+        <?= Grid::render($items, array(
+            // A column to be considered as a primary key
+            'pk' => 'id',
+            'batch' => true,
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                    'label' => '#'
+                ),
+            ),
+
+            'actions' => array(
+                'edit' => function($row){
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationItem@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this post'), 'data-button' => 'edit'));
+                },
+
+                'remove' => function($row){
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this post'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationItem@deleteAction', $row['id'])));
+                }
+            )
+
+        ), $this->translator); ?>
+
+        <?php if (empty($items)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No items'); ?></h2>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="col-lg-6">
+        <h3><?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h3>
+
+        <?= Grid::render($categories, array(
+            // A column to be considered as a primary key
+            'pk' => 'id',
+            'batch' => true,
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                    'label' => '#'
+                ),
+            ),
+
+            'actions' => array(
+                'edit' => function($row){
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this post'), 'data-button' => 'edit'));
+                },
+
+                'remove' => function($row){
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this post'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id'])));
+                }
+            )
+
+        ), $this->translator); ?>
+
+        <?php if (empty($categories)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
