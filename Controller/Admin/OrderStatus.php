@@ -20,18 +20,22 @@ final class OrderStatus extends AbstractController
     /**
      * Creates the grid
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $orderStatus
+     * @param \Krystal\Stdlib\VirtualEntity|array $orderStatus
      * @return string
      */
-    private function createGrid(VirtualEntity $orderStatus)
+    private function createForm($orderStatus)
     {
-        // Configure breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Order statuses');
+        // Whether form is new
+        $new = !is_array($orderStatus);
 
-        return $this->view->render('order-statuses-grid', array(
-            'orderStatuses' => $this->getModuleService('orderStatusManager')->fetchAll(),
-            'orderStatus' => $orderStatus
+        // Append breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('Order statuses', 'Shop:Admin:OrderStatus@indexAction')
+                                       ->addOne(!$new ? 'Update order status' : 'Add order status');
+
+        return $this->view->render('order-status/form', array(
+            'orderStatus' => $orderStatus,
+            'new' => $new
         ));
     }
 
@@ -42,7 +46,23 @@ final class OrderStatus extends AbstractController
      */
     public function indexAction()
     {
-        return $this->createGrid(new VirtualEntity());
+        // Configure breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('Order statuses');
+
+        return $this->view->render('order-status/index', array(
+            'orderStatuses' => $this->getModuleService('orderStatusManager')->fetchAll()
+        ));
+    }
+
+    /**
+     * Renders add form
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        return $this->createForm(new VirtualEntity());
     }
 
     /**
@@ -53,10 +73,10 @@ final class OrderStatus extends AbstractController
      */
     public function editAction($id)
     {
-        $entity = $this->getModuleService('orderStatusManager')->fetchById($id);
+        $orderStatus = $this->getModuleService('orderStatusManager')->fetchById($id, true);
 
-        if ($entity !== false) {
-            return $this->createGrid($entity);
+        if ($orderStatus !== false) {
+            return $this->createForm($orderStatus);
         } else {
             return false;
         }
@@ -96,17 +116,17 @@ final class OrderStatus extends AbstractController
             )
         ));
 
-        if ($formValidator->isValid()) {
+        if (1) {
             // Grab the service
             $service = $this->getModuleService('orderStatusManager');
 
             if ($input['id']) {
-                $service->update($input);
+                $service->save($this->request->getPost());
                 $this->flashBag->set('success', 'Order status has been updated successfully');
 
                 return 1;
             } else {
-                $service->add($input);
+                $service->save($this->request->getPost());
                 $this->flashBag->set('success', 'Order status has been added successfully');
 
                 return $service->getLastId();

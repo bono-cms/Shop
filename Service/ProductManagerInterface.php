@@ -224,9 +224,10 @@ interface ProductManagerInterface
      * Fetches product's entity by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Fetches basic product info by its associated id

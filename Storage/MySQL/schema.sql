@@ -190,12 +190,20 @@ CREATE TABLE `bono_module_shop_currencies` (
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status`;
 CREATE TABLE `bono_module_shop_orders_status` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order Status ID',
-    `name` varchar(255) NOT NULL COMMENT 'Order Status Name',
-    `description` TEXT COMMENT 'Order Status Description'
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order Status ID'
 ) DEFAULT CHARSET = UTF8;
 
+DROP TABLE IF EXISTS `bono_module_shop_orders_status_translations`;
+CREATE TABLE `bono_module_shop_orders_status_translations` (
 
+    `id` INT NOT NULL COMMENT 'Order Status ID',
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Order Status Name',
+    `description` TEXT COMMENT 'Order Status Description',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_orders_status(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_wishlist`;
 CREATE TABLE `bono_module_shop_wishlist` (

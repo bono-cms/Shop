@@ -818,7 +818,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     public function fetchFullById($id, $customerId = null)
     {
-        $product = $this->productMapper->fetchById($id, true, $customerId);
+        $product = $this->productMapper->fetchById($id, true, $customerId, false);
 
         $product['recommended_products'] = $this->createAttachedEntity($product['recommended']);
         $product['similar_products'] = $this->createAttachedEntity($product['similar']);
@@ -844,11 +844,16 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      * Fetches product's entity by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->productMapper->fetchById($id));
+        if ($withTranslations === true) {
+            return $this->prepareResults($this->productMapper->fetchById($id, true, null, true));
+        } else {
+            return $this->prepareResult($this->productMapper->fetchById($id));
+        }
     }
 
     /**
