@@ -214,3 +214,18 @@ CREATE TABLE `bono_module_shop_wishlist` (
 
 ) DEFAULT CHARSET = UTF8;
 
+DROP TABLE IF EXISTS `bono_module_shop_specification_category`;
+CREATE TABLE `bono_module_shop_specification_category` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `order` INT NOT NULL COMMENT 'Sorting order'
+) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_category_translation`;
+CREATE TABLE `bono_module_shop_specification_category_translation` (
+    `id` INT NOT NULL,
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Category name',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_product_specification_category(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
