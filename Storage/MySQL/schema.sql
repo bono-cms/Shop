@@ -249,3 +249,13 @@ CREATE TABLE `bono_module_shop_specification_item_translation` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE
 
 ) DEFAULT CHARSET = UTF8;
+
+/* Attached specification categories to products (i.e their ID relations) */
+DROP TABLE IF EXISTS `bono_module_shop_specification_relation`;
+CREATE TABLE `bono_module_shop_specification_relation` (
+    `master_id` INT NOT NULL COMMENT 'Product ID',
+    `slave_id` INT NOT NULL COMMENT 'Category ID',
+
+    FOREIGN KEY (slave_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;

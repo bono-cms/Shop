@@ -44,7 +44,8 @@ final class Dropper extends AbstractStorageDropper
             SpecificationCategoryMapper::getTableName(),
             SpecificationCategoryTranslationMapper::getTableName(),
             SpecificationItemMapper::getTableName(),
-            SpecificationItemTranslationMapper::getTableName()
+            SpecificationItemTranslationMapper::getTableName(),
+            SpecificationCategoryProductRelationMapper::getTableName()
         );
     }
 }
