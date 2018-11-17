@@ -28,7 +28,7 @@ final class SpecificationCategory extends AbstractController
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Specifications', 'Shop:Admin:SpecificationItem@indexAction')
+                                       ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
                                        ->addOne($new ? 'Add new category' : 'Edit category');
         
         return $this->view->render('specification/category.form', array(
