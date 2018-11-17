@@ -73,4 +73,15 @@ final class SpecificationCategoryMapper extends AbstractMapper implements Specif
     {
         return $this->findEntity($this->getColumns(), $id, $withTranslations);
     }
+
+    /**
+     * Fetch attached specification category IDs by product ID
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    public function fetchAttachedByProductId($id)
+    {
+        return $this->getSlaveIdsFromJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id);
+    }
 }

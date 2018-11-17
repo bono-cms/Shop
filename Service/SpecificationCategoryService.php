@@ -98,6 +98,17 @@ final class SpecificationCategoryService extends AbstractManager
     }
 
     /**
+     * Fetch attached specification category IDs by product ID
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    public function fetchAttachedByProductId($id)
+    {
+        return $this->specificationCategoryMapper->fetchAttachedByProductId($id);
+    }
+
+    /**
      * Returns last id
      * 
      * @return integer

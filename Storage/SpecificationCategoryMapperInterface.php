@@ -13,5 +13,11 @@ namespace Shop\Storage;
 
 interface SpecificationCategoryMapperInterface
 {
-    
+    /**
+     * Fetch attached specification category IDs by product ID
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    public function fetchAttachedByProductId($id);
 }
