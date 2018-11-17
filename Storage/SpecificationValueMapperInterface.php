@@ -13,5 +13,11 @@ namespace Shop\Storage;
 
 interface SpecificationValueMapperInterface
 {
-    
+    /**
+     * Find values by product ID
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    public function findByProduct($id);
 }
