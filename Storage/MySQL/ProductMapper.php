@@ -890,7 +890,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $translations =& $data['translation'];
 
         // Save data
-        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attributes', 'slug', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
+        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
 
         // Last product ID
         $id = !empty($product['id']) ? $product['id'] : $this->getLastId();
@@ -907,6 +907,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         if (isset($product['similar_ids'])) {
             $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $id, $product['similar_ids']);
         }
+
+        // Specification category relation
+        $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : array());
 
         return true;
     }

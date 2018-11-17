@@ -138,6 +138,13 @@ defined('KRYSTAL') or die;
             </div>
 
             <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Specification category'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[spec_cat_id][]', $specCatIds, $entity->getSpecCatIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one specification category'))); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
                 <div class="col-lg-10">
                     <?php echo Element::select('product[category_id][]', $categories, $entity->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
