@@ -11,6 +11,7 @@
 
 namespace Shop\Service;
 
+use Krystal\Stdlib\ArrayUtils;
 use Cms\Service\AbstractManager;
 use Shop\Storage\SpecificationValueMapperInterface;
 
@@ -32,5 +33,17 @@ final class SpecificationValueService extends AbstractManager
     public function __construct(SpecificationValueMapperInterface $specificationValueMapper)
     {
         $this->specificationValueMapper = $specificationValueMapper;
+    }
+    
+    /**
+     * Find values by product ID
+     * 
+     * @param int $id Product ID
+     * @return array
+     */
+    public function findByProduct($id)
+    {
+        $rows = $this->specificationValueMapper->findByProduct($id);
+        return ArrayUtils::arrayPartition($rows, 'category', false);
     }
 }
