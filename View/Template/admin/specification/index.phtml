@@ -68,6 +68,11 @@ defined('KRYSTAL') or die;
             'pk' => 'id',
             'batch' => true,
             'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'rowAttributes' => [
+                'class' => function($row) use ($categoryId){
+                    return $row['id'] == $categoryId ? 'success' : null;
+                }
+            ],
             'columns' => array(
                 array(
                     'column' => 'id',
@@ -76,7 +81,9 @@ defined('KRYSTAL') or die;
 
                 array(
                     'column' => 'name',
-                    'label' => '#'
+                    'value' => function($entity){
+                        return Element::link($entity['name'], $this->url('Shop:Admin:SpecificationItem@indexAction', $entity['id']));
+                    }
                 ),
             ),
 

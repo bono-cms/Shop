@@ -327,7 +327,7 @@ return array(
         'disallow' => array('guest')
     ),
 
-    '/%s/module/shop/specification/' => array(
+    '/%s/module/shop/specification/(:var)' => array(
         'controller' => 'Admin:SpecificationItem@indexAction'
     ),
     

@@ -19,17 +19,23 @@ final class SpecificationItem extends AbstractController
     /**
      * Renders grid
      * 
+     * @param int $categoryId Optional category ID filter
      * @return string
      */
-    public function indexAction()
+    public function indexAction($categoryId)
     {
+        if (!$categoryId) {
+            $categoryId = $this->getModuleService('specificationCategoryService')->getLastId();
+        }
+
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Specifications');
 
         return $this->view->render('specification/index', array(
             'categories' => $this->getModuleService('specificationCategoryService')->fetchAll(),
-            'items' => $this->getModuleService('specificationItemService')->fetchAll()
+            'categoryId' => $categoryId,
+            'items' => $this->getModuleService('specificationItemService')->fetchAll($categoryId)
         ));
     }
 
