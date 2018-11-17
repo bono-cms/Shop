@@ -7,6 +7,19 @@ defined('KRYSTAL') or die;
 
 ?>
 
+<div class="btn-toolbar">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu">
+         <li><a href="<?php echo $this->url('Shop:Admin:SpecificationCategory@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a></li>
+         <li><a href="<?php echo $this->url('Shop:Admin:SpecificationItem@addAction'); ?>"><i class="glyphicon glyphicon-inbox"></i> <?php $this->show('Add new item'); ?></a></li>
+      </ul>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-lg-6">
         <h3><?php $this->show('Items'); ?> <small>(<?= count($items); ?>)</small></h3>
