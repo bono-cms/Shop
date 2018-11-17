@@ -11,11 +11,12 @@ defined('KRYSTAL') or die;
 
 <form data-group="category">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
+        <li role="presentation" class="active"><a href="#translations" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
+        <li role="presentation"><a href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Options'); ?></a></li>
 	</ul>
 
     <div class="tab-content">
-        <div class="tab-pane fade in active" id="category" role="tabpanel">
+        <div class="tab-pane fade in active" id="translations" role="tabpanel">
             <div class="well">
                 <?php $this->loadPartial('language-tabs'); ?>
 
@@ -40,9 +41,22 @@ defined('KRYSTAL') or die;
                     </div>
                     <?php endforeach; ?>
                 </div>
+            </div>
+        </div>
 
-                <?php echo Element::hidden('category[id]', $entity->getId()); ?>
-                <?php echo Element::hidden('category[order]', $entity->getOrder()); ?>
+        <div class="tab-pane fade" id="category" role="tabpanel">
+            <?php echo Element::hidden('category[id]', $entity->getId()); ?>
+
+            <div class="well">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('category[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
