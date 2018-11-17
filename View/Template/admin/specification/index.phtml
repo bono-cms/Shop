@@ -66,13 +66,12 @@ defined('KRYSTAL') or die;
         <?= Grid::render($categories, array(
             // A column to be considered as a primary key
             'pk' => 'id',
-            'batch' => true,
             'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-            'rowAttributes' => [
+            'rowAttributes' => array(
                 'class' => function($row) use ($categoryId){
                     return $row['id'] == $categoryId ? 'success' : null;
                 }
-            ],
+            ),
             'columns' => array(
                 array(
                     'column' => 'id',
@@ -85,6 +84,10 @@ defined('KRYSTAL') or die;
                         return Element::link($entity['name'], $this->url('Shop:Admin:SpecificationItem@indexAction', $entity['id']));
                     }
                 ),
+
+                array(
+                    'column' => 'order',
+                )
             ),
 
             'actions' => array(
