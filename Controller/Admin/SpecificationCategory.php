@@ -87,10 +87,17 @@ final class SpecificationCategory extends AbstractController
     {
         $data = $this->request->getPost();
 
-        if ($this->getModuleService('specificationCategoryService')->save($data)) {
-            $this->flashBag->set('success', $data['category']['id'] ? 'Element has been updated successfully' : 'Element has been added successfully');
+        $new = $data['item']['id'];
+        $specificationCategoryService = $this->getModuleService('specificationCategoryService');
+
+        if ($specificationCategoryService->save($data)) {
+            $this->flashBag->set('success', !$new ? 'Element has been updated successfully' : 'Element has been added successfully');
         }
 
-        return 1;
+        if ($new) {
+            return $specificationCategoryService->getLastId();
+        } else {
+            return 1;
+        }
     }
 }
