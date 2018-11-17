@@ -27,7 +27,6 @@ defined('KRYSTAL') or die;
         <?= Grid::render($items, array(
             // A column to be considered as a primary key
             'pk' => 'id',
-            'batch' => true,
             'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
             'columns' => array(
                 array(
@@ -37,7 +36,6 @@ defined('KRYSTAL') or die;
 
                 array(
                     'column' => 'name',
-                    'label' => '#'
                 ),
             ),
 
