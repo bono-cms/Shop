@@ -45,7 +45,7 @@ final class SpecificationItem extends AbstractController
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Specifications', '#')
+                                       ->addOne('Specifications', 'Shop:Admin:SpecificationItem@indexAction')
                                        ->addOne($new ? 'Add new item' : 'Edit item');
         
         return $this->view->render('specification/item.form', array(
