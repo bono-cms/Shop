@@ -57,7 +57,7 @@ final class SpecificationItemService extends AbstractManager
      */
     public function getLastId()
     {
-        return $this->specificationItemMapper->getMaxId();
+        return $this->specificationItemMapper->getLastId();
     }
 
     /**

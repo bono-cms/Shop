@@ -87,7 +87,7 @@ final class SpecificationCategory extends AbstractController
     {
         $data = $this->request->getPost();
 
-        $new = $data['item']['id'];
+        $new = !$data['category']['id'];
         $specificationCategoryService = $this->getModuleService('specificationCategoryService');
 
         if ($specificationCategoryService->save($data)) {

@@ -105,9 +105,9 @@ final class SpecificationItem extends AbstractController
     {
         $data = $this->request->getPost();
 
-        $new = $data['item']['id'];
+        $new = !$data['item']['id'];
         $specificationItemService = $this->getModuleService('specificationItemService');
-
+        
         if ($specificationItemService->save($data)) {
             $this->flashBag->set('success', !$new ? 'Element has been updated successfully' : 'Element has been added successfully');
         }
