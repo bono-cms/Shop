@@ -68,7 +68,7 @@ final class SpecificationItemService extends AbstractManager
      */
     public function deleteById($id)
     {
-        return $this->specificationItemMapper->deleteById($id);
+        return $this->specificationItemMapper->deleteByPk($id);
     }
 
     /**
