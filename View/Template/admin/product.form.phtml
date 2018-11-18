@@ -17,7 +17,9 @@ defined('KRYSTAL') or die;
         <li role="presentation" class="active"><a href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
         <li role="presentation"><a href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
         <li role="presentation"><a href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
+        <?php if (!empty($features)): ?>
         <li role="presentation"><a href="#specifications" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a></li>
+        <?php endif; ?>
         <?php if (!empty($attributes)): ?>
         <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
         <?php endif; ?>
@@ -293,8 +295,11 @@ defined('KRYSTAL') or die;
                 <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-f-%s', $language->getId()); ?>" role="tabpanel">
                     <?php $this->loadPartial('language-name', array('language' => $language)); ?>
 
-                    <?php foreach ($features as $option): ?>
+                    <?php foreach ($features as $category => $options): ?>
                     <fieldset>
+                        <legend><?= $category; ?></legend>
+
+                        <?php foreach($options as $option): ?>
                         <?php if ($option['lang_id'] == $language->getId()): ?>
                         <div class="form-group">
                             <label class="col-lg-2 control-label"><?php echo $option['item']; ?></label>
@@ -303,6 +308,8 @@ defined('KRYSTAL') or die;
                             </div>
                         </div>
                         <?php endif; ?>
+                        <?php endforeach; ?>
+
                     </fieldset>
                     <?php endforeach; ?>
                 </div>
