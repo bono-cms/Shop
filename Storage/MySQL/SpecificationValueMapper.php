@@ -48,6 +48,7 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
             SpecificationItemTranslationMapper::column('lang_id'),
             SpecificationItemTranslationMapper::column('name') => 'item',
             SpecificationCategoryTranslationMapper::column('name') => 'category',
+            SpecificationCategoryMapper::column('id') => 'category_id',
             SpecificationValueTranslationMapper::column('value')
         );
 
