@@ -22,8 +22,9 @@ defined('KRYSTAL') or die;
 
 <div class="row">
     <div class="col-lg-6">
-        <h3><?php $this->show('Items'); ?> <small>(<?= count($items); ?>)</small></h3>
-    
+        <h3><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?> <small>(<?= count($items); ?>)</small></h3>
+        <br />
+
         <?= Grid::render($items, array(
             // A column to be considered as a primary key
             'pk' => 'id',
@@ -59,7 +60,8 @@ defined('KRYSTAL') or die;
     </div>
 
     <div class="col-lg-6">
-        <h3><?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h3>
+        <h3><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h3>
+        <br />
 
         <?= Grid::render($categories, array(
             // A column to be considered as a primary key
