@@ -15,6 +15,7 @@ use Krystal\Stdlib\ArrayUtils;
 use Krystal\Stdlib\VirtualEntity;
 use Cms\Service\AbstractManager;
 use Shop\Storage\SpecificationValueMapperInterface;
+use Shop\Storage\SpecificationCategoryMapperInterface;
 
 final class SpecificationValueService extends AbstractManager
 {
@@ -26,14 +27,23 @@ final class SpecificationValueService extends AbstractManager
     private $specificationValueMapper;
 
     /**
+     * Any compliant category mapper
+     * 
+     * @var \Shop\Storage\SpecificationCategoryMapperInterface
+     */
+    private $specificationCategoryMapper;
+
+    /**
      * State initialization
      * 
      * @param \Shop\Storage\SpecificationValueMapperInterface $specificationValueMapper
+     * @param \Shop\Storage\SpecificationCategoryMapperInterface $specificationCategoryMapper
      * @return void
      */
-    public function __construct(SpecificationValueMapperInterface $specificationValueMapper)
+    public function __construct(SpecificationValueMapperInterface $specificationValueMapper, SpecificationCategoryMapperInterface $specificationCategoryMapper)
     {
         $this->specificationValueMapper = $specificationValueMapper;
+        $this->specificationCategoryMapper = $specificationCategoryMapper;
     }
 
     /**
@@ -45,6 +55,28 @@ final class SpecificationValueService extends AbstractManager
      */
     public function findByProduct($id, $withTranslations = true)
     {
-        return $this->specificationValueMapper->findByProduct($id, $withTranslations);
+        $items = $this->specificationValueMapper->findByProduct($id, $withTranslations);
+        $categories = $this->specificationCategoryMapper->fetchAll();
+
+        $partitions = ArrayUtils::arrayPartition($items, 'category_id');
+
+        $output = array();
+
+        // Process merging items with categories
+        foreach ($partitions as $categoryId => $partition) {
+            foreach ($categories as $category) {
+                if ($category['id'] == $categoryId) {
+                    // Add on demand
+                    if (!isset($output[$category['name']])) {
+                        $output[$category['name']] = array();
+                    }
+
+                    // Finally merge
+                    $output[$category['name']] += $partition;
+                }
+            }
+        }
+
+        return $output;
     }
 }

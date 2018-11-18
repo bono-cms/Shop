@@ -122,7 +122,7 @@ final class Module extends AbstractCmsModule
             'attributeValueManager' => new AttributeValueManager($this->getMapper('/Shop/Storage/MySQL/AttributeValueMapper', false)),
             'specificationCategoryService' => new SpecificationCategoryService($this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper')),
             'specificationItemService' => new SpecificationItemService($this->getMapper('/Shop/Storage/MySQL/SpecificationItemMapper')),
-            'specificationValueService' => new SpecificationValueService($this->getMapper('/Shop/Storage/MySQL/SpecificationValueMapper'))
+            'specificationValueService' => new SpecificationValueService($this->getMapper('/Shop/Storage/MySQL/SpecificationValueMapper'), $this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper'))
         );
     }
 
