@@ -44,7 +44,8 @@ final class SpecificationItemMapper extends AbstractMapper implements Specificat
             self::column('category_id'),
             self::column('order'),
             SpecificationItemTranslationMapper::column('lang_id'),
-            SpecificationItemTranslationMapper::column('name')
+            SpecificationItemTranslationMapper::column('name'),
+            SpecificationItemTranslationMapper::column('hint')
         );
     }
 

@@ -244,7 +244,8 @@ DROP TABLE IF EXISTS `bono_module_shop_specification_item_translation`;
 CREATE TABLE `bono_module_shop_specification_item_translation` (
     `id` INT NOT NULL,
     `lang_id` INT NOT NULL COMMENT 'Attached language ID',
-    `name` varchar(255) NOT NULL COMMENT 'Category name',
+    `name` varchar(255) NOT NULL COMMENT 'Item name',
+    `hint` LONGTEXT NOT NULL COMMENT 'Item optional hint',
 
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE
 

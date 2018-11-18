@@ -45,7 +45,8 @@ final class SpecificationItemService extends AbstractManager
                ->setCategoryId($row['category_id'])
                ->setLangId($row['lang_id'])
                ->setOrder($row['order'])
-               ->setName($row['name']);
+               ->setName($row['name'])
+               ->setHint($row['hint']);
 
         return $entity;
     }
