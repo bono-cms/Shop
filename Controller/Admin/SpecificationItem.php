@@ -52,7 +52,7 @@ final class SpecificationItem extends AbstractController
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
-                                       ->addOne($new ? 'Add new item' : 'Edit item');
+                                       ->addOne($new ? 'Add new item' : 'Edit the item');
         
         return $this->view->render('specification/item.form', array(
             'item' => $item,
@@ -115,7 +115,7 @@ final class SpecificationItem extends AbstractController
         $specificationItemService = $this->getModuleService('specificationItemService');
         
         if ($specificationItemService->save($data)) {
-            $this->flashBag->set('success', !$new ? 'Element has been updated successfully' : 'Element has been added successfully');
+            $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
         }
 
         if ($new) {

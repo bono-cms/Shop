@@ -42,11 +42,11 @@ defined('KRYSTAL') or die;
 
             'actions' => array(
                 'edit' => function($row){
-                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationItem@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this post'), 'data-button' => 'edit'));
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationItem@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this item'), 'data-button' => 'edit'));
                 },
 
                 'remove' => function($row){
-                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this post'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationItem@deleteAction', $row['id'])));
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this item'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationItem@deleteAction', $row['id'])));
                 }
             )
 
@@ -92,11 +92,11 @@ defined('KRYSTAL') or die;
 
             'actions' => array(
                 'edit' => function($row){
-                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this post'), 'data-button' => 'edit'));
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this category'), 'data-button' => 'edit'));
                 },
 
                 'remove' => function($row){
-                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this post'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id'])));
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this category'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id'])));
                 }
             )
 

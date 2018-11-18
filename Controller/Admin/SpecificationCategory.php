@@ -29,7 +29,7 @@ final class SpecificationCategory extends AbstractController
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
-                                       ->addOne($new ? 'Add new category' : 'Edit category');
+                                       ->addOne($new ? 'Add new category' : 'Edit the category');
         
         return $this->view->render('specification/category.form', array(
             'category' => $category,
@@ -91,7 +91,7 @@ final class SpecificationCategory extends AbstractController
         $specificationCategoryService = $this->getModuleService('specificationCategoryService');
 
         if ($specificationCategoryService->save($data)) {
-            $this->flashBag->set('success', !$new ? 'Element has been updated successfully' : 'Element has been added successfully');
+            $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
         }
 
         if ($new) {
