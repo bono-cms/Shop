@@ -44,6 +44,7 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
         // Columns to be selected
         $columns = array(
             SpecificationItemMapper::column('id'),
+            SpecificationItemTranslationMapper::column('lang_id'),
             SpecificationItemTranslationMapper::column('name') => 'item',
             SpecificationCategoryTranslationMapper::column('name') => 'category',
             SpecificationValueTranslationMapper::column('value')
@@ -74,13 +75,14 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
                        ))
                        // Value translation relation
                        ->leftJoin(SpecificationValueTranslationMapper::getTableName(), array(
-                            SpecificationValueTranslationMapper::column('id') => SpecificationValueMapper::getRawColumn('id')
+                            SpecificationValueTranslationMapper::column('id') => SpecificationValueMapper::getRawColumn('id'),
+                            SpecificationValueTranslationMapper::column('lang_id') => SpecificationItemTranslationMapper::getRawColumn('lang_id')
                        ))
                        // Constraint
-                       ->whereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId())
-                       ->andWhereEquals(SpecificationCategoryProductRelationMapper::column('master_id'), $id);
+                       #->whereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId())
+                       ->whereEquals(SpecificationCategoryProductRelationMapper::column('master_id'), $id);
 
-                      # echo $db;exit;
+                       #echo $db;exit;
                        
         return $db->queryAll();
     }
