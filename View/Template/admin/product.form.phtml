@@ -17,7 +17,7 @@ defined('KRYSTAL') or die;
         <li role="presentation" class="active"><a href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
         <li role="presentation"><a href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
         <li role="presentation"><a href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
-        <li role="presentation"><a href="#features" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Features'); ?></a></li>
+        <li role="presentation"><a href="#specifications" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a></li>
         <?php if (!empty($attributes)): ?>
         <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
         <?php endif; ?>
@@ -276,7 +276,7 @@ defined('KRYSTAL') or die;
         </div>
       </div>
 
-      <div role="tabpanel" class="tab-pane" id="features">
+      <div role="tabpanel" class="tab-pane" id="specifications">
         <div class="well">
             <div class="tab-content">
                 <?php if (count($languages) > 1): ?>

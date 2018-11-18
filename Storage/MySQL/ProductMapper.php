@@ -910,7 +910,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         // Save features, of present
         if (isset($data['features'])) {
-            $this->saveFeautures($id, $data['features']['translation']);
+            $this->saveFeatures($id, $data['features']['translation']);
         }
 
         // Specification category relation
@@ -926,7 +926,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      * @param array $translations Translations
      * @return array
      */
-    private function saveFeautures($id, array $translations)
+    private function saveFeatures($id, array $translations)
     {
         // Delete previous records, if any
         $this->db->delete()
