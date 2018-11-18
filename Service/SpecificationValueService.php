@@ -12,6 +12,7 @@
 namespace Shop\Service;
 
 use Krystal\Stdlib\ArrayUtils;
+use Krystal\Stdlib\VirtualEntity;
 use Cms\Service\AbstractManager;
 use Shop\Storage\SpecificationValueMapperInterface;
 
@@ -34,7 +35,7 @@ final class SpecificationValueService extends AbstractManager
     {
         $this->specificationValueMapper = $specificationValueMapper;
     }
-    
+
     /**
      * Find values by product ID
      * 
@@ -43,7 +44,6 @@ final class SpecificationValueService extends AbstractManager
      */
     public function findByProduct($id)
     {
-        $rows = $this->specificationValueMapper->findByProduct($id);
-        return ArrayUtils::arrayPartition($rows, 'category', false);
+        return $this->specificationValueMapper->findByProduct($id);
     }
 }
