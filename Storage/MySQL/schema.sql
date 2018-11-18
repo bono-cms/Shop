@@ -263,7 +263,7 @@ CREATE TABLE `bono_module_shop_specification_relation` (
 /* Attached products and their items (i.e their ID relations) */
 DROP TABLE IF EXISTS `bono_module_shop_specification_values`;
 CREATE TABLE `bono_module_shop_specification_values` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Value ID',
     `product_id` INT NOT NULL COMMENT 'Product ID',
     `item_id` INT NOT NULL COMMENT 'Item ID',
 
@@ -273,7 +273,7 @@ CREATE TABLE `bono_module_shop_specification_values` (
 
 DROP TABLE IF EXISTS `bono_module_shop_specification_values_translations`;
 CREATE TABLE `bono_module_shop_specification_values_translations` (
-    `id` INT NOT NULL,
+    `id` INT NOT NULL COMMENT 'Value ID',
     `lang_id` INT NOT NULL COMMENT 'Attached language ID',
     `value` varchar(255) NOT NULL COMMENT 'Item value',
 
