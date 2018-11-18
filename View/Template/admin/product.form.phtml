@@ -17,7 +17,7 @@ defined('KRYSTAL') or die;
         <li role="presentation" class="active"><a href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
         <li role="presentation"><a href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
         <li role="presentation"><a href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
-
+        <li role="presentation"><a href="#features" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Features'); ?></a></li>
         <?php if (!empty($attributes)): ?>
         <li role="presentation"><a href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
         <?php endif; ?>
@@ -275,7 +275,44 @@ defined('KRYSTAL') or die;
             </div>
         </div>
       </div>
-      
+
+      <div role="tabpanel" class="tab-pane" id="features">
+        <div class="well">
+            <div class="tab-content">
+                <?php if (count($languages) > 1): ?>
+                <ul class="nav nav-tabs" role="tablist">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <li role="presentation" class="<?php echo $index == 0 ? 'active' : null; ?>"><a href="<?php printf('#language-f-%s', $language->getId()); ?>" role="tab" data-toggle="tab"><i class="<?php printf('famfamfam-flag-%s', $language->getFlag()); ?>"></i> <?php echo $language->getName(); ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+
+                <br />
+                <?php endif; ?>
+
+                <?php foreach ($languages as $index => $language): ?>
+                <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-f-%s', $language->getId()); ?>" role="tabpanel">
+                    <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+
+                    <?php foreach ($features as $category => $feature): ?>
+                    <fieldset>
+                        <legend><?= $category; ?></legend>
+
+                        <?php foreach ($feature as $option): ?>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php echo $option['item']; ?></label>
+                            <div class="col-lg-10">
+                                <?php echo Element::text(sprintf('features[translation][%s][%s]', $language->getId(), $option['id']), $option['value'], array('class' => 'form-control')); ?>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </fieldset>
+                    <?php endforeach; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+      </div>
+
       <?php if (!empty($attributes)): ?>
       <div role="tabpanel" class="tab-pane" id="attrs">
         <div class="well">

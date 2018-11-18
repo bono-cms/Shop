@@ -78,7 +78,8 @@ final class Product extends AbstractController
             'config' => $this->getModuleService('configManager')->getEntity(),
             'attributes' => $attributes,
             'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : array(),
-            'specCatIds' => $this->getModuleService('specificationCategoryService')->fetchList() // Specification category IDs
+            'specCatIds' => $this->getModuleService('specificationCategoryService')->fetchList(), // Specification category IDs
+            'features' => $id ? $this->getModuleService('specificationValueService')->findByProduct($id) : array()
         ));
     }
 
