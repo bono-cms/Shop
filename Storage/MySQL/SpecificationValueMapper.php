@@ -37,9 +37,10 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
      * Find values by product ID
      * 
      * @param int $id Product ID
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function findByProduct($id)
+    public function findByProduct($id, $withTranslations)
     {
         // Columns to be selected
         $columns = array(
@@ -79,11 +80,12 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
                             SpecificationValueTranslationMapper::column('lang_id') => SpecificationItemTranslationMapper::getRawColumn('lang_id')
                        ))
                        // Constraint
-                       #->whereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId())
                        ->whereEquals(SpecificationCategoryProductRelationMapper::column('master_id'), $id);
 
-                       #echo $db;exit;
-                       
+        if ($withTranslations === false) {
+            $db->andWhereEquals(SpecificationItemTranslationMapper::column('lang_id'), $this->getLangId());
+        }
+
         return $db->queryAll();
     }
 }

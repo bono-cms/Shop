@@ -17,7 +17,8 @@ interface SpecificationValueMapperInterface
      * Find values by product ID
      * 
      * @param int $id Product ID
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function findByProduct($id);
+    public function findByProduct($id, $withTranslations);
 }

@@ -40,10 +40,11 @@ final class SpecificationValueService extends AbstractManager
      * Find values by product ID
      * 
      * @param int $id Product ID
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function findByProduct($id)
+    public function findByProduct($id, $withTranslations = true)
     {
-        return $this->specificationValueMapper->findByProduct($id);
+        return $this->specificationValueMapper->findByProduct($id, $withTranslations);
     }
 }
