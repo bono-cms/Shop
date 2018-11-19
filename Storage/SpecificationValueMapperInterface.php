@@ -18,7 +18,8 @@ interface SpecificationValueMapperInterface
      * 
      * @param int $id Product ID
      * @param boolean $withTranslations Whether to fetch translations or not
+     * @param boolean $extended Whether to fetch all columns
      * @return array
      */
-    public function findByProduct($id, $withTranslations);
+    public function findByProduct($id, $withTranslations, $extended);
 }

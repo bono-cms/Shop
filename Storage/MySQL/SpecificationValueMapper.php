@@ -38,19 +38,26 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
      * 
      * @param int $id Product ID
      * @param boolean $withTranslations Whether to fetch translations or not
+     * @param boolean $extended Whether to fetch all columns
      * @return array
      */
-    public function findByProduct($id, $withTranslations)
+    public function findByProduct($id, $withTranslations, $extended)
     {
         // Columns to be selected
         $columns = array(
-            SpecificationItemMapper::column('id'),
-            SpecificationItemTranslationMapper::column('lang_id'),
-            SpecificationItemTranslationMapper::column('name') => 'item',
-            SpecificationCategoryTranslationMapper::column('name') => 'category',
             SpecificationCategoryMapper::column('id') => 'category_id',
+            SpecificationItemTranslationMapper::column('name') => 'item',
+            SpecificationItemTranslationMapper::column('hint'),
             SpecificationValueTranslationMapper::column('value')
         );
+
+        if ($extended == true) {
+            $columns = array_merge($columns, array(
+                SpecificationItemMapper::column('id'),
+                SpecificationItemTranslationMapper::column('lang_id'),
+                SpecificationCategoryTranslationMapper::column('name') => 'category',
+            ));
+        }
 
         $db = $this->db->select($columns)
                        ->from(SpecificationCategoryProductRelationMapper::getTableName())

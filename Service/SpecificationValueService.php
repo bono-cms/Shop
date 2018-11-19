@@ -51,11 +51,12 @@ final class SpecificationValueService extends AbstractManager
      * 
      * @param int $id Product ID
      * @param boolean $withTranslations Whether to fetch translations or not
+     * @param boolean $extended Whether to fetch all columns
      * @return array
      */
-    public function findByProduct($id, $withTranslations = true)
+    public function findByProduct($id, $withTranslations = true, $extended = true)
     {
-        $items = $this->specificationValueMapper->findByProduct($id, $withTranslations);
+        $items = $this->specificationValueMapper->findByProduct($id, $withTranslations, $extended);
         $categories = $this->specificationCategoryMapper->fetchAll();
 
         $partitions = ArrayUtils::arrayPartition($items, 'category_id');
