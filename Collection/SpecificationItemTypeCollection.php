@@ -27,4 +27,21 @@ final class SpecificationItemTypeCollection extends ArrayCollection
         self::TYPE_DESCRIPTION => 'Description',
         self::TYPE_NUMBER => 'Number'
     );
+    
+    /**
+     * Guess method by constant
+     * 
+     * @param int $const
+     * @return string
+     */
+    public static function guessMethodByConst($const)
+    {
+        $map = array(
+            self::TYPE_TEXT => 'text',
+            self::TYPE_DESCRIPTION => 'textarea',
+            self::TYPE_NUMBER => 'number'
+        );
+
+        return $map[$const];
+    }
 }

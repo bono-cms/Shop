@@ -3,6 +3,7 @@
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
 use Shop\Service\AttributeProcessor;
+use Shop\Collection\SpecificationItemTypeCollection;
 use Cms\Service\LanguageManager;
 
 defined('KRYSTAL') or die;
@@ -304,7 +305,7 @@ defined('KRYSTAL') or die;
                         <div class="form-group">
                             <label class="col-lg-2 control-label"><?php echo $option['item']; ?></label>
                             <div class="col-lg-10">
-                                <?php echo Element::text(sprintf('features[translation][%s][%s]', $language->getId(), $option['id']), $option['value'], array('class' => 'form-control')); ?>
+                                <?php echo call_user_func(sprintf('Krystal\Form\Element::%s', SpecificationItemTypeCollection::guessMethodByConst($option['type'])), sprintf('features[translation][%s][%s]', $language->getId(), $option['id']), $option['value'], array('class' => 'form-control')); ?>
                             </div>
                         </div>
                         <?php endif; ?>
