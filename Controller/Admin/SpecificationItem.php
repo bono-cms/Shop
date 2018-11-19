@@ -14,6 +14,7 @@ namespace Shop\Controller\Admin;
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Form\Gadget\LastCategoryKeeper;
+use Shop\Collection\SpecificationItemTypeCollection;
 
 final class SpecificationItem extends AbstractController
 {
@@ -68,12 +69,14 @@ final class SpecificationItem extends AbstractController
     /**
      * Renders a form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity|array $category
+     * @param \Krystal\Stdlib\VirtualEntity|array $item
      * @return string
      */
     private function createForm($item)
     {
         $new = is_object($item);
+
+        $typeCollection = new SpecificationItemTypeCollection();
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
@@ -83,7 +86,8 @@ final class SpecificationItem extends AbstractController
         return $this->view->render('specification/item.form', array(
             'item' => $item,
             'new' => $new,
-            'categories' => $this->getModuleService('specificationCategoryService')->fetchList()
+            'categories' => $this->getModuleService('specificationCategoryService')->fetchList(),
+            'types' => $typeCollection->getAll()
         ));
     }
 
