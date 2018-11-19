@@ -88,6 +88,7 @@ final class SpecificationItemService extends AbstractManager
      * Fetch item by its ID
      * 
      * @param int $id Item ID
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return mixed
      */
     public function fetchById($id, $withTranslations)
