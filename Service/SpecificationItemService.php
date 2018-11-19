@@ -46,6 +46,7 @@ final class SpecificationItemService extends AbstractManager
                ->setLangId($row['lang_id'])
                ->setOrder($row['order'])
                ->setFront($row['front'], VirtualEntity::FILTER_BOOL)
+               ->setType($row['type'], VirtualEntity::FILTER_INT)
                ->setName($row['name'])
                ->setHint($row['hint']);
 

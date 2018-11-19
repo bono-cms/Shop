@@ -236,6 +236,7 @@ CREATE TABLE `bono_module_shop_specification_item` (
     `category_id` INT NOT NULL COMMENT 'Attached category ID',
     `order` INT NOT NULL COMMENT 'Sorting order',
     `front` BOOLEAN NOT NULL COMMENT 'Whether front or not',
+    `type` SMALLINT NOT NULL COMMENT 'Field type constant',
 
     FOREIGN KEY (category_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
 
