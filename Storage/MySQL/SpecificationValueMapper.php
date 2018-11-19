@@ -54,6 +54,7 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
         if ($extended == true) {
             $columns = array_merge($columns, array(
                 SpecificationItemMapper::column('id'),
+                SpecificationItemMapper::column('type'),
                 SpecificationItemTranslationMapper::column('lang_id'),
                 SpecificationCategoryTranslationMapper::column('name') => 'category',
             ));
