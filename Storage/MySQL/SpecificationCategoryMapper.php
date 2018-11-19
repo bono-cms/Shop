@@ -11,6 +11,7 @@
 
 namespace Shop\Storage\MySQL;
 
+use Krystal\Db\Sql\RawSqlFragment;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\SpecificationCategoryMapperInterface;
 
@@ -48,14 +49,25 @@ final class SpecificationCategoryMapper extends AbstractMapper implements Specif
     }
 
     /**
-     * Fetch all categories
+     * Fetch all categories with item count
      * 
      * @return array
      */
     public function fetchAll()
     {
-        $db = $this->createEntitySelect($this->getColumns())
+        // Columns to be selected
+        $columns = $this->getColumns();
+        $columns[] = new RawSqlFragment(
+            sprintf('COUNT(%s) AS item_count', SpecificationItemMapper::column('id'))
+        );
+
+        $db = $this->createEntitySelect($columns)
+                   // Item relation
+                   ->leftJoin(SpecificationItemMapper::getTableName(), array(
+                        SpecificationItemMapper::column('category_id') => self::getRawColumn('id')
+                   ))
                    ->whereEquals(SpecificationCategoryTranslationMapper::column('lang_id'), $this->getLangId())
+                   ->groupBy($this->getColumns())
                    ->orderBy(self::column('id'))
                    ->desc();
 

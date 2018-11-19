@@ -46,7 +46,11 @@ final class SpecificationCategoryService extends AbstractManager
                ->setLangId($row['lang_id'])
                ->setName($row['name'])
                ->setOrder($row['order']);
-        
+
+        if (isset($row['item_count'])) {
+            $entity->setItemCount($row['item_count']);
+        }
+
         return $entity;
     }
 
