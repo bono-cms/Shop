@@ -27,6 +27,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Description
  - View counter
  - Breadcrumbs
+ - Specifications
 
 ## Categories
 
