@@ -60,6 +60,13 @@ defined('KRYSTAL') or die;
                 <?php echo Element::hidden('item[id]', $entity->getId()); ?>
 
                 <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Front'); ?></label>
+                    <div class="col-lg-10">
+                        <?php echo Element::checkbox('item[front]', $entity->getFront(), array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">

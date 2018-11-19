@@ -38,6 +38,14 @@ defined('KRYSTAL') or die;
                 array(
                     'column' => 'name',
                 ),
+
+                array(
+                    'column' => 'front',
+                    'translateable' => true,
+                    'value' => function($row){
+                        return $row['front'] ? 'Yes' : 'No';
+                    }
+                ),
             ),
 
             'actions' => array(
