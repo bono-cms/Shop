@@ -214,3 +214,72 @@ CREATE TABLE `bono_module_shop_wishlist` (
 
 ) DEFAULT CHARSET = UTF8;
 
+DROP TABLE IF EXISTS `bono_module_shop_specification_category`;
+CREATE TABLE `bono_module_shop_specification_category` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `order` INT NOT NULL COMMENT 'Sorting order'
+) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_category_translation`;
+CREATE TABLE `bono_module_shop_specification_category_translation` (
+    `id` INT NOT NULL,
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Category name',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_item`;
+CREATE TABLE `bono_module_shop_specification_item` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `category_id` INT NOT NULL COMMENT 'Attached category ID',
+    `order` INT NOT NULL COMMENT 'Sorting order',
+    `front` BOOLEAN NOT NULL COMMENT 'Whether front or not',
+    `type` SMALLINT NOT NULL COMMENT 'Field type constant',
+
+    FOREIGN KEY (category_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_item_translation`;
+CREATE TABLE `bono_module_shop_specification_item_translation` (
+    `id` INT NOT NULL,
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Item name',
+    `hint` LONGTEXT NOT NULL COMMENT 'Item optional hint',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
+
+/* Attached specification categories to products (i.e their ID relations) */
+DROP TABLE IF EXISTS `bono_module_shop_specification_relation`;
+CREATE TABLE `bono_module_shop_specification_relation` (
+    `master_id` INT NOT NULL COMMENT 'Product ID',
+    `slave_id` INT NOT NULL COMMENT 'Category ID',
+
+    FOREIGN KEY (slave_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
+
+/* Attached products and their items (i.e their ID relations) */
+DROP TABLE IF EXISTS `bono_module_shop_specification_values`;
+CREATE TABLE `bono_module_shop_specification_values` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Value ID',
+    `product_id` INT NOT NULL COMMENT 'Product ID',
+    `item_id` INT NOT NULL COMMENT 'Item ID',
+
+    FOREIGN KEY (item_id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_specification_values_translations`;
+CREATE TABLE `bono_module_shop_specification_values_translations` (
+    `id` INT NOT NULL COMMENT 'Value ID',
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `value` varchar(255) NOT NULL COMMENT 'Item value',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_specification_values(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;

@@ -890,7 +890,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $translations =& $data['translation'];
 
         // Save data
-        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attributes', 'slug', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
+        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
 
         // Last product ID
         $id = !empty($product['id']) ? $product['id'] : $this->getLastId();
@@ -908,6 +908,65 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->syncWithJunction(ProductSimilarRelationMapper::getTableName(), $id, $product['similar_ids']);
         }
 
+        // Save features, of present
+        if (isset($data['features'])) {
+            $this->saveFeatures($id, $data['features']['translation']);
+        }
+
+        // Specification category relation
+        $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : array());
+
+        return true;
+    }
+
+    /**
+     * Save features
+     * 
+     * @param int $id Product ID
+     * @param array $translations Translations
+     * @return array
+     */
+    private function saveFeatures($id, array $translations)
+    {
+        // Delete previous records, if any
+        $this->db->delete()
+                 ->from(SpecificationValueMapper::getTableName())
+                 ->whereEquals('product_id', $id)
+                 ->execute();
+
+        // Extract item IDs
+        $itemIds = array_values($translations);
+        $itemIds = array_keys($itemIds[0]);
+
+        foreach ($itemIds as $key) {
+            // Data for columns
+            $primaryValues = array(
+                'product_id' => $id,
+                'item_id' => $key
+            );
+
+            // 1. Insert first a new value
+            $this->db->insert(SpecificationValueMapper::getTableName(), $primaryValues)
+                     ->execute();
+
+            foreach ($translations as $langId => $translation) {
+                foreach ($translation as $itemId => $value) {
+                    if ($itemId == $key) {
+                        $translationValues = array(
+                            'id' => $this->getLastPk(SpecificationValueMapper::getTableName()),
+                            'lang_id' => $langId,
+                            'value' => $value
+                        );
+
+                        // 3. Insert into translations
+                        $this->db->insert(SpecificationValueTranslationMapper::getTableName(), $translationValues)
+                                 ->execute();
+                    }
+                }
+            }
+        }
+
+        // Insert values with their translations now
         return true;
     }
 

@@ -61,6 +61,9 @@ final class Product extends AbstractShopController
             // Indicate that this is product page
             $product->setProductPage(true);
 
+            // Add getSpecifications() and getFrontSpecifications() on product entity
+            $this->getModuleService('specificationValueService')->addSpecifications($product);
+
             // Configure breadcrumbs
             $this->configureBreadcrumbs($product);
 

@@ -1,0 +1,124 @@
+<?php
+
+use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<div class="btn-toolbar">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu">
+         <li><a href="<?php echo $this->url('Shop:Admin:SpecificationCategory@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a></li>
+         <li><a href="<?php echo $this->url('Shop:Admin:SpecificationItem@addAction'); ?>"><i class="glyphicon glyphicon-inbox"></i> <?php $this->show('Add new item'); ?></a></li>
+      </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h3><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?> <small>(<?= count($items); ?>)</small></h3>
+        <br />
+
+        <?= Grid::render($items, array(
+            // A column to be considered as a primary key
+            'pk' => 'id',
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                ),
+
+                array(
+                    'column' => 'front',
+                    'translateable' => true,
+                    'value' => function($row){
+                        return $row['front'] ? 'Yes' : 'No';
+                    }
+                ),
+            ),
+
+            'actions' => array(
+                'edit' => function($row){
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationItem@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this item'), 'data-button' => 'edit'));
+                },
+
+                'remove' => function($row){
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this item'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationItem@deleteAction', $row['id'])));
+                }
+            )
+
+        ), $this->translator); ?>
+
+        <?php if (empty($items)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No items'); ?></h2>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="col-lg-6">
+        <h3><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h3>
+        <br />
+
+        <?= Grid::render($categories, array(
+            // A column to be considered as a primary key
+            'pk' => 'id',
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'rowAttributes' => array(
+                'class' => function($row) use ($categoryId){
+                    return $row['id'] == $categoryId ? 'success' : null;
+                }
+            ),
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                    'value' => function($entity){
+                        return Element::link($entity['name'], $this->url('Shop:Admin:SpecificationItem@indexAction', $entity['id']));
+                    }
+                ),
+
+                array(
+                    'column' => 'order',
+                ),
+
+                array(
+                    'column' => 'item_count',
+                    'label' => 'Item count'
+                ),
+            ),
+
+            'actions' => array(
+                'edit' => function($row){
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this category'), 'data-button' => 'edit'));
+                },
+
+                'remove' => function($row){
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this category'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id'])));
+                }
+            )
+
+        ), $this->translator); ?>
+
+        <?php if (empty($categories)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>

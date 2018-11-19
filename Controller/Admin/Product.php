@@ -62,6 +62,13 @@ final class Product extends AbstractController
             $attributes = array();
         }
 
+        // If not new, then grab attached specification categories
+        if (!$new) {
+            foreach ($product as &$item) {
+                $item->setSpecCatIds($this->getModuleService('specificationCategoryService')->fetchAttachedByProductId($id));
+            }
+        }
+
         return $this->view->render('product.form', array(
             'new' => $new,
             'names' => $this->getModuleService('productManager')->fetchAllNames(),
@@ -70,7 +77,9 @@ final class Product extends AbstractController
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'config' => $this->getModuleService('configManager')->getEntity(),
             'attributes' => $attributes,
-            'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : array()
+            'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : array(),
+            'specCatIds' => $this->getModuleService('specificationCategoryService')->fetchList(), // Specification category IDs
+            'features' => $id ? $this->getModuleService('specificationValueService')->findByProduct($id) : array()
         ));
     }
 

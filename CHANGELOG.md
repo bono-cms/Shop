@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added product specifications support
  * Removed menu widget from category form
  * Improved modal of order detail
  * Compact view in product and category templates in (administration panel)
