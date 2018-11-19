@@ -13,6 +13,7 @@ namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Form\Gadget\LastCategoryKeeper;
 
 final class SpecificationItem extends AbstractController
 {
@@ -24,9 +25,7 @@ final class SpecificationItem extends AbstractController
      */
     public function indexAction($categoryId)
     {
-        if (!$categoryId) {
-            $categoryId = $this->getModuleService('specificationCategoryService')->getLastId();
-        }
+        $categoryId = $this->getCategoryId($categoryId);
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
@@ -37,6 +36,33 @@ final class SpecificationItem extends AbstractController
             'categoryId' => $categoryId,
             'items' => $this->getModuleService('specificationItemService')->fetchAll($categoryId)
         ));
+    }
+
+    /**
+     * Returns current category ID
+     * 
+     * @param mixed $value Current raw category ID
+     * @return mixed
+     */
+    private function getCategoryId($value)
+    {
+        // Last category ID keeper
+        $keeper = new LastCategoryKeeper($this->sessionBag, 'last_shop_item_category_id');
+
+        // If not provided, then try to get previous one if available. If not, then fallback to last category
+        if (!$value) {
+            if ($keeper->hasLastCategoryId()) {
+                $value = $keeper->getLastCategoryId();
+            } else {
+                $value = $this->getModuleService('specificationCategoryService')->getLastId();
+                $keeper->persistLastCategoryId($value);
+            }
+        } else {
+            // Category ID is provided, so save it
+            $keeper->persistLastCategoryId($value);
+        }
+
+        return $value;
     }
 
     /**
