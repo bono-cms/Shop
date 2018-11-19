@@ -46,6 +46,7 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
         // Columns to be selected
         $columns = array(
             SpecificationCategoryMapper::column('id') => 'category_id',
+            SpecificationItemMapper::column('front'),
             SpecificationItemTranslationMapper::column('name') => 'item',
             SpecificationItemTranslationMapper::column('hint'),
             SpecificationValueTranslationMapper::column('value')

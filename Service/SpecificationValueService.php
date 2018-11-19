@@ -47,6 +47,42 @@ final class SpecificationValueService extends AbstractManager
     }
 
     /**
+     * Add specifications on product entity
+     * 
+     * @param \Shop\Service\ProductEntity $product
+     * @return void
+     */
+    public function addSpecifications(ProductEntity $product)
+    {
+        // Extract data
+        $specifications = $this->findByProduct($product->getId(), false, false);
+        $fronts = $this->extractFrontItems($specifications);
+
+        // And append it
+        $product->setSpecifications($specifications)
+                ->setFrontSpecifications($fronts);
+    }
+
+    /**
+     * Extract front items
+     * 
+     * @param array $items
+     * @return array
+     */
+    private function extractFrontItems(array $items)
+    {
+        $output = array();
+
+        foreach ($items as $category => $item) {
+            if ($item['front'] == 1) {
+                $output[] = $item;
+            }
+        }
+
+        return $output;
+    }
+
+    /**
      * Find values by product ID
      * 
      * @param int $id Product ID
