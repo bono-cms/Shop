@@ -88,6 +88,17 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Category ID
+     * @return array
+     */
+    public function getSwitchUrls($id)
+    {
+        return $this->productMapper->createSwitchUrls($id, 'Shop', 'Shop:Category@indexAction');
+    }
+
+    /**
      * Returns a tree with prompt placeholder
      * 
      * @param string $text

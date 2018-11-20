@@ -16,6 +16,14 @@ use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 interface CategoryManagerInterface
 {
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Category ID
+     * @return array
+     */
+    public function getSwitchUrls($id);
+
+    /**
      * Returns a tree with prompt placeholder
      * 
      * @param string $text
