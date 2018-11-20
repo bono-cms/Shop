@@ -105,6 +105,7 @@ final class Category extends AbstractShopController
                 'page' => $category,
                 'category' => $category,
                 'attributes' => $categoryManager->fetchAttributesById($category->getId(), false),
+                'languages' => $categoryManager->getSwitchUrls($category->getId()),
 
                 // Form gadgets
                 'ppc' => $this->getPerPageCountGadget(),
