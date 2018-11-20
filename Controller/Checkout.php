@@ -37,7 +37,8 @@ final class Checkout extends AbstractShopController
 
             return $this->view->disableLayout()->render('shop-checkout', array(
                 'page' => $page,
-                'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll()
+                'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(),
+                'languages' => $pageManager->getSwitchUrls($id)
             ));
 
         } else {
