@@ -12,6 +12,7 @@
 namespace Shop\Service;
 
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 use Shop\Storage\BrandMapperInterface;
 use Cms\Service\AbstractManager;
 
@@ -89,6 +90,16 @@ final class BrandService extends AbstractManager
     public function fetchById($id)
     {
         return $this->prepareResult($this->brandMapper->findByPk($id));
+    }
+
+    /**
+     * Fetches as a list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return ArrayUtils::arrayList($this->brandMapper->fetchAll(), 'id', 'name');
     }
 
     /**
