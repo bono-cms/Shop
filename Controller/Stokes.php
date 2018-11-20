@@ -49,6 +49,7 @@ final class Stokes extends AbstractShopController
                 'paginator' => $paginator,
                 'products' => $products,
                 'page' => $page,
+                'languages' => $pageManager->getSwitchUrls($id)
             ));
 
         } else {
