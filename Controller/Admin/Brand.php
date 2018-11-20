@@ -30,7 +30,7 @@ final class Brand extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Brands');
 
-        return $this->view->render('brand/index', array(
+        return $this->view->render('brands', array(
             'new' => $new,
             'brand' => $brand,
             'brands' => $this->getModuleService('brandService')->fetchAll(),
