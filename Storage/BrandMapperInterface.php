@@ -13,4 +13,10 @@ namespace Shop\Storage;
 
 interface BrandMapperInterface
 {
+    /**
+     * Fetch all brands
+     * 
+     * @return array
+     */
+    public function fetchAll();
 }
