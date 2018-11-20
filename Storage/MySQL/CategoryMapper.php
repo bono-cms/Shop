@@ -143,21 +143,30 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         // Columns to be selected
         $columns = array_merge($this->getColumns(), array(WebPageMapper::column('slug')));
 
-        return $this->db->select($columns)
+        $db = $this->db->select($columns)
                         // Product counter
                         ->count(self::PARAM_JUNCTION_MASTER_COLUMN, 'product_count')
                         ->from(ProductCategoryRelationMapper::getTableName())
+                        // Category relation
                         ->rightJoin(self::getTableName(), array(
-                            self::column($top) => ProductCategoryRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN)
+                            $top => ProductCategoryRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN)
+                        ))
+                        // Category translation relation
+                        ->leftJoin(CategoryTranslationMapper::getTableName(), array(
+                            CategoryTranslationMapper::column('id') => self::getRawColumn('id')
                         ))
                         // Web page relation
                         ->leftJoin(WebPageMapper::getTableName(), array(
-                            WebPageMapper::column('id') => self::getRawColumn('web_page_id')
+                            WebPageMapper::column('id') => CategoryTranslationMapper::getRawColumn('web_page_id'),
+                            WebPageMapper::column('lang_id') => CategoryTranslationMapper::getRawColumn('lang_id')
                         ))
+                        // Constraints
                         ->whereEquals(self::column('parent_id'), $parentId)
+                        ->andWhereEquals(CategoryTranslationMapper::column('lang_id'), $this->getLangId())
                         ->groupBy(self::column('id'))
-                        ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::column('id'))))
-                        ->queryAll();
+                        ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::column('id'))));
+
+        return $db->queryAll();
     }
 
     /**
