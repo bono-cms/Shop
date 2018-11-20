@@ -69,13 +69,15 @@ final class SpecificationValueService extends AbstractManager
      * @param array $items
      * @return array
      */
-    private function extractFrontItems(array $items)
+    private function extractFrontItems(array $collection)
     {
         $output = array();
 
-        foreach ($items as $category => $item) {
-            if ($item['front'] == 1) {
-                $output[] = $item;
+        foreach ($collection as $category => $items) {
+            foreach ($items as $item) {
+                if ($item['front'] == 1) {
+                    $output[] = $item;
+                }
             }
         }
 
