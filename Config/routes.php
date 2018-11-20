@@ -363,5 +363,22 @@ return array(
 
     '/%s/module/shop/specification/item/save' => array(
         'controller' => 'Admin:SpecificationItem@saveAction'
+    ),
+
+    // Brands
+    '/%s/module/shop/brands' => array(
+        'controller' => 'Admin:Brand@indexAction'
+    ),
+
+    '/%s/module/shop/brands/edit/(:var)' => array(
+        'controller' => 'Admin:Brand@editAction'
+    ),
+
+    '/%s/module/shop/brands/delete/(:var)' => array(
+        'controller' => 'Admin:Brand@deleteAction'
+    ),
+
+    '/%s/module/shop/brands/save' => array(
+        'controller' => 'Admin:Brand@saveAction'
     )
 );

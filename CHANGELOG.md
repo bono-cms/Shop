@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Added optional brand support
  * Added product specifications support
  * Removed menu widget from category form
  * Improved modal of order detail

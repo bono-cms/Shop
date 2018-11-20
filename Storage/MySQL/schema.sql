@@ -86,6 +86,7 @@ DROP TABLE IF EXISTS `bono_module_shop_products`;
 CREATE TABLE `bono_module_shop_products` (
 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `brand_id` INT DEFAULT NULL COMMENT 'Optional attached brand ID',
     `regular_price` FLOAT NOT NULL COMMENT 'Regular price of this product',
     `stoke_price` FLOAT NOT NULL COMMENT 'Whether this product is considered as a special offer',
     `in_stock` INT NOT NULL COMMENT 'Quantity of the product in stoke',
@@ -282,4 +283,12 @@ CREATE TABLE `bono_module_shop_specification_values_translations` (
 
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_values(id) ON DELETE CASCADE
 
+) DEFAULT CHARSET = UTF8;
+
+/* Brands are not translate able */
+DROP TABLE IF EXISTS `bono_module_shop_brands`;
+CREATE TABLE `bono_module_shop_brands` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL COMMENT 'Brand name',
+    `order` INT NOT NULL COMMENT 'Sorting order'
 ) DEFAULT CHARSET = UTF8;

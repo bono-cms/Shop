@@ -21,13 +21,14 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
          <li><a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a></li>
          <li class="divider"></li>
          <?php endif; ?>
-         
+
          <li><a href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a></li>
          <li><a href="#" data-button="statistic" data-url="<?php echo $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></a></li>
          <li class="dropdown-header"><?php $this->show('Configurable parameters'); ?></li>
+         <li><a href="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
          <li><a href="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Delivery types'); ?></a></li>

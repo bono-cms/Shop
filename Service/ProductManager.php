@@ -314,6 +314,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $entity = new ProductEntity();
         $entity->setImageBag($imageBag)
             ->setId($product['id'], ProductEntity::FILTER_INT)
+            ->setBrandId($product['brand_id'])
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)
             ->setWebPageId($product['web_page_id'], ProductEntity::FILTER_INT)
             ->setPrice($product['regular_price'], ProductEntity::FILTER_FLOAT)
@@ -356,6 +357,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         if (isset($product['similar'])) {
             $entity->setSimilarIds($this->createCategoryIds($product['similar']));
             $entity->setSimilar($this->createCategoryPair($product['similar']));
+        }
+
+        if (isset($product['brand'])) {
+            $entity->setBrand($product['brand'], VirtualEntity::FILTER_SAFE_TAGS);
         }
 
         static $currencies = null;

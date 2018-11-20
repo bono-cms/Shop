@@ -49,6 +49,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Basic columns to be selected (required for most selections)
         $columns = array(
             ProductMapper::column('id'),
+            ProductMapper::column('brand_id'),
             ProductTranslationMapper::column('lang_id'),
             ProductTranslationMapper::column('web_page_id'),
             ProductTranslationMapper::column('name'),
@@ -631,7 +632,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchById($id, $junction = true, $customerId = null, $withTranslations = false)
     {
-        $db = $this->createWebPageSelect(self::getSharedColumns($customerId));
+        $columns = array_merge(self::getSharedColumns($customerId), array(
+            BrandMapper::column('name') => 'brand'
+        ));
+
+        $db = $this->createWebPageSelect($columns)
+                   // Brand relation
+                   ->leftJoin(BrandMapper::getTableName(), array(
+                        BrandMapper::column('id') => self::getRawColumn('brand_id')
+                   ));
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
