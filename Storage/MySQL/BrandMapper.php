@@ -12,8 +12,9 @@
 namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
+use Shop\Storage\BrandMapperInterface;
 
-final class BrandMapper extends AbstractMapper
+final class BrandMapper extends AbstractMapper implements BrandMapperInterface
 {
     /**
      * {@inheritDoc}
