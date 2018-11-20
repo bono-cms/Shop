@@ -1,0 +1,46 @@
+<?php
+
+use Krystal\Grid\Grid;
+use Krystal\Form\Element;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<h3><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?> <small>(<?= count($brands); ?>)</small></h3>
+<br />
+
+<p>
+    <a href="<?= $this->url('Shop:Admin:Brand@addAction'); ?>" class="btn btn-primary"><?php $this->show('Add new brand'); ?></a>
+</p>
+
+<?= Grid::render($brands, array(
+    // A column to be considered as a primary key
+    'pk' => 'id',
+    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+    'columns' => array(
+        array(
+            'column' => 'id',
+            'label' => '#'
+        ),
+
+        array(
+            'column' => 'name',
+        ),
+
+        array(
+            'column' => 'order'
+        )
+    ),
+
+    'actions' => array(
+        'edit' => function($row){
+            return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:Brand@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this brand'), 'data-button' => 'edit'));
+        },
+
+        'remove' => function($row){
+            return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this brand'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:Brand@deleteAction', $row['id'])));
+        }
+    )
+
+), $this->translator); ?>
