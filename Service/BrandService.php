@@ -11,6 +11,7 @@
 
 namespace Shop\Service;
 
+use Krystal\Stdlib\VirtualEntity;
 use Shop\Storage\BrandMapperInterface;
 use Cms\Service\AbstractManager;
 
@@ -35,6 +36,41 @@ final class BrandService extends AbstractManager
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function toEntity(array $row)
+    {
+        $entity = new VirtualEntity();
+        $entity->setId($row['id'])
+               ->setName($row['name'])
+               ->setOrder($row['order']);
+
+        return $entity;
+    }
+
+    /**
+     * Deletes by Id
+     * 
+     * @param int $id Brand Id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->brandMapper->deleteByPk($id);
+    }
+
+    /**
+     * Saves a brand
+     * 
+     * @param array $input
+     * @return boolean
+     */
+    public function save(array $input)
+    {
+        return $this->brandMapper->persist($input);
+    }
+
+    /**
      * Returns last ID
      * 
      * @return integer
@@ -42,5 +78,26 @@ final class BrandService extends AbstractManager
     public function getLastId()
     {
         return $this->brandMapper->getMaxId();
+    }
+
+    /**
+     * Fetches brand by its ID
+     * 
+     * @param int $id Brand ID
+     * @return array
+     */
+    public function fetchById($id)
+    {
+        return $this->prepareResult($this->brandMapper->findByPk($id));
+    }
+
+    /**
+     * Fetch all brands
+     * 
+     * @return array
+     */
+    public function fetchAll()
+    {
+        return $this->prepareResults($this->brandMapper->fetchAll());
     }
 }
