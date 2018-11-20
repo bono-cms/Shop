@@ -180,8 +180,8 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         return $this->db->select($columns)
                         ->from(self::getTableName())
                         // Category translation relation
-                        ->leftJoin(CategoryMapper::getTableName(), array(
-                            self::column('id') => CategoryTranslationMapper::getRawColumn('id')
+                        ->leftJoin(CategoryTranslationMapper::getTableName(), array(
+                            CategoryTranslationMapper::column('id') => self::getRawColumn('id')
                         ))
                         ->whereEquals(CategoryTranslationMapper::column('lang_id'), $this->getLangId())
                         ->queryAll();
