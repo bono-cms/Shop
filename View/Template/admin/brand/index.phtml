@@ -10,37 +10,83 @@ defined('KRYSTAL') or die;
 <h3><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?> <small>(<?= count($brands); ?>)</small></h3>
 <br />
 
-<p>
-    <a href="<?= $this->url('Shop:Admin:Brand@addAction'); ?>" class="btn btn-primary"><?php $this->show('Add new brand'); ?></a>
-</p>
+<div class="row">
+    <div class="col-lg-6">
+        <?= Grid::render($brands, array(
+            // A column to be considered as a primary key
+            'pk' => 'id',
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'rowAttributes' => array(
+                'class' => function($row) use ($brand){
+                    return $row['id'] == $brand->getId() ? 'success' : null;
+                }
+            ),
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
 
-<?= Grid::render($brands, array(
-    // A column to be considered as a primary key
-    'pk' => 'id',
-    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-    'columns' => array(
-        array(
-            'column' => 'id',
-            'label' => '#'
-        ),
+                array(
+                    'column' => 'name',
+                ),
 
-        array(
-            'column' => 'name',
-        ),
+                array(
+                    'column' => 'order'
+                )
+            ),
 
-        array(
-            'column' => 'order'
-        )
-    ),
+            'actions' => array(
+                'edit' => function($row){
+                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:Brand@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this brand'), 'data-button' => 'edit'));
+                },
 
-    'actions' => array(
-        'edit' => function($row){
-            return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:Brand@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this brand'), 'data-button' => 'edit'));
-        },
+                'remove' => function($row){
+                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this brand'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:Brand@deleteAction', $row['id'])));
+                }
+            )
 
-        'remove' => function($row){
-            return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this brand'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:Brand@deleteAction', $row['id'])));
-        }
-    )
+        ), $this->translator); ?>
+    </div>
 
-), $this->translator); ?>
+    <div class="col-lg-6">
+        <h4><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($title); ?></h4>
+
+        <form data-group="brand">
+            <div class="well">
+                <?= Element::hidden('brand[id]', $brand->getId()); ?>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('brand[name]', $brand->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('brand[order]', $brand->getORder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php if ($new): ?>
+            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Brand@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Brand@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Brand@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+            <?php else: ?>
+
+            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Brand@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Brand@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+
+            <?php endif; ?>
+            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+        </form>        
+    </div>
+</div>

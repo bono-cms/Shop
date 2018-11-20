@@ -370,10 +370,6 @@ return array(
         'controller' => 'Admin:Brand@indexAction'
     ),
 
-    '/%s/module/shop/brands/add' => array(
-        'controller' => 'Admin:Brand@addAction'
-    ),
-
     '/%s/module/shop/brands/edit/(:var)' => array(
         'controller' => 'Admin:Brand@editAction'
     ),

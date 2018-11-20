@@ -17,50 +17,35 @@ use Krystal\Stdlib\VirtualEntity;
 final class Brand extends AbstractController
 {
     /**
+     * Creates a form
+     * 
+     * @param Krystal\Stdlib\VirtualEntity $brand
+     * @return string
+     */
+    private function createGrid(VirtualEntity $brand)
+    {
+        $new = !$brand->getId();
+
+        // Append breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('Brands');
+
+        return $this->view->render('brand/index', array(
+            'new' => $new,
+            'brand' => $brand,
+            'brands' => $this->getModuleService('brandService')->fetchAll(),
+            'title' => $new ? 'Add new brand' : 'Edit brand'
+        ));
+    }
+
+    /**
      * Renders all brands
      * 
      * @return string
      */
     public function indexAction()
     {
-        // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Brands');
-
-        return $this->view->render('brand/index', array(
-            'brands' => $this->getModuleService('brandService')->fetchAll()
-        ));
-    }
-
-    /**
-     * Creates a form
-     * 
-     * @param Krystal\Stdlib\VirtualEntity $brand
-     * @return string
-     */
-    private function createForm(VirtualEntity $brand)
-    {
-        $new = !$brand->getId();
-
-        // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Brands', 'Shop:Admin:Brand@indexAction')
-                                       ->addOne($new ? 'Add new brand' : 'Edit brand');
-
-        return $this->view->render('brand/form', array(
-            'new' => $new,
-            'brand' => $brand
-        ));
-    }
-
-    /**
-     * Renders add form
-     * 
-     * @return string
-     */
-    public function addAction()
-    {
-        return $this->createForm(new VirtualEntity);
+        return $this->createGrid(new VirtualEntity);
     }
 
     /**
@@ -74,7 +59,7 @@ final class Brand extends AbstractController
         $brand = $this->getModuleService('brandService')->fetchById($id);
 
         if ($brand !== false) {
-            return $this->createForm($brand);
+            return $this->createGrid($brand);
         } else {
             return false;
         }
