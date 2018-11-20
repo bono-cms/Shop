@@ -359,6 +359,10 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             $entity->setSimilar($this->createCategoryPair($product['similar']));
         }
 
+        if (isset($product['brand'])) {
+            $entity->setBrand($product['brand'], VirtualEntity::FILTER_SAFE_TAGS);
+        }
+
         static $currencies = null;
 
         if (is_null($currencies)) {

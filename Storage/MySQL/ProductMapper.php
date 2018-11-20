@@ -632,7 +632,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchById($id, $junction = true, $customerId = null, $withTranslations = false)
     {
-        $db = $this->createWebPageSelect(self::getSharedColumns($customerId));
+        $columns = array_merge(self::getSharedColumns($customerId), array(
+            BrandMapper::column('name') => 'brand'
+        ));
+
+        $db = $this->createWebPageSelect($columns)
+                   // Brand relation
+                   ->leftJoin(BrandMapper::getTableName(), array(
+                        BrandMapper::column('id') => self::getRawColumn('brand_id')
+                   ));
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
