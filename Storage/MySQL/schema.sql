@@ -283,3 +283,11 @@ CREATE TABLE `bono_module_shop_specification_values_translations` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_values(id) ON DELETE CASCADE
 
 ) DEFAULT CHARSET = UTF8;
+
+/* Brands are not translate able */
+DROP TABLE IF EXISTS `bono_module_shop_brands`;
+CREATE TABLE `bono_module_shop_brands` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL COMMENT 'Brand name',
+    `order` INT NOT NULL COMMENT 'Sorting order'
+) DEFAULT CHARSET = UTF8;
