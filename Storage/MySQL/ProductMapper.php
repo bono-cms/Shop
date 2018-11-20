@@ -49,6 +49,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Basic columns to be selected (required for most selections)
         $columns = array(
             ProductMapper::column('id'),
+            ProductMapper::column('brand_id'),
             ProductTranslationMapper::column('lang_id'),
             ProductTranslationMapper::column('web_page_id'),
             ProductTranslationMapper::column('name'),
