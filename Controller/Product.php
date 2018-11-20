@@ -74,7 +74,8 @@ final class Product extends AbstractShopController
                 // Image bags of current product
                 'images' => $productManager->fetchAllPublishedImagesById($id),
                 'page' => $product,
-                'product' => $product
+                'product' => $product,
+                'languages' => $productManager->getSwitchUrls($id)
             ));
 
             // After product is viewed, it's time to increment its view count
