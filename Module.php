@@ -36,6 +36,7 @@ use Shop\Service\WishlistManager;
 use Shop\Service\SpecificationCategoryService;
 use Shop\Service\SpecificationItemService;
 use Shop\Service\SpecificationValueService;
+use Shop\Service\BrandService;
 
 final class Module extends AbstractCmsModule
 {
@@ -122,7 +123,8 @@ final class Module extends AbstractCmsModule
             'attributeValueManager' => new AttributeValueManager($this->getMapper('/Shop/Storage/MySQL/AttributeValueMapper', false)),
             'specificationCategoryService' => new SpecificationCategoryService($this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper')),
             'specificationItemService' => new SpecificationItemService($this->getMapper('/Shop/Storage/MySQL/SpecificationItemMapper')),
-            'specificationValueService' => new SpecificationValueService($this->getMapper('/Shop/Storage/MySQL/SpecificationValueMapper'), $this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper'))
+            'specificationValueService' => new SpecificationValueService($this->getMapper('/Shop/Storage/MySQL/SpecificationValueMapper'), $this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper')),
+            'brandService' => new BrandService($this->getMapper('/Shop/Storage/MySQL/BrandMapper'))
         );
     }
 
