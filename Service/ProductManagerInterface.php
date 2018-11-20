@@ -14,6 +14,14 @@ namespace Shop\Service;
 interface ProductManagerInterface
 {
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Product ID
+     * @return array
+     */
+    public function getSwitchUrls($id);
+
+    /**
      * Hydrate a raw product collection into entities
      * 
      * @param array $rows

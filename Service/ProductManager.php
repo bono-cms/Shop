@@ -120,6 +120,17 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     }
 
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Product ID
+     * @return array
+     */
+    public function getSwitchUrls($id)
+    {
+        return $this->productMapper->createSwitchUrls($id, 'Shop', 'Shop:Product@indexAction');
+    }
+
+    /**
      * Hydrate a raw product collection into entities
      * 
      * @param array $rows
