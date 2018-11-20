@@ -79,7 +79,8 @@ final class Product extends AbstractController
             'attributes' => $attributes,
             'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : array(),
             'specCatIds' => $this->getModuleService('specificationCategoryService')->fetchList(), // Specification category IDs
-            'features' => $id ? $this->getModuleService('specificationValueService')->findByProduct($id) : array()
+            'features' => $id ? $this->getModuleService('specificationValueService')->findByProduct($id) : array(),
+            'brands' => $this->getModuleService('brandService')->fetchList()
         ));
     }
 

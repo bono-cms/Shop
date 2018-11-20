@@ -140,6 +140,15 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
+            <?php if (!empty($brands)): ?>
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Brand'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[brand_id]', $brands, $entity->getBrandId(), array('class' => 'form-control'), ''); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Specification category'); ?></label>
                 <div class="col-lg-10">
