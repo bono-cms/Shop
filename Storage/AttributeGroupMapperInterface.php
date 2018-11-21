@@ -21,34 +21,11 @@ interface AttributeGroupMapperInterface
     public function fetchAll();
 
     /**
-     * Deletes a group by its associated id
-     * 
-     * @param string $id
-     * @return array
-     */
-    public function deleteById($id);
-
-    /**
      * Fetches category by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslation Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id);
-
-    /**
-     * Inserts a group
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function insert(array $input);
-
-    /**
-     * Updates a group
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input);
+    public function fetchById($id, $withTranslation);
 }
