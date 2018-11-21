@@ -142,11 +142,18 @@ DROP TABLE IF EXISTS `bono_module_shop_attribute_values`;
 CREATE TABLE `bono_module_shop_attribute_values` (
 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `group_id` INT NOT NULL,
-    `name` varchar(255) NOT NULL
+    `group_id` INT NOT NULL
 
 ) DEFAULT CHARSET = UTF8;
 
+DROP TABLE IF EXISTS `bono_module_shop_attribute_values_translations`;
+CREATE TABLE `bono_module_shop_attribute_values_translations` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL,
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_attribute_values(id) ON DELETE CASCADE
+) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_product_attributes`;
 CREATE TABLE `bono_module_shop_product_attributes` (

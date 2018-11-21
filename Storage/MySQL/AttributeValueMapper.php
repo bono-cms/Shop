@@ -25,6 +25,14 @@ final class AttributeValueMapper extends AbstractMapper implements AttributeValu
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return AttributeValueTranslationMapper::getTableName();
+    }
+
+    /**
      * Fetch all values filtered by group id
      * 
      * @param string $groupId
