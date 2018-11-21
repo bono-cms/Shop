@@ -168,10 +168,18 @@ CREATE TABLE `bono_module_shop_product_similar` (
 DROP TABLE IF EXISTS `bono_module_shop_delivery_types`;
 CREATE TABLE `bono_module_shop_delivery_types` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Delivery type ID',
-    `name` varchar(255) NOT NULL COMMENT 'Delivery type name',
     `price` FLOAT NOT NULL COMMENT 'The price for'
 ) DEFAULT CHARSET = UTF8;
 
+DROP TABLE IF EXISTS `bono_module_shop_delivery_types_translations`;
+CREATE TABLE `bono_module_shop_delivery_types_translations` (
+    `id` INT NOT NULL COMMENT 'Delivery type ID',
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Delivery type name',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_delivery_types(id) ON DELETE CASCADE
+
+) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_coupons`;
 CREATE TABLE `bono_module_shop_coupons` (

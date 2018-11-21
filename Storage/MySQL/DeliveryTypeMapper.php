@@ -25,6 +25,14 @@ final class DeliveryTypeMapper extends AbstractMapper implements DeliveryTypeMap
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return DeliveryTypeTranslationMapper::getTableName();
+    }
+
+    /**
      * Fetches delivery type name by its associated ID
      * 
      * @param string $id
