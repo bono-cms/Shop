@@ -6,7 +6,7 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show(!$new ? 'Update attribute group' : 'Add attribute group'); ?></h3>
+<h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($this->getBreadcrumbBag()->getLastName()); ?></h3>
 
 <form data-group="group">
     <ul class="nav nav-tabs" role="tablist">
