@@ -1,47 +1,73 @@
 <?php
 
 use Krystal\Form\Element;
+use Cms\Service\LanguageManager;
 defined('KRYSTAL') or die;
 
 ?>
 
-<h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($deliveryType->getId() ? 'Update delivery type' : 'Add new delivery type'); ?></h3>
+<h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show(!$new ? 'Update delivery type' : 'Add new delivery type'); ?></h3>
 
 <form data-group="deliveryType">
-    <div class="well">
-        <input type="hidden" name="deliveryType[id]" value="<?php echo $deliveryType->getId(); ?>" />
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Delivery type'); ?></a></li>
+        <li role="presentation"><a href="#settings" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Settings'); ?></a></li>
+	</ul>
 
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::text('deliveryType[name]', $deliveryType->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="category" role="tabpanel">
+            <div class="well">
+                <?php $this->loadPartial('language-tabs'); ?>
+
+                <div class="tab-content">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
+                        <?php $entity = LanguageManager::findByLangId($language->getId(), $deliveryType); ?>
+
+                        <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
+                        <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
+                        <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                            <div class="col-lg-10">
+                                <div class="input-group">
+                                    <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
+        
+        <div class="tab-pane fade in" id="settings" role="tabpanel">
+            <?php echo Element::hidden('deliveryType[id]', $entity->getId()); ?>
 
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Price'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::text('deliveryType[price]', $deliveryType->getPrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Price'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+            <div class="well">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Price'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('deliveryType[price]', $entity->getPrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Price'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
         </div>
     </div>
 
-    <?php if (!$deliveryType->getId()): ?>
-
+    <?php if ($new): ?>
     <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:DeliveryType@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
     <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
-
     <?php else: ?>
-
     <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
     <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
-    <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-
     <?php endif; ?>
+    
+    <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
 </form>

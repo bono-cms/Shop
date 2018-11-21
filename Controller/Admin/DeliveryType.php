@@ -20,12 +20,12 @@ final class DeliveryType extends AbstractController
     /**
      * Creates the form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $deliveryType
+     * @param \Krystal\Stdlib\VirtualEntity|array $deliveryType
      * @return string
      */
-    private function createForm(VirtualEntity $deliveryType)
+    private function createForm($deliveryType)
     {
-        $new = !$deliveryType->getId();
+        $new = is_object($deliveryType);
 
         // Configure breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
@@ -72,7 +72,7 @@ final class DeliveryType extends AbstractController
      */
     public function editAction($id)
     {
-        $deliveryType = $this->getModuleService('deliveryTypeManager')->fetchById($id);
+        $deliveryType = $this->getModuleService('deliveryTypeManager')->fetchById($id, true);
 
         if ($deliveryType !== false) {
             return $this->createForm($deliveryType);
@@ -109,7 +109,6 @@ final class DeliveryType extends AbstractController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'name' => new Pattern\Name(),
                     'price' => new Pattern\Price()
                 )
             )
@@ -118,16 +117,13 @@ final class DeliveryType extends AbstractController
         if ($formValidator->isValid()) {
             // Grab the service
             $deliveryTypeManager = $this->getModuleService('deliveryTypeManager');
+            $deliveryTypeManager->save($this->request->getPost());
 
             if ($input['id']) {
-                $deliveryTypeManager->update($input);
                 $this->flashBag->set('success', 'Delivery type has been updated successfully');
-
                 return 1;
             } else {
-                $deliveryTypeManager->add($input);
                 $this->flashBag->set('success', 'Delivery type has added successfully');
-
                 return $deliveryTypeManager->getLastId();
             }
 
