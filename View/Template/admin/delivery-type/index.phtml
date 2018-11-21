@@ -1,0 +1,50 @@
+<?php
+
+use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+defined('KRYSTAL') or die;
+
+?>
+
+<h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available delivery types'); ?> <small>(<?= count($deliveryTypes); ?>)</small></h2>
+
+<p>
+    <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:DeliveryType@addAction'); ?>"><?php $this->show('Add new delivery type'); ?></a>
+</p>
+
+<div class="table-responsive">
+    <?= Grid::render($deliveryTypes, array(
+        // A column to be considered as a primary key
+        'pk' => 'id',
+        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+        'columns' => array(
+            array(
+                'column' => 'id',
+                'label' => '#'
+            ),
+
+            array(
+                'column' => 'name',
+            ),
+
+            array(
+                'column' => 'price'
+            ),
+
+            array(
+                'column' => 'order'
+            )
+        ),
+
+        'actions' => array(
+            'edit' => function($row){
+                return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:DeliveryType@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this delivery method'), 'data-button' => 'edit'));
+            },
+
+            'remove' => function($row){
+                return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this delivery type'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:DeliveryType@deleteAction', $row['id'])));
+            }
+        )
+
+    ), $this->translator); ?>
+</div>

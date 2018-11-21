@@ -18,20 +18,23 @@ use Krystal\Validate\Pattern;
 final class DeliveryType extends AbstractController
 {
     /**
-     * Creates the grid
+     * Creates the form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $deliveryType
+     * @param \Krystal\Stdlib\VirtualEntity|array $deliveryType
      * @return string
      */
-    private function createGrid(VirtualEntity $deliveryType)
+    private function createForm($deliveryType)
     {
+        $new = is_object($deliveryType);
+
         // Configure breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Delivery types');
+                                       ->addOne('Delivery types', 'Shop:Admin:DeliveryType@indexAction')
+                                       ->addOne($new ? 'Add new delivery type' : 'Update delivery type');
 
-        return $this->view->render('delivery-type-grid', array(
-            'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(),
-            'deliveryType' => $deliveryType
+        return $this->view->render('delivery-type/form', array(
+            'deliveryType' => $deliveryType,
+            'new' => $new
         ));
     }
 
@@ -42,7 +45,23 @@ final class DeliveryType extends AbstractController
      */
     public function indexAction()
     {
-        return $this->createGrid(new VirtualEntity());
+        // Configure breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('Delivery types');
+
+        return $this->view->render('delivery-type/index', array(
+            'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll()
+        ));
+    }
+
+    /**
+     * Renders add form
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        return $this->createForm(new VirtualEntity());
     }
 
     /**
@@ -53,10 +72,10 @@ final class DeliveryType extends AbstractController
      */
     public function editAction($id)
     {
-        $deliveryType = $this->getModuleService('deliveryTypeManager')->fetchById($id);
+        $deliveryType = $this->getModuleService('deliveryTypeManager')->fetchById($id, true);
 
         if ($deliveryType !== false) {
-            return $this->createGrid($deliveryType);
+            return $this->createForm($deliveryType);
         } else {
             return false;
         }
@@ -90,7 +109,6 @@ final class DeliveryType extends AbstractController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'name' => new Pattern\Name(),
                     'price' => new Pattern\Price()
                 )
             )
@@ -99,16 +117,13 @@ final class DeliveryType extends AbstractController
         if ($formValidator->isValid()) {
             // Grab the service
             $deliveryTypeManager = $this->getModuleService('deliveryTypeManager');
+            $deliveryTypeManager->save($this->request->getPost());
 
             if ($input['id']) {
-                $deliveryTypeManager->update($input);
                 $this->flashBag->set('success', 'Delivery type has been updated successfully');
-
                 return 1;
             } else {
-                $deliveryTypeManager->add($input);
                 $this->flashBag->set('success', 'Delivery type has added successfully');
-
                 return $deliveryTypeManager->getLastId();
             }
 

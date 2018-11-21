@@ -36,7 +36,7 @@ final class Basket extends AbstractShopController
             return $this->view->render('shop-basket', array(
                 'products' => $this->getBasketManager()->getProducts(),
                 'page' => $page,
-                'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(),
+                'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(true),
                 'languages' => $pageManager->getSwitchUrls($id)
             ));
 

@@ -11,6 +11,7 @@
 
 namespace Shop\Storage\MySQL;
 
+use Krystal\Db\Sql\RawSqlFragment;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\DeliveryTypeMapperInterface;
 
@@ -22,6 +23,30 @@ final class DeliveryTypeMapper extends AbstractMapper implements DeliveryTypeMap
     public static function getTableName()
     {
         return self::getWithPrefix('bono_module_shop_delivery_types');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return DeliveryTypeTranslationMapper::getTableName();
+    }
+
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::column('id'),
+            self::column('price'),
+            self::column('order'),
+            DeliveryTypeTranslationMapper::column('lang_id'),
+            DeliveryTypeTranslationMapper::column('name')
+        );
     }
 
     /**
@@ -39,35 +64,35 @@ final class DeliveryTypeMapper extends AbstractMapper implements DeliveryTypeMap
      * Fetches delivery type meta data by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->findByPk($id);
+        return $this->findEntity($this->getColumns(), $id, $withTranslations);
     }
 
     /**
      * Fetches all delivery types
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($sort)
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->orderBy($this->getPk())
-                        ->desc()
-                        ->queryAll();
-    }
+        $db = $this->createEntitySelect($this->getColumns())
+                   ->whereEquals(DeliveryTypeTranslationMapper::column('lang_id'), $this->getLangId());
 
-    /**
-     * Delete delivery type by its associated id
-     * 
-     * @param string $id Delivery type ID
-     * @return boolean
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
+        if ($sort === false) {
+            $db->orderBy($this->getPk())
+               ->desc();
+        } else {
+            $db->orderBy(array(
+                self::column('order'), 
+                new RawSqlFragment(sprintf('CASE WHEN %s = 0 THEN %s END DESC', self::column('order'), self::column('id')))
+            ));
+        }
+
+        return $db->queryAll();
     }
 }

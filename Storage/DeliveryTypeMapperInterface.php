@@ -25,22 +25,16 @@ interface DeliveryTypeMapperInterface
      * Fetches delivery type meta data by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Fetches all delivery types
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll();
-
-    /**
-     * Delete delivery type by its associated id
-     * 
-     * @param string $id Delivery type ID
-     * @return boolean
-     */
-    public function deleteById($id);
+    public function fetchAll($sort);
 }

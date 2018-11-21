@@ -42,8 +42,10 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
     {
         $entity = new VirtualEntity();
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
+               ->setLangId($row['lang_id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS)
-               ->setPrice($row['price'], VirtualEntity::FILTER_FLOAT);
+               ->setPrice($row['price'], VirtualEntity::FILTER_FLOAT)
+               ->setOrder($row['order'], VirtualEntity::FILTER_INT);
 
         return $entity;
     }
@@ -81,25 +83,14 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
     }
 
     /**
-     * Updates the delivery type
+     * Updates or inserts delivery type
      * 
      * @param array $input
      * @return boolean
      */
-    public function update(array $input)
+    public function save(array $input)
     {
-        return $this->deliveryTypeMapper->persist($input);
-    }
-
-    /**
-     * Adds new delivery type
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function add(array $input)
-    {
-        return $this->deliveryTypeMapper->persist($input);
+        return $this->deliveryTypeMapper->saveEntity($input['deliveryType'], $input['translation']);
     }
 
     /**
@@ -120,27 +111,33 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
      */
     public function deleteById($id)
     {
-        return $this->deliveryTypeMapper->deleteById($id);
+        return $this->deliveryTypeMapper->deleteEntity($id);
     }
 
     /**
      * Fetches entity by its associated ID
      * 
      * @param string $id
-     * @return \Krystal\Stdlib\VirtualEntity
+     * @param boolean $withTranslations Whether to fetch translations or not
+     * @return \Krystal\Stdlib\VirtualEntity|array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->deliveryTypeMapper->fetchById($id));
+        if ($withTranslations === true) {
+            return $this->prepareResults($this->deliveryTypeMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->deliveryTypeMapper->fetchById($id, false));
+        }
     }
 
     /**
      * Fetch all entities
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($sort = false)
     {
-        return $this->prepareResults($this->deliveryTypeMapper->fetchAll());
+        return $this->prepareResults($this->deliveryTypeMapper->fetchAll($sort));
     }
 }

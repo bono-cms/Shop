@@ -29,21 +29,6 @@ interface DeliveryTypeManagerInterface
      */
     public function fetchNameById($id);
 
-    /**
-     * Updates the delivery type
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input);
-
-    /**
-     * Adds new delivery type
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function add(array $input);
 
     /**
      * Returns last delivery type ID
@@ -64,14 +49,16 @@ interface DeliveryTypeManagerInterface
      * Fetches entity by its associated ID
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Krystal\Stdlib\VirtualEntity
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Fetch all entities
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll($sort = false);
 }
