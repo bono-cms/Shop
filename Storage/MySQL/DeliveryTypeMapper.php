@@ -42,6 +42,7 @@ final class DeliveryTypeMapper extends AbstractMapper implements DeliveryTypeMap
         return array(
             self::column('id'),
             self::column('price'),
+            self::column('order'),
             DeliveryTypeTranslationMapper::column('lang_id'),
             DeliveryTypeTranslationMapper::column('name')
         );

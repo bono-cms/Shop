@@ -44,7 +44,8 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
                ->setLangId($row['lang_id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS)
-               ->setPrice($row['price'], VirtualEntity::FILTER_FLOAT);
+               ->setPrice($row['price'], VirtualEntity::FILTER_FLOAT)
+               ->setOrder($row['order'], VirtualEntity::FILTER_INT);
 
         return $entity;
     }

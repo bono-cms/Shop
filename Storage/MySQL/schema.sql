@@ -168,7 +168,8 @@ CREATE TABLE `bono_module_shop_product_similar` (
 DROP TABLE IF EXISTS `bono_module_shop_delivery_types`;
 CREATE TABLE `bono_module_shop_delivery_types` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Delivery type ID',
-    `price` FLOAT NOT NULL COMMENT 'The price for'
+    `price` FLOAT NOT NULL COMMENT 'The price for',
+    `order` INT NOT NULL COMMENT 'Sorting order'
 ) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_delivery_types_translations`;
