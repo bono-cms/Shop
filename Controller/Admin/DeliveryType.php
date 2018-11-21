@@ -18,20 +18,23 @@ use Krystal\Validate\Pattern;
 final class DeliveryType extends AbstractController
 {
     /**
-     * Creates the grid
+     * Creates the form
      * 
      * @param \Krystal\Stdlib\VirtualEntity $deliveryType
      * @return string
      */
-    private function createGrid(VirtualEntity $deliveryType)
+    private function createForm(VirtualEntity $deliveryType)
     {
+        $new = !$deliveryType->getId();
+
         // Configure breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Delivery types');
+                                       ->addOne('Delivery types', 'Shop:Admin:DeliveryType@indexAction')
+                                       ->addOne($new ? 'Add new delivery type' : 'Update delivery type');
 
-        return $this->view->render('delivery-type-grid', array(
-            'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(),
-            'deliveryType' => $deliveryType
+        return $this->view->render('delivery-type/form', array(
+            'deliveryType' => $deliveryType,
+            'new' => $new
         ));
     }
 
@@ -42,7 +45,23 @@ final class DeliveryType extends AbstractController
      */
     public function indexAction()
     {
-        return $this->createGrid(new VirtualEntity());
+        // Configure breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
+                                       ->addOne('Delivery types');
+
+        return $this->view->render('delivery-type/index', array(
+            'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll()
+        ));
+    }
+
+    /**
+     * Renders add form
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        return $this->createForm(new VirtualEntity());
     }
 
     /**
@@ -56,7 +75,7 @@ final class DeliveryType extends AbstractController
         $deliveryType = $this->getModuleService('deliveryTypeManager')->fetchById($id);
 
         if ($deliveryType !== false) {
-            return $this->createGrid($deliveryType);
+            return $this->createForm($deliveryType);
         } else {
             return false;
         }

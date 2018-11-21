@@ -199,7 +199,11 @@ return array(
     '/%s/module/shop/delivery-type/edit/(:var)' => array(
         'controller' => 'Admin:DeliveryType@editAction'
     ),
-    
+
+    '/%s/module/shop/delivery-type/add' => array(
+        'controller' => 'Admin:DeliveryType@addAction'
+    ),
+
     '/%s/module/shop/delivery-type/save' => array(
         'controller' => 'Admin:DeliveryType@saveAction'
     ),

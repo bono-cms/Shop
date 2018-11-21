@@ -1,0 +1,38 @@
+<?php
+
+defined('KRYSTAL') or die;
+
+?>
+
+<h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available delivery types'); ?></h2>
+
+<p>
+    <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:DeliveryType@addAction'); ?>"><?php $this->show('Add new delivery type'); ?></a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-stripped table-bordered table-hover">
+        <thead>
+            <tr>
+                <td class="text-center text-muted">#</td>
+                <td class="text-center"><?php $this->show('Name'); ?></td>
+                <td class="text-center"><?php $this->show('Price'); ?></td>
+                <td class="text-center"><?php $this->show('Actions'); ?></td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($deliveryTypes as $entity): ?>
+            <tr>
+                <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
+                <td class="text-center"><?php echo $entity->getName(); ?></td>
+                <td class="text-center"><?php echo $entity->getPrice(); ?></td>
+                <td class="text-center">
+                    <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this delivery method'); ?>" href="<?php echo $this->url('Shop:Admin:DeliveryType@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                    <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:DeliveryType@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this delivery type'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
