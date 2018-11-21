@@ -25,6 +25,14 @@ final class AttributeGroupMapper extends AbstractMapper implements AttributeGrou
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return AttributeGroupTranslationMapper::getTableName();
+    }
+
+    /**
      * Fetch all groups
      * 
      * @return array

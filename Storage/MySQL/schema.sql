@@ -125,13 +125,18 @@ CREATE TABLE `bono_module_shop_product_category_relations` (
 /* Attributes */
 DROP TABLE IF EXISTS `bono_module_shop_attribute_groups`;
 CREATE TABLE `bono_module_shop_attribute_groups` (
-
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` varchar(255) NOT NULL COMMENT 'Group name',
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Attr. Group ID',
     `dynamic` varchar(1) NOT NULL COMMENT 'Whether the group contains dynamic attributes only'
-
 ) DEFAULT CHARSET = UTF8;
 
+DROP TABLE IF EXISTS `bono_module_shop_attribute_groups_translation`;
+CREATE TABLE `bono_module_shop_attribute_groups_translation` (
+    `id` INT NOT NULL COMMENT 'Attr. Group ID',
+    `lang_id` INT NOT NULL COMMENT 'Attached language ID',
+    `name` varchar(255) NOT NULL COMMENT 'Group name',
+
+    FOREIGN KEY (id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE
+) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_attribute_values`;
 CREATE TABLE `bono_module_shop_attribute_values` (
