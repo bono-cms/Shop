@@ -11,6 +11,7 @@
 
 namespace Shop\Storage\MySQL;
 
+use Krystal\Db\Sql\RawSqlFragment;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\DeliveryTypeMapperInterface;
 
@@ -74,14 +75,24 @@ final class DeliveryTypeMapper extends AbstractMapper implements DeliveryTypeMap
     /**
      * Fetches all delivery types
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($sort)
     {
-        return $this->createEntitySelect($this->getColumns())
-                    ->whereEquals(DeliveryTypeTranslationMapper::column('lang_id'), $this->getLangId())
-                    ->orderBy($this->getPk())
-                    ->desc()
-                    ->queryAll();
+        $db = $this->createEntitySelect($this->getColumns())
+                   ->whereEquals(DeliveryTypeTranslationMapper::column('lang_id'), $this->getLangId());
+
+        if ($sort === false) {
+            $db->orderBy($this->getPk())
+               ->desc();
+        } else {
+            $db->orderBy(array(
+                self::column('order'), 
+                new RawSqlFragment(sprintf('CASE WHEN %s = 0 THEN %s END DESC', self::column('order'), self::column('id')))
+            ));
+        }
+
+        return $db->queryAll();
     }
 }

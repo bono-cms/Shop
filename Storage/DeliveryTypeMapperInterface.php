@@ -33,7 +33,8 @@ interface DeliveryTypeMapperInterface
     /**
      * Fetches all delivery types
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll($sort);
 }

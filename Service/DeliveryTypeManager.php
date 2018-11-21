@@ -133,10 +133,11 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
     /**
      * Fetch all entities
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($sort = false)
     {
-        return $this->prepareResults($this->deliveryTypeMapper->fetchAll());
+        return $this->prepareResults($this->deliveryTypeMapper->fetchAll($sort));
     }
 }

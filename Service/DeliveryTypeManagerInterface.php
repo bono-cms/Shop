@@ -57,7 +57,8 @@ interface DeliveryTypeManagerInterface
     /**
      * Fetch all entities
      * 
+     * @param boolean $sort Whether to sort by order
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll($sort = false);
 }
