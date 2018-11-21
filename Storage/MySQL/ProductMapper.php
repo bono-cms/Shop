@@ -766,7 +766,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
-        $db->whereEquals(self::column('lang_id'), $this->getLangId())
+        $db->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId())
            ->andWhereEquals(self::column('published'), '1');
 
         if ($categoryId !== null) {
