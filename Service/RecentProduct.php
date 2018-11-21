@@ -113,7 +113,7 @@ final class RecentProduct implements RecentProductInterface
         foreach ($ids as $id) {
             // Additional security check
             if (is_numeric($id)) {
-                $entity = $this->productManager->fetchById($id);
+                $entity = $this->productManager->fetchById($id, false);
 
                 // Yet another security check, which ensures that product exists
                 if ($entity->getId()) {
