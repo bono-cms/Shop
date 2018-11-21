@@ -119,7 +119,7 @@ final class Module extends AbstractCmsModule
             'basketManager' => $basketManager,
             'productManager' => $productManager,
             'categoryManager' => $categoryManager,
-            'attributeGroupManager' => new AttributeGroupManager($this->getMapper('/Shop/Storage/MySQL/AttributeGroupMapper', false)),
+            'attributeGroupManager' => new AttributeGroupManager($this->getMapper('/Shop/Storage/MySQL/AttributeGroupMapper')),
             'attributeValueManager' => new AttributeValueManager($this->getMapper('/Shop/Storage/MySQL/AttributeValueMapper', false)),
             'specificationCategoryService' => new SpecificationCategoryService($this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper')),
             'specificationItemService' => new SpecificationItemService($this->getMapper('/Shop/Storage/MySQL/SpecificationItemMapper')),
