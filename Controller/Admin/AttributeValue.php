@@ -13,19 +13,20 @@ namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
 
 final class AttributeValue extends AbstractController
 {
     /**
      * Renders the form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $value
+     * @param \Krystal\Stdlib\VirtualEntity|array $value
      * @param string $title
      * @return string
      */
-    private function createForm(VirtualEntity $value, $title)
+    private function createForm($value, $title)
     {
+        $new = is_object($value);
+
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()
                    ->addOne('Shop', 'Shop:Admin:Browser@indexAction')
@@ -34,7 +35,8 @@ final class AttributeValue extends AbstractController
 
         return $this->view->render('attribute-value', array(
             'groups' => $this->getModuleService('attributeGroupManager')->fetchList(),
-            'value' => $value
+            'value' => $value,
+            'new' => $new
         ));
     }
 
@@ -51,7 +53,6 @@ final class AttributeValue extends AbstractController
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
         return '1';
-        
     }
 
     /**
@@ -72,7 +73,7 @@ final class AttributeValue extends AbstractController
      */
     public function editAction($id)
     {
-        $value = $this->getModuleService('attributeValueManager')->fetchById($id);
+        $value = $this->getModuleService('attributeValueManager')->fetchById($id, true);
 
         if ($value !== false) {
             return $this->createForm($value, 'Edit the attribute');
@@ -90,33 +91,16 @@ final class AttributeValue extends AbstractController
     {
         $input = $this->request->getPost('value');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name()
-                )
-            )
-        ));
+        $service = $this->getModuleService('attributeValueManager');
+        $service->save($this->request->getPost());
 
-        if ($formValidator->isValid()) {
-            $service = $this->getModuleService('attributeValueManager');
-
-            if (!empty($input['id'])) {
-                if ($service->update($input)) {
-                    $this->flashBag->set('success', 'The element has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                if ($service->add($input)) {
-                    $this->flashBag->set('success', 'The element has been created successfully');
-                    return $service->getLastId();
-                }
-            }
+        if (!empty($input['id'])) {
+            $this->flashBag->set('success', 'The element has been updated successfully');
+            return '1';
 
         } else {
-            return $formValidator->getErrors();
+            $this->flashBag->set('success', 'The element has been created successfully');
+            return $service->getLastId();
         }
     }
 }
