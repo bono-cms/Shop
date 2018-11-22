@@ -20,10 +20,9 @@ final class AttributeValue extends AbstractController
      * Renders the form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $value
-     * @param string $title
      * @return string
      */
-    private function createForm($value, $title)
+    private function createForm($value)
     {
         $new = is_object($value);
 
@@ -31,7 +30,7 @@ final class AttributeValue extends AbstractController
         $this->view->getBreadcrumbBag()
                    ->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
-                   ->addOne($title);
+                   ->addOne($new ? 'Add attribute' : 'Edit the attribute');
 
         return $this->view->render('attribute-value', array(
             'groups' => $this->getModuleService('attributeGroupManager')->fetchList(),
@@ -62,7 +61,7 @@ final class AttributeValue extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity(), 'Add attribute');
+        return $this->createForm(new VirtualEntity());
     }
 
     /**
@@ -76,7 +75,7 @@ final class AttributeValue extends AbstractController
         $value = $this->getModuleService('attributeValueManager')->fetchById($id, true);
 
         if ($value !== false) {
-            return $this->createForm($value, 'Edit the attribute');
+            return $this->createForm($value);
         } else {
             return false;
         }
