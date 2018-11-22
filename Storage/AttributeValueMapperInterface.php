@@ -16,40 +16,17 @@ interface AttributeValueMapperInterface
     /**
      * Fetch all values filtered by group id
      * 
-     * @param string $groupId
+     * @param int $groupId
      * @return array
      */
     public function fetchAllByCategoryId($groupId);
 
     /**
-     * Deletes a value by its associated id
-     * 
-     * @param string $id
-     * @return array
-     */
-    public function deleteById($id);
-
-    /**
      * Fetches value by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id);
-
-    /**
-     * Inserts a value
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function insert(array $input);
-
-    /**
-     * Updates a value
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input);
+    public function fetchById($id, $withTranslations);
 }
