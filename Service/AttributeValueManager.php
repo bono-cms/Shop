@@ -43,6 +43,7 @@ final class AttributeValueManager extends AbstractManager
     {
         $entity = new VirtualEntity();
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
+               ->setLangId($row['lang_id'], VirtualEntity::FILTER_INT)
                ->setGroupId($row['group_id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS);
 
@@ -76,20 +77,9 @@ final class AttributeValueManager extends AbstractManager
      * @param array $input
      * @return boolean
      */
-    public function update(array $input)
+    public function save(array $input)
     {
-        return $this->attributeValueMapper->update($input);
-    }
-
-    /**
-     * Adds a value
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function add(array $input)
-    {
-        return $this->attributeValueMapper->insert($input);
+        return $this->attributeValueMapper->saveEntity($input['value'], $input['translation']);
     }
 
     /**
@@ -100,17 +90,22 @@ final class AttributeValueManager extends AbstractManager
      */
     public function deleteById($id)
     {
-        return $this->attributeValueMapper->deleteById($id);
+        return $this->attributeValueMapper->deleteEntity($id);
     }
 
     /**
      * Fetches value by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->attributeValueMapper->fetchById($id));
+        if ($withTranslations) {
+            return $this->prepareResults($this->attributeValueMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->attributeValueMapper->fetchById($id, false));
+        }
     }
 }
