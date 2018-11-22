@@ -11,29 +11,30 @@
 
 namespace Shop\Controller\Admin;
 
-use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
+use Cms\Controller\Admin\AbstractController;
 
 final class AttributeGroup extends AbstractController
 {
     /**
      * Creates the attribute form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $entity
-     * @param string $title
+     * @param \Krystal\Stdlib\VirtualEntity|array $group
      * @return string
      */
-    private function createForm(VirtualEntity $entity, $title)
+    private function createForm($group)
     {
+        $new = is_object($group);
+
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()
                    ->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
-                   ->addOne($title);
+                   ->addOne($new ? 'Add a group' : 'Edit the group');
 
-        return $this->view->render('attribute-group', array(
-            'group' => $entity
+        return $this->view->render('attributes/group', array(
+            'group' => $group,
+            'new' => $new
         ));
     }
 
@@ -44,7 +45,7 @@ final class AttributeGroup extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity(), 'Add a group');
+        return $this->createForm(new VirtualEntity());
     }
 
     /**
@@ -55,10 +56,10 @@ final class AttributeGroup extends AbstractController
      */
     public function editAction($id)
     {
-        $group = $this->getModuleService('attributeGroupManager')->fetchById($id);
+        $group = $this->getModuleService('attributeGroupManager')->fetchById($id, true);
 
         if ($group !== false) {
-            return $this->createForm($group, 'Edit the group');
+            return $this->createForm($group);
         } else {
             return false;
         }
@@ -67,39 +68,21 @@ final class AttributeGroup extends AbstractController
     /**
      * Saves the group
      * 
-     * @return boolean
+     * @return int
      */
     public function saveAction()
     {
         $input = $this->request->getPost('group');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name()
-                )
-            )
-        ));
+        $service = $this->getModuleService('attributeGroupManager');
+        $service->save($this->request->getPost());
 
-        if ($formValidator->isValid()) {
-            $service = $this->getModuleService('attributeGroupManager');
-
-            if (!empty($input['id'])) {
-                if ($service->update($input)) {
-                    $this->flashBag->set('success', 'The element has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                if ($service->add($input)) {
-                    $this->flashBag->set('success', 'The element has been created successfully');
-                    return $service->getLastId();
-                }
-            }
-
+        if (!empty($input['id'])) {
+            $this->flashBag->set('success', 'The element has been updated successfully');
+            return '1';
         } else {
-            return $formValidator->getErrors();
+            $this->flashBag->set('success', 'The element has been created successfully');
+            return $service->getLastId();
         }
     }
 

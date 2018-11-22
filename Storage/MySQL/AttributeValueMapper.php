@@ -25,62 +25,54 @@ final class AttributeValueMapper extends AbstractMapper implements AttributeValu
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return AttributeValueTranslationMapper::getTableName();
+    }
+
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::column('id'),
+            self::column('group_id'),
+            AttributeValueTranslationMapper::column('lang_id'),
+            AttributeValueTranslationMapper::column('name')
+        );
+    }
+
+    /**
      * Fetch all values filtered by group id
      * 
-     * @param string $groupId
+     * @param int $groupId
      * @return array
      */
     public function fetchAllByCategoryId($groupId)
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->whereEquals('group_id', $groupId)
-                        ->orderBy('id')
-                        ->desc()
-                        ->queryAll();
-    }
+        $db = $this->createEntitySelect($this->getColumns())
+                   ->whereEquals('group_id', $groupId)
+                   ->andWhereEquals(AttributeValueTranslationMapper::column('lang_id'), $this->getLangId())
+                   ->orderBy('id')
+                   ->desc();
 
-    /**
-     * Deletes a value by its associated id
-     * 
-     * @param string $id
-     * @return array
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
+        return $db->queryAll();
     }
 
     /**
      * Fetches value by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->findByPk($id);
-    }
-
-    /**
-     * Inserts a value
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function insert(array $input)
-    {
-        return $this->persist($input);
-    }
-
-    /**
-     * Updates a value
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->persist($input);
+        return $this->findEntity($this->getColumns(), $id, $withTranslations);
     }
 }

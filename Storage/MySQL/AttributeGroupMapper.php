@@ -25,60 +25,52 @@ final class AttributeGroupMapper extends AbstractMapper implements AttributeGrou
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return AttributeGroupTranslationMapper::getTableName();
+    }
+
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::column('id'),
+            self::column('dynamic'),
+            AttributeGroupTranslationMapper::column('lang_id'),
+            AttributeGroupTranslationMapper::column('name')
+        );
+    }
+
+    /**
      * Fetch all groups
      * 
      * @return array
      */
     public function fetchAll()
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->orderBy('id')
-                        ->desc()
-                        ->queryAll();
-    }
+        $db = $this->createEntitySelect($this->getColumns())
+                   ->whereEquals(AttributeGroupTranslationMapper::column('lang_id'), $this->getLangId())
+                   ->orderBy('id')
+                   ->desc();
 
-    /**
-     * Deletes a group by its associated id
-     * 
-     * @param string $id
-     * @return array
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
+        return $db->queryAll();
     }
 
     /**
      * Fetches category by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslation Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslation)
     {
-        return $this->findByPk($id);
-    }
-
-    /**
-     * Inserts a group
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function insert(array $input)
-    {
-        return $this->persist($input);
-    }
-
-    /**
-     * Updates a group
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->persist($input);
+        return $this->findEntity($this->getColumns(), $id, $withTranslation);
     }
 }

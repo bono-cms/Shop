@@ -43,6 +43,7 @@ final class AttributeGroupManager extends AbstractManager
     {
         $entity = new VirtualEntity();
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
+               ->setLangId($row['lang_id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS)
                ->setDynamic($row['dynamic'], VirtualEntity::FILTER_BOOL);
 
@@ -80,25 +81,14 @@ final class AttributeGroupManager extends AbstractManager
     }
 
     /**
-     * Updates a group
+     * Saves a group
      * 
      * @param array $input
      * @return boolean
      */
-    public function update(array $input)
+    public function save(array $input)
     {
-        return $this->attributeGroupMapper->update($input);
-    }
-
-    /**
-     * Adds a group
-     * 
-     * @param array $input
-     * @return boolean
-     */
-    public function add(array $input)
-    {
-        return $this->attributeGroupMapper->insert($input);
+        return $this->attributeGroupMapper->saveEntity($input['group'], $input['translation']);
     }
 
     /**
@@ -109,18 +99,22 @@ final class AttributeGroupManager extends AbstractManager
      */
     public function deleteById($id)
     {
-        // @TODO Delete attributes as well
-        return $this->attributeGroupMapper->deleteById($id);
+        return $this->attributeGroupMapper->deleteEntity($id);
     }
 
     /**
      * Fetches group by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslation Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslation)
     {
-        return $this->prepareResult($this->attributeGroupMapper->fetchById($id));
+        if ($withTranslation === true) {
+            return $this->prepareResults($this->attributeGroupMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->attributeGroupMapper->fetchById($id, false));
+        }
     }
 }
