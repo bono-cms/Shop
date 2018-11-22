@@ -28,7 +28,7 @@ final class Attributes extends AbstractController
                    ->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                    ->addOne('Attributes');
 
-        return $this->view->render('attributes', array(
+        return $this->view->render('attributes/index', array(
             'groups' => $this->getModuleService('attributeGroupManager')->fetchAll(),
             'values' => $this->getModuleService('attributeValueManager')->fetchAllByCategoryId($groupId),
             'groupId' => $groupId

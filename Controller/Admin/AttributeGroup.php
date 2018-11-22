@@ -32,7 +32,7 @@ final class AttributeGroup extends AbstractController
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
                    ->addOne($new ? 'Add a group' : 'Edit the group');
 
-        return $this->view->render('attribute-group', array(
+        return $this->view->render('attributes/group', array(
             'group' => $group,
             'new' => $new
         ));

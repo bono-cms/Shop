@@ -32,7 +32,7 @@ final class AttributeValue extends AbstractController
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
                    ->addOne($new ? 'Add attribute' : 'Edit the attribute');
 
-        return $this->view->render('attribute-value', array(
+        return $this->view->render('attributes/value', array(
             'groups' => $this->getModuleService('attributeGroupManager')->fetchList(),
             'value' => $value,
             'new' => $new
