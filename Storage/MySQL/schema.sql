@@ -148,7 +148,7 @@ CREATE TABLE `bono_module_shop_attribute_values` (
 
 DROP TABLE IF EXISTS `bono_module_shop_attribute_values_translations`;
 CREATE TABLE `bono_module_shop_attribute_values_translations` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` INT NOT NULL COMMENT 'Value ID',
     `lang_id` INT NOT NULL COMMENT 'Attached language ID',
     `name` varchar(255) NOT NULL,
 
