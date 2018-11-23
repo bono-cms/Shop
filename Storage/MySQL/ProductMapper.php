@@ -660,9 +660,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             }
         }
 
+        $attrs = $this->getSlaveIdsFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
+
         if ($withTranslations === false && isset($rows[0])) {
-            return $rows[0];
+            return array_merge($rows[0], array('attribute_group_id' => $attrs));
         } else if ($withTranslations === true) {
+            foreach ($rows as $index => $entity) {
+                $rows[$index]['attribute_group_id'] = $attrs;
+            }
+
             return $rows;
         } else {
             return false;
@@ -899,7 +905,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $translations =& $data['translation'];
 
         // Save data
-        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
+        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attribute_group_id', 'features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
 
         // Last product ID
         $id = !empty($product['id']) ? $product['id'] : $this->getLastId();
@@ -921,6 +927,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         if (isset($data['features'])) {
             $this->saveFeatures($id, $data['features']['translation']);
         }
+
+        // Synchronize attributes
+        $this->syncWithJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id, isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array());
 
         // Specification category relation
         $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : array());

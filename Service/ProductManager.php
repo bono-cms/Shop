@@ -324,6 +324,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         $entity = new ProductEntity();
         $entity->setImageBag($imageBag)
+            ->setAttributeGroupIds(isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array())        
             ->setId($product['id'], ProductEntity::FILTER_INT)
             ->setBrandId($product['brand_id'])
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)

@@ -49,8 +49,7 @@ final class Category extends AbstractController
 
         return $this->view->render('category.form', array(
             'categories' => $this->getCategoriesTree(),
-            'category' => $category,
-            'attributeGroups' => $this->getModuleService('attributeGroupManager')->fetchList()
+            'category' => $category
         ));
     }
 

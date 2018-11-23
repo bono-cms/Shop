@@ -150,6 +150,13 @@ defined('KRYSTAL') or die;
             <?php endif; ?>
 
             <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Attribute groups'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[attribute_group_id][]', $attributeGroups, $entity->getAttributeGroupIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Attach at least one attribute group'), 'id' => 'groups')); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Specification category'); ?></label>
                 <div class="col-lg-10">
                     <?php echo Element::select('product[spec_cat_id][]', $specCatIds, $entity->getSpecCatIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one specification category'))); ?>

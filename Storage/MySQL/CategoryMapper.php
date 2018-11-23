@@ -233,19 +233,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchById($id, $withTranslations)
     {
-        $category = $this->findWebPage($this->getColumns(), $id, $withTranslations);
-        $attrs = $this->getSlaveIdsFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
-
-        if ($withTranslations === true) {
-            foreach ($category as $index => $entity) {
-                $category[$index]['attribute_group_id'] = $attrs;
-            }
-
-            return $category;
-
-        } else {
-            return array_merge($category, array('attribute_group_id' => $attrs));
-        }
+        return $this->findWebPage($this->getColumns(), $id, $withTranslations);
     }
 
     /**
@@ -288,12 +276,6 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     {
         $category =& $input['category'];
         $translations =& $input['translation'];
-
-        if (!empty($category['attribute_group_id'])) {
-            $this->syncWithJunction(CategoryAttributeGroupRelationMapper::getTableName(), $category['id'], $category['attribute_group_id']);
-        } else {
-            $this->removeFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $category['id']);
-        }
 
         unset($category['attribute_group_id']);
         return $this->savePage('Shop', 'Shop:Category@indexAction', $category, $translations);
