@@ -57,7 +57,7 @@ final class Product extends AbstractController
         }
 
         if ($id) {
-            $attributes = $this->getModuleService('productManager')->fetchAttributesByIds(array($id), true);
+            $attributes = $this->getModuleService('productManager')->fetchAttributesById($id, true);
         } else {
             $attributes = array();
         }
