@@ -660,7 +660,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             }
         }
 
-        $attrs = $this->getSlaveIdsFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
+        $attrs = $this->getSlaveIdsFromJunction(ProductAttributeGroupRelationMapper::getTableName(), $id);
 
         if ($withTranslations === false && isset($rows[0])) {
             return array_merge($rows[0], array('attribute_group_id' => $attrs));
@@ -929,7 +929,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         // Synchronize attributes
-        $this->syncWithJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id, isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array());
+        $this->syncWithJunction(ProductAttributeGroupRelationMapper::getTableName(), $id, isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array());
 
         // Specification category relation
         $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : array());
@@ -1001,6 +1001,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->removeFromJunction(ProductCategoryRelationMapper::getTableName(), $id);
         $this->removeFromJunction(ProductRecommendedMapper::getTableName(), $id);
         $this->removeFromJunction(ProductSimilarRelationMapper::getTableName(), $id);
+        $this->removeFromJunction(ProductAttributeGroupRelationMapper::getTableName(), $id);
 
         return true;
     }

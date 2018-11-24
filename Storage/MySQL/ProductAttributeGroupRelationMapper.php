@@ -13,13 +13,13 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 
-final class CategoryAttributeGroupRelationMapper extends AbstractMapper
+final class ProductAttributeGroupRelationMapper extends AbstractMapper
 {
     /**
      * {@inheritDoc}
      */
     public static function getTableName()
     {
-        return self::getWithPrefix('bono_module_shop_categories_attr_groups');
+        return self::getWithPrefix('bono_module_shop_product_attr_groups_rel');
     }
 }

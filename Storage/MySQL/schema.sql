@@ -62,8 +62,8 @@ CREATE TABLE `bono_module_shop_categories_translations` (
 ) DEFAULT CHARSET = UTF8;
 
 
-DROP TABLE IF EXISTS `bono_module_shop_categories_attr_groups`;
-CREATE TABLE `bono_module_shop_categories_attr_groups` (
+DROP TABLE IF EXISTS `bono_module_shop_product_attr_groups_rel`;
+CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
 
     `master_id` INT NOT NULL COMMENT 'Category ID',
     `slave_id` INT NOT NULL COMMENT 'Attribute group ID'

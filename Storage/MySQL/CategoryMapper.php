@@ -112,10 +112,10 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         );
 
         $db = $this->db->select($columns)
-                        ->from(CategoryAttributeGroupRelationMapper::getTableName())
+                        ->from(ProductAttributeGroupRelationMapper::getTableName())
                         ->leftJoin(AttributeGroupMapper::getTableName(), array(
-                            AttributeGroupMapper::column('id') => CategoryAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
-                            CategoryAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
+                            AttributeGroupMapper::column('id') => ProductAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
+                            ProductAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
                         ));
 
         if ($dynamic === false) {
@@ -260,7 +260,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         // If there's at least one selected group, then insert into the junction table
         if (!empty($groups)) {
-            return $this->insertIntoJunction(CategoryAttributeGroupRelationMapper::getTableName(), $this->getLastId(), $groups);
+            return $this->insertIntoJunction(ProductAttributeGroupRelationMapper::getTableName(), $this->getLastId(), $groups);
         }
 
         return true;
@@ -302,7 +302,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function deleteById($id)
     {
-        return $this->deletePage($id) && $this->removeFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
+        return $this->deletePage($id);
     }
 
     /**
