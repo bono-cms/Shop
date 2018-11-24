@@ -87,6 +87,43 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Finds product attributes by its associated id
+     * 
+     * @param string $id Product id
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function findAttributesById($id, $dynamic)
+    {
+        // Data to be selected
+        $columns = array(
+            AttributeGroupMapper::column('id') => 'group_id',
+            AttributeGroupMapper::column('name') => 'group_name',
+            AttributeGroupMapper::column('dynamic') => 'dynamic',
+            AttributeValueMapper::column('id') => 'value_id',
+            AttributeValueMapper::column('name') => 'value_name'
+        );
+
+        $db = $this->db->select($columns)
+                        ->from(ProductAttributeGroupRelationMapper::getTableName())
+                        ->leftJoin(AttributeGroupMapper::getTableName(), array(
+                            AttributeGroupMapper::column('id') => ProductAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
+                            ProductAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
+                        ));
+
+        if ($dynamic === false) {
+            $db->rawAnd()
+               ->equals(AttributeGroupMapper::column('dynamic'), new RawBinding('0'));
+        }
+
+        $db->innerJoin(AttributeValueMapper::getTableName(), array(
+            AttributeValueMapper::column('group_id') => AttributeGroupMapper::getRawColumn('id')
+        ));
+
+        return $db->queryAll();
+    }
+
+    /**
      * Fetches all product ids with their corresponding names
      *
      * @return array

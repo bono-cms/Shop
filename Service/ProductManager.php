@@ -22,6 +22,7 @@ use Shop\Storage\ImageMapperInterface;
 use Shop\Storage\CategoryMapperInterface;
 use Shop\Storage\ProductAttributeMapperInterface;
 use Shop\Storage\CurrencyMapperInterface;
+use Shop\Service\AttributeProcessor;
 use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
 use Cms\Service\WebPageManagerInterface;
@@ -117,6 +118,42 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $this->imageManager = $imageManager;
         $this->historyManager = $historyManager;
         $this->productRemover = $productRemover;
+    }
+
+    /**
+     * Finds product attributes by its associated id
+     * 
+     * @param array $ids A collection of product IDs
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function fetchAttributesByIds(array $ids, $dynamic)
+    {
+        $attributes = array();
+
+        foreach ($ids as $id) {
+            $attributes = array_merge($attributes, $this->fetchAttributesById($id, $dynamic));
+        }
+
+        // Remove duplicates if any
+        $attributes = ArrayUtils::arrayUnique($attributes);
+
+        return $attributes;
+    }
+
+    /**
+     * Finds product attributes by its associated id
+     * 
+     * @param string $id
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function fetchAttributesById($id, $dynamic)
+    {
+        $rows = $this->productMapper->findAttributesById($id, $dynamic);
+        $processor = new AttributeProcessor($rows);
+
+        return $processor->process();
     }
 
     /**

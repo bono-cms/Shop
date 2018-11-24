@@ -18,7 +18,6 @@ use Menu\Contract\MenuAwareManager;
 use Menu\Service\MenuWidgetInterface;
 use Shop\Storage\CategoryMapperInterface;
 use Shop\Storage\ProductMapperInterface;
-use Shop\Service\AttributeProcessor;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Security\Filter;
 use Krystal\Tree\AdjacencyList\TreeBuilder;
@@ -428,42 +427,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         }
 
         return true;
-    }
-
-    /**
-     * Finds category attributes by its associated id
-     * 
-     * @param array $ids A collection of category IDs
-     * @param boolean $dynamic Whether to include dynamic attributes
-     * @return array
-     */
-    public function fetchAttributesByIds(array $ids, $dynamic)
-    {
-        $attributes = array();
-
-        foreach ($ids as $id) {
-            $attributes = array_merge($attributes, $this->fetchAttributesById($id, $dynamic));
-        }
-
-        // Remove duplicates if any
-        $attributes = ArrayUtils::arrayUnique($attributes);
-
-        return $attributes;
-    }
-
-    /**
-     * Finds category attributes by its associated id
-     * 
-     * @param string $id
-     * @param boolean $dynamic Whether to include dynamic attributes
-     * @return array
-     */
-    public function fetchAttributesById($id, $dynamic)
-    {
-        $rows = $this->categoryMapper->findAttributesById($id, $dynamic);
-        $processor = new AttributeProcessor($rows);
-
-        return $processor->process();
     }
 
     /**

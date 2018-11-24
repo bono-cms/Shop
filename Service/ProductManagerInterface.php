@@ -14,6 +14,24 @@ namespace Shop\Service;
 interface ProductManagerInterface
 {
     /**
+     * Finds product attributes by its associated id
+     * 
+     * @param array $ids A collection of product IDs
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function fetchAttributesByIds(array $ids, $dynamic);
+
+    /**
+     * Finds product attributes by its associated id
+     * 
+     * @param string $id
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function fetchAttributesById($id, $dynamic);
+
+    /**
      * Returns a collection of switching URLs
      * 
      * @param string $id Product ID

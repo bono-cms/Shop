@@ -56,8 +56,8 @@ final class Product extends AbstractController
             $photos = array();
         }
 
-        if ($id && $categoryIds) {
-            $attributes = $this->getModuleService('categoryManager')->fetchAttributesByIds($categoryIds, true);
+        if ($id) {
+            $attributes = $this->getModuleService('productManager')->fetchAttributesByIds(array($id), true);
         } else {
             $attributes = array();
         }
