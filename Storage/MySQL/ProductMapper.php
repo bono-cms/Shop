@@ -98,14 +98,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         // Data to be selected
         $columns = array(
             AttributeGroupMapper::column('id') => 'group_id',
-            AttributeGroupMapper::column('name') => 'group_name',
+            AttributeGroupTranslationMapper::column('name') => 'group_name',
             AttributeGroupMapper::column('dynamic') => 'dynamic',
             AttributeValueMapper::column('id') => 'value_id',
-            AttributeValueMapper::column('name') => 'value_name'
+            AttributeValueTranslationMapper::column('name') => 'value_name'
         );
 
         $db = $this->db->select($columns)
                         ->from(ProductAttributeGroupRelationMapper::getTableName())
+                        // Attribute group relation
                         ->leftJoin(AttributeGroupMapper::getTableName(), array(
                             AttributeGroupMapper::column('id') => ProductAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
                             ProductAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
@@ -116,9 +117,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                ->equals(AttributeGroupMapper::column('dynamic'), new RawBinding('0'));
         }
 
-        $db->innerJoin(AttributeValueMapper::getTableName(), array(
+        // Attribute group translations
+        $db->leftJoin(AttributeGroupTranslationMapper::getTableName(), array(
+            AttributeGroupTranslationMapper::column('id') => AttributeGroupMapper::getRawColumn('id')
+        ))
+        // Attribute -> group relation
+        ->innerJoin(AttributeValueMapper::getTableName(), array(
             AttributeValueMapper::column('group_id') => AttributeGroupMapper::getRawColumn('id')
-        ));
+        ))
+        // Attribute translation mapper
+        ->leftJoin(AttributeValueTranslationMapper::getTableName(), array(
+            AttributeValueTranslationMapper::column('id') => AttributeValueMapper::getRawColumn('id'),
+            AttributeValueTranslationMapper::column('lang_id') => AttributeGroupTranslationMapper::getRawColumn('lang_id')
+        ))
+        // Constraints
+        ->whereEquals(AttributeValueTranslationMapper::column('lang_id'), $this->getLangId());
 
         return $db->queryAll();
     }
