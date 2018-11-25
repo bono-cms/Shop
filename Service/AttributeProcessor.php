@@ -77,23 +77,24 @@ final class AttributeProcessor
      * @param string $values
      * @param array $attributes
      * @param array $activeAttributes
-     * @return boolean
+     * @return array
      */
     public static function findActiveAttribute(array $values, array $attributes, array $activeAttributes)
     {
+        $output = array();
         $keys = array_keys($values);
 
         foreach ($attributes as $attribute) {
             foreach ($activeAttributes as $activeAttribute) {
                 if ($activeAttribute[self::ARRAY_KEY_GROUP_ID] == $attribute[self::ARRAY_KEY_GROUP_ID]) {
                     if (in_array($activeAttribute[self::ARRAY_KEY_VALUE_ID], $keys)) {
-                        return $activeAttribute[self::ARRAY_KEY_VALUE_ID];
+                        $output[] = $activeAttribute[self::ARRAY_KEY_VALUE_ID];
                     }
                 }
             }
         }
 
-        return false;
+        return $output;
     }
 
     /**
