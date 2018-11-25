@@ -14,6 +14,15 @@ namespace Shop\Storage;
 interface ProductMapperInterface
 {
     /**
+     * Finds product attributes by its associated id
+     * 
+     * @param string $id Product id
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function findAttributesById($id, $dynamic);
+
+    /**
      * Fetches all product ids with their corresponding names
      *
      * @return array

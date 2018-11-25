@@ -14,6 +14,7 @@ namespace Shop\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductAttributeMapperInterface;
 use Shop\Service\CategorySortGadget;
+use Shop\Service\AttributeProcessor;
 use Krystal\Db\Sql\RawSqlFragment;
 use Krystal\Db\Sql\RawBinding;
 
@@ -113,19 +114,13 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     /**
      * Stores attribute relations
      * 
-     * @param string $id Product id
+     * @param string $productId Product id
      * @param array $values
      * @return boolean
      */
-    public function store($id, array $values)
+    public function store($productId, array $values)
     {
-        $collection = array();
-
-        foreach ($values as $groupId => $valueId) {
-            $collection[] = array($id, $groupId, (int) $valueId);
-        }
-
-        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), $collection)
+        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), AttributeProcessor::normalizeInput($productId, $values))
                         ->execute();
     }
 }

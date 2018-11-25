@@ -21,15 +21,6 @@ interface CategoryMapperInterface
     public function fetchTree();
 
     /**
-     * Finds category attributes by its associated id
-     * 
-     * @param string $id Category id
-     * @param boolean $dynamic Whether to include dynamic attributes
-     * @return array
-     */
-    public function findAttributesById($id, $dynamic);
-
-    /**
      * Fetches child rows by associated parent id
      * 
      * @param string $parentId

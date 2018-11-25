@@ -87,6 +87,56 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Finds product attributes by its associated id
+     * 
+     * @param string $id Product id
+     * @param boolean $dynamic Whether to include dynamic attributes
+     * @return array
+     */
+    public function findAttributesById($id, $dynamic)
+    {
+        // Data to be selected
+        $columns = array(
+            AttributeGroupMapper::column('id') => 'group_id',
+            AttributeGroupTranslationMapper::column('name') => 'group_name',
+            AttributeGroupMapper::column('dynamic') => 'dynamic',
+            AttributeValueMapper::column('id') => 'value_id',
+            AttributeValueTranslationMapper::column('name') => 'value_name'
+        );
+
+        $db = $this->db->select($columns)
+                        ->from(ProductAttributeGroupRelationMapper::getTableName())
+                        // Attribute group relation
+                        ->leftJoin(AttributeGroupMapper::getTableName(), array(
+                            AttributeGroupMapper::column('id') => ProductAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
+                            ProductAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
+                        ));
+
+        if ($dynamic === false) {
+            $db->rawAnd()
+               ->equals(AttributeGroupMapper::column('dynamic'), new RawBinding('0'));
+        }
+
+        // Attribute group translations
+        $db->leftJoin(AttributeGroupTranslationMapper::getTableName(), array(
+            AttributeGroupTranslationMapper::column('id') => AttributeGroupMapper::getRawColumn('id')
+        ))
+        // Attribute -> group relation
+        ->innerJoin(AttributeValueMapper::getTableName(), array(
+            AttributeValueMapper::column('group_id') => AttributeGroupMapper::getRawColumn('id')
+        ))
+        // Attribute translation mapper
+        ->leftJoin(AttributeValueTranslationMapper::getTableName(), array(
+            AttributeValueTranslationMapper::column('id') => AttributeValueMapper::getRawColumn('id'),
+            AttributeValueTranslationMapper::column('lang_id') => AttributeGroupTranslationMapper::getRawColumn('lang_id')
+        ))
+        // Constraints
+        ->whereEquals(AttributeValueTranslationMapper::column('lang_id'), $this->getLangId());
+
+        return $db->queryAll();
+    }
+
+    /**
      * Fetches all product ids with their corresponding names
      *
      * @return array
@@ -660,9 +710,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             }
         }
 
+        $attrs = $this->getSlaveIdsFromJunction(ProductAttributeGroupRelationMapper::getTableName(), $id);
+
         if ($withTranslations === false && isset($rows[0])) {
-            return $rows[0];
+            return array_merge($rows[0], array('attribute_group_id' => $attrs));
         } else if ($withTranslations === true) {
+            foreach ($rows as $index => $entity) {
+                $rows[$index]['attribute_group_id'] = $attrs;
+            }
+
             return $rows;
         } else {
             return false;
@@ -899,7 +955,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $translations =& $data['translation'];
 
         // Save data
-        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
+        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attribute_group_id', 'features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
 
         // Last product ID
         $id = !empty($product['id']) ? $product['id'] : $this->getLastId();
@@ -921,6 +977,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         if (isset($data['features'])) {
             $this->saveFeatures($id, $data['features']['translation']);
         }
+
+        // Synchronize attributes
+        $this->syncWithJunction(ProductAttributeGroupRelationMapper::getTableName(), $id, isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array());
 
         // Specification category relation
         $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : array());
@@ -992,6 +1051,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $this->removeFromJunction(ProductCategoryRelationMapper::getTableName(), $id);
         $this->removeFromJunction(ProductRecommendedMapper::getTableName(), $id);
         $this->removeFromJunction(ProductSimilarRelationMapper::getTableName(), $id);
+        $this->removeFromJunction(ProductAttributeGroupRelationMapper::getTableName(), $id);
 
         return true;
     }

@@ -117,24 +117,6 @@ interface CategoryManagerInterface
     public function deleteById($id);
 
     /**
-     * Finds category attributes by its associated id
-     * 
-     * @param array $ids A collection of category IDs
-     * @param boolean $dynamic Whether to include dynamic attributes
-     * @return array
-     */
-    public function fetchAttributesByIds(array $ids, $dynamic);
-
-    /**
-     * Finds category attributes by its associated id
-     * 
-     * @param string $id
-     * @param boolean $dynamic Whether to include dynamic attributes
-     * @return array
-     */
-    public function fetchAttributesById($id, $dynamic);
-
-    /**
      * Fetches category's entity by its associated id
      * 
      * @param string $id Category id

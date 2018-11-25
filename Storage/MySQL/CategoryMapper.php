@@ -94,42 +94,6 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Finds category attributes by its associated id
-     * 
-     * @param string $id Category id
-     * @param boolean $dynamic Whether to include dynamic attributes
-     * @return array
-     */
-    public function findAttributesById($id, $dynamic)
-    {
-        // Data to be selected
-        $columns = array(
-            AttributeGroupMapper::column('id') => 'group_id',
-            AttributeGroupMapper::column('name') => 'group_name',
-            AttributeGroupMapper::column('dynamic') => 'dynamic',
-            AttributeValueMapper::column('id') => 'value_id',
-            AttributeValueMapper::column('name') => 'value_name'
-        );
-
-        $db = $this->db->select($columns)
-                        ->from(CategoryAttributeGroupRelationMapper::getTableName())
-                        ->leftJoin(AttributeGroupMapper::getTableName(), array(
-                            AttributeGroupMapper::column('id') => CategoryAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
-                            CategoryAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
-                        ));
-
-        if ($dynamic === false) {
-            $db->rawAnd()
-               ->equals(AttributeGroupMapper::column('dynamic'), new RawBinding('0'));
-        }
-
-        return $db->innerJoin(AttributeValueMapper::getTableName(), array(
-                        AttributeValueMapper::column('group_id') => AttributeGroupMapper::getRawColumn('id')
-                    ))
-                  ->queryAll();
-    }
-
-    /**
      * Fetches child rows by associated parent id
      * 
      * @param string $parentId
@@ -233,19 +197,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchById($id, $withTranslations)
     {
-        $category = $this->findWebPage($this->getColumns(), $id, $withTranslations);
-        $attrs = $this->getSlaveIdsFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
-
-        if ($withTranslations === true) {
-            foreach ($category as $index => $entity) {
-                $category[$index]['attribute_group_id'] = $attrs;
-            }
-
-            return $category;
-
-        } else {
-            return array_merge($category, array('attribute_group_id' => $attrs));
-        }
+        return $this->findWebPage($this->getColumns(), $id, $withTranslations);
     }
 
     /**
@@ -272,7 +224,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         // If there's at least one selected group, then insert into the junction table
         if (!empty($groups)) {
-            return $this->insertIntoJunction(CategoryAttributeGroupRelationMapper::getTableName(), $this->getLastId(), $groups);
+            return $this->insertIntoJunction(ProductAttributeGroupRelationMapper::getTableName(), $this->getLastId(), $groups);
         }
 
         return true;
@@ -288,12 +240,6 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     {
         $category =& $input['category'];
         $translations =& $input['translation'];
-
-        if (!empty($category['attribute_group_id'])) {
-            $this->syncWithJunction(CategoryAttributeGroupRelationMapper::getTableName(), $category['id'], $category['attribute_group_id']);
-        } else {
-            $this->removeFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $category['id']);
-        }
 
         unset($category['attribute_group_id']);
         return $this->savePage('Shop', 'Shop:Category@indexAction', $category, $translations);
@@ -320,7 +266,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function deleteById($id)
     {
-        return $this->deletePage($id) && $this->removeFromJunction(CategoryAttributeGroupRelationMapper::getTableName(), $id);
+        return $this->deletePage($id);
     }
 
     /**

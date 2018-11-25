@@ -150,6 +150,13 @@ defined('KRYSTAL') or die;
             <?php endif; ?>
 
             <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Attribute groups'); ?></label>
+                <div class="col-lg-10">
+                    <?php echo Element::select('product[attribute_group_id][]', $attributeGroups, $entity->getAttributeGroupIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Attach at least one attribute group'), 'id' => 'groups')); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Specification category'); ?></label>
                 <div class="col-lg-10">
                     <?php echo Element::select('product[spec_cat_id][]', $specCatIds, $entity->getSpecCatIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one specification category'))); ?>
@@ -332,12 +339,11 @@ defined('KRYSTAL') or die;
       <div role="tabpanel" class="tab-pane" id="attrs">
         <div class="well">
             <?php foreach ($attributes as $attribute): ?>
-            
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php echo $attribute['group_name']; ?></label>
                 <div class="col-lg-10">
                     <?php echo Element::select(
-                        sprintf('product[attributes][%s]', $attribute['group_id']), 
+                        $attribute['group_dynamic'] ? sprintf('product[attributes][%s][]', $attribute['group_id']) : sprintf('product[attributes][%s]', $attribute['group_id']), 
                         $attribute['attributes'], 
                         AttributeProcessor::findActiveAttribute($attribute['attributes'], $attributes, $activeAttributes),
                         array('class' => 'form-control', 'multiple' => $attribute['group_dynamic']),

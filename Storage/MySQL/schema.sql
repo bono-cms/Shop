@@ -62,8 +62,8 @@ CREATE TABLE `bono_module_shop_categories_translations` (
 ) DEFAULT CHARSET = UTF8;
 
 
-DROP TABLE IF EXISTS `bono_module_shop_categories_attr_groups`;
-CREATE TABLE `bono_module_shop_categories_attr_groups` (
+DROP TABLE IF EXISTS `bono_module_shop_product_attr_groups_rel`;
+CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
 
     `master_id` INT NOT NULL COMMENT 'Category ID',
     `slave_id` INT NOT NULL COMMENT 'Attribute group ID'
@@ -155,13 +155,17 @@ CREATE TABLE `bono_module_shop_attribute_values_translations` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_attribute_values(id) ON DELETE CASCADE
 ) DEFAULT CHARSET = UTF8;
 
+/* Product attribute relation */
 DROP TABLE IF EXISTS `bono_module_shop_product_attributes`;
 CREATE TABLE `bono_module_shop_product_attributes` (
     `product_id` INT NOT NULL COMMENT 'Product ID',
     `group_id` INT NOT NULL COMMENT 'Group ID',
-    `value_id` INT NOT NULL COMMENT 'Value ID'
-);
+    `value_id` INT NOT NULL COMMENT 'Value ID',
 
+    FOREIGN KEY (product_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE,
+    FOREIGN KEY (value_id) REFERENCES bono_module_shop_attribute_values(id) ON DELETE CASCADE
+);
 
 DROP TABLE IF EXISTS `bono_module_shop_product_recommended`;
 CREATE TABLE `bono_module_shop_product_recommended` (
