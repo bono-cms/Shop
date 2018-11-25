@@ -48,9 +48,9 @@ interface ProductAttributeMapperInterface
     /**
      * Stores attribute relations
      * 
-     * @param string $id Product id
+     * @param string $productId Product id
      * @param array $values
      * @return boolean
      */
-    public function store($id, array $values);
+    public function store($productId, array $values);
 }
