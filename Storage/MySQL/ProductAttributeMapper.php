@@ -111,6 +111,32 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     }
 
     /**
+     * Normalizes input for insert
+     * 
+     * @param string $id Product id
+     * @param array $raw Raw input data
+     * @return array
+     */
+    private function normalizeInput($id, array $raw)
+    {
+        // To be returned
+        $collection = array();
+
+        foreach ($raw as $groupId => $value) {
+            // Support multiple values on demand
+            if (is_array($value)) {
+                foreach ($value as $valueId) {
+                    $collection[] = array($id, $groupId, (int) $valueId);
+                }
+            } else {
+                $collection[] = array($id, $groupId, (int) $value);
+            }
+        }
+
+        return $collection;
+    }
+    
+    /**
      * Stores attribute relations
      * 
      * @param string $id Product id
@@ -119,13 +145,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
      */
     public function store($id, array $values)
     {
-        $collection = array();
-
-        foreach ($values as $groupId => $valueId) {
-            $collection[] = array($id, $groupId, (int) $valueId);
-        }
-
-        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), $collection)
+        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), $this->normalizeInput($id, $values))
                         ->execute();
     }
 }
