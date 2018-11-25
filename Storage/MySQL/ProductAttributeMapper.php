@@ -14,6 +14,7 @@ namespace Shop\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductAttributeMapperInterface;
 use Shop\Service\CategorySortGadget;
+use Shop\Service\AttributeProcessor;
 use Krystal\Db\Sql\RawSqlFragment;
 use Krystal\Db\Sql\RawBinding;
 
@@ -111,32 +112,6 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     }
 
     /**
-     * Normalizes input for insert
-     * 
-     * @param string $productId Product id
-     * @param array $raw Raw input data
-     * @return array
-     */
-    private function normalizeInput($productId, array $raw)
-    {
-        // To be returned
-        $collection = array();
-
-        foreach ($raw as $groupId => $value) {
-            // Support multiple values on demand
-            if (is_array($value)) {
-                foreach ($value as $valueId) {
-                    $collection[] = array($productId, $groupId, (int) $valueId);
-                }
-            } else {
-                $collection[] = array($productId, $groupId, (int) $value);
-            }
-        }
-
-        return $collection;
-    }
-
-    /**
      * Stores attribute relations
      * 
      * @param string $productId Product id
@@ -145,7 +120,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
      */
     public function store($productId, array $values)
     {
-        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), $this->normalizeInput($productId, $values))
+        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), AttributeProcessor::normalizeInput($productId, $values))
                         ->execute();
     }
 }

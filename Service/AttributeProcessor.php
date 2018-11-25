@@ -46,6 +46,32 @@ final class AttributeProcessor
     }
 
     /**
+     * Normalizes input for insert
+     * 
+     * @param string $productId Product id
+     * @param array $raw Raw input data
+     * @return array
+     */
+    public static function normalizeInput($productId, array $raw)
+    {
+        // To be returned
+        $collection = array();
+
+        foreach ($raw as $groupId => $value) {
+            // Support multiple values on demand
+            if (is_array($value)) {
+                foreach ($value as $valueId) {
+                    $collection[] = array($productId, $groupId, (int) $valueId);
+                }
+            } else {
+                $collection[] = array($productId, $groupId, (int) $value);
+            }
+        }
+
+        return $collection;
+    }
+
+    /**
      * Finds an attribute is active
      * 
      * @param string $values
