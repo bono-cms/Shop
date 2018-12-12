@@ -27,7 +27,7 @@ final class SpecificationItemTypeCollection extends ArrayCollection
         self::TYPE_DESCRIPTION => 'Description',
         self::TYPE_NUMBER => 'Number'
     );
-    
+
     /**
      * Guess method by constant
      * 
