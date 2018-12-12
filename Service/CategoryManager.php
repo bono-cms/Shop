@@ -289,6 +289,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function update(array $input)
     {
         $category =& $input['data']['category'];
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
 
         // Allow to remove a cover, only it case it exists and checkbox was checked
         if (isset($category['remove_cover']) && !empty($category['cover'])) {
@@ -297,21 +298,16 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             $category['cover'] = '';
 
         } else {
-            if (!empty($input['files']['file'])) {
-                $file =& $input['files']['file'];
-
+            if ($file) {
                 // If we have a previous cover's image, then we need to remove it
                 if (!empty($category['cover'])) {
-                    if (!$this->imageManager->delete($category['id'], $category['cover'])){
+                    if (!$this->imageManager->delete($category['id'], $category['cover'])) {
                         // If failed, then exit this method immediately
                         return false;
                     }
                 }
 
-                // And now upload a new one
-                $this->filterFileInput($file);
-                $category['cover'] = $file[0]->getName();
-
+                $category['cover'] = $file->getUniqueName();
                 $this->imageManager->upload($category['id'], $file);
             }
         }
@@ -330,27 +326,19 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function add(array $input)
     {
         $category =& $input['data']['category'];
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false; 
 
         // Cover is always empty by default
         $category['cover'] = '';
 
         // If we have a cover, then we need to upload it
-        if (!empty($input['files']['file'])) {
-            $file =& $input['files']['file'];
-
-            // Now filter original file's name
-            $this->filterFileInput($file);
-
-            // Override empty cover's value now
-            $category['cover'] = $file[0]->getName();
+        if ($file) {
+            $category['cover'] = $file->getUniqueName();
         }
 
         if ($this->categoryMapper->insert($input['data'])) {
-            $id = $this->getLastId();
-
-            // If we have a cover, then we need to upload it
-            if (!empty($input['files']['file'])) {
-                $this->imageManager->upload($id, $input['files']['file']);
+            if ($file) {
+                $this->imageManager->upload($this->getLastId(), $file);
             }
 
             //$this->track('Added category "%s"', $category['name']);
