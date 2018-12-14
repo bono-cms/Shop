@@ -16,6 +16,7 @@ use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\ProductMapperInterface;
 use Shop\Service\CategorySortGadget;
 use Krystal\Db\Sql\RawSqlFragment;
+use Krystal\Db\Sql\RawBinding;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Db\Sql\QueryBuilderInterface;
 
