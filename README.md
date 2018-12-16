@@ -65,3 +65,7 @@ This is optional feature. Orders can be done without registration.
  - Catalogue mode
  - Product ratings
  - Product reviews
+
+# Credits 
+
+Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons "Smashicons") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon") is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/ "Creative Commons BY 3.0")
