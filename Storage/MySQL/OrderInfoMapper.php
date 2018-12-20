@@ -47,8 +47,8 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
             self::column('email'),
             self::column('customer_id'),
             self::column('order_status_id'),
-            OrderStatusMapper::column('name') => 'status_name',
-            OrderStatusMapper::column('description') => 'status_description',
+            OrderStatusTranslationMapper::column('name') => 'status_name',
+            OrderStatusTranslationMapper::column('description') => 'status_description',
         );
     }
 
@@ -94,7 +94,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     private function getSelectQuery()
     {
-        return $this->db->select('*')
+        return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
                         // Order status relation
                         ->leftJoin(OrderStatusMapper::getTableName(), array(
@@ -164,9 +164,14 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     {
         return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
+                        // Order status relation
                         ->leftJoin(OrderStatusMapper::getTableName(), array(
-                            self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id')),
+                            OrderStatusMapper::column('id') => self::getRawColumn('order_status_id'),
                             self::column('id') => $id
+                        ))
+                        // Order status translation
+                        ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                            OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
                         ))
                         ->limit(1)
                         ->query();
