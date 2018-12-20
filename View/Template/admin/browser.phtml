@@ -4,9 +4,13 @@ use Krystal\Form\Widget\BooleanWidget;
 use Krystal\Form\Widget\DropdownWidget;
 use Krystal\Form\HtmlHelper;
 use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categoryId;
+
+$route = $this->url('Shop:Admin:Browser@filterAction', null);
 
 ?>
 
@@ -52,101 +56,98 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
 </div>
 
 <div class="row">
-
     <div class="col-lg-8">
         <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
-        <form action="<?php echo $this->url('Shop:Admin:Browser@filterAction', null); ?>" novalidate>
+        <form action="<?= $route; ?>" novalidate>
             <?php if (isset($categoryId)): ?>
             <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
             <?php endif; ?>
-        
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                <?php if (!empty($products)):?>
-                                <input type="checkbox" />
-                                <?php endif; ?>
-                            </th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('id'); ?>"><i class="<?php echo $filter->isSortedByDesc('id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> #</a>
-                            </th>
-                            <th class="text-center"><?php $this->show('Cover'); ?></th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('name'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('name'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Name'); ?>
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('date'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('date'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('date') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Date'); ?>
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('regular_price'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('regular_price'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('regular_price') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Price'); ?>
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('published'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('published'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('published') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Published'); ?>
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('seo'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('seo'); ?>">
-                                <i class="<?php echo $filter->isSortedByDesc('seo') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('SEO'); ?>
-                                </a>
-                            </th>
-                            <th class="text-center"><?php $this->show('Actions'); ?></th>
-                        </tr>
-                        
-                        <tr class="filter">
-                            <th></th>
-                            <th><?php echo Element::number($filter->getElementName('id'), $filter->get('id'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
-                            <th></th>
-                            <th><?php echo Element::text($filter->getElementName('name'), $filter->get('name'), array('class' => 'form-control')); ?></th>
-                            <th class="date-col"><?php echo Element::text($filter->getElementName('date'), $filter->get('date'), array('class' => 'form-control')); ?></th>
-                            <th class="price-col"><?php echo Element::text($filter->getElementName('regular_price'), $filter->get('regular_price'), array('class' => 'form-control')); ?></th>
-                            <th class="text-center"><?php echo BooleanWidget::render(array('name' => $filter->getElementName('published'), 'class' => 'form-control'), $filter->get('published'), $this->getTranslator()); ?></th>
-                            <th class="text-center"><?php echo BooleanWidget::render(array('name' => $filter->getElementName('seo'), 'class' => 'form-control'), $filter->get('seo'), $this->getTranslator()); ?></th>
-                            <th></th>
-                        </tr>
-                    </thead>
 
-                    <?php if (!empty($products)):?>
-                    <tbody>
-                        
-                        <?php foreach ($products as $product): ?>
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="toDelete[<?php echo $product->getId(); ?>]" />
-                            </td>
-                            <td class="col-lg-1 text-center text-muted"><?php echo $product->getId(); ?></td>
-                            <td>
-                                <a data-toggle="tooltip" data-placement="top" data-original-title="<?php $this->show('Click to zoom this image'); ?>" data-lightbox="<?php printf('image-%s', $product->getId()); ?>" href="<?php echo $product->getImageBag()->getUrl('original'); ?>"><img class="img-responsive center-block" src="<?php echo $product->getImageBag()->getUrl('200x200'); ?>" /></a>
-                            </td>
-                            <td class="text-center"><?php echo $product->getName(); ?></td>
-                            <td class="text-center"><?php echo $product->getDate(); ?></td>
-                            <td>
-                                <?php echo Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0')); ?>
-                            </td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('published[%s]', $product->getId()), $product->getPublished()); ?>
-                            </td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('seo[%s]', $product->getId()), $product->getSeo()); ?>
-                            </td>
-                            <td class="text-center">
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this product on site'); ?>" data-button="view" href="<?php echo $product->getUrl(); ?>" target="_blank"><i class="glyphicon glyphicon-search"></i></a>
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this product'); ?>" data-button="edit" href="<?php echo $this->url('Shop:Admin:Product@editAction', $product->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this product'); ?>" data-button="delete" data-url="<?php echo $this->url('Shop:Admin:Product@deleteAction', $product->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                    <?php endif; ?>
-                </table>
+            <div class="table-responsive">
+                <?= Grid::render($products, array(
+                    'batch' => true,
+                    'pk' => 'id',
+                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                    'columns' => array(
+                        array(
+                            'column' => 'id',
+                            'label' => '#'
+                        ),
+
+                        array(
+                            'column' => 'image',
+                            'label' => 'Cover',
+                            'value' => function($product){
+                                $image = Element::image($product->getImageBag()->getUrl('200x200'), array('class' => 'img-responsive center-block'));
+                                return Element::link($image, $product->getImageBag()->getUrl('original'), array(
+                                    'data-toggle' => 'tooltip',
+                                    'data-placement' => 'top',
+                                    'data-original-title' => $this->translate('Click to zoom this image'),
+                                    'data-lightbox' => sprintf('image-%s', $product->getId())
+                                ));
+                            }
+                        ),
+
+                        array(
+                            'column' => 'name',
+                            'filter' => true
+                        ),
+
+                        array(
+                            'column' => 'date',
+                            'filter' => true
+                        ),
+
+                        array(
+                            'column' => 'regular_price',
+                            'label' => 'Price',
+                            'filter' => true,
+                            'value' => function($product){
+                                return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0'));
+                            }
+                        ),
+
+                        array(
+                            'column' => 'published',
+                            'type' => 'select',
+                            'filter' => 'boolean',
+                            'value' => function($product){
+                                return Element::checkbox(sprintf('published[%s]', $product->getId()), $product->getPublished());
+                            }
+                        ),
+
+                        array(
+                            'column' => 'seo',
+                            'label' => 'SEO',
+                            'type' => 'select',
+                            'filter' => 'boolean',
+                            'value' => function($product){
+                                return Element::checkbox(sprintf('seo[%s]', $product->getId()), $product->getSeo());
+                            }
+                        )
+                    ),
+
+                    'actions' => array(
+                        'view' => function($product){
+                            return Icon::view($product->getUrl(), $this->translate('View this product on site'));
+                        },
+
+                        'edit' => function($product){
+                            return Icon::edit(
+                                $this->url('Shop:Admin:Product@editAction', $product->getId()),
+                                $this->translate('Edit this product')
+                            );
+                        },
+
+                        'remove' => function($product){
+                            return Icon::remove(
+                                $this->url('Shop:Admin:Product@deleteAction', $product->getId()),
+                                $this->translate('Remove this product')
+                            );
+                        }
+                    )
+
+                ), $this->translator, $route, $query); ?>
 
                 <?php if (!empty($products)): ?>
                 <div>
@@ -157,13 +158,12 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                     <br />
                 </div>
                 <?php endif; ?>
-                
+
                 <?php if (empty($products)): ?>
                 <div class="center-block">
                     <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No products'); ?></h2>
                 </div>
                 <?php endif; ?>
-                
             </div>
         </form>
 
@@ -172,63 +172,63 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
 
     <div class="col-lg-4">
         <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
-        <table class="table table-hover table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th class="text-center"><?php $this->show('#'); ?></th>
-                    <th class="text-center"><?php $this->show('Name'); ?></th>
-                    <th class="text-center"><?php $this->show('Amount of products'); ?></th>
-                    <th class="text-center"><?php $this->show('Actions'); ?></th>
-                </tr>
-            </thead>
-            
-            <?php if (!empty($categories)): ?>
-            <tbody>
-                <?php foreach ($categories as $category): ?>
 
-                <tr <?php HtmlHelper::addClassOnDemand(isset($categoryId) && $categoryId == $category['id'], 'info'); ?>>
-                    <td class="text-center text-muted"><?php echo $category['id']; ?></td>
-                    <td>
-                        <a class="pull-left" href="<?php echo $this->url('Shop:Admin:Browser@categoryAction', $category['id']); ?>">
-                            <?php HtmlHelper::wrapOnDemand(isset($categoryId) && $categoryId == $category['id'], 'strong', $category['name']); ?>
-                        </a>
-                    </td>
+        <?= Grid::render($categories, array(
+            'tableClass' => 'table table-hover table-bordered table-striped',
+            'rowAttributes' => array(
+                'class' => function($category) use ($categoryId){
+                    return $categoryId == $category['id'] ? 'info' : null;
+                }
+            ),
 
-                    <td class="text-center"><?php echo $category['product_count']; ?></td>
-                    <td class="text-center">
-                        <a target="_blank" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this category'); ?>" data-button="view" href="<?php echo $category['url']; ?>"><i class="glyphicon glyphicon-search"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this category'); ?>" data-button="edit" href="<?php echo $this->url('Shop:Admin:Category@editAction', $category['id']); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this category'); ?>" data-button="delete" data-url="<?php echo $this->url('Shop:Admin:Category@deleteAction', $category['id']); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-            <?php endif; ?>
-            
-        </table>
-        
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                    'value' => function($category){
+                        return Element::link($category['name'], $this->url('Shop:Admin:Browser@categoryAction', $category['id']));
+                    }
+                ),
+
+                array(
+                    'column' => 'product_count',
+                    'label' => 'Amount of products'
+                )
+            ),
+
+            'actions' => array(
+                'view' => function($category){
+                    return Icon::view($category['url'], $this->translate('View this category'));
+                },
+
+                'edit' => function($row){
+                    return Icon::edit(
+                        $this->url('Shop:Admin:Category@editAction', $row['id']),
+                        $this->translate('Edit this category')
+                    );
+                },
+
+                'remove' => function($row){
+                    return Icon::remove(
+                        $this->url('Shop:Admin:Category@deleteAction', $row['id']),
+                        $this->translate('Remove this advice')
+                    );
+                }
+            )
+
+        ), $this->translator); ?>
+
         <?php if (empty($categories)): ?>
         <div class="center-block">
             <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
         </div>
         <?php endif; ?>
-        
     </div>
-
 </div>
-
-
-<style>
-
-th.price-col {
-  width: 126px;
-}
-
-th.date-col {
- width: 133px;
-}
-
-</style>
 
 <div class="modal fade" id="statistic-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  <div class="modal-dialog">

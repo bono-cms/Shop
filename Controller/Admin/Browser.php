@@ -93,7 +93,8 @@ final class Browser extends AbstractController
             'paginator' => $paginator,
             'categoryId' => $categoryId,
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(true),
-            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Browser@filterAction', array(null)))
+            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Browser@filterAction', array(null))),
+            'query' => $this->request->getQuery()
         ));
     }
 
