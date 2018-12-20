@@ -2,6 +2,7 @@
 
 use Krystal\Grid\Grid;
 use Krystal\Form\Element;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -13,14 +14,13 @@ defined('KRYSTAL') or die;
 <div class="row">
     <div class="col-lg-6">
         <?= Grid::render($brands, array(
-            // A column to be considered as a primary key
-            'pk' => 'id',
             'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
             'rowAttributes' => array(
                 'class' => function($row) use ($brand){
                     return $row['id'] == $brand->getId() ? 'success' : null;
                 }
             ),
+
             'columns' => array(
                 array(
                     'column' => 'id',
@@ -38,11 +38,17 @@ defined('KRYSTAL') or die;
 
             'actions' => array(
                 'edit' => function($row){
-                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:Brand@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this brand'), 'data-button' => 'edit'));
+                    return Icon::edit(
+                        $this->url('Shop:Admin:Brand@editAction', $row['id']),
+                        $this->translate('Edit this brand')
+                    );
                 },
 
                 'remove' => function($row){
-                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this brand'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:Brand@deleteAction', $row['id'])));
+                    return Icon::remove(
+                        $this->url('Shop:Admin:Brand@deleteAction', $row['id']),
+                        $this->translate('Remove this brand')
+                    );
                 }
             )
 
@@ -70,7 +76,7 @@ defined('KRYSTAL') or die;
                     <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
-                            <?php echo Element::text('brand[order]', $brand->getORder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+                            <?php echo Element::text('brand[order]', $brand->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
                             <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                         </div>
                     </div>

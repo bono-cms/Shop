@@ -1,3 +1,12 @@
+<?php
+
+use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+use Cms\View\Icon;
+
+defined('KRYSTAL') or die;
+
+?>
 
 <a class="btn btn-sm btn-default" href="<?php echo $this->url('Shop:Admin:AttributeValue@addAction'); ?>"><i class="glyphicon glyphicon-tag"></i> <?php $this->show('Add attribute'); ?></a>
 <a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeGroup@addAction'); ?>"><i class="glyphicon glyphicon-book"></i> <?php $this->show('Add group'); ?></a>
@@ -6,58 +15,88 @@
     <div class="col-lg-6">
         <h4><i class="glyphicon glyphicon-tags"></i> <?php $this->show('Values'); ?> <small>(<?php echo count($values); ?>)</small></h4>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <td class="text-center">#</td>
-                    <td class="text-center"><?php $this->show('Attribute'); ?></td>
-                    <td class="text-center"><?php $this->show('Actions'); ?></td>
-                </tr>
-            </thead>
-            
-            <tbody>
-                <?php foreach ($values as $value): ?>
-                <tr>
-                    <td class="text-center text-muted"><?php echo $value->getId(); ?></td>
-                    <td><?php echo $value->getName(); ?></td>
-                    <td class="text-center">
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this attribute'); ?>" data-button="edit" href="<?php echo $this->url('Shop:Admin:AttributeValue@editAction', $value->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this attribute'); ?>" data-button="delete" data-url="<?php echo $this->url('Shop:Admin:AttributeValue@deleteAction', $value->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?= Grid::render($values, array(
+            'tableClass' => 'table table-hover table-bordered table-striped',
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name'
+                )
+            ),
+
+            'actions' => array(
+                'edit' => function($value){
+                    return Icon::edit(
+                        $this->url('Shop:Admin:AttributeValue@editAction', $value->getId()),
+                        $this->translate('Edit this attribute')
+                    );
+                },
+
+                'remove' => function($value){
+                    return Icon::remove(
+                        $this->url('Shop:Admin:AttributeValue@deleteAction', $value->getId()),
+                        $this->translate('Remove this attribute')
+                    );
+                }
+            )
+
+        ), $this->translator); ?>
+
     </div>
 
     <div class="col-lg-6">
         <h4><i class="glyphicon glyphicon-book"></i> <?php $this->show('Groups'); ?> <small>(<?php echo count($groups); ?>)</small></h4>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <td class="text-center">#</td>
-                    <td class="text-center"><?php $this->show('Group'); ?></td>
-                    <td class="text-center"><?php $this->show('Dynamic'); ?></td>
-                    <td class="text-center"><?php $this->show('Actions'); ?></td>
-                </tr>
-            </thead>
 
-            <tbody>
-                <?php foreach ($groups as $group): ?>
-                <tr class="<?php echo $groupId == $group->getId() ? 'info' : ''; ?>">
-                    <td class="text-center text-muted"><?php echo $group->getId(); ?></td>
-                    <td>
-                        <a href="<?php echo $this->url('Shop:Admin:Attributes@groupAction', $group->getId()); ?>"><?php echo $group->getName(); ?></a>
-                    </td>
-                    <td class="text-center"><?php $this->show($group->getDynamic() ? 'Yes' : 'No') ;?></td>
-                    <td class="text-center">
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this group'); ?>" data-button="edit" href="<?php echo $this->url('Shop:Admin:AttributeGroup@editAction', $group->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this group'); ?>" data-button="delete" data-url="<?php echo $this->url('Shop:Admin:AttributeGroup@deleteAction', $group->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?= Grid::render($groups, array(
+            'tableClass' => 'table table-hover table-bordered table-striped',
+            'rowAttributes' => array(
+                'class' => function($group) use ($groupId) {
+                    return $groupId == $group->getId() ? 'info' : null;
+                }
+            ),
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                    'value' => function($group){
+                        return Element::link($group->getName(), $this->url('Shop:Admin:Attributes@groupAction', $group->getId()));
+                    }
+                ),
+
+                array(
+                    'column' => 'dynamic',
+                    'translateable' => true,
+                    'value' => function($group){
+                        return $group->getDynamic() ? 'Yes' : 'No';
+                    }
+                )
+            ),
+
+            'actions' => array(
+                'edit' => function($group){
+                    return Icon::edit(
+                        $this->url('Shop:Admin:AttributeGroup@editAction', $group->getId()),
+                        $this->translate('Edit this group')
+                    );
+                },
+
+                'remove' => function($group){
+                    return Icon::remove(
+                        $this->url('Shop:Admin:AttributeGroup@deleteAction', $group->getId()),
+                        $this->translate('Remove this group')
+                    );
+                }
+            )
+
+        ), $this->translator); ?>        
     </div>
 </div>
 

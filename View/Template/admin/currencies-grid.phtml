@@ -1,6 +1,9 @@
 <?php
 
 use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+use Cms\View\Icon;
+
 defined('KRYSTAL') or die;
 
 ?>
@@ -10,30 +13,49 @@ defined('KRYSTAL') or die;
         <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available currencies'); ?> <small>(<?php echo count($currencies); ?>)</small></h2>
 
         <div class="table-responsive">
-            <table class="table table-stripped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <td class="text-center text-muted">#</td>
-                        <td class="text-center"><?php $this->show('Value'); ?></td>
-                        <td class="text-center"><?php $this->show('Currency code'); ?></td>
-                        <td class="text-center"><?php $this->show('Actions'); ?></td>
-                    </tr>
-                </thead>
+            <?= Grid::render($currencies, array(
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'rowAttributes' => array(
+                    'class' => function($row) use ($currency){
+                        return $row->getId() == $currency->getId() ? 'info' : null;
+                    }
+                ),
 
-                <tbody>
-                    <?php foreach ($currencies as $entity): ?>
-                    <tr class="<?php echo $entity->getId() == $currency->getId() ? 'info' : null; ?>">
-                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
-                        <td class="text-center"><?php echo $entity->getValue(); ?></td>
-                        <td class="text-center"><?php echo $entity->getCode(); ?></td>
-                        <td class="text-center">
-                            <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this currency'); ?>" href="<?php echo $this->url('Shop:Admin:Currency@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Currency@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this currency'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'value'
+                    ),
+
+                    array(
+                        'column' => 'code',
+                        'label' => 'Currency code'
+                    )
+                ),
+
+                'actions' => array(
+                    'edit' => function($currency){
+                        return Icon::edit(
+                            $this->url('Shop:Admin:Currency@editAction', $currency->getId()),
+                            $this->translate('Edit this currency')
+                        );
+                    },
+
+                    'remove' => function($currency){
+                        return Icon::remove(
+                            $this->url('Shop:Admin:Currency@deleteAction', $currency->getId()),
+                            $this->translate('Remove this currency'),
+                            null,
+                            $this->url('Shop:Admin:Currency@indexAction')
+                        );
+                    }
+                )
+
+            ), $this->translator); ?>            
         </div>
     </div>
 

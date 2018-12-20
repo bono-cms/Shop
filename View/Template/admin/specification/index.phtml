@@ -2,6 +2,7 @@
 
 use Krystal\Form\Element;
 use Krystal\Grid\Grid;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -26,8 +27,6 @@ defined('KRYSTAL') or die;
         <br />
 
         <?= Grid::render($items, array(
-            // A column to be considered as a primary key
-            'pk' => 'id',
             'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
             'columns' => array(
                 array(
@@ -50,11 +49,17 @@ defined('KRYSTAL') or die;
 
             'actions' => array(
                 'edit' => function($row){
-                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationItem@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this item'), 'data-button' => 'edit'));
+                    return Icon::edit(
+                        $this->url('Shop:Admin:SpecificationItem@editAction', $row['id']),
+                        $this->translate('Edit this item')
+                    );
                 },
 
                 'remove' => function($row){
-                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this item'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationItem@deleteAction', $row['id'])));
+                    return Icon::remove(
+                        $this->url('Shop:Admin:SpecificationItem@deleteAction', $row['id']),
+                        $this->translate('Remove this item')
+                    );
                 }
             )
 
@@ -72,8 +77,6 @@ defined('KRYSTAL') or die;
         <br />
 
         <?= Grid::render($categories, array(
-            // A column to be considered as a primary key
-            'pk' => 'id',
             'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
             'rowAttributes' => array(
                 'class' => function($row) use ($categoryId){
@@ -105,11 +108,17 @@ defined('KRYSTAL') or die;
 
             'actions' => array(
                 'edit' => function($row){
-                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this category'), 'data-button' => 'edit'));
+                    return Icon::edit(
+                        $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), 
+                        $this->translate('Edit this category')
+                    );
                 },
 
                 'remove' => function($row){
-                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this category'), 'data-button' => 'delete', 'data-url' => $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id'])));
+                    return Icon::remove(
+                        $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id']),
+                        $this->translate('Remove this category')
+                    );
                 }
             )
 

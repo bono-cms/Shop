@@ -1,6 +1,9 @@
 <?php
 
 use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+use Cms\View\Icon;
+
 defined('KRYSTAL') or die;
 
 ?>
@@ -10,30 +13,50 @@ defined('KRYSTAL') or die;
         <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available coupons'); ?> <small>(<?php echo count($coupons); ?>)</small></h2>
 
         <div class="table-responsive">
-            <table class="table table-stripped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <td class="text-center text-muted">#</td>
-                        <td class="text-center"><?php $this->show('Code'); ?></td>
-                        <td class="text-center"><?php $this->show('Discount percentage'); ?> (%)</td>
-                        <td class="text-center"><?php $this->show('Actions'); ?></td>
-                    </tr>
-                </thead>
+            <?= Grid::render($coupons, array(
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'rowAttributes' => array(
+                    'class' => function($coupon) use ($entity){
+                        return $entity->getId() == $coupon->getId() ? 'info' : null;
+                    }
+                ),
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
 
-                <tbody>
-                    <?php foreach ($coupons as $entity): ?>
-                    <tr class="<?php echo $entity->getId() == $coupon->getId() ? 'info' : null; ?>">
-                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
-                        <td class="text-center"><?php echo $entity->getCode(); ?></td>
-                        <td class="text-center"><?php echo $entity->getPercentage(); ?> %</td>
-                        <td class="text-center">
-                            <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this coupon'); ?>" href="<?php echo $this->url('Shop:Admin:Coupon@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a data-button="delete" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@deleteAction', $entity->getId()); ?>" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this coupon'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    array(
+                        'column' => 'code'
+                    ),
+                    
+                    array(
+                        'column' => 'percentage',
+                        'value' => function($coupon){
+                            return $coupon->getPercentage() . ' % ';
+                        }
+                    ),
+                ),
+
+                'actions' => array(
+                    'edit' => function($coupon){
+                        return Icon::edit(
+                            $this->url('Shop:Admin:Coupon@editAction', $coupon->getId()),
+                            $this->translate('Edit this coupon')
+                        );
+                    },
+
+                    'remove' => function($coupon){
+                        return Icon::remove(
+                            $this->url('Shop:Admin:Coupon@deleteAction', $coupon->getId()),
+                            $this->translate('Remove this coupon'),
+                            null,
+                            $this->url('Shop:Admin:Coupon@indexAction')
+                        );
+                    }
+                )
+
+            ), $this->translator); ?>
         </div>
     </div>
 
