@@ -12,7 +12,6 @@
 namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
-use Krystal\Db\Filter\QueryContainer;
 
 final class Order extends AbstractController
 {
@@ -115,8 +114,8 @@ final class Order extends AbstractController
         $service = $this->getModuleService('orderManager');
 
         // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
+        if ($this->request->hasPost('batch')) {
+            $ids = array_keys($this->request->getPost('batch'));
 
             $service->deleteByIds($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');
@@ -184,7 +183,8 @@ final class Order extends AbstractController
             'paginator' => $paginator,
             'config' => $this->getConfig(),
             'title' => 'Orders',
-            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Order@filterAction', array(null)))
+            'query' => $this->request->getQuery(),
+            'appliedFilter' => $this->request->getQuery('filter', false)
         ));
     }
 
