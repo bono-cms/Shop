@@ -157,6 +157,10 @@ return array(
         'controller' => 'Admin:OrderStatus@indexAction'
     ),
 
+    '/%s/module/shop/order-statuses/add' => array(
+        'controller' => 'Admin:OrderStatus@addAction'
+    ),
+
     '/%s/module/shop/order-statuses/edit/(:var)' => array(
         'controller' => 'Admin:OrderStatus@editAction'
     ),
