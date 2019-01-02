@@ -216,7 +216,8 @@ CREATE TABLE `bono_module_shop_currencies` (
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status`;
 CREATE TABLE `bono_module_shop_orders_status` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order Status ID'
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order Status ID',
+    `order` INT NOT NULL COMMENT 'Sorting order'
 ) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status_translations`;

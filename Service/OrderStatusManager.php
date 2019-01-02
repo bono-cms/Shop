@@ -44,6 +44,7 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
         $entity = new VirtualEntity();
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
                ->setLangId($row['lang_id'], VirtualEntity::FILTER_INT)
+               ->setOrder($row['order'], VirtualEntity::FILTER_INT)
                ->setName($row['name'])
                ->setDescription($row['description']);
 

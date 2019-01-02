@@ -39,6 +39,7 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
     {
         return array(
             self::column('id'),
+            self::column('order'),
             OrderStatusTranslationMapper::column('lang_id'),
             OrderStatusTranslationMapper::column('name'),
             OrderStatusTranslationMapper::column('description')
