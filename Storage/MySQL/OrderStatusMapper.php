@@ -13,6 +13,7 @@ namespace Shop\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\OrderStatusMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class OrderStatusMapper extends AbstractMapper implements OrderStatusMapperInterface
 {
@@ -61,15 +62,25 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
     /**
      * Fetch all rows
      * 
+     * @param boolean $sort Whether to sort rows
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($sort = false)
     {
         $db = $this->createEntitySelect($this->getColumns())
-                   ->whereEquals(OrderStatusTranslationMapper::column('lang_id'), $this->getLangId())
-                   ->orderBy($this->getPk())
-                   ->desc();
-                   
+                   ->whereEquals(OrderStatusTranslationMapper::column('lang_id'), $this->getLangId());
+
+        // Whether to sort
+        if ($sort === true) {
+            $db->orderBy(array(
+                'order',
+                new RawSqlFragment(sprintf('CASE WHEN `order` = 0 THEN %s END DESC', self::column('id')))
+            ));
+        } else {
+            $db->orderBy($this->getPk())
+               ->desc();
+        }
+
         return $db->queryAll();
     }
 }

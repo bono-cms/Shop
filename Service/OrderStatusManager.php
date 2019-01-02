@@ -90,17 +90,18 @@ final class OrderStatusManager extends AbstractManager implements OrderStatusMan
      */
     public function fetchList()
     {
-        return ArrayUtils::arrayList($this->orderStatusMapper->fetchAll(), 'id', 'name');
+        return ArrayUtils::arrayList($this->orderStatusMapper->fetchAll(true), 'id', 'name');
     }
 
     /**
      * Fetch all entities
      * 
+     * @param boolean $sort Whether to sort rows
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($sort = false)
     {
-        return $this->prepareResults($this->orderStatusMapper->fetchAll());
+        return $this->prepareResults($this->orderStatusMapper->fetchAll($sort));
     }
 
     /**

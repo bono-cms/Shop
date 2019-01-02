@@ -25,7 +25,8 @@ interface OrderStatusMapperInterface
     /**
      * Fetch all rows
      * 
+     * @param boolean $sort Whether to sort rows
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll($sort = false);
 }

@@ -46,9 +46,10 @@ interface OrderStatusManagerInterface
     /**
      * Fetch all entities
      * 
+     * @param boolean $sort Whether to sort rows
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll($sort = false);
 
     /**
      * Fetches order status entity by its associated ID
