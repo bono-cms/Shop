@@ -87,18 +87,14 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <?php if (!$currency->getId()): ?>
+            <?php $this->loadPartial('actions', array(
+                'new' => !$currency->getId(),
+                'add' => 'Shop:Admin:Currency@indexAction',
+                'edit' => 'Shop:Admin:Currency@editAction',
+                'save' => 'Shop:Admin:Currency@saveAction',
+                'cancel' => 'Shop:Admin:Currency@indexAction'
+            )); ?>
 
-            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Currency@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
-
-            <?php else: ?>
-
-            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Currency@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
-            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-
-            <?php endif; ?>
         </form>
     </div>
 </div>

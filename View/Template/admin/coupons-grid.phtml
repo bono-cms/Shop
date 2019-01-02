@@ -16,8 +16,8 @@ defined('KRYSTAL') or die;
             <?= Grid::render($coupons, array(
                 'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                 'rowAttributes' => array(
-                    'class' => function($coupon) use ($entity){
-                        return $entity->getId() == $coupon->getId() ? 'info' : null;
+                    'class' => function($row) use ($coupon){
+                        return $coupon->getId() == $row->getId() ? 'info' : null;
                     }
                 ),
                 'columns' => array(
@@ -88,18 +88,14 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <?php if (!$coupon->getId()): ?>
+            <?php $this->loadPartial('actions', array(
+                'new' => !$coupon->getId(),
+                'add' => 'Shop:Admin:Coupon@indexAction',
+                'edit' => 'Shop:Admin:Coupon@editAction',
+                'save' => 'Shop:Admin:Coupon@saveAction',
+                'cancel' => 'Shop:Admin:Coupon@indexAction'
+            )); ?>
 
-            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
-
-            <?php else: ?>
-
-            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Coupon@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
-            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-
-            <?php endif; ?>
         </form>
     </div>
 </div>

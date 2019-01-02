@@ -102,18 +102,15 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <?php if ($new): ?>
-            <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:Product@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Add'); ?></button>
-            <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+            <?php $this->loadPartial('actions', array(
+                'new' => $new,
+                'add' => 'Shop:Admin:Product@addAction',
+                'edit' => 'Shop:Admin:Product@editAction',
+                'save' => 'Shop:Admin:Product@saveAction',
+                'cancel' => 'Shop:Admin:Browser@indexAction',
+                'options' => true
+            )); ?>
 
-            <?php else: ?>
-            <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> <?php $this->show('Save'); ?></button>
-            <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:Product@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
-
-            <?php endif; ?>
-
-            <button data-button="options" class="btn btn-primary"><i class="glyphicon glyphicon-open"></i> <?php $this->show('More options'); ?></button>
-            <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
         </div>
         <!--/Home tab-->
         

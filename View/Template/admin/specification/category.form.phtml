@@ -61,13 +61,12 @@ defined('KRYSTAL') or die;
         </div>
     </div>
 
-    <?php if ($new): ?>
-    <button data-button="add" data-back-url="<?php echo $this->url('Shop:Admin:SpecificationCategory@editAction', null); ?>" data-url="<?php echo $this->url('Shop:Admin:SpecificationCategory@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-    <button data-button="add-create" data-url="<?php echo $this->url('Shop:Admin:SpecificationCategory@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
-    <?php else: ?>
-    <button data-button="save" data-url="<?php echo $this->url('Shop:Admin:SpecificationCategory@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-    <button data-button="save-create" data-back-url="<?php echo $this->url('Shop:Admin:SpecificationCategory@indexAction'); ?>" data-url="<?php echo $this->url('Shop:Admin:SpecificationCategory@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
-    <?php endif; ?>
+    <?php $this->loadPartial('actions', array(
+        'new' => $new,
+        'add' => 'Shop:Admin:SpecificationCategory@addAction',
+        'edit' => 'Shop:Admin:SpecificationCategory@editAction',
+        'save' => 'Shop:Admin:SpecificationCategory@saveAction',
+        'cancel' => array('Shop:Admin:SpecificationItem@indexAction', null)
+    )); ?>
 
-    <button data-button="cancel" data-url="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
 </form>
