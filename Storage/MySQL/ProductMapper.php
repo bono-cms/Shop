@@ -697,8 +697,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->appendCustomerRelation($customerId);
         }
 
-        $db->whereEquals(self::column('id'), $id)
-           ->andWhereEquals(self::column('published'), '1');
+        $db->whereEquals(self::column('id'), $id);
 
         $rows = $withTranslations === true ? $db->queryAll() : array($db->query());
 

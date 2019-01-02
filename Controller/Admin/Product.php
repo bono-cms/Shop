@@ -110,7 +110,7 @@ final class Product extends AbstractController
     {
         $product = $this->getModuleService('productManager')->fetchById($id, true);
 
-        if ($product !== false) {
+        if ($product) {
             return $this->createForm($product, 'Edit the product');
         } else {
             return false;
