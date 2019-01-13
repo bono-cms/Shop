@@ -1,12 +1,10 @@
 
-
 DROP TABLE IF EXISTS `bono_module_shop_orders_info`;
 CREATE TABLE `bono_module_shop_orders_info` (
-	
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Unique order id',
     `order_status_id` INT COMMENT 'Order Status ID',
     `customer_id` INT COMMENT 'Optional customer ID',
-	`date` DATE NOT NULL,
+    `datetime` DATETIME NOT NULL COMMENT 'Date and time this order was made',
 	`name` varchar(255) NOT NULL COMMENT 'Name of customer',
 	`email` varchar(255) NOT NULL COMMENT 'Customer email',
 	`phone` varchar(254) NOT NULL COMMENT 'Phone of customer',

@@ -34,7 +34,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     {
         return array(
             self::column('id'),
-            self::column('date'),
+            self::column('datetime'),
             self::column('name'),
             self::column('phone'),
             self::column('address'),

@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * In order sub-module changed date to datetime
  * Added optional brand support
  * Added product specifications support
  * Removed menu widget from category form

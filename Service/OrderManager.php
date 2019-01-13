@@ -14,6 +14,7 @@ namespace Shop\Service;
 use Cms\Service\WebPageManagerInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\MailerInterface;
+use Krystal\Date\TimeHelper;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Security\Filter;
@@ -305,7 +306,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
         $entity->setId($order['id'], VirtualEntity::FILTER_INT)
                ->setCustomerId($order['customer_id'], VirtualEntity::FILTER_INT)
                ->setStatusId($order['order_status_id'], VirtualEntity::FILTER_INT)
-               ->setDate($order['date'], VirtualEntity::FILTER_TAGS)
+               ->setDatetime($order['datetime'], VirtualEntity::FILTER_TAGS)
                ->setName($order['name'], VirtualEntity::FILTER_HTML)
                ->setEmail($order['email'], VirtualEntity::FILTER_HTML)
                ->setPhone($order['phone'], VirtualEntity::FILTER_HTML)
@@ -343,7 +344,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
         );
 
         $data = array_merge($input, $defaults);
-        $data['date'] = date('Y-m-d', time());
+        $data['datetime'] = TimeHelper::getNow();
 
         // First of all, insert, because we need to obtain a last id
         $this->orderInfoMapper->insert(ArrayUtils::arrayWithout($data, array('captcha')));
