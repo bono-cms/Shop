@@ -123,7 +123,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     /**
      * Finds product attributes by its associated id
      * 
-     * @param string $id
+     * @param string $id Product ID
      * @param boolean $dynamic Whether to include dynamic attributes
      * @return array
      */
@@ -570,14 +570,23 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     private function prepareInput(array $input)
     {
+        // Remove empty indexes
+        foreach ($input['files']['file'] as $index => $file) {
+            if (empty($file)) {
+                unset($input['files']['file'][$index]);
+            }
+        }
+
         // Request data
         $product =& $input['data']['product'];
-        $files =& $input['files'];
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
+
+        // Reset indexes
+        sort($file);
 
         // If a cover has been selected, then we need to override its base name right now
-        if (!empty($files['file'])) {
-            $this->filterFileInput($files['file']);
-            $product['cover'] = $files['file'][0]->getName();
+        if ($file) {
+            $product['cover'] = $file[0]->getUniqueName();
         }
 
         // Numeric attributes
@@ -599,14 +608,12 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
 
         // Short-cuts
         $product =& $input['data']['product'];
+        $files = isset($input['files']['file']) ? $input['files']['file'] : false;
 
         // Initial view count
         $product['views'] = 0;
-
         // For cross-database compatibility, the date must be generated here, not in the mapper
         $product['date'] = date('Y-m-d', time());
-
-        $files =& $input['files']['file'];
 
         // Insert should be first, because we need to provide an id
         $this->productMapper->save($input);
@@ -620,7 +627,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             if ($this->imageManager->upload($id, $files)) {
                 // And write their base names into storage
                 foreach ($files as $file) {
-                    $this->imageMapper->insert($id, $file->getName(), 0, true);
+                    $this->imageMapper->insert($id, $file->getUniqueName(), 0, true);
                 }
 
             } else {
@@ -646,8 +653,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
      */
     public function update(array $input)
     {
-        $input = $this->prepareInput($input);
-
         // Product data
         $product =& $input['data']['product'];
 
@@ -655,7 +660,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $productId = $product['id'];
 
         // An array of new appended images from a user
-        $appendedImages = $input['files']['file'];
+        $appendedImages = isset($input['files']['file']) ? $input['files']['file'] : array();
 
         if (!empty($input['files'])) {
             // Array of changed images, representing an id => FileBag instance
@@ -667,9 +672,8 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
                     // First of all we need to remove old image
                     if ($this->imageManager->delete($productId, $this->imageMapper->fetchFileNameById($imageId))) {
 
-                        $this->filterFileInput($fileBag);
                         $this->imageManager->upload($productId, $fileBag);
-                        $this->imageMapper->updateFileNameById($imageId, $fileBag[0]->getName());
+                        $this->imageMapper->updateFileNameById($imageId, $fileBag->getUniqueName());
                     }
                 }
 
@@ -684,7 +688,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             if ($this->imageManager->upload($productId, $appendedImages)) {
                 // Then save them
                 foreach ($appendedImages as $fileBag) {
-                    $this->imageMapper->insert($productId, $fileBag->getName(), 1, 1);
+                    $this->imageMapper->insert($productId, $fileBag->getUniqueName(), 1, 1);
                 }
             }
         }
@@ -725,7 +729,6 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         }
 
         //$this->track('Product "%s" has been updated', $product['name']);
-        //$this->webPageManager->update($product['web_page_id'], $product['slug']);
 
         // Update attributes if present
         if (isset($product['attributes'])) {
