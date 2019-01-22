@@ -55,7 +55,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
 <div class="row">
     <div class="col-lg-8">
         <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
-        <form action="<?= $route; ?>" novalidate>
+        <form action="<?= $route; ?>" novalidate autocomplete="off">
             <?php if (isset($categoryId)): ?>
             <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
             <?php endif; ?>

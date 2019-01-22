@@ -4,6 +4,7 @@ CHANGELOG
 1.4
 ---
 
+ * Disabled autocomplete in forms
  * In order sub-module changed date to datetime
  * Added optional brand support
  * Added product specifications support

@@ -62,7 +62,7 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($currency->getId() ? 'Update currency' : 'Add new currency'); ?></h3>
 
-        <form data-group="currency">
+        <form data-group="currency" autocomplete="off">
             <div class="well">
                 <input type="hidden" name="currency[id]" value="<?php echo $currency->getId(); ?>" />
 

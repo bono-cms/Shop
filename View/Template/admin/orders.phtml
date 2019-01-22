@@ -37,7 +37,7 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
 <div class="table-responsive">
     <?php $this->loadPartial('items-per-page', array('caption' => 'Recent orders')); ?>
 
-    <form action="<?php echo $route; ?>" novalidate>
+    <form action="<?php echo $route; ?>" novalidate autocomplete="off">
         <?= Grid::render($orders, array(
             'batch' => true,
             'pk' => 'id',

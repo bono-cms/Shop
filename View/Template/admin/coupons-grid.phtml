@@ -63,7 +63,7 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($coupon->getId() ? 'Update coupon' : 'Add new coupon'); ?></h3>
 
-        <form data-group="coupon">
+        <form data-group="coupon" autocomplete="off">
             <div class="well">
                 <input type="hidden" name="coupon[id]" value="<?php echo $coupon->getId(); ?>" />
 
