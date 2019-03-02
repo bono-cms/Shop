@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -55,13 +55,14 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
 <div class="row">
     <div class="col-lg-8">
         <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
+
         <form action="<?= $route; ?>" novalidate autocomplete="off">
             <?php if (isset($categoryId)): ?>
             <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
             <?php endif; ?>
 
             <div class="table-responsive">
-                <?= Grid::render($products, array(
+                <?= $this->widget(new GridWidget($products, array(
                     'batch' => true,
                     'pk' => 'id',
                     'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
@@ -144,7 +145,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                         }
                     )
 
-                ), $this->translator, $route, $query); ?>
+                ), $route)); ?>
 
                 <?php if (!empty($products)): ?>
                 <div>
@@ -170,7 +171,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
     <div class="col-lg-4">
         <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
-        <?= Grid::render($categories, array(
+        <?= $this->widget(new GridWidget($categories, array(
             'tableClass' => 'table table-hover table-bordered table-striped',
             'rowAttributes' => array(
                 'class' => function($category) use ($categoryId){
@@ -216,8 +217,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                     );
                 }
             )
-
-        ), $this->translator); ?>
+        ))); ?>
 
         <?php if (empty($categories)): ?>
         <div class="center-block">

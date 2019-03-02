@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -15,7 +15,7 @@ defined('KRYSTAL') or die;
 </p>
 
 <div class="table-responsive">
-    <?= Grid::render($deliveryTypes, array(
+    <?= $this->widget(new GridWidget($deliveryTypes, array(
         'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
         'columns' => array(
             array(
@@ -51,6 +51,5 @@ defined('KRYSTAL') or die;
                 );
             }
         )
-
-    ), $this->translator); ?>
+    ))); ?>
 </div>

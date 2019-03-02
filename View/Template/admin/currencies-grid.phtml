@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -13,7 +13,7 @@ defined('KRYSTAL') or die;
         <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available currencies'); ?> <small>(<?php echo count($currencies); ?>)</small></h2>
 
         <div class="table-responsive">
-            <?= Grid::render($currencies, array(
+            <?= $this->widget(new GridWidget($currencies, array(
                 'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                 'rowAttributes' => array(
                     'class' => function($row) use ($currency){
@@ -54,8 +54,8 @@ defined('KRYSTAL') or die;
                         );
                     }
                 )
+            ))); ?>
 
-            ), $this->translator); ?>            
         </div>
     </div>
 
