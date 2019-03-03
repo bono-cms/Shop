@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Widget\GridWidget;
+use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -38,7 +38,7 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
     <?php $this->loadPartial('items-per-page', array('caption' => 'Recent orders')); ?>
 
     <form action="<?php echo $route; ?>" novalidate autocomplete="off">
-        <?= $this->widget(new GridWidget($orders, array(
+        <?= $this->widget(new GridViewWidget($orders, array(
             'batch' => true,
             'pk' => 'id',
             'tableClass' => 'table table-hover table-bordered table-striped',

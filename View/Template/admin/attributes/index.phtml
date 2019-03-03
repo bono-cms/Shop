@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Widget\GridWidget;
+use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -15,7 +15,7 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <h4><i class="glyphicon glyphicon-tags"></i> <?php $this->show('Values'); ?> <small>(<?php echo count($values); ?>)</small></h4>
 
-        <?= $this->widget(new GridWidget($values, array(
+        <?= $this->widget(new GridViewWidget($values, array(
             'tableClass' => 'table table-hover table-bordered table-striped',
             'columns' => array(
                 array(
@@ -49,7 +49,7 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <h4><i class="glyphicon glyphicon-book"></i> <?php $this->show('Groups'); ?> <small>(<?php echo count($groups); ?>)</small></h4>
 
-        <?= $this->widget(new GridWidget($groups, array(
+        <?= $this->widget(new GridViewWidget($groups, array(
             'tableClass' => 'table table-hover table-bordered table-striped',
             'rowAttributes' => array(
                 'class' => function($group) use ($groupId) {

@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Widget\GridWidget;
+use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -62,7 +62,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
             <?php endif; ?>
 
             <div class="table-responsive">
-                <?= $this->widget(new GridWidget($products, array(
+                <?= $this->widget(new GridViewWidget($products, array(
                     'batch' => true,
                     'pk' => 'id',
                     'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
@@ -171,7 +171,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
     <div class="col-lg-4">
         <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
-        <?= $this->widget(new GridWidget($categories, array(
+        <?= $this->widget(new GridViewWidget($categories, array(
             'tableClass' => 'table table-hover table-bordered table-striped',
             'rowAttributes' => array(
                 'class' => function($category) use ($categoryId){

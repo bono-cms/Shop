@@ -1,6 +1,6 @@
 <?php
 
-use Krystal\Widget\GridWidget;
+use Krystal\Widget\GridView\GridViewWidget;
 use Krystal\Form\Element;
 use Cms\View\Icon;
 
@@ -15,7 +15,7 @@ defined('KRYSTAL') or die;
 </p>
 
 <div class="table-responsive">
-    <?= $this->widget(new GridWidget($orderStatuses, array(
+    <?= $this->widget(new GridViewWidget($orderStatuses, array(
         'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
         'columns' => array(
             array(
