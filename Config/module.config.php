@@ -1,13 +1,12 @@
 <?php
 
+/**
+ * Module configuration container
+ */
+
 return array(
     'name' => 'Shop',
-    'caption' => 'Shop',
-    'route' => 'Shop:Admin:Browser@indexAction',
-    'icon' => 'fa fa-shopping-cart fa-5x',
-    'order' => 1,
     'description' => 'Shop module allows you to manage e-commerce system on your site',
-
     // Bookmarks of this module
     'bookmarks' => array(
         array(
@@ -26,6 +25,20 @@ return array(
             'name' => 'Orders',
             'controller' => 'Shop:Admin:Order@indexAction',
             'icon' => 'glyphicon glyphicon-user'
+        )
+    ),
+    'menu' => array(
+        'name' => 'Shop',
+        'icon' => 'fas fa-cart-arrow-down',
+        'items' => array(
+            array(
+                'route' => 'Shop:Admin:Browser@indexAction',
+                'name' => 'View all products'
+            ),
+            array(
+                'route' => 'Shop:Admin:Category@addAction',
+                'name' => 'Add a category'
+            )
         )
     )
 );
