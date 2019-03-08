@@ -8,61 +8,62 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<h3><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?> <small>(<?= count($brands); ?>)</small></h3>
-<br />
-
 <div class="row">
     <div class="col-lg-6">
-        <?= $this->widget(new GridViewWidget($brands, array(
-            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-            'rowAttributes' => array(
-                'class' => function($row) use ($brand){
-                    return $row['id'] == $brand->getId() ? 'success' : null;
-                }
-            ),
+        <div class="card">
+            <h3><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?> <small>(<?= count($brands); ?>)</small></h3>
 
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
+            <?= $this->widget(new GridViewWidget($brands, array(
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'rowAttributes' => array(
+                    'class' => function($row) use ($brand){
+                        return $row['id'] == $brand->getId() ? 'table-info' : null;
+                    }
                 ),
 
-                array(
-                    'column' => 'name',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'name',
+                    ),
+
+                    array(
+                        'column' => 'order'
+                    )
                 ),
 
-                array(
-                    'column' => 'order'
+                'actions' => array(
+                    'edit' => function($row){
+                        return Icon::edit(
+                            $this->url('Shop:Admin:Brand@editAction', $row['id']),
+                            $this->translate('Edit this brand')
+                        );
+                    },
+
+                    'remove' => function($row){
+                        return Icon::remove(
+                            $this->url('Shop:Admin:Brand@deleteAction', $row['id']),
+                            $this->translate('Remove this brand')
+                        );
+                    }
                 )
-            ),
-
-            'actions' => array(
-                'edit' => function($row){
-                    return Icon::edit(
-                        $this->url('Shop:Admin:Brand@editAction', $row['id']),
-                        $this->translate('Edit this brand')
-                    );
-                },
-
-                'remove' => function($row){
-                    return Icon::remove(
-                        $this->url('Shop:Admin:Brand@deleteAction', $row['id']),
-                        $this->translate('Remove this brand')
-                    );
-                }
-            )
-        ))); ?>
+            ))); ?>
+        </div>
     </div>
 
     <div class="col-lg-6">
-        <h4><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($title); ?></h4>
+        <div class="card">
+            <h4><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($title); ?></h4>
 
-        <form data-group="brand" autocomplete="off">
-            <div class="well">
+            <form data-group="brand" autocomplete="off">
                 <?= Element::hidden('brand[id]', $brand->getId()); ?>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                    <label class="col-lg-12 control-label"><?php $this->show('Name'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
                             <?php echo Element::text('brand[name]', $brand->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
@@ -72,7 +73,7 @@ defined('KRYSTAL') or die;
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
+                    <label class="col-lg-12 control-label"><?php $this->show('Order'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
                             <?php echo Element::text('brand[order]', $brand->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
@@ -80,16 +81,15 @@ defined('KRYSTAL') or die;
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <?php $this->loadPartial('actions', array(
-                'new' => $new,
-                'add' => 'Shop:Admin:Brand@addAction',
-                'edit' => 'Shop:Admin:Brand@editAction',
-                'save' => 'Shop:Admin:Brand@saveAction',
-                'cancel' => 'Shop:Admin:Browser@indexAction'
-            )); ?>
-
-        </form>        
+                <?php $this->loadPartial('actions', array(
+                    'new' => $new,
+                    'add' => 'Shop:Admin:Brand@addAction',
+                    'edit' => 'Shop:Admin:Brand@editAction',
+                    'save' => 'Shop:Admin:Brand@saveAction',
+                    'cancel' => 'Shop:Admin:Browser@indexAction'
+                )); ?>
+            </form>
+        </div>
     </div>
 </div>

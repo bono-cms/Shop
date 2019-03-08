@@ -8,48 +8,50 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available delivery types'); ?> <small>(<?= count($deliveryTypes); ?>)</small></h2>
+<div class="card">
+    <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available delivery types'); ?> <small>(<?= count($deliveryTypes); ?>)</small></h2>
 
-<p>
-    <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:DeliveryType@addAction'); ?>"><?php $this->show('Add new delivery type'); ?></a>
-</p>
+    <p>
+        <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:DeliveryType@addAction'); ?>"><?php $this->show('Add new delivery type'); ?></a>
+    </p>
 
-<div class="table-responsive">
-    <?= $this->widget(new GridViewWidget($deliveryTypes, array(
-        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-        'columns' => array(
-            array(
-                'column' => 'id',
-                'label' => '#'
+    <div class="table-responsive">
+        <?= $this->widget(new GridViewWidget($deliveryTypes, array(
+            'tableClass' => 'table table-hover table-bordered table-striped',
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                ),
+
+                array(
+                    'column' => 'price'
+                ),
+
+                array(
+                    'column' => 'order'
+                )
             ),
 
-            array(
-                'column' => 'name',
-            ),
+            'actions' => array(
+                'edit' => function($row){
+                    return Icon::edit(
+                        $this->url('Shop:Admin:DeliveryType@editAction', $row['id']),
+                        $this->translate('Edit this delivery method')
+                    );
+                },
 
-            array(
-                'column' => 'price'
-            ),
-
-            array(
-                'column' => 'order'
+                'remove' => function($row){
+                    return Icon::remove(
+                        $this->url('Shop:Admin:DeliveryType@deleteAction', $row['id']),
+                        $this->translate('Remove this delivery type')
+                    );
+                }
             )
-        ),
-
-        'actions' => array(
-            'edit' => function($row){
-                return Icon::edit(
-                    $this->url('Shop:Admin:DeliveryType@editAction', $row['id']),
-                    $this->translate('Edit this delivery method')
-                );
-            },
-
-            'remove' => function($row){
-                return Icon::remove(
-                    $this->url('Shop:Admin:DeliveryType@deleteAction', $row['id']),
-                    $this->translate('Remove this delivery type')
-                );
-            }
-        )
-    ))); ?>
+        ))); ?>
+    </div>
 </div>

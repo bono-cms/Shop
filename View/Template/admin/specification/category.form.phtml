@@ -9,52 +9,48 @@ defined('KRYSTAL') or die;
 
 <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($this->getBreadcrumbBag()->getLastName()); ?></h3>
 
-<form data-group="category" autocomplete="off">
+<form class="card" data-group="category" autocomplete="off">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#translations" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
-        <li role="presentation"><a href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Options'); ?></a></li>
+        <li role="presentation" class="nav-item active"><a class="nav-link" href="#translations" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
+        <li role="presentation" class="nav-item"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Options'); ?></a></li>
 	</ul>
 
     <div class="tab-content">
         <div class="tab-pane fade in active" id="translations" role="tabpanel">
-            <div class="well">
-                <?php $this->loadPartial('language-tabs'); ?>
+            <?php $this->loadPartial('language-tabs'); ?>
 
-                <div class="tab-content">
-                    <?php foreach ($languages as $index => $language): ?>
-                    <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
-                        <?php $entity = LanguageManager::findByLangId($language->getId(), $category); ?>
+            <div class="tab-content">
+                <?php foreach ($languages as $index => $language): ?>
+                <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
+                    <?php $entity = LanguageManager::findByLangId($language->getId(), $category); ?>
 
-                        <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
-                        <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
-                        <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+                    <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
+                    <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
+                    <?php $this->loadPartial('language-name', array('language' => $language)); ?>
 
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                            <div class="col-lg-10">
-                                <div class="input-group">
-                                    <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                        <div class="col-lg-10">
+                            <div class="input-group">
+                                <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                             </div>
                         </div>
                     </div>
-                    <?php endforeach; ?>
                 </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
         <div class="tab-pane fade" id="category" role="tabpanel">
             <?php echo Element::hidden('category[id]', $entity->getId()); ?>
 
-            <div class="well">
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
-                    <div class="col-lg-10">
-                        <div class="input-group">
-                            <?php echo Element::text('category[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                        </div>
+            <div class="form-group">
+                <label class="col-lg-12 control-label"><?php $this->show('Order'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::text('category[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                     </div>
                 </div>
             </div>

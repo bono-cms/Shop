@@ -8,57 +8,60 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available order statuses'); ?> <small>(<?php echo count($orderStatuses); ?>)</small></h2>
+<div class="card">
+    <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available order statuses'); ?> <small>(<?php echo count($orderStatuses); ?>)</small></h2>
 
-<p>
-    <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:OrderStatus@addAction'); ?>"><?php $this->show('Add new order status'); ?></a>
-</p>
+    <p>
+        <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:OrderStatus@addAction'); ?>"><?php $this->show('Add new order status'); ?></a>
+    </p>
 
-<div class="table-responsive">
-    <?= $this->widget(new GridViewWidget($orderStatuses, array(
-        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-        'columns' => array(
-            array(
-                'column' => 'id',
-                'label' => '#'
+    <div class="table-responsive">
+        <?= $this->widget(new GridViewWidget($orderStatuses, array(
+            'tableClass' => 'table table-hover table-bordered table-striped table-sm',
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name'
+                ),
+
+                array(
+                    'column' => 'description'
+                ),
+
+                array(
+                    'column' => 'order'
+                )
             ),
 
-            array(
-                'column' => 'name'
-            ),
+            'actions' => array(
+                'edit' => function($row){
+                    return Icon::edit(
+                        $this->url('Shop:Admin:OrderStatus@editAction', $row['id']),
+                        $this->translate('Edit this order status')
+                    );
+                },
 
-            array(
-                'column' => 'description'
-            ),
-
-            array(
-                'column' => 'order'
+                'remove' => function($row){
+                    return Icon::remove(
+                        $this->url('Shop:Admin:OrderStatus@deleteAction', $row['id']),
+                        $this->translate('Remove this order status'),
+                        null,
+                        $this->url('Shop:Admin:OrderStatus@indexAction')
+                    );
+                }
             )
-        ),
+        ))); ?>
 
-        'actions' => array(
-            'edit' => function($row){
-                return Icon::edit(
-                    $this->url('Shop:Admin:OrderStatus@editAction', $row['id']),
-                    $this->translate('Edit this order status')
-                );
-            },
+    </div>
 
-            'remove' => function($row){
-                return Icon::remove(
-                    $this->url('Shop:Admin:OrderStatus@deleteAction', $row['id']),
-                    $this->translate('Remove this order status'),
-                    null,
-                    $this->url('Shop:Admin:OrderStatus@indexAction')
-                );
-            }
-        )
-    ))); ?>
+    <?php if (empty($orderStatuses)): ?>
+    <div class="center-block">
+        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No order statuses'); ?></h2>
+    </div>
+    <?php endif; ?>
 
 </div>
-
-<?php if (empty($orderStatuses)): ?>
-<div class="center-block">
-    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No order statuses'); ?></h2>
-</div>
-<?php endif; ?>

@@ -12,227 +12,225 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
 ?>
 
 <div class="btn-toolbar">
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?php echo $newOrdersCount; ?>) <?php endif; ?> </span><span class="caret"></span>
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?php echo $newOrdersCount; ?>) <?php endif; ?> </span>
       </button>
-      
-      <ul class="dropdown-menu">
+
+      <div class="dropdown-menu">
          <?php if (isset($categoryId)): ?>
-         <li><a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a></li>
-         <li class="divider"></li>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a>
+         <li class="divider">
          <?php endif; ?>
 
-         <li><a href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a></li>
-         <li><a href="#" data-button="statistic" data-url="<?php echo $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></a></li>
-         <li class="dropdown-header"><?php $this->show('Configurable parameters'); ?></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Delivery types'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>"><i class="glyphicon glyphicon-link"></i> <?php $this->show('Discount coupons'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Currencies'); ?></a></li>
-         <li><a href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a></li>
-         <li class="divider"></li>
-         <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a>
+         <a class="dropdown-item" href="#" data-button="statistic" data-url="<?php echo $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></a>
+         <div class="dropdown-header"><?php $this->show('Configurable parameters'); ?></div>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Delivery types'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>"><i class="glyphicon glyphicon-link"></i> <?php $this->show('Discount coupons'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Currencies'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a>
+         <div class="dropdown-divider"></div>
+         <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
          
          <?php if (!empty($products)):?>
-         <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a></li>
-         <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+         <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
+         <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
          
          <?php else: ?>
-         <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a></li>
-         <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+         <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
+         <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
          
          <?php endif; ?>
-      </ul>
+      </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-8">
-        <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
+<div class="card">
+    <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
 
-        <form action="<?= $route; ?>" novalidate autocomplete="off">
-            <?php if (isset($categoryId)): ?>
-            <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
-            <?php endif; ?>
+    <form action="<?= $route; ?>" novalidate autocomplete="off">
+        <?php if (isset($categoryId)): ?>
+        <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
+        <?php endif; ?>
 
-            <div class="table-responsive">
-                <?= $this->widget(new GridViewWidget($products, array(
-                    'batch' => true,
-                    'pk' => 'id',
-                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                    'columns' => array(
-                        array(
-                            'column' => 'id',
-                            'label' => '#'
-                        ),
-
-                        array(
-                            'column' => 'image',
-                            'label' => 'Cover',
-                            'value' => function($product){
-                                $image = Element::image($product->getImageBag()->getUrl('200x200'), array('class' => 'img-responsive center-block'));
-                                return Element::link($image, $product->getImageBag()->getUrl('original'), array(
-                                    'data-toggle' => 'tooltip',
-                                    'data-placement' => 'top',
-                                    'data-original-title' => $this->translate('Click to zoom this image'),
-                                    'data-lightbox' => sprintf('image-%s', $product->getId())
-                                ));
-                            }
-                        ),
-
-                        array(
-                            'column' => 'name',
-                            'filter' => true
-                        ),
-
-                        array(
-                            'column' => 'date',
-                            'filter' => true
-                        ),
-
-                        array(
-                            'column' => 'regular_price',
-                            'label' => 'Price',
-                            'filter' => true,
-                            'value' => function($product){
-                                return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0'));
-                            }
-                        ),
-
-                        array(
-                            'column' => 'published',
-                            'type' => 'select',
-                            'filter' => 'boolean',
-                            'value' => function($product){
-                                return Element::checkbox(sprintf('published[%s]', $product->getId()), $product->getPublished());
-                            }
-                        ),
-
-                        array(
-                            'column' => 'seo',
-                            'label' => 'SEO',
-                            'type' => 'select',
-                            'filter' => 'boolean',
-                            'value' => function($product){
-                                return Element::checkbox(sprintf('seo[%s]', $product->getId()), $product->getSeo());
-                            }
-                        )
+        <div class="table-responsive">
+            <?= $this->widget(new GridViewWidget($products, array(
+                'batch' => true,
+                'pk' => 'id',
+                'tableClass' => 'table table-hover table-bordered',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
                     ),
 
-                    'actions' => array(
-                        'view' => function($product){
-                            return Icon::view($product->getUrl(), $this->translate('View this product on site'));
-                        },
+                    array(
+                        'column' => 'image',
+                        'label' => 'Cover',
+                        'value' => function($product){
+                            $image = Element::image($product->getImageBag()->getUrl('200x200'), array('class' => 'img-fluid'));
+                            return Element::link($image, $product->getImageBag()->getUrl('original'), array(
+                                'data-toggle' => 'tooltip',
+                                'data-placement' => 'top',
+                                'data-original-title' => $this->translate('Click to zoom this image'),
+                                'data-lightbox' => sprintf('image-%s', $product->getId())
+                            ));
+                        }
+                    ),
 
-                        'edit' => function($product){
-                            return Icon::edit(
-                                $this->url('Shop:Admin:Product@editAction', $product->getId()),
-                                $this->translate('Edit this product')
-                            );
-                        },
+                    array(
+                        'column' => 'name',
+                        'filter' => true
+                    ),
 
-                        'remove' => function($product){
-                            return Icon::remove(
-                                $this->url('Shop:Admin:Product@deleteAction', $product->getId()),
-                                $this->translate('Remove this product')
-                            );
+                    array(
+                        'column' => 'date',
+                        'filter' => true
+                    ),
+
+                    array(
+                        'column' => 'regular_price',
+                        'label' => 'Price',
+                        'filter' => true,
+                        'value' => function($product){
+                            return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0'));
+                        }
+                    ),
+
+                    array(
+                        'column' => 'published',
+                        'type' => 'select',
+                        'filter' => 'boolean',
+                        'value' => function($product){
+                            return Element::checkbox(sprintf('published[%s]', $product->getId()), $product->getPublished());
+                        }
+                    ),
+
+                    array(
+                        'column' => 'seo',
+                        'label' => 'SEO',
+                        'type' => 'select',
+                        'filter' => 'boolean',
+                        'value' => function($product){
+                            return Element::checkbox(sprintf('seo[%s]', $product->getId()), $product->getSeo());
                         }
                     )
-
-                ), $route)); ?>
-
-                <?php if (!empty($products)): ?>
-                <div>
-                    <?php if ($filter->isApplied()): ?>
-                    <a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
-                    <?php endif; ?>
-                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
-                    <br />
-                </div>
-                <?php endif; ?>
-
-                <?php if (empty($products)): ?>
-                <div class="center-block">
-                    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No products'); ?></h2>
-                </div>
-                <?php endif; ?>
-            </div>
-        </form>
-
-        <?php $this->loadPartial('paginator'); ?>
-    </div>
-
-    <div class="col-lg-4">
-        <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
-
-        <?= $this->widget(new GridViewWidget($categories, array(
-            'tableClass' => 'table table-hover table-bordered table-striped',
-            'rowAttributes' => array(
-                'class' => function($category) use ($categoryId){
-                    return $categoryId == $category['id'] ? 'info' : null;
-                }
-            ),
-
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
                 ),
 
-                array(
-                    'column' => 'name',
-                    'value' => function($category){
-                        return Element::link($category['name'], $this->url('Shop:Admin:Browser@categoryAction', $category['id']));
+                'actions' => array(
+                    'view' => function($product){
+                        return Icon::view($product->getUrl(), $this->translate('View this product on site'));
+                    },
+
+                    'edit' => function($product){
+                        return Icon::edit(
+                            $this->url('Shop:Admin:Product@editAction', $product->getId()),
+                            $this->translate('Edit this product')
+                        );
+                    },
+
+                    'remove' => function($product){
+                        return Icon::remove(
+                            $this->url('Shop:Admin:Product@deleteAction', $product->getId()),
+                            $this->translate('Remove this product')
+                        );
                     }
-                ),
-
-                array(
-                    'column' => 'product_count',
-                    'label' => 'Amount of products'
                 )
+
+            ), $route)); ?>
+
+            <?php if (!empty($products)): ?>
+            <div>
+                <?php if ($filter->isApplied()): ?>
+                <a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
+                <br />
+            </div>
+            <?php endif; ?>
+
+            <?php if (empty($products)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No products'); ?></h2>
+            </div>
+            <?php endif; ?>
+        </div>
+    </form>
+
+    <?php $this->loadPartial('paginator'); ?>
+</div>
+
+<div class="card">
+    <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+
+    <?= $this->widget(new GridViewWidget($categories, array(
+        'tableClass' => 'table table-hover table-bordered table-striped',
+        'rowAttributes' => array(
+            'class' => function($category) use ($categoryId){
+                return $categoryId == $category['id'] ? 'table-info' : null;
+            }
+        ),
+
+        'columns' => array(
+            array(
+                'column' => 'id',
+                'label' => '#'
             ),
 
-            'actions' => array(
-                'view' => function($category){
-                    return Icon::view($category['url'], $this->translate('View this category'));
-                },
-
-                'edit' => function($row){
-                    return Icon::edit(
-                        $this->url('Shop:Admin:Category@editAction', $row['id']),
-                        $this->translate('Edit this category')
-                    );
-                },
-
-                'remove' => function($row){
-                    return Icon::remove(
-                        $this->url('Shop:Admin:Category@deleteAction', $row['id']),
-                        $this->translate('Remove this advice')
-                    );
+            array(
+                'column' => 'name',
+                'value' => function($category){
+                    return Element::link($category['name'], $this->url('Shop:Admin:Browser@categoryAction', $category['id']));
                 }
-            )
-        ))); ?>
+            ),
 
-        <?php if (empty($categories)): ?>
-        <div class="center-block">
-            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
-        </div>
-        <?php endif; ?>
+            array(
+                'column' => 'product_count',
+                'label' => 'Amount of products'
+            )
+        ),
+
+        'actions' => array(
+            'view' => function($category){
+                return Icon::view($category['url'], $this->translate('View this category'));
+            },
+
+            'edit' => function($row){
+                return Icon::edit(
+                    $this->url('Shop:Admin:Category@editAction', $row['id']),
+                    $this->translate('Edit this category')
+                );
+            },
+
+            'remove' => function($row){
+                return Icon::remove(
+                    $this->url('Shop:Admin:Category@deleteAction', $row['id']),
+                    $this->translate('Remove this advice')
+                );
+            }
+        )
+    ))); ?>
+
+    <?php if (empty($categories)): ?>
+    <div class="center-block">
+        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
     </div>
+    <?php endif; ?>
 </div>
 
 <div class="modal fade" id="statistic-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h4 class="modal-title"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></h4>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body" id="statistic-body"></div>
     <div class="modal-footer">

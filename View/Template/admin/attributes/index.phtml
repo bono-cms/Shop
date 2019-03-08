@@ -8,93 +8,97 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<a class="btn btn-sm btn-default" href="<?php echo $this->url('Shop:Admin:AttributeValue@addAction'); ?>"><i class="glyphicon glyphicon-tag"></i> <?php $this->show('Add attribute'); ?></a>
+<a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeValue@addAction'); ?>"><i class="glyphicon glyphicon-tag"></i> <?php $this->show('Add attribute'); ?></a>
 <a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeGroup@addAction'); ?>"><i class="glyphicon glyphicon-book"></i> <?php $this->show('Add group'); ?></a>
 
 <div class="row">
     <div class="col-lg-6">
-        <h4><i class="glyphicon glyphicon-tags"></i> <?php $this->show('Values'); ?> <small>(<?php echo count($values); ?>)</small></h4>
+        <div class="card">
+            <h4><i class="glyphicon glyphicon-tags"></i> <?php $this->show('Values'); ?> <small>(<?php echo count($values); ?>)</small></h4>
 
-        <?= $this->widget(new GridViewWidget($values, array(
-            'tableClass' => 'table table-hover table-bordered table-striped',
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
+            <?= $this->widget(new GridViewWidget($values, array(
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'name'
+                    )
                 ),
 
-                array(
-                    'column' => 'name'
+                'actions' => array(
+                    'edit' => function($value){
+                        return Icon::edit(
+                            $this->url('Shop:Admin:AttributeValue@editAction', $value->getId()),
+                            $this->translate('Edit this attribute')
+                        );
+                    },
+
+                    'remove' => function($value){
+                        return Icon::remove(
+                            $this->url('Shop:Admin:AttributeValue@deleteAction', $value->getId()),
+                            $this->translate('Remove this attribute')
+                        );
+                    }
                 )
-            ),
-
-            'actions' => array(
-                'edit' => function($value){
-                    return Icon::edit(
-                        $this->url('Shop:Admin:AttributeValue@editAction', $value->getId()),
-                        $this->translate('Edit this attribute')
-                    );
-                },
-
-                'remove' => function($value){
-                    return Icon::remove(
-                        $this->url('Shop:Admin:AttributeValue@deleteAction', $value->getId()),
-                        $this->translate('Remove this attribute')
-                    );
-                }
-            )
-        ))); ?>
+            ))); ?>
+        </div>
     </div>
 
     <div class="col-lg-6">
-        <h4><i class="glyphicon glyphicon-book"></i> <?php $this->show('Groups'); ?> <small>(<?php echo count($groups); ?>)</small></h4>
+        <div class="card">
+            <h4><i class="glyphicon glyphicon-book"></i> <?php $this->show('Groups'); ?> <small>(<?php echo count($groups); ?>)</small></h4>
 
-        <?= $this->widget(new GridViewWidget($groups, array(
-            'tableClass' => 'table table-hover table-bordered table-striped',
-            'rowAttributes' => array(
-                'class' => function($group) use ($groupId) {
-                    return $groupId == $group->getId() ? 'info' : null;
-                }
-            ),
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
-                ),
-
-                array(
-                    'column' => 'name',
-                    'value' => function($group){
-                        return Element::link($group->getName(), $this->url('Shop:Admin:Attributes@groupAction', $group->getId()));
+            <?= $this->widget(new GridViewWidget($groups, array(
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'rowAttributes' => array(
+                    'class' => function($group) use ($groupId) {
+                        return $groupId == $group->getId() ? 'table-info' : null;
                     }
                 ),
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
 
-                array(
-                    'column' => 'dynamic',
-                    'translateable' => true,
-                    'value' => function($group){
-                        return $group->getDynamic() ? 'Yes' : 'No';
+                    array(
+                        'column' => 'name',
+                        'value' => function($group){
+                            return Element::link($group->getName(), $this->url('Shop:Admin:Attributes@groupAction', $group->getId()));
+                        }
+                    ),
+
+                    array(
+                        'column' => 'dynamic',
+                        'translateable' => true,
+                        'value' => function($group){
+                            return $group->getDynamic() ? 'Yes' : 'No';
+                        }
+                    )
+                ),
+
+                'actions' => array(
+                    'edit' => function($group){
+                        return Icon::edit(
+                            $this->url('Shop:Admin:AttributeGroup@editAction', $group->getId()),
+                            $this->translate('Edit this group')
+                        );
+                    },
+
+                    'remove' => function($group){
+                        return Icon::remove(
+                            $this->url('Shop:Admin:AttributeGroup@deleteAction', $group->getId()),
+                            $this->translate('Remove this group')
+                        );
                     }
                 )
-            ),
+            ))); ?>
 
-            'actions' => array(
-                'edit' => function($group){
-                    return Icon::edit(
-                        $this->url('Shop:Admin:AttributeGroup@editAction', $group->getId()),
-                        $this->translate('Edit this group')
-                    );
-                },
-
-                'remove' => function($group){
-                    return Icon::remove(
-                        $this->url('Shop:Admin:AttributeGroup@deleteAction', $group->getId()),
-                        $this->translate('Remove this group')
-                    );
-                }
-            )
-        ))); ?>
-
+        </div>
     </div>
 </div>
 

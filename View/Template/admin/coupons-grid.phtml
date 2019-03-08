@@ -10,65 +10,67 @@ defined('KRYSTAL') or die;
 
 <div class="row">
     <div class="col-lg-6">
-        <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available coupons'); ?> <small>(<?php echo count($coupons); ?>)</small></h2>
+        <div class="card">
+            <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available coupons'); ?> <small>(<?php echo count($coupons); ?>)</small></h2>
 
-        <div class="table-responsive">
-            <?= $this->widget(new GridViewWidget($coupons, array(
-                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                'rowAttributes' => array(
-                    'class' => function($row) use ($coupon){
-                        return $coupon->getId() == $row->getId() ? 'info' : null;
-                    }
-                ),
-                'columns' => array(
-                    array(
-                        'column' => 'id',
-                        'label' => '#'
-                    ),
-
-                    array(
-                        'column' => 'code'
-                    ),
-                    
-                    array(
-                        'column' => 'percentage',
-                        'value' => function($coupon){
-                            return $coupon->getPercentage() . ' % ';
+            <div class="table-responsive">
+                <?= $this->widget(new GridViewWidget($coupons, array(
+                    'tableClass' => 'table table-hover table-bordered table-striped',
+                    'rowAttributes' => array(
+                        'class' => function($row) use ($coupon){
+                            return $coupon->getId() == $row->getId() ? 'table-info' : null;
                         }
                     ),
-                ),
+                    'columns' => array(
+                        array(
+                            'column' => 'id',
+                            'label' => '#'
+                        ),
 
-                'actions' => array(
-                    'edit' => function($coupon){
-                        return Icon::edit(
-                            $this->url('Shop:Admin:Coupon@editAction', $coupon->getId()),
-                            $this->translate('Edit this coupon')
-                        );
-                    },
+                        array(
+                            'column' => 'code'
+                        ),
+                        
+                        array(
+                            'column' => 'percentage',
+                            'value' => function($coupon){
+                                return $coupon->getPercentage() . ' % ';
+                            }
+                        ),
+                    ),
 
-                    'remove' => function($coupon){
-                        return Icon::remove(
-                            $this->url('Shop:Admin:Coupon@deleteAction', $coupon->getId()),
-                            $this->translate('Remove this coupon'),
-                            null,
-                            $this->url('Shop:Admin:Coupon@indexAction')
-                        );
-                    }
-                )
+                    'actions' => array(
+                        'edit' => function($coupon){
+                            return Icon::edit(
+                                $this->url('Shop:Admin:Coupon@editAction', $coupon->getId()),
+                                $this->translate('Edit this coupon')
+                            );
+                        },
 
-            ))); ?>
+                        'remove' => function($coupon){
+                            return Icon::remove(
+                                $this->url('Shop:Admin:Coupon@deleteAction', $coupon->getId()),
+                                $this->translate('Remove this coupon'),
+                                null,
+                                $this->url('Shop:Admin:Coupon@indexAction')
+                            );
+                        }
+                    )
+
+                ))); ?>
+            </div>
         </div>
     </div>
 
     <div class="col-lg-6">
-        <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($coupon->getId() ? 'Update coupon' : 'Add new coupon'); ?></h3>
+        <div class="card">
+            <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($coupon->getId() ? 'Update coupon' : 'Add new coupon'); ?></h3>
 
-        <form data-group="coupon" autocomplete="off">
-            <div class="well">
+            <form data-group="coupon" autocomplete="off">
                 <input type="hidden" name="coupon[id]" value="<?php echo $coupon->getId(); ?>" />
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Code'); ?></label>
+                    <label class="col-lg-12 control-label"><?php $this->show('Code'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
                             <?php echo Element::text('coupon[code]', $coupon->getCode(), array('class' => 'form-control', 'placeholder' => $this->translate('Unique coupon code'))); ?>
@@ -78,7 +80,7 @@ defined('KRYSTAL') or die;
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Percentage'); ?></label>
+                    <label class="col-lg-12 control-label"><?php $this->show('Percentage'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
                             <?php echo Element::number('coupon[percentage]', $coupon->getPercentage(), array('min' => 1, 'max' => 100, 'class' => 'form-control', 'placeholder' => $this->translate('Discount percentage'))); ?>
@@ -86,16 +88,15 @@ defined('KRYSTAL') or die;
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <?php $this->loadPartial('actions', array(
-                'new' => !$coupon->getId(),
-                'add' => 'Shop:Admin:Coupon@indexAction',
-                'edit' => 'Shop:Admin:Coupon@editAction',
-                'save' => 'Shop:Admin:Coupon@saveAction',
-                'cancel' => 'Shop:Admin:Coupon@indexAction'
-            )); ?>
-
-        </form>
+                <?php $this->loadPartial('actions', array(
+                    'new' => !$coupon->getId(),
+                    'add' => 'Shop:Admin:Coupon@indexAction',
+                    'edit' => 'Shop:Admin:Coupon@editAction',
+                    'save' => 'Shop:Admin:Coupon@saveAction',
+                    'cancel' => 'Shop:Admin:Coupon@indexAction'
+                )); ?>
+            </form>
+        </div>
     </div>
 </div>

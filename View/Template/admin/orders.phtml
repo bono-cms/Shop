@@ -10,156 +10,161 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
 
 ?>
 
-<div class="btn-toolbar">
-	<div class="btn-group">
-	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-		<span class="glyphicon glyphicon-list"></span> <?php $this->show('Menu'); ?> <span class="caret"></span>
-	  </button>
-      
-	  <ul class="dropdown-menu">
-         <li><a href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a></li>
-		 <li class="divider"></li>
-         <?php if (!empty($orders)): ?>
-		 <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Order@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Order@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-         
-         <?php else: ?>
-		 
-         <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-         <?php endif; ?>
-	  </ul>
-	</div>
-</div>
+<div class="card">
+    <div class="btn-toolbar">
+        <div class="dropdown">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-list"></span> <?php $this->show('Menu'); ?>
+          </button>
 
-<h2><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?> (<?php echo $paginator->getTotalAmount(); ?>)</h2>
+          <div class="dropdown-menu">
+             <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a>
+             <div class="dropdown-divider"></div>
+             <?php if (!empty($orders)): ?>
+             <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Order@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
+             <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Order@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+             <?php else: ?>
 
-<div class="table-responsive">
-    <?php $this->loadPartial('items-per-page', array('caption' => 'Recent orders')); ?>
+             <a class="dropdown-item disabled"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
+             <a class="dropdown-item disabled"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+             <?php endif; ?>
+          </div>
+        </div>
+    </div>
 
-    <form action="<?php echo $route; ?>" novalidate autocomplete="off">
-        <?= $this->widget(new GridViewWidget($orders, array(
-            'batch' => true,
-            'pk' => 'id',
-            'tableClass' => 'table table-hover table-bordered table-striped',
-            'rowAttributes' => array(
-                'class' => function($order){
-                    return !$order->getApproved() ? 'warning' : null;
-                }
-            ),
+    <h2><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?> (<?php echo $paginator->getTotalAmount(); ?>)</h2>
 
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
-                ),
+    <div class="__table-responsive">
+        <?php $this->loadPartial('items-per-page', array('caption' => 'Recent orders')); ?>
 
-                array(
-                    'column' => 'order_status_id',
-                    'label' => 'Order status',
-                    'type' => 'select',
-                    'filter' => $orderStatuses,
-                    'value' => function($order) use ($orderStatuses){
-                        return Element::select(sprintf('order_status_id[%s]', $order->getId()), $orderStatuses, $order->getStatusId(), array('class' => 'form-control'), null);
+        <form action="<?php echo $route; ?>" novalidate autocomplete="off">
+            <?= $this->widget(new GridViewWidget($orders, array(
+                'batch' => true,
+                'pk' => 'id',
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'rowAttributes' => array(
+                    'class' => function($order){
+                        return !$order->getApproved() ? 'table-warning' : null;
                     }
                 ),
 
-                array(
-                    'column' => 'name',
-                    'filter' => true
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'order_status_id',
+                        'attributes' => array(
+                            'class' => 'col-2'
+                        ),
+                        'label' => 'Order status',
+                        'type' => 'select',
+                        'filter' => $orderStatuses,
+                        'value' => function($order) use ($orderStatuses){
+                            return Element::select(sprintf('order_status_id[%s]', $order->getId()), $orderStatuses, $order->getStatusId(), array('class' => 'form-control'), null);
+                        }
+                    ),
+
+                    array(
+                        'column' => 'name',
+                        'filter' => true
+                    ),
+
+                    array(
+                        'column' => 'delivery',
+                        'label' => 'Delivery type'
+                    ),
+
+                    array(
+                        'column' => 'qty',
+                        'filter' => true
+                    ),
+
+                    array(
+                        'column' => 'total_price',
+                        'label' => 'Total price',
+                        'filter' => true,
+                        'value' => function($order) use ($config){
+                            return $order->getTotalPrice() . PHP_EOL . $config->getCurrency();
+                        }
+                    ),
+
+                    array(
+                        'column' => 'discount',
+                        'value' => function($order) use ($config){
+                            return $order->getDiscount() . PHP_EOL . $config->getCurrency();
+                        }
+                    ),
+
+                    array(
+                        'column' => 'approved',
+                        'translateable' => true,
+                        'type' => 'select',
+                        'filter' => 'boolean',
+                        'value' => function($order){
+                            return $order->getApproved() ? 'Yes' : 'No';
+                        }
+                    )
                 ),
 
-                array(
-                    'column' => 'delivery',
-                    'label' => 'Delivery type'
-                ),
+                'actions' => array(
+                    'approve' => function($order) {
+                        if (!$order->getApproved()) {
+                            return Icon::approve(
+                                $this->url('Shop:Admin:Order@approveAction', $order->getId()),
+                                $this->translate('Approve this order')
+                            );
+                        } else {
+                            return null;
+                        }
+                    },
 
-                array(
-                    'column' => 'qty',
-                    'filter' => true
-                ),
+                    'details' => function($order) {
+                        return Icon::details(
+                            $this->url('Shop:Admin:Order@detailsAction', $order->getId()),
+                            $this->translate('View purchased products')
+                        );
+                    },
 
-                array(
-                    'column' => 'total_price',
-                    'label' => 'Total price',
-                    'filter' => true,
-                    'value' => function($order) use ($config){
-                        return $order->getTotalPrice() . PHP_EOL . $config->getCurrency();
-                    }
-                ),
-
-                array(
-                    'column' => 'discount',
-                    'value' => function($order) use ($config){
-                        return $order->getDiscount() . PHP_EOL . $config->getCurrency();
-                    }
-                ),
-
-                array(
-                    'column' => 'approved',
-                    'translateable' => true,
-                    'type' => 'select',
-                    'filter' => 'boolean',
-                    'value' => function($order){
-                        return $order->getApproved() ? 'Yes' : 'No';
+                    'remove' => function($order) {
+                        return Icon::remove(
+                            $this->url('Shop:Admin:Order@deleteAction', $order->getId()),
+                            $this->translate('Remove this order')
+                        );
                     }
                 )
-            ),
 
-            'actions' => array(
-                'approve' => function($order) {
-                    if (!$order->getApproved()) {
-                        return Icon::approve(
-                            $this->url('Shop:Admin:Order@approveAction', $order->getId()),
-                            $this->translate('Approve this order')
-                        );
-                    } else {
-                        return null;
-                    }
-                },
+            ), $route)); ?>
 
-                'details' => function($order) {
-                    return Icon::details(
-                        $this->url('Shop:Admin:Order@detailsAction', $order->getId()),
-                        $this->translate('View purchased products')
-                    );
-                },
-
-                'remove' => function($order) {
-                    return Icon::remove(
-                        $this->url('Shop:Admin:Order@deleteAction', $order->getId()),
-                        $this->translate('Remove this order')
-                    );
-                }
-            )
-
-        ), $route)); ?>
-
-        <?php if (empty($orders)): ?>
-        <div class="center-block">
-            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No orders'); ?></h2>
-        </div>
-        
-        <?php else: ?>
-        <div>
-            <?php if ($appliedFilter): ?>
-            <a href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+            <?php if (empty($orders)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No orders'); ?></h2>
+            </div>
+            
+            <?php else: ?>
+            <div>
+                <?php if ($appliedFilter): ?>
+                <a href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
+                <br />
+            </div>
             <?php endif; ?>
-            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
-            <br />
-        </div>
-        <?php endif; ?>
-    </form>
-    
-    <?php $this->loadPartial('paginator'); ?>
+        </form>
+        
+        <?php $this->loadPartial('paginator'); ?>
+    </div>
+
 </div>
 
 <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  <div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h4 class="modal-title"><i class="glyphicon glyphicon-eye-open"></i> <?php $this->show('Order details'); ?></h4>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body" id="details-body"></div>
     <div class="modal-footer">
