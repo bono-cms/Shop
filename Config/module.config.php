@@ -12,19 +12,19 @@ return array(
         array(
             'name' => 'Add a product',
             'controller' => 'Shop:Admin:Product@addAction',
-            'icon' => 'glyphicon glyphicon-shopping-cart'
+            'icon' => 'fas fa-cart-arrow-down'
         ),
 
         array(
             'name' => 'Add a category',
             'controller' => 'Shop:Admin:Category@addAction',
-            'icon' => 'glyphicon glyphicon-folder-open'
+            'icon' => 'fas fa-clone'
         ),
 
         array(
             'name' => 'Orders',
             'controller' => 'Shop:Admin:Order@indexAction',
-            'icon' => 'glyphicon glyphicon-user'
+            'icon' => 'far fa-credit-card'
         )
     ),
     'menu' => array(
@@ -34,6 +34,10 @@ return array(
             array(
                 'route' => 'Shop:Admin:Browser@indexAction',
                 'name' => 'View all products'
+            ),
+            array(
+                'route' => 'Shop:Admin:Product@addAction',
+                'name' => 'Add a product'
             ),
             array(
                 'route' => 'Shop:Admin:Category@addAction',
