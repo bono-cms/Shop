@@ -11,51 +11,65 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
 
 ?>
 
-<div class="btn-toolbar">
-    <div class="dropdown">
-      <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
-        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?php echo $newOrdersCount; ?>) <?php endif; ?> </span>
-      </button>
+<form action="<?= $route; ?>" novalidate autocomplete="off">
+    <div class="btn-toolbar">
+        <div class="btn-group mr-2">
+            <div class="dropdown">
+              <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?php echo $newOrdersCount; ?>) <?php endif; ?> </span>
+              </button>
 
-      <div class="dropdown-menu">
-         <?php if (isset($categoryId)): ?>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a>
-         <li class="divider">
-         <?php endif; ?>
+              <div class="dropdown-menu">
+                 <?php if (isset($categoryId)): ?>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a>
+                 <li class="divider">
+                 <?php endif; ?>
 
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a>
-         <a class="dropdown-item" href="#" data-button="statistic" data-url="<?php echo $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></a>
-         <div class="dropdown-header"><?php $this->show('Configurable parameters'); ?></div>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Delivery types'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>"><i class="glyphicon glyphicon-link"></i> <?php $this->show('Discount coupons'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Currencies'); ?></a>
-         <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a>
-         <div class="dropdown-divider"></div>
-         <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
-         
-         <?php if (!empty($products)):?>
-         <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
-         <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
-         
-         <?php else: ?>
-         <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
-         <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
-         
-         <?php endif; ?>
-      </div>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a>
+                 <a class="dropdown-item" href="#" data-button="statistic" data-url="<?php echo $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></a>
+                 <div class="dropdown-header"><?php $this->show('Configurable parameters'); ?></div>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Delivery types'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>"><i class="glyphicon glyphicon-link"></i> <?php $this->show('Discount coupons'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Currencies'); ?></a>
+                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a>
+                 <div class="dropdown-divider"></div>
+                 <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
+                 
+                 <?php if (!empty($products)):?>
+                 <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
+                 <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+                 
+                 <?php else: ?>
+                 <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
+                 <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+                 
+                 <?php endif; ?>
+              </div>
+            </div>
+        </div>
+
+        <?php if (!empty($products)): ?>
+        <div class="btn-group mr-2">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> <?php $this->show('Filter'); ?></button>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($filter->isApplied()): ?>
+        <div class="btn-group mr-2">
+            <a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+        </div>
+        <?php endif; ?>
     </div>
-</div>
 
-<div class="card">
-    <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
+    <div class="card">
+        <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
 
-    <form action="<?= $route; ?>" novalidate autocomplete="off">
         <?php if (isset($categoryId)): ?>
         <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
         <?php endif; ?>
@@ -146,26 +160,17 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
 
             ), $route)); ?>
 
-            <?php if (!empty($products)): ?>
-            <div>
-                <?php if ($filter->isApplied()): ?>
-                <a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
-                <?php endif; ?>
-                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
-                <br />
-            </div>
-            <?php endif; ?>
-
             <?php if (empty($products)): ?>
             <div class="center-block">
                 <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No products'); ?></h2>
             </div>
             <?php endif; ?>
         </div>
-    </form>
 
-    <?php $this->loadPartial('paginator'); ?>
-</div>
+        <?php $this->loadPartial('paginator'); ?>
+    </div>
+
+</form>
 
 <div class="card">
     <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
