@@ -529,7 +529,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllPublishedWithMaxViewCount($limit, $categoryId = null)
     {
-        $db = $this->db->select('*')
+        $db = $this->db->select($this->getSharedColumns())
                        ->from(self::getTableName());
 
         $this->appendTranslationRelation();
@@ -539,7 +539,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $this->db->innerJoin(ProductCategoryRelationMapper::getTableName());
         }
 
-        $db->whereEquals(self::column('lang_id'), $this->getLangId())
+        $db->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId())
            ->andWhereEquals(self::column('published'), '1')
            ->andWhereGreaterThan(self::column('views'), '0');
 
