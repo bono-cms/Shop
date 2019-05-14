@@ -8,8 +8,15 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeValue@addAction'); ?>"><i class="glyphicon glyphicon-tag"></i> <?php $this->show('Add attribute'); ?></a>
-<a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeGroup@addAction'); ?>"><i class="glyphicon glyphicon-book"></i> <?php $this->show('Add group'); ?></a>
+<div class="btn-toolbar">
+    <div class="btn-group mr-2">
+        <a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeValue@addAction'); ?>"><i class="glyphicon glyphicon-tag"></i> <?php $this->show('Add attribute'); ?></a>
+    </div>
+
+    <div class="btn-group mr-2">
+        <a class="btn btn-sm btn-primary" href="<?php echo $this->url('Shop:Admin:AttributeGroup@addAction'); ?>"><i class="glyphicon glyphicon-book"></i> <?php $this->show('Add group'); ?></a>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-lg-6">

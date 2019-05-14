@@ -8,12 +8,14 @@ defined('KRYSTAL') or die;
 
 ?>
 
+<div class="btn-toolbar">
+    <div class="btn-group mr-2">
+        <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:OrderStatus@addAction'); ?>"><?php $this->show('Add new order status'); ?></a>
+    </div>
+</div>
+
 <div class="card">
     <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available order statuses'); ?> <small>(<?php echo count($orderStatuses); ?>)</small></h2>
-
-    <p>
-        <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:OrderStatus@addAction'); ?>"><?php $this->show('Add new order status'); ?></a>
-    </p>
 
     <div class="table-responsive">
         <?= $this->widget(new GridViewWidget($orderStatuses, array(
