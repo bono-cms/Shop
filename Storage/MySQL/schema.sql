@@ -112,13 +112,14 @@ CREATE TABLE `bono_module_shop_products_translations` (
     `meta_description` TEXT NOT NULL COMMENT 'Meta-description for search engines'
 );
 
-
 DROP TABLE IF EXISTS `bono_module_shop_product_category_relations`;
 CREATE TABLE `bono_module_shop_product_category_relations` (
     `master_id` INT NOT NULL COMMENT 'Product ID',
-    `slave_id` INT NOT NULL COMMENT 'Category ID'
-);
+    `slave_id` INT NOT NULL COMMENT 'Category ID',
 
+    FOREIGN KEY (master_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
+    FOREIGN KEY (slave_id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE
+);
 
 /* Attributes */
 DROP TABLE IF EXISTS `bono_module_shop_attribute_groups`;
