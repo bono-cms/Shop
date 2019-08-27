@@ -20,17 +20,18 @@ final class SpecificationCategory extends AbstractController
      * Renders a form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $category
+     * @param string $title
      * @return string
      */
-    private function createForm($category)
+    private function createForm($category, $title)
     {
         $new = is_object($category);
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
-                                       ->addOne($new ? 'Add new category' : 'Edit the category');
-        
+                                       ->addOne($title);
+
         return $this->view->render('specification/category.form', array(
             'category' => $category,
             'new' => $new
@@ -44,7 +45,7 @@ final class SpecificationCategory extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity());
+        return $this->createForm(new VirtualEntity(), 'Add new category');
     }
 
     /**
@@ -58,7 +59,8 @@ final class SpecificationCategory extends AbstractController
         $category = $this->getModuleService('specificationCategoryService')->fetchById($id, true);
 
         if ($category !== false) {
-            return $this->createForm($category);
+            $name = $this->getCurrentProperty($category, 'name');
+            return $this->createForm($category, $this->translator->translate('Edit the category "%s"', $name));
         } else {
             return false;
         }

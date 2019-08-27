@@ -21,16 +21,17 @@ final class DeliveryType extends AbstractController
      * Creates the form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $deliveryType
+     * @param string $title Page title
      * @return string
      */
-    private function createForm($deliveryType)
+    private function createForm($deliveryType, $title)
     {
         $new = is_object($deliveryType);
 
         // Configure breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Delivery types', 'Shop:Admin:DeliveryType@indexAction')
-                                       ->addOne($new ? 'Add new delivery type' : 'Update delivery type');
+                                       ->addOne($title);
 
         return $this->view->render('delivery-type/form', array(
             'deliveryType' => $deliveryType,
@@ -61,7 +62,7 @@ final class DeliveryType extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity());
+        return $this->createForm(new VirtualEntity(), 'Add new delivery type');
     }
 
     /**
@@ -75,7 +76,8 @@ final class DeliveryType extends AbstractController
         $deliveryType = $this->getModuleService('deliveryTypeManager')->fetchById($id, true);
 
         if ($deliveryType !== false) {
-            return $this->createForm($deliveryType);
+            $name = $this->getCurrentProperty($deliveryType, 'name');
+            return $this->createForm($deliveryType, $this->translator->translate('Edit the delivery type "%s"', $name));
         } else {
             return false;
         }

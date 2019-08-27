@@ -111,7 +111,8 @@ final class Product extends AbstractController
         $product = $this->getModuleService('productManager')->fetchById($id, true);
 
         if ($product) {
-            return $this->createForm($product, 'Edit the product');
+            $name = $this->getCurrentProperty($product, 'name');
+            return $this->createForm($product, $this->translator->translate('Edit the product "%s"', $name));
         } else {
             return false;
         }

@@ -20,9 +20,10 @@ final class AttributeGroup extends AbstractController
      * Creates the attribute form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $group
+     * @param string $title Page title
      * @return string
      */
-    private function createForm($group)
+    private function createForm($group, $title)
     {
         $new = is_object($group);
 
@@ -30,7 +31,7 @@ final class AttributeGroup extends AbstractController
         $this->view->getBreadcrumbBag()
                    ->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
-                   ->addOne($new ? 'Add a group' : 'Edit the group');
+                   ->addOne($title);
 
         return $this->view->render('attributes/group', array(
             'group' => $group,
@@ -45,7 +46,7 @@ final class AttributeGroup extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity());
+        return $this->createForm(new VirtualEntity(), 'Add a group');
     }
 
     /**
@@ -59,7 +60,8 @@ final class AttributeGroup extends AbstractController
         $group = $this->getModuleService('attributeGroupManager')->fetchById($id, true);
 
         if ($group !== false) {
-            return $this->createForm($group);
+            $name = $this->getCurrentProperty($group, 'name');
+            return $this->createForm($group, $this->translator->translate('Edit the attribute group "%s"', $name));
         } else {
             return false;
         }

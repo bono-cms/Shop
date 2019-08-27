@@ -21,9 +21,10 @@ final class OrderStatus extends AbstractController
      * Creates the grid
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $orderStatus
+     * @param string $title Page title
      * @return string
      */
-    private function createForm($orderStatus)
+    private function createForm($orderStatus, $title)
     {
         // Whether form is new
         $new = !is_array($orderStatus);
@@ -31,7 +32,7 @@ final class OrderStatus extends AbstractController
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Order statuses', 'Shop:Admin:OrderStatus@indexAction')
-                                       ->addOne(!$new ? 'Update order status' : 'Add order status');
+                                       ->addOne($title);
 
         return $this->view->render('order-status/form', array(
             'orderStatus' => $orderStatus,
@@ -62,7 +63,7 @@ final class OrderStatus extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity());
+        return $this->createForm(new VirtualEntity(), 'Add order status');
     }
 
     /**
@@ -76,7 +77,8 @@ final class OrderStatus extends AbstractController
         $orderStatus = $this->getModuleService('orderStatusManager')->fetchById($id, true);
 
         if ($orderStatus !== false) {
-            return $this->createForm($orderStatus);
+            $name = $this->getCurrentProperty($orderStatus, 'name');
+            return $this->createForm($orderStatus, $this->translator->translate('Edit the order status "%s"', $name));
         } else {
             return false;
         }

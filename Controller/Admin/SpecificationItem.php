@@ -70,9 +70,10 @@ final class SpecificationItem extends AbstractController
      * Renders a form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $item
+     * @param string $title Page title
      * @return string
      */
-    private function createForm($item)
+    private function createForm($item, $title)
     {
         $new = is_object($item);
 
@@ -81,8 +82,8 @@ final class SpecificationItem extends AbstractController
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
-                                       ->addOne($new ? 'Add new item' : 'Edit the item');
-        
+                                       ->addOne($title);
+
         return $this->view->render('specification/item.form', array(
             'item' => $item,
             'new' => $new,
@@ -98,7 +99,7 @@ final class SpecificationItem extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity());
+        return $this->createForm(new VirtualEntity(), 'Add new item');
     }
 
     /**
@@ -112,7 +113,8 @@ final class SpecificationItem extends AbstractController
         $item = $this->getModuleService('specificationItemService')->fetchById($id, true);
 
         if ($item !== false) {
-            return $this->createForm($item);
+            $name = $this->getCurrentProperty($item, 'name');
+            return $this->createForm($item, $this->translator->translate('Edit the item "%s"', $name));
         } else {
             return false;
         }
