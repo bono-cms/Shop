@@ -264,6 +264,8 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setOrder($category['order'], CategoryEntity::FILTER_INT)
             ->setSeo($category['seo'], CategoryEntity::FILTER_BOOL)
             ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), CategoryEntity::FILTER_TAGS)
+            ->setChangeFreq($category['changefreq'])
+            ->setPriority($category['priority'])
             ->setPermanentUrl('/module/shop/category/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
             ->setCover($category['cover'], CategoryEntity::FILTER_TAGS)

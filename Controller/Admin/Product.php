@@ -92,10 +92,15 @@ final class Product extends AbstractController
      */
     public function addAction()
     {
+        // CMS configuration object
+        $config = $this->getService('Cms', 'configManager')->getEntity();
+
         $product = new VirtualEntity();
         $product->setSeo(true)
                 ->setPublished(true)
-                ->setSpecialOffer(false);
+                ->setSpecialOffer(false)
+                ->setChangeFreq($config->getSitemapFrequency())
+                ->setPriority($config->getSitemapPriority());
 
         return $this->createForm($product, 'Add a product');
     }

@@ -350,6 +350,8 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
             ->setSpecialOffer($product['special_offer'], ProductEntity::FILTER_BOOL)
             ->setName($product['name'], ProductEntity::FILTER_HTML)
             ->setSlug($product['slug'])
+            ->setChangeFreq($product['changefreq'])
+            ->setPriority($product['priority'])
             ->setCover($product['cover'], ProductEntity::FILTER_TAGS)
             ->setPermanentUrl('/module/shop/product/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))

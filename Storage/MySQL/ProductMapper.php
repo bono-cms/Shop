@@ -60,6 +60,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             ProductMapper::column('special_offer'),
             ProductMapper::column('cover'),
             WebPageMapper::column('slug'),
+            WebPageMapper::column('changefreq'),
+            WebPageMapper::column('priority')
         );
 
         // Do extra columns need to be appended?
