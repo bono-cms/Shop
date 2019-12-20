@@ -573,18 +573,22 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
     private function prepareInput(array $input)
     {
         // Remove empty indexes
-        foreach ($input['files']['file'] as $index => $file) {
-            if (empty($file)) {
-                unset($input['files']['file'][$index]);
+        if (isset($input['files']['file'])) {
+            foreach ($input['files']['file'] as $index => $file) {
+                if (empty($file)) {
+                    unset($input['files']['file'][$index]);
+                }
             }
         }
 
         // Request data
         $product =& $input['data']['product'];
-        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
+        $file = isset($input['files']['file']) ? $input['files']['file'] : array();
 
         // Reset indexes
-        sort($file);
+        if ($file) {
+            sort($file);
+        }
 
         // If a cover has been selected, then we need to override its base name right now
         if ($file) {
