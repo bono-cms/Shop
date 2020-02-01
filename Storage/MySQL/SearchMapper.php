@@ -12,20 +12,41 @@
 namespace Shop\Storage\MySQL;
 
 use Search\Storage\MySQL\AbstractSearchProvider;
+use Cms\Storage\MySQL\AbstractMapper;
 use Krystal\Db\Sql\QueryBuilderInterface;
 
-final class SearchMapper extends AbstractSearchProvider
+final class SearchMapper extends AbstractMapper
 {
     /**
      * {@inheritDoc}
      */
     public function appendQuery(QueryBuilderInterface $queryBuilder, $placeholder)
     {
-        $queryBuilder->select($this->getWithDefaults(array('description' => 'content')))
+        // Columns to be selected
+        $columns = array(
+            ProductMapper::column('id'),
+            ProductTranslationMapper::column('web_page_id'),
+            ProductTranslationMapper::column('lang_id'),
+            ProductTranslationMapper::column('title'),
+            ProductTranslationMapper::column('description'),
+            ProductTranslationMapper::column('name')
+        );
+
+        $queryBuilder->select($columns)
                      ->from(ProductMapper::getTableName())
-                     ->whereEquals('lang_id', "'{$this->getLangId()}'")
-                     ->andWhereEquals('published', '1')
-                     ->andWhereLike('title', $placeholder)
-                     ->orWhereLike('description', $placeholder);
+                     // Translation relation
+                     ->innerJoin(ProductTranslationMapper::getTableName(), array(
+                        ProductMapper::column('id') => ProductTranslationMapper::column('id')
+                     ))
+                     // Filtering conditions
+                     ->whereEquals(ProductMapper::column('seo'), '1')
+                     ->andWhereEquals(ProductTranslationMapper::column('lang_id'), "'{$this->getLangId()}'")
+                     ->rawAnd()
+                     ->openBracket()
+                     // Search
+                     ->like(ProductTranslationMapper::column('name'), $placeholder)
+                     ->rawOr()
+                     ->like(ProductTranslationMapper::column('description'), $placeholder)
+                     ->closeBracket();
     }
 }
