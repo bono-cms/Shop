@@ -37,7 +37,7 @@ final class Basket extends AbstractShopController
                 'products' => $this->getBasketManager()->getProducts(),
                 'page' => $page,
                 'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(true),
-                'languages' => $pageManager->getSwitchUrls($id)
+                'languages' => $pageManager->getSwitchUrls($id, 'Shop:Basket@indexAction')
             ));
 
         } else {
