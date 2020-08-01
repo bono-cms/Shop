@@ -38,11 +38,12 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     /**
      * Returns shared columns to be selected
      * 
+     * @param boolean $all
      * @return array
      */
-    private function getColumns()
+    private function getColumns($all = true)
     {
-        return array(
+        $columns = array(
             self::column('cover'),
             self::column('id'),
             self::column('parent_id'),
@@ -54,11 +55,18 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
             CategoryTranslationMapper::column('name'),
             CategoryTranslationMapper::column('title'),
             CategoryTranslationMapper::column('keywords'),
-            CategoryTranslationMapper::column('meta_description'),
-            WebPageMapper::column('slug'),
-            WebPageMapper::column('changefreq'),
-            WebPageMapper::column('priority')
+            CategoryTranslationMapper::column('meta_description')
         );
+
+        if ($all) {
+            $columns = array_merge($columns, array(
+                WebPageMapper::column('slug'),
+                WebPageMapper::column('changefreq'),
+                WebPageMapper::column('priority')
+            ));
+        }
+
+        return $columns;
     }
 
     /**
@@ -181,14 +189,20 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchAll()
     {
-        return $this->db->select($this->getColumns())
+        $db = $this->db->select($this->getColumns())
                         ->from(self::getTableName())
                         // Category translation relation
                         ->leftJoin(CategoryTranslationMapper::getTableName(), array(
                             self::column('id') => CategoryTranslationMapper::getRawColumn('id')
                         ))
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->queryAll();
+                        // Web page relation
+                        ->leftJoin(WebPageMapper::getTableName(), array(
+                            WebPageMapper::column('id') => CategoryTranslationMapper::getRawColumn('web_page_id'),
+                            WebPageMapper::column('lang_id') => CategoryTranslationMapper::getRawColumn('lang_id')
+                        ))
+                        ->whereEquals(CategoryTranslationMapper::column('lang_id'), $this->getLangId());
+
+        return $db->queryAll();
     }
 
     /**
