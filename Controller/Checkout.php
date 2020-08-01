@@ -35,10 +35,10 @@ final class Checkout extends AbstractShopController
             $this->view->getBreadcrumbBag()
                        ->addOne($page->getName());
 
-            return $this->view->disableLayout()->render('shop-checkout', array(
+            return $this->view->render('shop-checkout', array(
                 'page' => $page,
                 'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(),
-                'languages' => $pageManager->getSwitchUrls($id)
+                'languages' => $pageManager->getSwitchUrls($id, 'Shop:Checkout@indexAction')
             ));
 
         } else {
