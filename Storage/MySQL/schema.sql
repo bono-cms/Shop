@@ -15,7 +15,6 @@ CREATE TABLE `bono_module_shop_orders_info` (
 	`total_price` FLOAT COMMENT 'Total price',
     `discount` FLOAT COMMENT 'Discount price if applied',
 	`approved` varchar(1) NOT NULL COMMENT 'Whether this order is approved'
-
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_products`;
@@ -59,17 +58,6 @@ CREATE TABLE `bono_module_shop_categories_translations` (
     FOREIGN KEY (web_page_id) REFERENCES bono_module_cms_webpages(id) ON DELETE CASCADE
 
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
-
-
-DROP TABLE IF EXISTS `bono_module_shop_product_attr_groups_rel`;
-CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
-    `master_id` INT NOT NULL COMMENT 'Category ID',
-    `slave_id` INT NOT NULL COMMENT 'Attribute group ID',
-    
-    FOREIGN KEY (master_id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE
-    FOREIGN KEY (slave_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
-
 
 DROP TABLE IF EXISTS `bono_module_shop_products`;
 CREATE TABLE `bono_module_shop_products` (
@@ -333,4 +321,13 @@ CREATE TABLE `bono_module_shop_brands` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` varchar(255) NOT NULL COMMENT 'Brand name',
     `order` INT NOT NULL COMMENT 'Sorting order'
+) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_shop_product_attr_groups_rel`;
+CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
+    `master_id` INT NOT NULL COMMENT 'Category ID',
+    `slave_id` INT NOT NULL COMMENT 'Attribute group ID',
+
+    FOREIGN KEY (master_id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (slave_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
