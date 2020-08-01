@@ -31,79 +31,105 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     /**
      * Find attached dynamic attributes by product ID
      * 
-     * @param string $productId
+     * @param int $productId
      * @return array
      */
     public function findDynamicAttributes($productId)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             AttributeGroupMapper::column('id') => 'group_id',
-            AttributeGroupMapper::column('name') => 'group_name',
-            AttributeValueMapper::column('name') => 'value_name',
+            AttributeGroupTranslationMapper::column('name') => 'group_name',
+            AttributeValueTranslationMapper::column('name') => 'value_name',
             AttributeValueMapper::column('id') => 'value_id'
-        );
+        ];
 
-        return $this->db->select($columns)
-                        ->from(AttributeGroupMapper::getTableName())
-                        // Attribute value relation
-                        ->innerJoin(AttributeValueMapper::getTableName(), array(
-                            AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
-                        ))
-                        ->innerJoin(self::getTableName(), array(
-                            AttributeGroupMapper::column('dynamic') => new RawBinding('1'),
-                            self::column('product_id') => $productId,
-                            self::column('group_id') => AttributeGroupMapper::getRawColumn('id')
-                        ))
-                        ->queryAll();
+        $db = $this->db->select($columns)
+                       ->from(AttributeGroupMapper::getTableName())
+                       // Attribute group translations
+                       ->leftJoin(AttributeGroupTranslationMapper::getTableName(), [
+                            AttributeGroupTranslationMapper::column('id') => AttributeGroupMapper::getRawColumn('id'),
+                            AttributeGroupTranslationMapper::column('lang_id') => $this->getLangId()
+                       ])
+                       // Attribute value relation
+                       ->innerJoin(AttributeValueMapper::getTableName(), [
+                           AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
+                       ])
+                       // Attribute value translation
+                       ->leftJoin(AttributeValueTranslationMapper::getTableName(), [
+                            AttributeValueTranslationMapper::column('id') => AttributeValueMapper::getRawColumn('id'),
+                            AttributeValueTranslationMapper::column('lang_id') => $this->getLangId()
+                       ])
+                       ->innerJoin(self::getTableName(), [
+                           AttributeGroupMapper::column('dynamic') => new RawBinding('1'),
+                           self::column('product_id') => $productId,
+                           self::column('group_id') => AttributeGroupMapper::getRawColumn('id')
+                       ]);
+
+        return $db->queryAll();
     }
 
     /**
      * Finds attached static attributes. Primarily used to render attributes on product page
      * 
-     * @param string $productId
+     * @param int $productId
      * @return array
      */
     public function findStaticAttributes($productId)
     {
         // Columns to be selected
-        $columns = array(
-            AttributeGroupMapper::column('name') => 'group',
-            AttributeValueMapper::column('name') => 'attribute'
-        );
+        $columns = [
+            AttributeGroupTranslationMapper::column('name') => 'group',
+            AttributeValueTranslationMapper::column('name') => 'attribute'
+        ];
 
-        return $this->db->select($columns)
-                        ->from(AttributeGroupMapper::getTableName())
-                        ->innerJoin(AttributeValueMapper::getTableName(), array(
-                            AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
-                        ))
-                        ->innerJoin(self::getTableName(), array(
-                            AttributeGroupMapper::column('dynamic') => new RawSqlFragment('0'),
-                            self::column('product_id') => $productId,
-                            self::column('group_id') => AttributeGroupMapper::getRawColumn('id'),
-                            self::column('value_id') => AttributeValueMapper::getRawColumn('id')
-                        ))
-                        ->queryAll();
+        $db = $this->db->select($columns)
+                       ->from(AttributeGroupMapper::getTableName())
+                       // Attribute group translations
+                       ->leftJoin(AttributeGroupTranslationMapper::getTableName(), [
+                           AttributeGroupTranslationMapper::column('id') => AttributeGroupMapper::getRawColumn('id'),
+                           AttributeGroupTranslationMapper::column('lang_id') => $this->getLangId()
+                       ])
+                       ->innerJoin(AttributeValueMapper::getTableName(), [
+                           AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
+                       ])
+                       // Attribute value translation mapper
+                       ->leftJoin(AttributeValueTranslationMapper::getTableName(), [
+                            AttributeValueTranslationMapper::column('id') => AttributeValueMapper::getRawColumn('id'),
+                            AttributeValueTranslationMapper::column('lang_id') => $this->getLangId()
+                       ])
+                       ->innerJoin(self::getTableName(), [
+                           AttributeGroupMapper::column('dynamic') => new RawSqlFragment('0'),
+                           self::column('product_id') => $productId,
+                           self::column('group_id') => AttributeGroupMapper::getRawColumn('id'),
+                           self::column('value_id') => AttributeValueMapper::getRawColumn('id')
+                       ]);
+
+        return $db->queryAll();
     }
 
     /**
      * Find a collection of attributes
      * 
-     * @param string $productId
+     * @param int $productId
      * @return array
      */
     public function findAttributesByProductId($productId)
     {
-        return $this->db->select(array('group_id', 'value_id'))
+        $db = $this->db->select([
+                            'group_id',
+                            'value_id'
+                        ])
                         ->from(self::getTableName())
-                        ->whereEquals('product_id', $productId)
-                        ->queryAll();
+                        ->whereEquals('product_id', $productId);
+
+        return $db->queryAll();
     }
 
     /**
      * Deletes attributes by associated product id
      * 
-     * @param string $productId
+     * @param int $productId
      * @return boolean
      */
     public function deleteByProductId($productId)
@@ -114,7 +140,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
     /**
      * Stores attribute relations
      * 
-     * @param string $productId Product id
+     * @param int $productId
      * @param array $values
      * @return boolean
      */
