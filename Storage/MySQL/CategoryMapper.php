@@ -85,7 +85,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
             WebPageMapper::column('slug')
         );
 
-        return $this->db->select($columns)
+        $db = $this->db->select($columns)
                         ->count(ProductCategoryRelationMapper::getRawColumn(ProductMapper::PARAM_JUNCTION_MASTER_COLUMN), 'product_count')
                         ->from(self::getTableName())
                         // Product relation
@@ -94,14 +94,17 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ))
                         // Category translation relation
                         ->innerJoin(CategoryTranslationMapper::getTableName(), array(
-                            self::column('id') => CategoryTranslationMapper::getRawColumn('id')
+                            CategoryTranslationMapper::column('id') => self::getRawColumn('id'),
+                            CategoryTranslationMapper::column('lang_id') => $this->getLangId(),
                         ))
                         // Web page relation
                         ->leftJoin(WebPageMapper::getTableName(), array(
-                            WebPageMapper::column('id') => CategoryTranslationMapper::getRawColumn('web_page_id')
+                            WebPageMapper::column('id') => CategoryTranslationMapper::getRawColumn('web_page_id'),
+                            WebPageMapper::column('lang_id') => $this->getLangId()
                         ))
-                        ->groupBy(self::column('id'))
-                        ->queryAll();
+                        ->groupBy(self::column('id'));
+
+        return $db->queryAll();
     }
 
     /**
