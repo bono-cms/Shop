@@ -87,14 +87,14 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
                         'label' => 'Total price',
                         'filter' => true,
                         'value' => function($order) use ($config){
-                            return $order->getTotalPrice() . PHP_EOL . $config->getCurrency();
+                            return number_format($order->getTotalPrice()) . ' ' . $config->getCurrency();
                         }
                     ),
 
                     array(
                         'column' => 'discount',
                         'value' => function($order) use ($config){
-                            return $order->getDiscount() . PHP_EOL . $config->getCurrency();
+                            return number_format($order->getDiscount()) . ' ' . $config->getCurrency();
                         }
                     ),
 
