@@ -14,6 +14,7 @@ namespace Shop\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Shop\Storage\OrderInfoMapperInterface;
 use Krystal\Db\Sql\RawSqlFragment;
+use Krystal\Db\Filter\InputDecorator;
 
 final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInterface
 {
@@ -136,22 +137,12 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public function countUnapproved()
     {
-        return $this->db->select()
+        $db = $this->db->select()
                         ->count('id', 'count')
                         ->from(self::getTableName())
-                        ->whereEquals('approved', '0')
-                        ->query('count');
-    }
+                        ->whereEquals('approved', '0');
 
-    /**
-     * Adds new order data
-     * 
-     * @param array $data
-     * @return boolean
-     */
-    public function insert(array $data)
-    {
-        return $this->persist($data);
+        return $db->query('count');
     }
 
     /**
@@ -162,19 +153,20 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public function fetchById($id)
     {
-        return $this->db->select($this->getColumns())
-                        ->from(self::getTableName())
-                        // Order status relation
-                        ->leftJoin(OrderStatusMapper::getTableName(), array(
-                            OrderStatusMapper::column('id') => self::getRawColumn('order_status_id'),
-                            self::column('id') => $id
-                        ))
-                        // Order status translation
-                        ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
-                            OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
-                        ))
-                        ->limit(1)
-                        ->query();
+        $db = $this->db->select($this->getColumns())
+                       ->from(self::getTableName())
+                       // Order status relation
+                       ->leftJoin(OrderStatusMapper::getTableName(), array(
+                           OrderStatusMapper::column('id') => self::getRawColumn('order_status_id'),
+                           self::column('id') => $id
+                       ))
+                       // Order status translation
+                       ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                           OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
+                       ))
+                       ->limit(1);
+
+        return $db->query();
     }
 
     /**
@@ -185,15 +177,16 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public function fetchAllByCustomerId($customerId)
     {
-        return $this->db->select($this->getColumns())
-                        ->from(self::getTableName())
-                        ->leftJoin(OrderStatusMapper::getTableName(), array(
-                            self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id'))
-                        ))
-                        ->whereEquals(self::column('customer_id'), $customerId)
-                        ->orderBy($this->getPk())
-                        ->desc()
-                        ->queryAll();
+        $db = $this->db->select($this->getColumns())
+                       ->from(self::getTableName())
+                       ->leftJoin(OrderStatusMapper::getTableName(), array(
+                           self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id'))
+                       ))
+                       ->whereEquals(self::column('customer_id'), $customerId)
+                       ->orderBy($this->getPk())
+                       ->desc();
+
+        return $db->queryAll();
     }
 
     /**
@@ -218,9 +211,18 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     public function fetchAllByPage($page, $itemsPerPage)
     {
-        return $this->getSelectQuery()
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
+        return $this->filter(new InputDecorator(), $page, $itemsPerPage, null, true);
+    }
+
+    /**
+     * Adds new order data
+     * 
+     * @param array $data
+     * @return boolean
+     */
+    public function insert(array $data)
+    {
+        return $this->persist($data);
     }
 
     /**
