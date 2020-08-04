@@ -58,7 +58,7 @@ final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeM
      */
     public function createDeliveryStatus($id)
     {
-        $delivery = $this->fetchById($id);
+        $delivery = $this->fetchById($id, false);
 
         if ($delivery !== false) {
             if ($delivery->getPrice() == 0) {
