@@ -224,7 +224,7 @@ final class ProductManager extends AbstractManager implements ProductManagerInte
         $ids = $this->productMapper->fetchBestSales($qty, $limit);
 
         foreach ($ids as $id) {
-            $entities[] = $this->fetchById($id);
+            $entities[] = $this->fetchById($id, false);
         }
 
         return $entities;
