@@ -240,7 +240,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         unset($category['attribute_group_id']);
 
         // Insert a category
-        $this->savePage('Shop', 'Shop:Category@indexAction', $category, $translations);
+        $this->savePage('Shop (Categories)', 'Shop:Category@indexAction', $category, $translations);
 
         // If there's at least one selected group, then insert into the junction table
         if (!empty($groups)) {
@@ -262,7 +262,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         $translations =& $input['translation'];
 
         unset($category['attribute_group_id']);
-        return $this->savePage('Shop', 'Shop:Category@indexAction', $category, $translations);
+        return $this->savePage('Shop (Categories)', 'Shop:Category@indexAction', $category, $translations);
     }
 
     /**
