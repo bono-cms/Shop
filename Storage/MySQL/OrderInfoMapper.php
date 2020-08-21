@@ -164,7 +164,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
                        ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
                            OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
                        ))
-                       ->limit(1);
+                       ->whereEquals(self::column('id'), $id);
 
         return $db->query();
     }
