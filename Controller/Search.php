@@ -108,7 +108,8 @@ final class Search extends AbstractShopController
 
                 // Form gadgets
                 'ppc' => $this->getPerPageCountGadget(),
-                'sorter' => $this->getCategorySortGadget()
+                'sorter' => $this->getCategorySortGadget(),
+                'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true)
             );
 
             if ($this->request->isAjax()){
