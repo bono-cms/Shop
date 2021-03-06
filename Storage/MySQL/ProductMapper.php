@@ -334,7 +334,8 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     private function appendTranslationRelation()
     {
         $this->db->leftJoin(ProductTranslationMapper::getTableName(), array(
-            self::column('id') => ProductTranslationMapper::getRawColumn('id')
+            self::column('id') => ProductTranslationMapper::getRawColumn('id'),
+            ProductTranslationMapper::column('lang_id') => $this->getLangId()
         ));
     }
 
@@ -701,6 +702,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $db->whereEquals(self::column('id'), $id);
 
+        if (!$withTranslations) {
+            $db->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
+        }
+
         $rows = $withTranslations === true ? $db->queryAll() : array($db->query());
 
         // Append relation data if required
@@ -876,7 +881,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         if ($keyword !== null) {
-            $db->andWhereLike(self::column('name'), '%'.$keyword.'%');
+            $db->andWhereLike(ProductTranslationMapper::column('name'), '%'.$keyword.'%');
         }
 
         $sortingRules = CategorySortGadget::createSortingRules($sort);
