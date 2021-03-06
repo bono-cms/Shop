@@ -94,7 +94,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function getSwitchUrls($id)
     {
-        return $this->productMapper->createSwitchUrls($id, 'Shop', 'Shop:Category@indexAction');
+        return $this->productMapper->createSwitchUrls($id, 'Shop (Categories)', 'Shop:Category@indexAction');
     }
 
     /**
