@@ -72,6 +72,8 @@ final class Category extends AbstractShopController
         $categoryManager = $this->getModuleService('categoryManager');
         $category = $categoryManager->fetchById($id, false);
 
+        $pageNumber = $this->request->getQuery('page', $pageNumber);
+
         // If $category isn't false, then right id is supplied, $category itself a bag
         if ($category !== false) {
             // Indicated that this is a category page
@@ -124,9 +126,7 @@ final class Category extends AbstractShopController
 
             // Done. Now just render them
             return $this->view->render('shop-category', $vars);
-
         } else {
-
             // Returning false will trigger 404 error automatically
             return false;
         }
