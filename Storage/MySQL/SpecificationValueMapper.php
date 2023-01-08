@@ -61,7 +61,7 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
             ));
         }
 
-        $db = $this->db->select($columns)
+        $db = $this->db->select($columns, true)
                        ->from(SpecificationCategoryProductRelationMapper::getTableName())
                        // Item relation
                        ->leftJoin(SpecificationItemMapper::getTableName(), array(
@@ -73,7 +73,8 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
                        ))
                        // Value relation
                        ->leftJoin(SpecificationValueMapper::getTableName(), array(
-                            SpecificationValueMapper::column('item_id') => SpecificationItemMapper::getRawColumn('id')
+                            SpecificationValueMapper::column('item_id') => SpecificationItemMapper::getRawColumn('id'),
+                            SpecificationValueMapper::column('product_id') => SpecificationCategoryProductRelationMapper::getRawColumn('master_id')
                        ))
                        // Category relation
                        ->leftJoin(SpecificationCategoryMapper::getTableName(), array(
