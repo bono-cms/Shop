@@ -75,17 +75,17 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
         <?php endif; ?>
 
         <div class="table-responsive">
-            <?= $this->widget(new GridViewWidget($products, array(
+            <?= $this->widget(new GridViewWidget($products, [
                 'batch' => true,
                 'pk' => 'id',
                 'tableClass' => 'table table-hover table-bordered',
-                'columns' => array(
-                    array(
+                'columns' => [
+                    [
                         'column' => 'id',
                         'label' => '#'
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'image',
                         'label' => 'Cover',
                         'value' => function($product){
@@ -97,37 +97,37 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                                 'data-lightbox' => sprintf('image-%s', $product->getId())
                             ));
                         }
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'name',
                         'filter' => true
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'date',
                         'filter' => true
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'regular_price',
                         'label' => 'Price',
                         'filter' => true,
                         'value' => function($product){
                             return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0'));
                         }
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'published',
                         'type' => 'select',
                         'filter' => 'boolean',
                         'value' => function($product){
                             return Element::checkbox(sprintf('published[%s]', $product->getId()), $product->getPublished());
                         }
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'seo',
                         'label' => 'SEO',
                         'type' => 'select',
@@ -135,10 +135,10 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                         'value' => function($product){
                             return Element::checkbox(sprintf('seo[%s]', $product->getId()), $product->getSeo());
                         }
-                    )
-                ),
+                    ]
+                ],
 
-                'actions' => array(
+                'actions' => [
                     'view' => function($product){
                         return Icon::view($product->getUrl(), $this->translate('View this product on site'));
                     },
@@ -156,9 +156,9 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                             $this->translate('Remove this product')
                         );
                     }
-                )
+                ]
 
-            ), $route)); ?>
+            ], $route)); ?>
 
             <?php if (empty($products)): ?>
             <div class="center-block">
@@ -175,7 +175,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
 <div class="card">
     <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
-    <?= $this->widget(new GridViewWidget($categories, array(
+    <?= $this->widget(new GridViewWidget($categories, [
         'tableClass' => 'table table-hover table-bordered table-striped',
         'rowAttributes' => array(
             'class' => function($category) use ($categoryId){
@@ -183,26 +183,26 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
             }
         ),
 
-        'columns' => array(
-            array(
+        'columns' => [
+            [
                 'column' => 'id',
                 'label' => '#'
-            ),
+            ],
 
-            array(
+            [
                 'column' => 'name',
                 'value' => function($category){
                     return Element::link($category['name'], $this->url('Shop:Admin:Browser@categoryAction', $category['id']));
                 }
-            ),
+            ],
 
-            array(
+            [
                 'column' => 'product_count',
                 'label' => 'Amount of products'
-            )
-        ),
+            ]
+        ],
 
-        'actions' => array(
+        'actions' => [
             'view' => function($category){
                 return Icon::view($category['url'], $this->translate('View this category'));
             },
@@ -220,8 +220,8 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                     $this->translate('Remove this advice')
                 );
             }
-        )
-    ))); ?>
+        ]
+    ])); ?>
 
     <?php if (empty($categories)): ?>
     <div class="center-block">
