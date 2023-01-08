@@ -33,6 +33,7 @@ final class Wishlist extends AbstractShopController
             $products = $this->getModuleService('wishlistManager')->fetchAllByCustomerId($this->createCustomerId());
 
             return $this->view->render('shop-wishlist', array(
+                'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true),
                 'page' => $page,
                 'products' => $products
             ));
