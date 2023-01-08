@@ -179,6 +179,9 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     {
         $db = $this->db->select($this->getColumns())
                        ->from(self::getTableName())
+                       ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                            OrderStatusTranslationMapper::column('id') => self::getRawColumn('id')
+                       ))
                        ->leftJoin(OrderStatusMapper::getTableName(), array(
                            self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id'))
                        ))
