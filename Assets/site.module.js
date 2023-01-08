@@ -756,7 +756,7 @@
                 if (response == "1"){
                     window.location.reload();
                 } else {
-                    $.getValidator($form).handleAll(response);
+                    $.getValidator($form).handleAll(response, $form);
                 }
             });
         });
