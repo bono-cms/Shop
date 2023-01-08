@@ -295,10 +295,6 @@ return array(
         'controller' => 'Admin:AttributeValue@deleteAction'
     ),
     
-    '/%s/module/shop/filter/(:var)' => array(
-        'controller' => 'Admin:Browser@filterAction'
-    ),
-    
     '/%s/module/shop/page/(:var)' => array(
         'controller' => 'Admin:Browser@indexAction'
     ),

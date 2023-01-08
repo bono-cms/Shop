@@ -7,11 +7,9 @@ use Cms\View\Icon;
 defined('KRYSTAL') or die;
 $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categoryId;
 
-$route = $this->url('Shop:Admin:Browser@filterAction', null);
-
 ?>
 
-<form action="<?= $route; ?>" novalidate autocomplete="off">
+<form novalidate autocomplete="off">
     <div class="btn-toolbar">
         <div class="btn-group mr-2">
             <div class="dropdown">
@@ -157,8 +155,7 @@ $route = $this->url('Shop:Admin:Browser@filterAction', null);
                         );
                     }
                 ]
-
-            ], $route)); ?>
+            ])); ?>
 
             <?php if (empty($products)): ?>
             <div class="center-block">

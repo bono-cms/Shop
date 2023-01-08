@@ -17,22 +17,6 @@ use Krystal\Db\Filter\QueryContainer;
 final class Browser extends AbstractController
 {
     /**
-     * Applies the filter
-     * 
-     * @return string
-     */
-    public function filterAction()
-    {
-        $records = $this->getFilter($this->getProductManager(), $this->createUrl('Shop:Admin:Browser@filterAction', array(null)));
-
-        if ($records !== false) {
-            return $this->createGrid($records, null, null);
-        } else {
-            return $this->indexAction();
-        }
-    }
-
-    /**
      * Shows a table
      * 
      * @param integer $page Current page
@@ -40,10 +24,9 @@ final class Browser extends AbstractController
      */
     public function indexAction($page = 1)
     {
-        $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount(), null);
-        $url = $this->createUrl('Shop:Admin:Browser@indexAction', array(), 1);
+        $products = $this->getFilter($this->getProductManager());
 
-        return $this->createGrid($products, $url, null);
+        return $this->createGrid($products, null);
     }
 
     /**
@@ -65,17 +48,12 @@ final class Browser extends AbstractController
      * Creates a grid
      * 
      * @param array $products
-     * @param string $url
      * @param string $categoryId
      * @return string
      */
-    private function createGrid(array $products, $url, $categoryId)
+    private function createGrid(array $products, $categoryId)
     {
         $paginator = $this->getProductManager()->getPaginator();
-
-        if ($url !== null) {
-            $paginator->setUrl($url);
-        }
 
         // Load view plugins
         $this->view->getPluginBag()
