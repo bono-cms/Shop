@@ -21,10 +21,10 @@ final class Order extends AbstractShopController
     /**
      * {@inheritDoc}
      */
-    protected function bootstrap()
+    protected function bootstrap($action)
     {
         $this->validateCustomerRequirement();
-        parent::bootstrap();
+        parent::bootstrap($action);
     }
 
     /**
@@ -46,6 +46,7 @@ final class Order extends AbstractShopController
         $this->loadSitePlugins();
 
         return $this->view->render('shop-order-list', array(
+            'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true),
             'page' => $page,
             'orders' => $this->getModuleService('orderManager')->fetchAllByCustomerId($this->createCustomerId())
         ));
@@ -65,8 +66,8 @@ final class Order extends AbstractShopController
         if ($order !== false) {
             // Append breadcrumbs
             $this->view->getBreadcrumbBag()
-                       ->addOne('Orders', 'Shop:Customer:Order@listAction')
-                       ->addOne('Order details');
+                       ->addOne($this->translator->translate('Orders'), $this->createUrl('Shop:Customer:Order@listAction'))
+                       ->addOne($this->translator->translate('Order details') . ' #' . $id);
 
             $page = new VirtualEntity();
             $page->setTitle(sprintf('%s #%s', $this->translator->translate('View order details'), $id))
@@ -75,8 +76,9 @@ final class Order extends AbstractShopController
             $this->loadSitePlugins();
 
             return $this->view->render('shop-order-details', array(
+                'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true),
                 'page' => $page,
-                'products' => $orderManager->fetchAllDetailsByOrderId($id, $this->createCustomerId()),
+                'products' => $orderManager->fetchAllDetailsByOrderId($id, $this->createCustomerId(), '120x120'),
                 'order' => $order
             ));
 
