@@ -43,7 +43,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
 ## Orders
 
  - Shopping cart (Basket)
- - Order form  with built-in one click order
+ - Order form with built-in one click order
  - Discount codes
  - Dynamic delivery methods
  - Ability to order right in the basket page or via standalone Checkout page
@@ -61,11 +61,151 @@ This is optional feature. Orders can be done without registration.
 
  - Dynamic fields in attributes (WYSIWYG, select, etc)
  - Colors and image attaches
- - Full internalization support
- - Catalogue mode
  - Product ratings
  - Product reviews
 
-# Credits 
+# Templates
 
-Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons "Smashicons") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon") is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/ "Creative Commons BY 3.0")
+## Product template
+The template file must be named `shop-product.phtml` and placed inside the current theme directory.
+
+Within this template, the `$product`  entity object is available and provides the following methods:
+
+
+    $product->getImageUrl('dimension'); 
+    // Returns the full URL to the product image. 
+    // You can specify a dimension (e.g., 'thumbnail', 'medium') depending on the configured sizes.
+    
+    // Returns the name of the category this product belongs to.
+    $product->getCategoryName(); 
+    
+    // Returns the product name.
+    $product->getName(); 
+    
+    // Returns the product price.
+    $product->getPrice(); 
+    
+    // Returns the strike-through price (e.g., original price before discount), if defined.
+    $product->getStokePrice(); 
+    
+    // Returns TRUE or FALSE depending on whether the product is marked as a special offer.
+    $product->getSpecialOffer(); 
+    
+    // Returns the full product description.
+    $product->getDescription(); 
+    
+    // Returns the date the product was added by the site administrator, in `YYYY-MM-DD` format.
+    $product->getDate(); 
+    
+    // Returns the full product URL.
+    $product->getUrl(); 
+    
+    // Returns the number of times the product has been viewed by users.
+    $product->getViewCount(); 
+
+## Category template
+
+The file must be named `shop-category.phtml` and placed within the current theme directory.
+
+Inside this template, a `$category` entity object is available, providing the following methods:
+
+    // Returns the full URL to the category's cover image. 
+    // You can specify a dimension (e.g., 'thumbnail', 'medium') based on the configured image sizes.
+    $category->getImageUrl('dimension'); 
+    
+    // Returns the title of the category.
+    $category->getName(); 
+    
+    // Returns the category description.
+    $category->getDescription(); 
+    
+    // Returns the full URL of the current category.
+    $category->getUrl(); 
+
+## Basket template
+
+The file must be named `shop-basket.phtml` and placed in the current theme directory.
+
+Within this template, a `$products` array is available, containing product entity objects. Each object provides the following methods:
+
+    // Returns the unique ID of the product.
+    $basket->getId(); 
+    
+    // Returns the product title.
+    $basket->getName(); 
+    
+    // Returns the full URL to the product image. 
+    // You can specify a dimension based on the configured image sizes.
+    $basket->getImageUrl('dimension'); 
+    
+    // Returns the quantity of this product in the basket.
+    $basket->getQty(); 
+    
+    // Returns the product price. 
+    // If a strike-through price is defined, it will be returned instead.
+    $basket->getPrice(); 
+    
+    // Returns the subtotal price for this product 
+    // (i.e., quantity × price).
+    $basket->getSubTotalPrice(); 
+
+## Stoke page template
+
+The file must be named shop-stokes.phtml and placed in the current theme directory.
+
+This page contains a `$products` array of product entities. The available methods are identical to those found on the category page.
+
+# Services
+
+## Basket service
+The service is accessible via the `$basket` variable, which is available in all templates. It provides the following methods:
+
+    // Returns the URL of the basket page. 
+    // Note: The page ID must be specified in the module configuration.
+    $basket->getUrl(); 
+    
+    // Returns the total price of all products in the basket.
+    $basket->getTotalPrice(); 
+    
+    // Returns the total quantity of products in the basket.
+    $basket->getTotalQty(); 
+    
+    // Returns the current currency.
+    // Note: The currency must be defined in the module configuration.
+    $basket->getCurrency(); 
+
+## Shop service
+
+The `$shop` variable represents the shop service and is available globally. It provides the following methods:
+
+### Getting minimal product price
+
+Returns the minimum product price (i.e., the starting price) within the specified category.
+
+    $shop->getMinCategoryPriceCount($id); // $id - category id
+
+### Getting products with max view count
+
+    $shop->getProductsWithMaxViewCount($limit, $categoryId = null);
+
+Returns an array of the most viewed product entities.
+
+-   `$limit`: Specifies the number of products to return.
+    
+-   `$categoryId` (optional): Filters the results by a specific category ID, if provided.
+
+### Getting recent products
+    $shop->getRecentProducts($id); // Product ID to be exluded. Optional.
+    
+Returns an array of products recently viewed by the user.
+
+-   `$id`: The ID of the current product to exclude from the result.  
+    This is useful when displaying related or recently viewed products, so the currently viewed product isn’t shown in the list.
+
+
+### Getting last products
+
+    $shop->getLatest()
+
+Returns an array of the latest products added by the site administrator.  
+The number of products returned is determined by the module's configuration settings.
