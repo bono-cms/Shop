@@ -122,6 +122,39 @@ Inside this template, a `$category` entity object is available, providing the fo
     // Returns the full URL of the current category.
     $category->getUrl(); 
 
+### Nested categories
+
+To determine whether the current category contains nested categories, use the predefined $categories array. If there is at least one nested category, the array will contain the corresponding category entities.
+
+If there are no nested categories, products are typically displayed instead.
+
+    <?php if (isset($categories)): ?>
+    
+    <!-- There are nested categories. Render them;
+    <div class="row">
+        <?php foreach ($categories as $nested): ?>
+        <div class="col-lg-3">
+            <h3 class="mb-3"><?= $nested->getName(); ?></h3>
+            <a href="<?= $nested->getUrl(); ?>">View category</a>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+    
+    <?php else: ?>
+    
+    <!-- No nested categories. Render products instead. -->
+    <div class="row">
+        <?php foreach ($products as $product): ?>
+        <div class="col-lg-3">
+            <h3><?= $product->getName(); ?></h3>
+            <a href="<?= $product->getUrl(); ?>">View product</a>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    
+    <?php endif; ?>
+
 ## Basket template
 
 The file must be named `shop-basket.phtml` and placed in the current theme directory.
@@ -209,3 +242,4 @@ Returns an array of products recently viewed by the user.
 
 Returns an array of the latest products added by the site administrator.  
 The number of products returned is determined by the module's configuration settings.
+
