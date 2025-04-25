@@ -124,13 +124,13 @@ Inside this template, a `$category` entity object is available, providing the fo
 
 ### Nested categories
 
-To determine whether the current category contains nested categories, use the predefined $categories array. If there is at least one nested category, the array will contain the corresponding category entities.
+To determine whether the current category contains nested categories, use the predefined `$categories` array. If there is at least one nested category, the array will contain the corresponding category entities.
 
 If there are no nested categories, products are typically displayed instead.
 
     <?php if (isset($categories)): ?>
     
-    <!-- There are nested categories. Render them;
+    <!-- There are nested categories. Render them; -->
     <div class="row">
         <?php foreach ($categories as $nested): ?>
         <div class="col-lg-3">
@@ -139,7 +139,6 @@ If there are no nested categories, products are typically displayed instead.
         </div>
         <?php endforeach; ?>
     </div>
-    <?php endif; ?>
     
     <?php else: ?>
     
