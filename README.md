@@ -187,6 +187,20 @@ The file must be named shop-stokes.phtml and placed in the current theme directo
 
 This page contains a `$products` array of product entities. The available methods are identical to those found on the category page.
 
+# URL Generation
+
+## Categories
+
+To generate a URL for a category by its ID (assuming the category ID is 1), use:
+
+    <a href="<?= $cms->createUrl(1, 'Shop (Categories)'); ?>">View category</a>
+
+## Products
+
+To generate a URL for a product by its ID (assuming the product ID is 1), use:
+
+    <a href="<?= $cms->createUrl(1, 'Shop'); ?>">View product</a>
+
 # Services
 
 ## Basket service
