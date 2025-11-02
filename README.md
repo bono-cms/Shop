@@ -5,7 +5,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
 
 # Features
 
-## General
+## General features
 
  - Filterable grid in administration panel
  - Two column view. One for products, the second for categories
@@ -13,7 +13,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Statistic
  - Searchable (it would be possible to search products and categories by keywords on the site)
 
-## Products
+## Product features
 
  - Quick view
  - Regular and stoke prices
@@ -30,7 +30,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Specifications
  - Brands
 
-## Categories
+## Category features
 
  - Filters / attributes by product attributes
  - Unlimited depth support (aka Parent-child relationship)
@@ -40,7 +40,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Ability to sort applying several options when viewing on the site
  - Ability to change per page count on the site as well
 
-## Orders
+## Order features
 
  - Shopping cart (Basket)
  - Order form with built-in one click order
@@ -48,7 +48,7 @@ This module allows you to manage e-commerce store on your site. For details, ple
  - Dynamic delivery methods
  - Ability to order right in the basket page or via standalone Checkout page
  
-## Customers
+## Customer features
 
 This is optional feature. Orders can be done without registration.
 
@@ -57,7 +57,7 @@ This is optional feature. Orders can be done without registration.
  - Order statuses
  - Order history
  
-## Coming soon:
+## Coming soon
 
  - Dynamic fields in attributes (WYSIWYG, select, etc)
  - Colors and image attaches
@@ -67,6 +67,7 @@ This is optional feature. Orders can be done without registration.
 # Templates
 
 ## Product template
+
 The template file must be named `shop-product.phtml` and placed inside the current theme directory.
 
 Within this template, the `$product`  entity object is available and provides the following methods:
@@ -102,6 +103,30 @@ Within this template, the `$product`  entity object is available and provides th
     
     // Returns the number of times the product has been viewed by users.
     $product->getViewCount(); 
+
+### Product images
+
+Within the `shop-product.phtml` template, an array of product images is available via the `$images` variable.
+
+The `$images` variable contains an array of **image entities** associated with the current product. Each image entity provides access to various image data and methods, including the image URL through its `ImageBag`.
+
+Example usage
+
+    <?php if (!empty($images)): ?>
+        <div class="row">
+         <?php foreach ($images as $image): ?>
+         <div class="col-lg-4">
+             <img src="<?= $image->getImageBag()->getUrl('original'); ?>" alt="<?= $product->getName(); ?>" class="img-fluid">
+         </div>
+         <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+#### Notes
+
+-   `$images` will be empty if no images are assigned to the product.
+    
+-   You can retrieve different image sizes or versions by replacing `'original'` with other available image keys (e.g. `'600x600'`, `'250x500'`, etc.), depending on your configuration.
 
 ## Category template
 
