@@ -104,7 +104,7 @@ Within this template, the `$product`  entity object is available and provides th
     // Returns the number of times the product has been viewed by users.
     $product->getViewCount(); 
 
-### Product images
+**Product images**
 
 Within the `shop-product.phtml` template, an array of product images is available via the `$images` variable.
 
@@ -122,7 +122,7 @@ Example usage
         </div>
     <?php endif; ?>
 
-#### Notes
+**Notes**
 
 -   `$images` will be empty if no images are assigned to the product.
     
