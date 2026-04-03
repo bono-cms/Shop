@@ -1,7 +1,6 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Form\HtmlHelper;
 use Shop\Service\AttributeProcessor;
 use Shop\Collection\SpecificationItemTypeCollection;
 use Cms\Service\LanguageManager;
@@ -193,7 +192,7 @@ defined('KRYSTAL') or die;
             </div>
         </div>
 
-        <div class="form-group <?php HtmlHelper::addOnDemand($config->getSpecialSupport(), 'hidden'); ?>">
+        <div class="form-group <?= $config->getSpecialSupport() ? 'hidden' : '' ?>">
             <label class="col-lg-2 control-label"><?php $this->show('Special offer'); ?></label>
             <div class="col-lg-10">
                 <?php echo Element::checkbox('product[special_offer]', $entity->getSpecialOffer(), array('class' => 'form-control')); ?>
