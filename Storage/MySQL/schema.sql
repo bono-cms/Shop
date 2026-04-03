@@ -15,32 +15,27 @@ CREATE TABLE `bono_module_shop_orders_info` (
 	`total_price` FLOAT COMMENT 'Total price',
     `discount` FLOAT COMMENT 'Discount price if applied',
 	`approved` varchar(1) NOT NULL COMMENT 'Whether this order is approved'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_products`;
 CREATE TABLE `bono_module_shop_orders_products` (
-    
 	`order_id` INT NOT NULL,
 	`product_id` INT NOT NULL COMMENT 'Product id',
 	`name` varchar(255) NOT NULL COMMENT 'Product name',
 	`price` float NOT NULL COMMENT 'Product price',
 	`sub_total_price` float NOT NULL COMMENT 'Sub-total price',
 	`qty` INT NOT NULL COMMENT 'Amount of ordered products',
-    `attributes` TEXT COMMENT 'JSON string representing a collection of Group ID => Value ID'
-    
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+    `attributes` TEXT COMMENT 'JSON string representing a collection of Group ID => Value ID'    
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_categories`;
 CREATE TABLE `bono_module_shop_categories` (
-
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `parent_id` INT NOT NULL COMMENT 'Parent category id this category id refers to',
     `order` INT NOT NULL COMMENT 'Sort order for this category',
     `seo` varchar(1) NOT NULL COMMENT 'Whether SEO enabled or not',
     `cover` varchar(254) NOT NULL COMMENT 'Cover image base name'
-
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_categories_translations`;
 CREATE TABLE `bono_module_shop_categories_translations` (
@@ -56,8 +51,7 @@ CREATE TABLE `bono_module_shop_categories_translations` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE,
     FOREIGN KEY (web_page_id) REFERENCES bono_module_cms_webpages(id) ON DELETE CASCADE
-
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_products`;
 CREATE TABLE `bono_module_shop_products` (
@@ -73,7 +67,7 @@ CREATE TABLE `bono_module_shop_products` (
     `cover` varchar(254) NOT NULL COMMENT 'Basename of image file',
     `date` DATE NOT NULL COMMENT 'Date when added',
     `views` INT NOT NULL COMMENT 'View couter'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_products_translations`;
 CREATE TABLE `bono_module_shop_products_translations` (
@@ -89,7 +83,7 @@ CREATE TABLE `bono_module_shop_products_translations` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE,
     FOREIGN KEY (web_page_id) REFERENCES bono_module_cms_webpages(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_product_images`;
 CREATE TABLE `bono_module_shop_product_images` (
@@ -100,7 +94,7 @@ CREATE TABLE `bono_module_shop_product_images` (
 	`published` varchar(1) NOT NULL COMMENT 'Whether this image is visible',
 
     FOREIGN KEY (product_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_product_category_relations`;
 CREATE TABLE `bono_module_shop_product_category_relations` (
@@ -109,14 +103,14 @@ CREATE TABLE `bono_module_shop_product_category_relations` (
 
     FOREIGN KEY (master_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
     FOREIGN KEY (slave_id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 /* Attributes */
 DROP TABLE IF EXISTS `bono_module_shop_attribute_groups`;
 CREATE TABLE `bono_module_shop_attribute_groups` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Attr. Group ID',
     `dynamic` varchar(1) NOT NULL COMMENT 'Whether the group contains dynamic attributes only'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_attribute_groups_translation`;
 CREATE TABLE `bono_module_shop_attribute_groups_translation` (
@@ -127,7 +121,7 @@ CREATE TABLE `bono_module_shop_attribute_groups_translation` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_attribute_values`;
 CREATE TABLE `bono_module_shop_attribute_values` (
@@ -135,7 +129,7 @@ CREATE TABLE `bono_module_shop_attribute_values` (
     `group_id` INT NOT NULL,
     
     FOREIGN KEY (group_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_attribute_values_translations`;
 CREATE TABLE `bono_module_shop_attribute_values_translations` (
@@ -146,7 +140,7 @@ CREATE TABLE `bono_module_shop_attribute_values_translations` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_attribute_values(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 /* Product attribute relation */
 DROP TABLE IF EXISTS `bono_module_shop_product_attributes`;
@@ -158,7 +152,7 @@ CREATE TABLE `bono_module_shop_product_attributes` (
     FOREIGN KEY (product_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
     FOREIGN KEY (group_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE,
     FOREIGN KEY (value_id) REFERENCES bono_module_shop_attribute_values(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_product_recommended`;
 CREATE TABLE `bono_module_shop_product_recommended` (
@@ -166,8 +160,7 @@ CREATE TABLE `bono_module_shop_product_recommended` (
     `slave_id` INT NOT NULL COMMENT 'Attached product ID',
 
     FOREIGN KEY (master_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_product_similar`;
 CREATE TABLE `bono_module_shop_product_similar` (
@@ -175,7 +168,7 @@ CREATE TABLE `bono_module_shop_product_similar` (
     `slave_id` INT NOT NULL COMMENT 'Attached product ID',
 
     FOREIGN KEY (master_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 
 DROP TABLE IF EXISTS `bono_module_shop_delivery_types`;
@@ -193,14 +186,14 @@ CREATE TABLE `bono_module_shop_delivery_types_translations` (
 
     FOREIGN KEY (id) REFERENCES bono_module_shop_delivery_types(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_coupons`;
 CREATE TABLE `bono_module_shop_coupons` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Coupon ID',
     `code` varchar(30) NOT NULL COMMENT 'Coupon code',
     `percentage` FLOAT NOT NULL COMMENT 'Discount percentage'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 
 DROP TABLE IF EXISTS `bono_module_shop_currencies`;
@@ -208,14 +201,14 @@ CREATE TABLE `bono_module_shop_currencies` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Currency ID',
     `code` varchar(30) NOT NULL COMMENT 'Unique currency code',
     `value` FLOAT NOT NULL COMMENT 'Currency value'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status`;
 CREATE TABLE `bono_module_shop_orders_status` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order Status ID',
     `order` INT NOT NULL COMMENT 'Sorting order'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status_translations`;
@@ -227,8 +220,7 @@ CREATE TABLE `bono_module_shop_orders_status_translations` (
 
     FOREIGN KEY (id) REFERENCES bono_module_shop_orders_status(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
-
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_wishlist`;
 CREATE TABLE `bono_module_shop_wishlist` (
@@ -238,13 +230,13 @@ CREATE TABLE `bono_module_shop_wishlist` (
 
     FOREIGN KEY (product_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_specification_category`;
 CREATE TABLE `bono_module_shop_specification_category` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `order` INT NOT NULL COMMENT 'Sorting order'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_specification_category_translation`;
 CREATE TABLE `bono_module_shop_specification_category_translation` (
@@ -255,7 +247,7 @@ CREATE TABLE `bono_module_shop_specification_category_translation` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_specification_item`;
 CREATE TABLE `bono_module_shop_specification_item` (
@@ -267,7 +259,7 @@ CREATE TABLE `bono_module_shop_specification_item` (
 
     FOREIGN KEY (category_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_specification_item_translation`;
 CREATE TABLE `bono_module_shop_specification_item_translation` (
@@ -279,7 +271,7 @@ CREATE TABLE `bono_module_shop_specification_item_translation` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 /* Attached specification categories to products (i.e their ID relations) */
 DROP TABLE IF EXISTS `bono_module_shop_specification_relation`;
@@ -290,7 +282,7 @@ CREATE TABLE `bono_module_shop_specification_relation` (
     FOREIGN KEY (master_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
     FOREIGN KEY (slave_id) REFERENCES bono_module_shop_specification_category(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 /* Attached products and their items (i.e their ID relations) */
 DROP TABLE IF EXISTS `bono_module_shop_specification_values`;
@@ -302,7 +294,7 @@ CREATE TABLE `bono_module_shop_specification_values` (
     FOREIGN KEY (product_id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES bono_module_shop_specification_item(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_specification_values_translations`;
 CREATE TABLE `bono_module_shop_specification_values_translations` (
@@ -313,7 +305,7 @@ CREATE TABLE `bono_module_shop_specification_values_translations` (
     FOREIGN KEY (id) REFERENCES bono_module_shop_specification_values(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
 
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 /* Brands are not translate able */
 DROP TABLE IF EXISTS `bono_module_shop_brands`;
@@ -321,7 +313,7 @@ CREATE TABLE `bono_module_shop_brands` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` varchar(255) NOT NULL COMMENT 'Brand name',
     `order` INT NOT NULL COMMENT 'Sorting order'
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_product_attr_groups_rel`;
 CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
@@ -330,4 +322,4 @@ CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
 
     FOREIGN KEY (master_id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE,
     FOREIGN KEY (slave_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
