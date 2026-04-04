@@ -146,6 +146,7 @@
                 var self = this;
 
                 var formData = new FormData($("form[data-form-type='attributes']")[0]);
+
                 formData.append('id', id);
                 formData.append('qty', qty);
 
@@ -162,27 +163,13 @@
                         // This should not invoke global complete() handler, so we'd override it with empty function too
                     },
                     success : function(response){
-                        // If we've got an error code
-                        if ($.isNumeric(response)){
-                            var log = null;
-
-                            switch (parseInt(response)) {
-                                case -1:
-                                    log = 'The quantity value is greater than stocking one';
-                                break;
-
-                                case 0:
-                                    log = 'Not enough request parameters';
-                                break;
-                            }
-
-                            // Log the error code
-                            console.log(log);
-                        } else {
+                        if (response.code == 1){
                             self.handleSuccess(response, function(data){
                                 view.updateStat(data.basket);
                                 view.updateAddedQv(data.product);
                             });
+                        } else {
+                            console.log(response);
                         }
                     }
                 });

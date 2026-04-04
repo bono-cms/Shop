@@ -60,10 +60,10 @@ final class Basket extends AbstractShopController
             $basketManager->recount($id, $qty);
             $basketManager->save();
 
-            return json_encode(array(
+            return $this->json([
                 'product' => $basketManager->getProductStat($id),
                 'all' => $basketManager->getAllStat()
-            ));
+            ]);
         }
     }
 
@@ -74,7 +74,7 @@ final class Basket extends AbstractShopController
      */
     public function getStatAction()
     {
-        return json_encode($this->getBasketManager()->getAllStat());
+        return $this->json($this->getBasketManager()->getAllStat());
     }
 
     /**
@@ -100,28 +100,36 @@ final class Basket extends AbstractShopController
 
                 // Make sure, that quantity cannot be greater than a stocking value
                 if ($qty > $product->getInStock()) {
-                    // Error code that indicates aforementioned error
-                    return -1;
+                    return $this->json([
+                        'code' => -1,
+                        'error' => true,
+                        'message' => 'Out of stock'
+                    ]);
                 } else {
                     $basketManager->add($id, $qty, $attributes);
                     $basketManager->save();
 
-                    return json_encode(array(
+                    return $this->json([
+                        'code' => 1,
+                        'error' => false,
                         'basket' => $basketManager->getAllStat(),
-                        'product' => array(
+                        'product' => [
                             'id' => $product->getId(),
                             'regularPrice' => $product->getRegularPrice(),
                             'stokePrice' => $product->getStokePrice(),
                             'name' => $product->getName(),
                             'cover' => $product->getImageUrl('450x450'),
                             'qty' => $qty
-                        )
-                    ));
+                        ]
+                    ]);
                 }
 
             } else {
-                // Failure
-                return 0;
+                return $this->json([
+                    'error' => true,
+                    'code' => 0,
+                    'description' => sprintf('The product with ID %s does not exist', $id)
+                ]);
             }
         }
     }
@@ -151,10 +159,10 @@ final class Basket extends AbstractShopController
             $wishlistManager->add($customerId, $id);
 
             // Return new statistic
-            return json_encode(array(
+            return $this->json([
                 'wishlistCount' => $wishlistManager->getCount($customerId),
                 'basket' => $basketManager->getAllStat()
-            ));
+            ]);
         }
     }
 
@@ -172,7 +180,7 @@ final class Basket extends AbstractShopController
             $basketManager->removeById($id);
             $basketManager->save();
 
-            return json_encode($basketManager->getAllStat());
+            return $this->json($basketManager->getAllStat());
         }
     }
 
@@ -189,12 +197,11 @@ final class Basket extends AbstractShopController
 
         $this->flashBag->set('success', 'Your basket has been cleared successfully');
 
-        return json_encode($basketManager->getAllStat());
+        return $this->json($basketManager->getAllStat());
     }
 
     /**
      * Returns basket manager
-     * Just a shortcut
      * 
      * @return \Shop\Service\BasketManager
      */
