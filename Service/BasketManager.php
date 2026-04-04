@@ -169,6 +169,19 @@ final class BasketManager
     }
 
     /**
+     * Recounts quantity for a specific product variant
+     * 
+     * @param string|int $id Product id
+     * @param string|int $variantId Specific variant id
+     * @param int|string $qty New quantity
+     * @return boolean
+     */
+    public function recountVariant($id, $variantId, $qty)
+    {
+        return $this->recount($id, $qty, ['variant_id' => $variantId]);
+    }
+
+    /**
      * Removes a product variant from the basket
      * 
      * @param string $id Product id
@@ -178,6 +191,18 @@ final class BasketManager
     public function remove($id, array $attributes = [])
     {
         return $this->cart->remove($id, $attributes);
+    }
+
+    /**
+     * Removes a specific product variant from the basket
+     * 
+     * @param string|int $id The main product ID
+     * @param string|int $variantId The specific variant ID to be removed
+     * @return boolean True on success, false otherwise
+     */
+    public function removeVariant($id, $variantId)
+    {
+        return $this->remove($id, ['variant_id' => $variantId]);
     }
 
     /**
@@ -204,6 +229,7 @@ final class BasketManager
 
         $entity = new BasketEntity();
         $entity->setId($product['id'], BasketEntity::FILTER_INT)
+               ->setVariantId($item['attributes']['variant_id'] ?? null)
                ->setName($product['name'], BasketEntity::FILTER_HTML)
                ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
                ->setUrl($this->webPageManager->surround($product['slug'], $product['lang_id']))
@@ -239,8 +265,8 @@ final class BasketManager
      *
      * @return bool True if the basket contains no items, false otherwise
      */
-    public function isEmpty() 
-    { 
+    public function isEmpty()
+    {
         return $this->cart->isEmpty(); 
     }
 
@@ -249,8 +275,8 @@ final class BasketManager
      *
      * @return void
      */
-    public function clear() 
+    public function clear()
     { 
-        $this->cart->clear(); 
+        return $this->cart->clear();
     }
 }
