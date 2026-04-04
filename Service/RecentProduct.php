@@ -47,12 +47,12 @@ final class RecentProduct
     /**
      * State initialization
      * 
-     * @param \Shop\Service\ProductManagerInterface $productManager
+     * @param \Shop\Service\ProductManager $productManager
      * @param \Krystal\Text\CsvLimitedToolInterface $csvLimitedTool
      * @param \Krystal\Http\PersistentStorageInterface $storage
      * @return void
      */
-    public function __construct(ProductManagerInterface $productManager, CsvLimitedToolInterface $csvLimitedTool, PersistentStorageInterface $storage)
+    public function __construct(ProductManager $productManager, CsvLimitedToolInterface $csvLimitedTool, PersistentStorageInterface $storage)
     {
         $this->productManager = $productManager;
         $this->csvLimitedTool = $csvLimitedTool;

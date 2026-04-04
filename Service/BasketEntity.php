@@ -18,17 +18,17 @@ final class BasketEntity extends VirtualEntity
     /**
      * Basket service
      * 
-     * @var \Shop\Service\BasketManagerInterface
+     * @var \Shop\Service\BasketManager
      */
     private $basketManager;
 
     /**
      * State initialization
      * 
-     * @param \Shop\Service\BasketManagerInterface $basketManager
+     * @param \Shop\Service\BasketManager $basketManager
      * @return void
      */
-    public function __construct(BasketManagerInterface $basketManager = null)
+    public function __construct(BasketManager $basketManager = null)
     {
         $this->basketManager = $basketManager;
         $this->once = true;

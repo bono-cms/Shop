@@ -22,21 +22,21 @@ final class SiteService implements SiteServiceInterface
     /**
      * Product manager service
      * 
-     * @var \Shop\Service\ProductManagerInterface
+     * @var \Shop\Service\ProductManager
      */
     private $productManager;
 
     /**
      * Category manager service
      * 
-     * @var \Shop\Service\CategoryManagerInterface
+     * @var \Shop\Service\CategoryManager
      */
     private $categoryManager;
 
     /**
      * Currency service
      * 
-     * @var \Shop\Service\CurrencyManagerInterface
+     * @var \Shop\Service\CurrencyManager
      */
     private $currencyManager;
 
@@ -50,7 +50,7 @@ final class SiteService implements SiteServiceInterface
     /**
      * A service to deal with recent products
      * 
-     * @var \Shop\Service\RecentProductInterface
+     * @var \Shop\Service\RecentProduct
      */
     private $recentProduct;
 
@@ -64,19 +64,19 @@ final class SiteService implements SiteServiceInterface
     /**
      * State initialization
      * 
-     * @param \Shop\Service\ProductManagerInterface $productManager
-     * @param \Shop\Service\CategoryManagerInterface $categoryManager
-     * @param \Shop\Service\RecentProductInterface $recentProduct
-     * @param \Shop\Service\CurrencyManagerInterface $currencyManager
+     * @param \Shop\Service\ProductManager $productManager
+     * @param \Shop\Service\CategoryManager $categoryManager
+     * @param \Shop\Service\RecentProduct $recentProduct
+     * @param \Shop\Service\CurrencyManager $currencyManager
      * @param \Shop\Storage\WishlistMapperInterface $wishlistMapper
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
     public function __construct(
-        ProductManagerInterface $productManager, 
-        CategoryManagerInterface $categoryManager, 
-        RecentProductInterface $recentProduct, 
-        CurrencyManagerInterface $currencyManager, 
+        ProductManager $productManager, 
+        CategoryManager $categoryManager, 
+        RecentProduct $recentProduct, 
+        CurrencyManager $currencyManager, 
         WishlistMapperInterface $wishlistMapper,
         VirtualEntity $config
     ){

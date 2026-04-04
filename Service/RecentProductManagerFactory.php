@@ -21,12 +21,12 @@ final class RecentProductManagerFactory
     /**
      * Builds an instance
      * 
-     * @param \Shop\Service\ProductManagerInterface $productManager
+     * @param \Shop\Service\ProductManager $productManager
      * @param \Krystal\Http\PersistentStorageInterface $storage
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Shop\Service\RecentProduct
      */
-    public static function build(ProductManagerInterface $productManager, PersistentStorageInterface $storage, VirtualEntity $config)
+    public static function build(ProductManager $productManager, PersistentStorageInterface $storage, VirtualEntity $config)
     {
         $amount = (int) $config->getMaxRecentAmount();
 

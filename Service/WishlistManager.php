@@ -34,10 +34,10 @@ final class WishlistManager implements WishlistManagerInterface
      * State initialization
      * 
      * @param \Shop\Storage\WishlistMapperInterface $wishlistMapper
-     * @param \Shop\Service\ProductManagerInterface $productManager
+     * @param \Shop\Service\ProductManager $productManager
      * @return void
      */
-    public function __construct(WishlistMapperInterface $wishlistMapper, ProductManagerInterface $productManager)
+    public function __construct(WishlistMapperInterface $wishlistMapper, ProductManager $productManager)
     {
         $this->wishlistMapper = $wishlistMapper;
         $this->productManager = $productManager;

@@ -107,7 +107,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
         WebPageManagerInterface $webPageManager,
         ImageManagerInterface $imageManager,
         HistoryManagerInterface $historyManager,
-        ProductRemoverInterface $productRemover
+        ProductRemover $productRemover
     ){
         $this->productMapper = $productMapper;
         $this->imageMapper = $imageMapper;
