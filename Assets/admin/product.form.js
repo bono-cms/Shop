@@ -26,6 +26,7 @@ $(function(){
 
     /**
      * Create a new file input element
+     * 
      * @return DOMElement
      */
     function createFileElement(){

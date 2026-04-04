@@ -384,5 +384,22 @@ return array(
 
     '/%s/module/shop/brands/save' => array(
         'controller' => 'Admin:Brand@saveAction'
+    ),
+    
+    // Variants
+    '/%s/module/shop/variant/save' => array(
+        'controller' => 'Admin:ProductVariant@saveAction'
+    ),
+
+    '/%s/module/shop/variant/add/(:var)' => array(
+        'controller' => 'Admin:ProductVariant@addAction'
+    ),
+
+    '/%s/module/shop/variant/edit/(:var)' => array(
+        'controller' => 'Admin:ProductVariant@editAction'
+    ),
+
+    '/%s/module/shop/variant/delete/(:var)' => array(
+        'controller' => 'Admin:ProductVariant@deleteAction'
     )
 );
