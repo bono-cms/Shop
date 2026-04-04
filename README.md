@@ -212,6 +212,57 @@ The file must be named shop-stokes.phtml and placed in the current theme directo
 
 This page contains a `$products` array of product entities. The available methods are identical to those found on the category page.
 
+## Variants
+
+Product variants are options that can be assigned to a single product to represent different versions, such as size, color, or material. Unlike standard attributes, each variant is a unique entity with its own SKU, Price, and Stock level, allowing for precise inventory tracking and flexible pricing strategies within a single product page.
+
+**Usage in templates**
+
+In the shop-product.phtml template, you can check whether a product has variants and iterate through them to build a selection table or a dropdown.
+
+
+    <?php if ($product->hasVariants()): ?>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th><?= $this->translate('SKU'); ?></th>
+                <th><?= $this->translate('Price'); ?></th>
+                <th><?= $this->translate('Stock'); ?></th>
+                <th class="text-end"><?= $this->translate('Action'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($product->getVariants() as $variant): ?>
+            <tr>
+                <td><?= $variant->getSku(); ?></td>
+                <td><?= $variant->getPrice(); ?></td>
+                <td>
+                    <?php if ($variant->getStock() > 0): ?>
+                        <span class="badge bg-success"><?= $variant->getStock(); ?></span>
+                    <?php else: ?>
+                        <span class="badge bg-danger"><?= $this->translate('Out of stock'); ?></span>
+                    <?php endif; ?>
+                </td>
+                <td class="text-end">
+                    <button class="btn btn-primary btn-sm"data-button="add-to-cart"  data-variant-id="<?= $variant->getId(); ?>" <?= $variant->getStock() <= 0 ? 'disabled' : ''; ?>> <i class="bi bi-cart-plus"></i></button>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php endif; ?>
+
+
+**Data structure**
+
+Each variant is returned as a Krystal\Stdlib\VirtualEntity, providing the following methods:
+
+`$variant->getId()` — Unique identifier of the variant.
+`$variant->getSku()` — Specific stock keeping unit.
+`$variant->getPrice()` — Individual price for this version.
+`$variant->getStock()` — Current availability in the warehouse.
+`$variant->getPublished()` — Boolean status of visibility.
+
 # URL Generation
 
 ## Categories
