@@ -233,33 +233,6 @@
             },
 
             /**
-             * Deletes a product by its associated id from the basket
-             * 
-             * @param string id Product id to be removed from a basket
-             * @param callable handler Callback function invoked when it's done
-             * @return void
-             */
-            delete : function(id, callback){
-                var self = this;
-                $.ajax({
-                    type : "POST",
-                    url : "/module/shop/basket/delete",
-                    data : {
-                        id : id,
-                    },
-                    beforeSend : function(){
-                        // This should not invoke global beforeSend() handler, so we'd override it with empty function
-                    },
-                    complete : function(){
-                        // This should not invoke global complete() handler, so we'd override it with empty function too
-                    },
-                    success : function(response) {
-                        self.handleSuccess(response, callback);
-                    }
-                });
-            },
-
-            /**
              * Cleans the basket
              * 
              * @param function callback function to be invoked when it's done
@@ -579,9 +552,6 @@
                 $.post("/module/shop/basket/wishlist", { id : id }, function(response){
                     var data = $.parseJSON(response);
 
-                    // Update with new statistic
-                    view.onRemoval(id, data.basket)
-
                     // Update counter
                     wishlist.updateCount(data.wishlistCount);
                 });
@@ -666,36 +636,6 @@
              */
             grabProductId : function(element){
                 return $(element).data("basket-product-id");
-            },
-
-            /**
-             * Handler called when invoking products removal
-             * 
-             * @param string id Product id
-             * @param string data Server's response
-             * @return void
-             */
-            onRemoval : function(id, data){
-                // Ensure we've got what we expected first
-                if (data !== false){
-                    // If a user removed all product from the basket, the we need to refresh a page
-                    if (data.totalQuantity == 0){
-                        window.location.reload();
-                    } else {
-                        // Otherwise just update a table
-                        this.updateStat(data);
-                        this.updateCurrency();
-
-                        $row = this.getNodesByProductIdWithFilter(id, "[data-basket-type='container']");
-                        $row.hide(500, function(){
-                            // Remove a row
-                            $(this).empty();
-                        });
-                    }
-                } else {
-                    // We got something we didn't expect, so just log it for now
-                    console.log(data);
-                }
             },
 
             /**
@@ -813,27 +753,14 @@
                 window.location.reload();
             });
         });
-        
-        
-        $("[data-basket-button='product-delete-with-confirm']").click(function(event){
-            event.preventDefault();
-            var id = view.grabProductId(this);
 
-            // Ensure the previous listener is removed, and attach a new one
-            $("[data-basket-button='product-delete-confirm-yes']").off('click').click(function(event){
-                $.basket.delete(id, function(data){
-                    view.onRemoval(id, data);
-                });
-            });
-        });
-        
-        $("[data-basket-button='product-delete-without-confirm']").click(function(event){
+        $(document).on('click', "[data-basket-button='product-delete-with-confirm']", function(event) {
+            // Prevent the browser from following the link immediately
             event.preventDefault();
-            var id = view.grabProductId(this);
-            
-            $.basket.delete(id, function(data){
-                view.onRemoval(id, data);
-            });
+            var deleteUrl = $(this).attr('href');
+
+            // Store this URL on the "Yes" button inside the modal
+            $("[data-basket-button='product-delete-confirm-yes']").attr('href', deleteUrl);
         });
         
         // Product recount button

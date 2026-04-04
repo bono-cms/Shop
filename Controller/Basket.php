@@ -53,15 +53,29 @@ final class Basket extends AbstractShopController
     public function recountAction()
     {
         if ($this->request->hasPost('id', 'qty')) {
+            // Grab request params
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
+            $variantId = $this->request->getPost('variant_id', null);
 
             $basketManager = $this->getBasketManager();
-            $basketManager->recount($id, $qty);
+
+            // If product doesn't have a variant
+            if ($variantId === null){
+                $basketManager->recount($id, $qty);
+            } else {
+                // if it does have
+                $basketManager->recountVariant($id, $variantId, $qty);
+            }
 
             return $this->json([
                 'product' => $basketManager->getProductStat($id),
                 'all' => $basketManager->getAllStat()
+            ]);
+        } else {
+            return $this->json([
+                'error' => true,
+                'message' => 'Missing required HTTP POST parameters: id, qty'
             ]);
         }
     }
@@ -230,13 +244,23 @@ final class Basket extends AbstractShopController
      */
     public function deleteAction()
     {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
+        if ($this->request->hasQuery('product_id')) {
+            $id = $this->request->getQuery('product_id');
+            $variantId = $this->request->getQuery('variant_id', null);
 
             $basketManager = $this->getBasketManager();
-            $basketManager->remove($id);
 
-            return $this->json($basketManager->getAllStat());
+            if ($variantId) {
+                $basketManager->removeVariant($id, $variantId);
+            } else {
+                $basketManager->remove($id);
+            }
+
+            $this->flashBag->set('success', 'Selected product has been removed from your basket');
+            return $this->response->back();
+
+        } else {
+            return false;
         }
     }
 
