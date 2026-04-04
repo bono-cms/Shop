@@ -220,36 +220,52 @@ Product variants are options that can be assigned to a single product to represe
 
 In the shop-product.phtml template, you can check whether a product has variants and iterate through them to build a selection table or a dropdown.
 
-
     <?php if ($product->hasVariants()): ?>
-    <table class="table table-hover table-striped">
-        <thead>
-            <tr>
-                <th><?= $this->translate('SKU'); ?></th>
-                <th><?= $this->translate('Price'); ?></th>
-                <th><?= $this->translate('Stock'); ?></th>
-                <th class="text-end"><?= $this->translate('Action'); ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($product->getVariants() as $variant): ?>
-            <tr>
-                <td><?= $variant->getSku(); ?></td>
-                <td><?= $variant->getPrice(); ?></td>
-                <td>
-                    <?php if ($variant->getStock() > 0): ?>
-                        <span class="badge bg-success"><?= $variant->getStock(); ?></span>
-                    <?php else: ?>
-                        <span class="badge bg-danger"><?= $this->translate('Out of stock'); ?></span>
-                    <?php endif; ?>
-                </td>
-                <td class="text-end">
-                    <button class="btn btn-primary btn-sm"data-button="add-to-cart"  data-variant-id="<?= $variant->getId(); ?>" <?= $variant->getStock() <= 0 ? 'disabled' : ''; ?>> <i class="bi bi-cart-plus"></i></button>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <h5 class="mt-5 mb-4 fw-bold text-uppercase small text-muted"><?= $this->translate('Available Variants'); ?></h5>
+
+    <div class="table-responsive">
+        <table class="table align-middle border-top">
+            <thead>
+                <tr class="small text-uppercase fw-bold text-secondary">
+                    <th class="py-3"><?= $this->translate('SKU'); ?></th>
+                    <th class="py-3"><?= $this->translate('Price'); ?></th>
+                    <th class="py-3 w-25"><?= $this->translate('Quantity'); ?></th>
+                    <th class="py-3 text-end"><?= $this->translate('Action'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($product->getVariants() as $variant): ?>
+                <tr>
+                    <td class="fw-semibold text-dark"><?= $variant->getSku(); ?></td>
+                    <td>
+                        <span class="fw-bold text-primary"><?= $variant->getPrice(); ?></span>
+                        <small class="text-muted"><?= $basket->getCurrency(); ?></small>
+                    </td>
+                    <td>
+                        <?php if ($variant->getStock() > 0): ?>
+                        <div class="input-group input-group-sm w-75">
+                            <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-box-seam"></i></span>
+                            <input type="number" class="form-control border-start-0 text-center rounded-0" value="1" min="1" max="<?= $variant->getStock(); ?>" data-basket-quantity="<?= $variant->getId(); ?>" aria-label="Quantity">
+                        </div>
+                        <div class="text-success mt-1 small opacity-75">
+                            <?= $this->translate('In stock'); ?>: <?= $variant->getStock(); ?>
+                        </div>
+                        <?php else: ?>
+                        <span class="badge rounded-pill bg-light text-danger border border-danger border-opacity-25 py-2 px-3">
+                            <i class="bi bi-x-circle me-1"></i><?= $this->translate('Out of stock'); ?>
+                        </span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="text-end">
+                        <button class="btn btn-primary btn-sm rounded-0 px-3" data-button="add-variant-to-cart" data-product-id="<?= $variant->getProductId(); ?>" data-variant-id="<?= $variant->getId(); ?>" <?= $variant->getStock() <= 0 ? 'disabled' : ''; ?>>
+                            <i class="bi bi-cart-plus me-1"></i> <?= $this->translate('Add'); ?>
+                        </button>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
     <?php endif; ?>
 
 
