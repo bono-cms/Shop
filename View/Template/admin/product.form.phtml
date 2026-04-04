@@ -4,6 +4,7 @@ use Krystal\Form\Element;
 use Shop\Service\AttributeProcessor;
 use Shop\Collection\SpecificationItemTypeCollection;
 use Cms\Service\LanguageManager;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -43,9 +44,13 @@ defined('KRYSTAL') or die;
                 </a>
             </li>
             <?php endif; ?>
+            
             <li class="nav-item" role="presentation">
                 <a class="nav-link" href="#variants" role="tab" data-toggle="tab">
-                    <i class="bi bi-grid-3x3-gap"></i> <?= $this->translate('Variants'); ?>
+                    <i class="bi bi-grid-3x3-gap"></i>  <?= $this->translate('Variants'); ?> 
+                    <span class="badge rounded-pill bg-secondary ms-1 text-white">
+                        <?= count($variants); ?>
+                    </span>
                 </a>
             </li>
         </ul>
@@ -230,7 +235,7 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <div role="tabpanel" class="tab-pane fade" id="images">
+            <div role="tabpanel" class="tab-pane fade img-upload-form" id="images">
                 <?= Element::hidden('product[cover]', $entity->getCover()); ?>
                 <?= Element::hidden('product[id]', $entity->getId()); ?>
 
@@ -245,7 +250,7 @@ defined('KRYSTAL') or die;
                 </div>
                 
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped border">
+                    <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th class="text-center"><?= $this->translate('Image'); ?></th>
@@ -350,6 +355,16 @@ defined('KRYSTAL') or die;
             <?php endif; ?>
             
             <div role="tabpanel" class="tab-pane fade" id="variants">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="m-0">
+                        <?= $this->translate('Total variants'); ?>: <strong><?= count($variants); ?></strong>
+                    </h5>
+
+                    <a href="<?= $this->url('Shop:Admin:ProductVariant@addAction', $entity->getId()); ?>" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> <?= $this->translate('Add variant'); ?>
+                    </a>
+                </div>
+
                 <?php $this->loadPartial('grid', [
                     'rows' => $variants,
                     'grid' => [
@@ -361,7 +376,8 @@ defined('KRYSTAL') or die;
                             ],
 
                             [
-                                'column' => 'sku'
+                                'column' => 'sku',
+                                'label' => 'SKU'
                             ],
 
                             [
@@ -374,24 +390,26 @@ defined('KRYSTAL') or die;
 
                             [
                                 'column' => 'published'
-                            ],
+                            ]
                         ],
+
                         'actions' => [
-                            function($product){
+                            function($variant){
                                 return Icon::edit(
-                                    $this->url('Shop:Admin:ProductVariant@editAction', $product->getId()),
+                                    $this->url('Shop:Admin:ProductVariant@editAction', $variant->getId()),
                                     $this->translate('Edit this variant')
                                 );
                             },
-                            function($product){
+
+                            function($variant){
                                 return Icon::remove(
-                                    $this->url('Shop:Admin:ProductVariant@deleteAction', $product->getId()),
+                                    $this->url('Shop:Admin:ProductVariant@deleteAction', $variant->getId()),
                                     $this->translate('Remove this variant')
                                 );
                             }
                         ]
                     ]
-                ]); ?>                
+                ]); ?>
             </div>
         </div>
     </div>
