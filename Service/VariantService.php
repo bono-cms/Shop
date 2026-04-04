@@ -12,9 +12,10 @@
 namespace Shop\Service;
 
 use Krystal\Stdlib\VirtualEntity;
+use Cms\Service\AbstractManager;
 use Shop\Storage\ProductVariantMapperInterface;
 
-final class VariantService
+final class VariantService extends AbstractManager
 {
     /**
      * Variant mapper
@@ -35,6 +36,22 @@ final class VariantService
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function toEntity(array $row)
+    {
+        $entity = new VirtualEntity();
+        $entity->setId($row['id'])
+               ->setProductId($row['product_id'])
+               ->setSku($row['sku'])
+               ->setPrice($row['price'])
+               ->setStock($row['stock'])
+               ->setPublished($row['published']);
+
+        return $entity;
+    }
+
+    /**
      * Fetches all variants associated with a product ID
      * 
      * @param int $productId
@@ -43,7 +60,40 @@ final class VariantService
      */
     public function fetchAllByProductId($productId, $published = false)
     {
-        return $this->variantMapper->fetchAllByProductId($productId, $published);
+        $rows = $this->variantMapper->fetchAllByProductId($productId, $published);
+        return $this->prepareResults($rows);
+    }
+
+    /**
+     * Fetches a variant entity by its ID
+     *
+     * @param int $id Variant ID
+     * @return \Krystal\Stdlib\VirtualEntity|boolean
+     */    
+    public function fetchById($id)
+    {
+        return $this->prepareResult($this->variantMapper->findByPk($id));
+    }
+
+    /**
+     * Deletes a variant by its ID
+     *
+     * @param int $id Variant ID
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->variantMapper->deleteByPk($id);
+    }
+
+    /**
+     * Returns last id
+     * 
+     * @return int
+     */
+    public function getLastId()
+    {
+        return $this->variantMapper->getLastId();
     }
 
     /**
@@ -65,6 +115,6 @@ final class VariantService
      */
     public function save(array $input)
     {
-        
+        return $this->variantMapper->persist($input);
     }
 }
