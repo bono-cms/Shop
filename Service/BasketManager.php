@@ -122,6 +122,20 @@ final class BasketManager
     }
 
     /**
+     * Adds a specific product variant to the basket
+     * 
+     * @param string|int $id The main product ID
+     * @param string|int $variantId The specific variant/option ID
+     * @param int $qty Quantity to be added
+     * @param float|int $price Unit price for this specific variant
+     * @return boolean Depending on whether the item was successfully added to the cart
+     */
+    public function addVariant($id, $variantId, $qty, $price)
+    {
+        return $this->cart->add($id, $qty, ['variant_id' => $variantId], $price);
+    }
+
+    /**
      * Adds a product to the basket
      * 
      * @param string $id Product id

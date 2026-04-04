@@ -66,6 +66,10 @@ return array(
     '/module/shop/basket/add' => array(
         'controller' => 'Basket@addAction'
     ),
+
+    '/module/shop/basket/add-variant' => array(
+        'controller' => 'Basket@addVariant'
+    ),
     
     '/module/shop/basket/wishlist' => array(
         'controller' => 'Basket@wishlistAction'

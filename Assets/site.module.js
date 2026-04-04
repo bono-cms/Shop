@@ -141,6 +141,57 @@
             },
 
             /**
+             * Adds a specific product variant into the basket
+             * 
+             * @param {string|number} id - Target product id
+             * @param {string|number} variant_id - Specific variant id
+             * @param {number} qty - Quantity to be added
+             * @param {function} callback - Optional function to be invoked on success
+             * @return {void}
+             */
+            addVariant: function(id, variant_id, qty, callback) {
+                var self = this;
+
+                // Safely initialize FormData
+                var $form = $("form[data-form-type='attributes']");
+                var formData = $form.length ? new FormData($form[0]) : new FormData();
+
+                formData.append('id', id);
+                formData.append('variant_id', variant_id);
+                formData.append('qty', qty);
+
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    url: "/module/shop/basket/add-variant",
+                    data: formData,
+                    beforeSend: function() {
+                        // Overriding global handlers
+                    },
+                    complete: function() {
+                        // Overriding global handlers
+                    },
+                    success: function(response) {
+                        if (response.code == 1) {
+                            self.handleSuccess(response, function(data) {
+                                view.updateStat(data.basket);
+                                view.updateAddedQv(data.product);
+
+                                // Invoke the provided callback if it exists
+                                if (typeof callback === 'function') {
+                                    callback(data);
+                                }
+                            });
+                        } else {
+                            // Consider using a UI notification instead of just console.log
+                            console.error("Basket Error:", response);
+                        }
+                    }
+                });
+            },
+
+            /**
              * Adds a product id into a basket
              * 
              * @param string id Target product id
@@ -835,6 +886,37 @@
                     view.updateStat(data);
                 } else {
                     console.log('Failure when retrieving data from a basket: ' + data);
+                }
+            });
+        });
+
+        // Dedicated listener for variants table
+        $(document).on('click', "[data-button='add-variant-to-cart']", function(event) {
+            event.preventDefault();
+
+            var $self = $(this);
+
+            // 1. Extract IDs directly from the clicked button's data attributes
+            var id = $self.data('product-id');
+            var variantId = $self.data('variant-id');
+            
+            // 2. Target the specific quantity input using the variant ID
+            var qty = $("[data-basket-quantity='" + variantId + "']").val();
+
+            // 3. UI Feedback: Disable button and show loading icon
+            var originalHtml = $self.html();
+            $self.prop('disabled', true).html('<i class="bi bi-hourglass-split"></i>');
+
+            // 4. Call the dedicated variant method
+            $.basket.addVariant(id, variantId, qty, function(data) {
+                // Re-enable button and restore original icon/text
+                $self.prop('disabled', false).html(originalHtml);
+
+                if (data !== false) {
+                    // The stat updates (view.updateStat) are handled inside $.basket.addVariant
+                    // You can add a temporary "Success" class or toast notification here
+                } else {
+                    console.error('Error adding variant ID ' + variantId + ' to basket.');
                 }
             });
         });

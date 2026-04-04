@@ -77,6 +77,67 @@ final class Basket extends AbstractShopController
     }
 
     /**
+     * Adds a product variant to the basket via AJAX
+     * Expects the following POST parameters:
+     * - id (int|string): The base product ID
+     * - variant_id (int|string): The specific variant ID
+     * - qty (int): The quantity to add
+     * 
+     * @return string JSON response containing status code, error flag, and updated basket/product data
+     */    
+    public function addVariant()
+    {
+        if ($this->request->hasPost('id', 'variant_id', 'qty')) {
+
+            // Get HTTP POST variables
+            $id = $this->request->getPost('id');
+            $variantId = $this->request->getPost('variant_id');
+            $qty = $this->request->getPost('qty');
+
+            $product = $this->getModuleService('productManager')->fetchBasicById($id);
+            $variant = $this->getModuleService('variantService')->fetchById($variantId);
+
+            // Make sure the valid product id supplied
+            if ($variant !== false && $product !== false) {
+                // Make sure, that quantity cannot be greater than a stocking value
+                if ($qty > $variant->getStock()) {
+                    return $this->json([
+                        'code' => -1,
+                        'error' => true,
+                        'message' => 'Out of stock'
+                    ]);
+                } else {
+                    // Grab basket manager to add it
+                    $basketManager = $this->getBasketManager();
+                    $basketManager->addVariant($id, $variantId, $qty, $variant->getPrice());
+
+                    return $this->json([
+                        'code' => 1,
+                        'error' => false,
+                        'basket' => $basketManager->getAllStat(),
+                        'product' => [
+                            'id' => $product->getId(),
+                            'variant_id' => $variantId,
+                            'regularPrice' => $variant->getPrice(),
+                            'stokePrice' => null,
+                            'name' => $product->getName(),
+                            'cover' => $product->getImageUrl('450x450'),
+                            'qty' => $qty
+                        ]
+                    ]);
+                }
+
+            } else {
+                return $this->json([
+                    'error' => true,
+                    'code' => 0,
+                    'message' => 'The selected product or variant is no longer available'
+                ]);
+            }
+        }
+    }
+
+    /**
      * Adds a product id into a basket with its quantity
      * 
      * @return string
@@ -87,16 +148,13 @@ final class Basket extends AbstractShopController
             // Get HTTP POST variables
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
-            $attributes = $this->request->getPost('attributes', array()); // Optional attributes
+            $attributes = $this->request->getPost('attributes', []); // Optional attributes
 
             $productManager = $this->getModuleService('productManager');
             $product = $productManager->fetchBasicById($id);
 
             // Make sure the valid product id supplied
             if ($product !== false) {
-                // Grab basket manager to add it
-                $basketManager = $this->getBasketManager();
-
                 // Make sure, that quantity cannot be greater than a stocking value
                 if ($qty > $product->getInStock()) {
                     return $this->json([
@@ -105,6 +163,8 @@ final class Basket extends AbstractShopController
                         'message' => 'Out of stock'
                     ]);
                 } else {
+                    // Grab basket manager to add it
+                    $basketManager = $this->getBasketManager();
                     $basketManager->add($id, $qty, $attributes);
 
                     return $this->json([
