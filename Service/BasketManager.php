@@ -165,7 +165,9 @@ final class BasketManager
      */
     public function recount($id, $qty, array $attributes = [])
     {
-        return $this->cart->update($id, $attributes, ['quantity' => $qty]);
+        return $this->cart->update($id, $attributes, [
+            'quantity' => (int) $qty
+        ]);        
     }
 
     /**
@@ -179,6 +181,26 @@ final class BasketManager
     public function recountVariant($id, $variantId, $qty)
     {
         return $this->recount($id, $qty, ['variant_id' => $variantId]);
+    }
+
+    /**
+     * Recounts multiple products and variants at once
+     * 
+     * @param array $quantities Multidimensional array [product_id][variant_id] => qty
+     * @return void
+     */
+    public function recountBatch(array $quantities)
+    {
+        foreach ($quantities as $productId => $variants) {
+            foreach ($variants as $variantId => $qty) {
+                // If variantId is 0 or empty, it's a simple product
+                if (empty($variantId)) {
+                    $this->recount($productId, (int) $qty);
+                } else {
+                    $this->recountVariant($productId, $variantId, (int) $qty);
+                }
+            }
+        }
     }
 
     /**

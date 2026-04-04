@@ -52,32 +52,14 @@ final class Basket extends AbstractShopController
      */
     public function recountAction()
     {
-        if ($this->request->hasPost('id', 'qty')) {
-            // Grab request params
-            $id = $this->request->getPost('id');
-            $qty = $this->request->getPost('qty');
-            $variantId = $this->request->getPost('variant_id', null);
+        if ($this->request->isPost()) {
+            $quantities = $this->request->getPost('qty', []);
 
-            $basketManager = $this->getBasketManager();
-
-            // If product doesn't have a variant
-            if ($variantId === null){
-                $basketManager->recount($id, $qty);
-            } else {
-                // if it does have
-                $basketManager->recountVariant($id, $variantId, $qty);
-            }
-
-            return $this->json([
-                'product' => $basketManager->getProductStat($id),
-                'all' => $basketManager->getAllStat()
-            ]);
-        } else {
-            return $this->json([
-                'error' => true,
-                'message' => 'Missing required HTTP POST parameters: id, qty'
-            ]);
+            $this->getBasketManager()->recountBatch($quantities);
+            $this->flashBag->set('success', 'Basket has been updated');
         }
+
+        return $this->response->back($this->createUrl('Shop:Basket@indexAction'));
     }
 
     /**

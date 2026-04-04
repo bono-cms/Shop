@@ -89,35 +89,6 @@
             },
 
             /**
-             * Recounts the price by associated id
-             * 
-             * @param string id Product id
-             * @param integer qty New quantity
-             * @param function Callback function to be invoked when it's done
-             * @return void
-             */
-            recount : function(id, qty, callback){
-                var self = this;
-                $.ajax({
-                    type : "POST",
-                    url : "/module/shop/basket/re-count",
-                    data : {
-                        id : id,
-                        qty : qty
-                    },
-                    beforeSend : function(){
-                        // This should not invoke global beforeSend() handler, so we'd override it with empty function
-                    },
-                    complete : function(){
-                        // This should not invoke global complete() handler, so we'd override it with empty function too
-                    },
-                    success : function(response){
-                        self.handleSuccess(response, callback);
-                    }
-                });
-            },
-
-            /**
              * Gets basic statistic about total products count and its total price
              * 
              * @param function callback Is invoked when request is done
@@ -761,27 +732,6 @@
 
             // Store this URL on the "Yes" button inside the modal
             $("[data-basket-button='product-delete-confirm-yes']").attr('href', deleteUrl);
-        });
-        
-        // Product recount button
-        $(document).on('click', "[data-basket-button='product-recount']", function(){
-            event.preventDefault();
-            // Current product's id
-            var id = view.grabProductId(this);
-
-            // Find all nodes corresponding to current product id
-            var $productNodes = view.getNodesByProductId(id);
-
-            // New quantity
-            var qty = $productNodes.filter("[data-basket-input='recount']").val();
-
-            $.basket.recount(id, qty, function(data){
-                if (data !== false) {
-                    view.updateStat(data.all);
-                    // Now change subTotalCount label
-                    $productNodes.filter("[data-basket-label='sub-total-price']").text(data.product.totalPrice);
-                }
-            });
         });
 
         // Add to basket button
