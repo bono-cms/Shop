@@ -58,7 +58,6 @@ final class Basket extends AbstractShopController
 
             $basketManager = $this->getBasketManager();
             $basketManager->recount($id, $qty);
-            $basketManager->save();
 
             return $this->json([
                 'product' => $basketManager->getProductStat($id),
@@ -107,7 +106,6 @@ final class Basket extends AbstractShopController
                     ]);
                 } else {
                     $basketManager->add($id, $qty, $attributes);
-                    $basketManager->save();
 
                     return $this->json([
                         'code' => 1,
@@ -152,7 +150,6 @@ final class Basket extends AbstractShopController
             // Remove a product from basket
             $basketManager = $this->getBasketManager();
             $basketManager->removeById($id);
-            $basketManager->save();
 
             // Then add it to wishlist
             $wishlistManager = $this->getModuleService('wishlistManager');
@@ -178,7 +175,6 @@ final class Basket extends AbstractShopController
 
             $basketManager = $this->getBasketManager();
             $basketManager->removeById($id);
-            $basketManager->save();
 
             return $this->json($basketManager->getAllStat());
         }
@@ -193,7 +189,6 @@ final class Basket extends AbstractShopController
     {
         $basketManager = $this->getBasketManager();
         $basketManager->clear();
-        $basketManager->save();
 
         $this->flashBag->set('success', 'Your basket has been cleared successfully');
 

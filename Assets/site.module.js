@@ -72,12 +72,18 @@
              * Typical callback handler for successful requests
              */
             handleSuccess : function(response, callback){
+                // 1. If it's already an object, just use it
+                if (typeof response === 'object' && response !== null) {
+                    return callback(response);
+                }
+
+                // 2. If it's a string, try to parse it
                 try {
                     var data = $.parseJSON(response);
                     callback(data);
-                    
-                } catch(e){
-                    console.log(response);
+                } catch (e) {
+                    // 3. Log raw response for debugging and fail gracefully
+                    console.error('Failed to parse response:', response);
                     callback(false);
                 }
             },

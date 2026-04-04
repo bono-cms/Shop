@@ -23,7 +23,6 @@ use Shop\Service\AttributeValueManager;
 use Shop\Service\ProductImageManagerFactory;
 use Shop\Service\CategoryImageManagerFactory;
 use Shop\Service\RecentProductManagerFactory;
-use Shop\Service\BasketManagerFactory;
 use Shop\Service\BasketManager;
 use Shop\Service\ProductManagerInterface;
 use Shop\Service\ProductManager;
@@ -38,6 +37,8 @@ use Shop\Service\SpecificationItemService;
 use Shop\Service\SpecificationValueService;
 use Shop\Service\BrandService;
 use Shop\Service\VariantService;
+use Krystal\Cart\ShoppingCart;
+use Krystal\Cart\SessionAdapter;
 
 final class Module extends AbstractCmsModule
 {
@@ -70,8 +71,7 @@ final class Module extends AbstractCmsModule
         $webPageManager = $this->getWebPageManager();
         $historyManager = $this->getHistoryManager();
 
-        $basketManager = $this->getBasketManager($config->getEntity(), $productMapper, $productImageManager->getImageBag());
-        $basketManager->load();
+        $basketManager = new BasketManager($productMapper, $webPageManager, $productImageManager->getImageBag(), new ShoppingCart(new SessionAdapter()));
 
         $productRemover = new ProductRemover($productMapper, $imageMapper, $webPageManager, $productImageManager);
 
@@ -199,10 +199,10 @@ final class Module extends AbstractCmsModule
      * Returns manager for recent products
      * 
      * @param \Krystal\Stdlib\VirtualEntity $config
-     * @param \Shop\Service\ProductManagerInterface $productManager
+     * @param \Shop\Service\ProductManager $productManager
      * @return \Shop\Service\RecentProduct
      */
-    private function getRecentProduct(VirtualEntity $config, ProductManagerInterface $productManager)
+    private function getRecentProduct(VirtualEntity $config, ProductManager $productManager)
     {
         return RecentProductManagerFactory::build($productManager, $this->createStorage($config), $config);
     }
