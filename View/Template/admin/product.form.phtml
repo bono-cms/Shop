@@ -394,7 +394,11 @@ defined('KRYSTAL') or die;
                             ],
 
                             [
-                                'column' => 'published'
+                                'column' => 'published',
+                                'translateable' => true,
+                                'value' => function($variant){
+                                    return $variant->getPublished() ? 'Yes' : 'No';
+                                }
                             ]
                         ],
 
