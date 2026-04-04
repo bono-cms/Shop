@@ -65,6 +65,30 @@ final class BasketManager
     }
 
     /**
+     * Returns statistics for a specific product in the basket
+     *
+     * @param int|string $id Product ID
+     * @return array|bool Returns stats array on success, false if product not in basket
+     */
+    public function getProductStat($id)
+    {
+        $row = $this->findProductInRows($this->getProducts(), $id);
+
+        if ($row !== false) {
+            return [
+                'id' => $row['id'],
+                'qty' => $row['qty'],
+                'price' => $row['price'],
+                'subTotal' => $row['qty'] * $row['price'],
+                'name' => $row['name'] ?? '',
+                'exists' => true
+            ];
+        }
+
+        return false;
+    }
+
+    /**
      * Returns all product entities stored in the basket
      * 
      * @return array

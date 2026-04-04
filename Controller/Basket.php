@@ -149,7 +149,7 @@ final class Basket extends AbstractShopController
 
             // Remove a product from basket
             $basketManager = $this->getBasketManager();
-            $basketManager->removeById($id);
+            $basketManager->remove($id);
 
             // Then add it to wishlist
             $wishlistManager = $this->getModuleService('wishlistManager');
@@ -174,7 +174,7 @@ final class Basket extends AbstractShopController
             $id = $this->request->getPost('id');
 
             $basketManager = $this->getBasketManager();
-            $basketManager->removeById($id);
+            $basketManager->remove($id);
 
             return $this->json($basketManager->getAllStat());
         }
