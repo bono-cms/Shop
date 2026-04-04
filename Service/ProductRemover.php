@@ -17,7 +17,7 @@ use Cms\Service\WebPageManagerInterface;
 use Krystal\Image\Tool\ImageManagerInterface;
 
 /* Internal service which takes care of product removal */
-final class ProductRemover implements ProductRemoverInterface
+final class ProductRemover
 {
     /**
      * Any compliant product mapper

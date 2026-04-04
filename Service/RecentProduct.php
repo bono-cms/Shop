@@ -14,7 +14,7 @@ namespace Shop\Service;
 use Krystal\Text\CsvLimitedToolInterface;
 use Krystal\Http\PersistentStorageInterface;
 
-final class RecentProduct implements RecentProductInterface
+final class RecentProduct
 {
     /**
      * Utility to manage collection of product ids

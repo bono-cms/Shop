@@ -17,7 +17,7 @@ use Krystal\Text\Math;
 use Krystal\Session\SessionBagInterface;
 use Cms\Service\AbstractManager;
 
-final class CouponManager extends AbstractManager implements CouponManagerInterface
+final class CouponManager extends AbstractManager
 {
     /**
      * Any-compliant coupon mapper

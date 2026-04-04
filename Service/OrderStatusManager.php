@@ -16,7 +16,7 @@ use Cms\Service\AbstractManager;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 
-final class OrderStatusManager extends AbstractManager implements OrderStatusManagerInterface
+final class OrderStatusManager extends AbstractManager
 {
     /**
      * Any compliant order status mapper

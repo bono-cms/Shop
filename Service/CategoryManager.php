@@ -25,7 +25,7 @@ use Krystal\Tree\AdjacencyList\Render\AbstractRenderer;
 use Krystal\Tree\AdjacencyList\Render\PhpArray;
 use Krystal\Stdlib\ArrayUtils;
 
-final class CategoryManager extends AbstractManager implements CategoryManagerInterface, MenuAwareManager
+final class CategoryManager extends AbstractManager implements MenuAwareManager
 {
     /**
      * Any compliant category mapper

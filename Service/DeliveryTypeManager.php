@@ -15,7 +15,7 @@ use Cms\Service\AbstractManager;
 use Shop\Storage\DeliveryTypeMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 
-final class DeliveryTypeManager extends AbstractManager implements DeliveryTypeManagerInterface
+final class DeliveryTypeManager extends AbstractManager
 {
     /**
      * Delivery type mapper

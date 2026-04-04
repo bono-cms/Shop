@@ -15,7 +15,7 @@ use Shop\Storage\CategoryMapperInterface;
 use Cms\Service\WebPageManagerInterface;
 use Krystal\Tree\AdjacencyList\BreadcrumbBuilder;
 
-final class BreadcrumbMaker implements BreadcrumbMakerInterface
+final class BreadcrumbMaker
 {
     /**
      * Any compliant category mapper

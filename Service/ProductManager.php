@@ -27,7 +27,7 @@ use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
 use Cms\Service\WebPageManagerInterface;
 
-final class ProductManager extends AbstractManager implements ProductManagerInterface, FilterableServiceInterface, MenuAwareManager
+final class ProductManager extends AbstractManager implements FilterableServiceInterface, MenuAwareManager
 {
     /**
      * Any compliant product mapper

@@ -16,7 +16,7 @@ use Shop\Storage\CurrencyMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 
-final class CurrencyManager extends AbstractManager implements CurrencyManagerInterface
+final class CurrencyManager extends AbstractManager
 {
     /**
      * Any compliant currency mapper

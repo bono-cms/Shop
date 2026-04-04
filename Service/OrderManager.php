@@ -11,19 +11,18 @@
 
 namespace Shop\Service;
 
-use Cms\Service\WebPageManagerInterface;
-use Cms\Service\AbstractManager;
-use Cms\Service\MailerInterface;
 use Krystal\Date\TimeHelper;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Security\Filter;
 use Krystal\Db\Filter\FilterableServiceInterface;
+use Cms\Service\WebPageManagerInterface;
+use Cms\Service\AbstractManager;
+use Cms\Service\MailerInterface;
 use Shop\Storage\OrderInfoMapperInterface;
 use Shop\Storage\OrderProductMapperInterface;
-use Shop\Module;
 
-final class OrderManager extends AbstractManager implements OrderManagerInterface, FilterableServiceInterface
+final class OrderManager extends AbstractManager implements FilterableServiceInterface
 {
     /**
      * Any compliant order information mapper
@@ -42,7 +41,7 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
     /**
      * Basket manager
      * 
-     * @var \Shop\Service\BasketManagerInterface
+     * @var \Shop\Service\BasketManager
      */
     private $basketManager;
 
@@ -58,14 +57,14 @@ final class OrderManager extends AbstractManager implements OrderManagerInterfac
      * 
      * @param \Shop\Storage\OrderInfoMapperInterface $orderMapper
      * @param \Shop\Storage\OrderProductMapperInterface $orderProductMapper
-     * @param \Shop\Service\BasketManagerInterface $basketManager
+     * @param \Shop\Service\BasketManager $basketManager
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
      * @return void
      */
     public function __construct(
         OrderInfoMapperInterface $orderInfoMapper, 
         OrderProductMapperInterface $orderProductMapper, 
-        BasketManagerInterface $basketManager,
+        BasketManager $basketManager,
         WebPageManagerInterface $webPageManager
     ){
         $this->orderInfoMapper = $orderInfoMapper;
