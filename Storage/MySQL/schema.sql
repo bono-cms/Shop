@@ -323,3 +323,20 @@ CREATE TABLE `bono_module_shop_product_attr_groups_rel` (
     FOREIGN KEY (master_id) REFERENCES bono_module_shop_categories(id) ON DELETE CASCADE,
     FOREIGN KEY (slave_id) REFERENCES bono_module_shop_attribute_groups(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_unicode_ci;
+
+/* Product variants */
+DROP TABLE IF EXISTS `bono_module_shop_product_variants`;
+CREATE TABLE `bono_module_shop_product_variants` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Internal Variant ID',
+    `product_id` INT NOT NULL COMMENT 'The parent product ID',
+    `sku` varchar(255) DEFAULT NULL COMMENT 'Stock Keeping Unit',
+    `price` FLOAT NOT NULL COMMENT 'Specific price for this variant',
+    `stock` INT NOT NULL DEFAULT 0 COMMENT 'Current inventory',
+    `published` BOOLEAN NOT NULL DEFAULT 1,
+
+    /* Foreign Key */
+    CONSTRAINT `fk_variant_product` FOREIGN KEY (`product_id`) REFERENCES `bono_module_shop_products` (`id`) ON DELETE CASCADE,
+
+    /* Performance Index */
+    INDEX `idx_product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
