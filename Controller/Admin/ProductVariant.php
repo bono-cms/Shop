@@ -31,7 +31,7 @@ final class ProductVariant extends AbstractController
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne($product->getName(), $this->createUrl('Shop:Admin:Product@editAction', [$product->getId()]))
+                                       ->addOne($this->translator->translate('Edit the product "%s"', $product->getName()), $this->createUrl('Shop:Admin:Product@editAction', [$product->getId()]))
                                        ->addOne($title);
 
         return $this->view->render('product.variant.form', array(
