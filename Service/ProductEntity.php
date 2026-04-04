@@ -18,6 +18,16 @@ use DateTime;
 final class ProductEntity extends VirtualEntity
 {
     /**
+     * Checks whether product has at least one variant
+     * 
+     * @return boolean
+     */
+    public function hasVariants()
+    {
+        return (bool) $this->getVariants();
+    }
+
+    /**
      * Checks whether product has been added to wishlist
      * 
      * @return boolean
