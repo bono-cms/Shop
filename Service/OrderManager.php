@@ -335,12 +335,14 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
      */
     public function make(array $input)
     {
-        $defaults = array(
-            // By default all orders are un-approved
+        $stat = $this->basketManager->getAllStat();
+
+        // By default all orders are un-approved
+        $defaults = [
             'approved' => '0',
-            'qty' => $this->basketManager->getTotalQuantity(),
-            'total_price' => $this->basketManager->getTotalPrice()
-        );
+            'qty' => $stat['totalQuantity'],
+            'total_price' => $stat['totalPrice']
+        ];
 
         $data = array_merge($input, $defaults);
         $data['datetime'] = TimeHelper::getNow();
@@ -357,7 +359,6 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
 
             // Order is saved. Now clear the basket
             $this->basketManager->clear();
-            $this->basketManager->save();
 
             return true;
         } else {

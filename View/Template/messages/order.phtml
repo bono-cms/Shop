@@ -1,4 +1,10 @@
-<?php defined('KRYSTAL') or die; ?>
+<?php
+
+defined('KRYSTAL') or die;
+
+$stat = $basketManager->getAllStat();
+
+?>
 
 <p><?= $this->translate('Hello there!'); ?></p>
 <p><?= $this->translate('You have a new order from'); ?>: <?= $input['name']; ?></p>
@@ -32,5 +38,5 @@
 <p><?= $this->translate('Discount'); ?>: <?= $input['discount']; ?></p>
 <?php endif; ?>
 
-<p><?= $this->translate('Total quantity of all products'); ?>: <?= $basketManager->getTotalQuantity(); ?></p>
-<p><?= $this->translate('Total price'); ?>: <?= $basketManager->getTotalPrice(), ' ', $currency; ?></p>
+<p><?= $this->translate('Total quantity of all products'); ?>: <?= $stat['totalQuantity']; ?></p>
+<p><?= $this->translate('Total price'); ?>: <?= $stat['totalPrice'], ' ', $currency; ?></p>
