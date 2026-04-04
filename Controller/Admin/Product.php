@@ -52,14 +52,12 @@ final class Product extends AbstractController
         // If viewing edit form, then grab product photos as well
         if ($id) {
             $photos = $this->getModuleService('productManager')->fetchAllImagesById($id);
+            $attributes = $this->getModuleService('productManager')->fetchAttributesById($id, true);
+            $variants = $this->getModuleService('variantService')->fetchAllByProductId($id);
         } else {
             $photos = array();
-        }
-
-        if ($id) {
-            $attributes = $this->getModuleService('productManager')->fetchAttributesById($id, true);
-        } else {
             $attributes = array();
+            $variants = array();
         }
 
         // If not new, then grab attached specification categories
@@ -71,6 +69,7 @@ final class Product extends AbstractController
 
         return $this->view->render('product.form', array(
             'new' => $new,
+            'variants' => $variants,
             'names' => $this->getModuleService('productManager')->fetchAllNames(),
             'photos' => $photos,
             'product' => $product,

@@ -43,6 +43,11 @@ defined('KRYSTAL') or die;
                 </a>
             </li>
             <?php endif; ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#variants" role="tab" data-toggle="tab">
+                    <i class="bi bi-grid-3x3-gap"></i> <?= $this->translate('Variants'); ?>
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -343,6 +348,51 @@ defined('KRYSTAL') or die;
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
+            
+            <div role="tabpanel" class="tab-pane fade" id="variants">
+                <?php $this->loadPartial('grid', [
+                    'rows' => $variants,
+                    'grid' => [
+                        'tableClass' => 'table table-bordered table-sm',
+                        'columns' => [
+                            [
+                                'column' => 'id',
+                                'label' => '#'
+                            ],
+
+                            [
+                                'column' => 'sku'
+                            ],
+
+                            [
+                                'column' => 'price'
+                            ],
+
+                            [
+                                'column' => 'stock'
+                            ],
+
+                            [
+                                'column' => 'published'
+                            ],
+                        ],
+                        'actions' => [
+                            function($product){
+                                return Icon::edit(
+                                    $this->url('Shop:Admin:ProductVariant@editAction', $product->getId()),
+                                    $this->translate('Edit this variant')
+                                );
+                            },
+                            function($product){
+                                return Icon::remove(
+                                    $this->url('Shop:Admin:ProductVariant@deleteAction', $product->getId()),
+                                    $this->translate('Remove this variant')
+                                );
+                            }
+                        ]
+                    ]
+                ]); ?>                
+            </div>
         </div>
     </div>
 </form>
