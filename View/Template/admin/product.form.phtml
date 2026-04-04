@@ -355,6 +355,11 @@ defined('KRYSTAL') or die;
             <?php endif; ?>
             
             <div role="tabpanel" class="tab-pane fade" id="variants">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <?= $this->translate('Product variants help you manage different versions of the same product, such as sizes or colors, each with its own price and stock level'); ?>
+                </div>
+
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="m-0">
                         <?= $this->translate('Total variants'); ?>: <strong><?= count($variants); ?></strong>
