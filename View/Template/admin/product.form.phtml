@@ -12,358 +12,343 @@ defined('KRYSTAL') or die;
 <?php if (!empty($categories)): ?>
 
 <form class="card" data-group="product" autocomplete="off">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="nav-item active"><a class="nav-link" href="#product" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Product'); ?></a></li>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#images" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Images'); ?></a></li>
-        <?php if (!empty($features)): ?>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#specifications" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a></li>
-        <?php endif; ?>
-        <?php if (!empty($attributes)): ?>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#attrs" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a></li>
-        <?php endif; ?>
-    </ul>
-
-    <div class="tab-content">
-        <!--Product tab-->
-        <div role="tabpanel" class="tab-pane active" id="product">
-            <?php $this->loadPartial('language-tabs'); ?>
-
-            <div class="tab-content">
-                <?php foreach ($languages as $index => $language): ?>
-                <div class="tab-pane fade in <?php echo $index == 0 ? 'active show' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
-                    <?php $entity = LanguageManager::findByLangId($language->getId(), $product); ?>
-
-                    <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
-                    <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
-                    <?php echo Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
-
-                    <?php $this->loadPartial('language-name', array('language' => $language)); ?>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product name'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::textarea(sprintf('translation[%s][description]', $language->getId()), $entity->getDescription(), array('data-wysiwyg' => 'true')); ?>
-                        </div>
-                    </div>
-
-                    <div class="options">
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
-
-                            <div class="col-lg-10">
-                                <div class="input-group">
-                                    <?php echo Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), array('class' => 'form-control', 'placeholder' => $this->translate('URL slug for this product. By default is taken from the name'))); ?>
-
-                                    <span class="input-group-addon">
-                                        <a href="#" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh the slug'); ?>"></i></a>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label"><?php $this->show('Change frequency'); ?></label>
-                            <div class="col-lg-10">
-                                <?php echo Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), array('class' => 'form-control')); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label"><?php $this->show('Priority'); ?></label>
-                            <div class="col-lg-10">
-                                <?php echo Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), array('class' => 'form-control')); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
-                            <div class="col-lg-10">
-                                <div class="input-group">
-                                    <?php echo Element::text(sprintf('translation[%s][title]', $language->getId()), $entity->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product title'))); ?>
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
-                            <div class="col-lg-10">
-                                <?php echo Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
-                            <div class="col-lg-10">
-                                <?php echo Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-
-            <?php $this->loadPartial('actions', array(
-                'new' => $new,
-                'add' => 'Shop:Admin:Product@addAction',
-                'edit' => 'Shop:Admin:Product@editAction',
-                'save' => 'Shop:Admin:Product@saveAction',
-                'cancel' => 'Shop:Admin:Browser@indexAction',
-                'options' => true
-            )); ?>
-
-        </div>
-        <!--/Home tab-->
-        
-        <!--Images tab-->
-       <div role="tabpanel" class="tab-pane" id="configuration">
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Price'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::number('product[regular_price]', $entity->getPrice(), array('class' => 'form-control', 'min' => '1', 'step' => '0.01', 'placeholder' => $this->translate('Price of the product to be added'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group <?php echo !$config->getStokePriceEnabled() ? 'hidden' : ''; ?>">
-            <label class="col-lg-2 control-label"><?php $this->show('Stoke price'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::number('product[stoke_price]', $entity->getStokePrice(), array('class' => 'form-control', 'placeholder' => $this->translate('Stoke price'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>
-                </div>
-            </div>
-        </div>
-
-        <?php if (!empty($brands)): ?>
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Brand'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('product[brand_id]', $brands, $entity->getBrandId(), array('class' => 'form-control'), ''); ?>
-            </div>
-        </div>
-        <?php endif; ?>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Attribute groups'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('product[attribute_group_id][]', $attributeGroups, $entity->getAttributeGroupIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Attach at least one attribute group'), 'id' => 'groups')); ?>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Specification category'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('product[spec_cat_id][]', $specCatIds, $entity->getSpecCatIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one specification category'))); ?>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('product[category_id][]', $categories, $entity->getCategoryIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => $this->translate('Pick up at least one category'))); ?>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::checkbox('product[published]', $entity->getPublished(), array('class' => 'form-control')); ?>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::checkbox('product[seo]', $entity->getSeo(), array('class' => 'form-control')); ?>
-            </div>
-        </div>
-
-        <div class="form-group <?= $config->getSpecialSupport() ? 'hidden' : '' ?>">
-            <label class="col-lg-2 control-label"><?php $this->show('Special offer'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::checkbox('product[special_offer]', $entity->getSpecialOffer(), array('class' => 'form-control')); ?>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::number('product[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Product sorting order'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('In stock'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::number('product[in_stock]', $entity->getInStock(), array('class' => 'form-control', 'placeholder' => $this->translate('Quantity of this product in stock'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Recommended products'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('product[recommended_ids][]', $names, $entity->getRecommendedIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Similar products'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('product[similar_ids][]', $names, $entity->getSimilarIds(), array('class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'data-placeholder' => ' ')); ?>
-            </div>
-        </div>
-      </div>
-
-      <!--Images tab-->
-      <div role="tabpanel" class="tab-pane" id="images">
-        <?php echo Element::hidden('product[cover]', $entity->getCover()); ?>
-        <?php echo Element::hidden('product[id]', $entity->getId()); ?>
-
-        <div id="file-input-container">
-            <?php echo Element::file('file[]', 'image/x-png, image/gif, image/jpeg'); ?>
-        </div>
-        
-        <div class="btn-container">
-            <a class="btn btn-primary dropdown-toggle" data-button="upload" href="#"><i class="glyphicon glyphicon-camera"></i> <?php $this->show('Upload new image'); ?></a></a>
-        </div>
-        
-        <div class="table-responsive">
-            <table class="table table-hover table-striped table-bordered table-condensed">
-                <thead>
-                    <tr>
-                        <th class="text-center"><?php $this->show('Image'); ?></th>
-                        <th class="text-center"><?php $this->show('Order'); ?></th>
-                        <th class="text-center"><?php $this->show('Published'); ?></th>
-                        <th class="text-center"><?php $this->show('Cover'); ?></th>
-                        <th class="text-center"><?php $this->show('Actions'); ?></th>
-                    </tr>
-                </thead>
-                
-                <tbody data-container="image">
-                    
-                    <?php if (!empty($photos)): ?>
-                    <?php foreach ($photos as $photo): ?>
-                    
-                    <tr>
-                        <td>
-                            <img class="img-responsive center-block" data-image="" width="200" height="200" src="<?php echo $photo->getImageBag()->getUrl('200x200'); ?>" />
-                        </td>
-                        
-                        <td class="text-center col-md-1">
-                            <?php echo Element::number(sprintf('photos[order][%s]', $photo->getId()), $photo->getOrder(), array('class' => 'form-control center-block', 'min' => '0')); ?>
-                        </td>
-                        
-                        <td class="text-center">
-                            <?php echo Element::checkbox(sprintf('photos[published][%s]', $photo->getId()), $photo->getPublished()); ?>
-                        </td>
-                        
-                        <td class="text-center">
-                            <?php echo Element::radio('photos[cover]', $photo->getImage(), $entity->getCover() == $photo->getImage()); ?>
-                        </td>
-                        
-                        <td class="text-center">
-                            <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Replace this image'); ?>" data-button="edit" data-image="<?php echo $photo->getImage(); ?>" href="#"><i class="glyphicon glyphicon-pencil"></i></a>
-                            
-                            <?php if ($entity->getCover() != $photo->getImage()): ?>
-                            <?php echo Element::checkbox(sprintf('photos[toDelete][%s]', $photo->getId()), false, array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Check if you want to remove this image')), false); ?> <span class="product-remove-caption"><?php $this->show('Remove'); ?></span>
-                            <?php endif; ?>
-                            
-                            <?php echo Element::file(sprintf('image_%s', $photo->getId()), 'image/x-png, image/gif, image/jpeg', array('class' => 'hidden')); ?>
-                        </td>
-                    </tr>
-                    
-                    <?php endforeach; ?>
-                    <?php endif; ?>
-                    
-                </tbody>
-            </table>
-        </div>
-      </div>
-
-      <div role="tabpanel" class="tab-pane" id="specifications">
-        <div class="tab-content">
-            <?php if (count($languages) > 1): ?>
-            <ul class="nav nav-tabs" role="tablist">
-                <?php foreach ($languages as $index => $language): ?>
-                <li role="presentation" class="nav-item <?php echo $index == 0 ? 'active' : null; ?>"><a class="nav-link" href="<?php printf('#language-f-%s', $language->getId()); ?>" role="tab" data-toggle="tab"><i class="<?php printf('famfamfam-flag-%s', $language->getFlag()); ?>"></i> <?php echo $language->getName(); ?></a></li>
-                <?php endforeach; ?>
-            </ul>
-
-            <br />
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" href="#product" role="tab" data-toggle="tab">
+                    <i class="bi bi-cart"></i> <?= $this->translate('Product'); ?>
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#configuration" role="tab" data-toggle="tab">
+                    <i class="bi bi-gear"></i> <?= $this->translate('Configuration'); ?>
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#images" role="tab" data-toggle="tab">
+                    <i class="bi bi-image"></i> <?= $this->translate('Images'); ?>
+                </a>
+            </li>
+            <?php if (!empty($features)): ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#specifications" role="tab" data-toggle="tab">
+                    <i class="bi bi-pencil-square"></i> <?= $this->translate('Specifications'); ?>
+                </a>
+            </li>
             <?php endif; ?>
+            <?php if (!empty($attributes)): ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#attrs" role="tab" data-toggle="tab">
+                    <i class="bi bi-list-ul"></i> <?= $this->translate('Attributes'); ?>
+                </a>
+            </li>
+            <?php endif; ?>
+        </ul>
+    </div>
 
-            <?php foreach ($languages as $index => $language): ?>
-            <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-f-%s', $language->getId()); ?>" role="tabpanel">
-                <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+    <div class="card-body">
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade show active" id="product">
+                <?php $this->loadPartial('language-tabs'); ?>
 
-                <?php foreach ($features as $category => $options): ?>
-                <fieldset>
-                    <legend><?= $category; ?></legend>
+                <div class="tab-content mt-3">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>" role="tabpanel">
+                        <?php $entity = LanguageManager::findByLangId($language->getId(), $product); ?>
 
-                    <?php foreach($options as $option): ?>
-                    <?php if ($option['lang_id'] == $language->getId()): ?>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $option['item']; ?></label>
-                        <div class="col-lg-10">
-                            <?php echo call_user_func(sprintf('Krystal\Form\Element::%s', SpecificationItemTypeCollection::guessMethodByConst($option['type'])), sprintf('features[translation][%s][%s]', $language->getId(), $option['id']), $option['value'], array('class' => 'form-control')); ?>
+                        <?= Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
+                        <?= Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
+                        <?= Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
+
+                        <?php $this->loadPartial('language-name', ['language' => $language]); ?>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label"><?= $this->translate('Name'); ?></label>
+                            <div class="input-group">
+                                <?= Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), ['class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product name')]); ?>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label"><?= $this->translate('Description'); ?></label>
+                            <?= Element::textarea(sprintf('translation[%s][description]', $language->getId()), $entity->getDescription(), ['data-wysiwyg' => 'true']); ?>
+                        </div>
+
+                        <div class="options border-top pt-3 mt-3">
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $this->translate('Slug'); ?></label>
+                                <div class="input-group">
+                                    <?= Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), ['class' => 'form-control', 'placeholder' => $this->translate('URL slug for this product')]); ?>
+                                    <div class="input-group-append">
+                                        <a href="#" class="input-group-text text-decoration-none" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>">
+                                            <i class="bi bi-arrow-repeat" data-toggle="tooltip" title="<?= $this->translate('Refresh the slug'); ?>"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $this->translate('Change frequency'); ?></label>
+                                <?= Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), ['class' => 'form-control']); ?>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $this->translate('Priority'); ?></label>
+                                <?= Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), ['class' => 'form-control']); ?>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $this->translate('Title'); ?></label>
+                                <div class="input-group">
+                                    <?= Element::text(sprintf('translation[%s][title]', $language->getId()), $entity->getTitle(), ['class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product title')]); ?>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $this->translate('Keywords'); ?></label>
+                                <?= Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), ['class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines')]); ?>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $this->translate('Description'); ?></label>
+                                <?= Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), ['class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines')]); ?>
+                            </div>
                         </div>
                     </div>
-                    <?php endif; ?>
                     <?php endforeach; ?>
+                </div>
 
-                </fieldset>
+                <div class="mt-3">
+                    <?php $this->loadPartial('actions', [
+                        'new' => $new,
+                        'add' => 'Shop:Admin:Product@addAction',
+                        'edit' => 'Shop:Admin:Product@editAction',
+                        'save' => 'Shop:Admin:Product@saveAction',
+                        'cancel' => 'Shop:Admin:Browser@indexAction',
+                        'options' => true
+                    ]); ?>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="configuration">
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Price'); ?></label>
+                    <div class="input-group">
+                        <?= Element::number('product[regular_price]', $entity->getPrice(), ['class' => 'form-control', 'min' => '1', 'step' => '0.01']); ?>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="bi bi-cash"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 <?= !$config->getStokePriceEnabled() ? 'd-none' : ''; ?>">
+                    <label class="form-label"><?= $this->translate('Stoke price'); ?></label>
+                    <div class="input-group">
+                        <?= Element::number('product[stoke_price]', $entity->getStokePrice(), ['class' => 'form-control']); ?>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="bi bi-cash"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if (!empty($brands)): ?>
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Brand'); ?></label>
+                    <?= Element::select('product[brand_id]', $brands, $entity->getBrandId(), ['class' => 'form-control'], ''); ?>
+                </div>
+                <?php endif; ?>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Attribute groups'); ?></label>
+                    <?= Element::select('product[attribute_group_id][]', $attributeGroups, $entity->getAttributeGroupIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'id' => 'groups']); ?>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Specification category'); ?></label>
+                    <?= Element::select('product[spec_cat_id][]', $specCatIds, $entity->getSpecCatIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Category'); ?></label>
+                    <?= Element::select('product[category_id][]', $categories, $entity->getCategoryIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
+                </div>
+
+                <div class="form-check mb-3">
+                    <?= Element::checkbox('product[published]', $entity->getPublished(), ['class' => 'form-check-input', 'id' => 'product_published']); ?>
+                    <label class="form-check-label" for="product_published"><?= $this->translate('Published'); ?></label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <?= Element::checkbox('product[seo]', $entity->getSeo(), ['class' => 'form-check-input', 'id' => 'product_seo']); ?>
+                    <label class="form-check-label" for="product_seo"><?= $this->translate('Enable SEO'); ?></label>
+                </div>
+
+                <div class="form-check mb-3 <?= $config->getSpecialSupport() ? 'd-none' : '' ?>">
+                    <?= Element::checkbox('product[special_offer]', $entity->getSpecialOffer(), ['class' => 'form-check-input', 'id' => 'product_special']); ?>
+                    <label class="form-check-label" for="product_special"><?= $this->translate('Special offer'); ?></label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Order'); ?></label>
+                    <div class="input-group">
+                        <?= Element::number('product[order]', $entity->getOrder(), ['class' => 'form-control']); ?>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('In stock'); ?></label>
+                    <div class="input-group">
+                        <?= Element::number('product[in_stock]', $entity->getInStock(), ['class' => 'form-control']); ?>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Recommended products'); ?></label>
+                    <?= Element::select('product[recommended_ids][]', $names, $entity->getRecommendedIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Similar products'); ?></label>
+                    <?= Element::select('product[similar_ids][]', $names, $entity->getSimilarIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="images">
+                <?= Element::hidden('product[cover]', $entity->getCover()); ?>
+                <?= Element::hidden('product[id]', $entity->getId()); ?>
+
+                <div id="file-input-container">
+                    <?= Element::file('file[]', 'image/x-png, image/gif, image/jpeg', ['class' => 'd-none']); ?>
+                </div>
+                
+                <div class="mb-3">
+                    <a class="btn btn-primary" data-button="upload" href="#">
+                        <i class="bi bi-camera"></i> <?= $this->translate('Upload new image'); ?>
+                    </a>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped border">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?= $this->translate('Image'); ?></th>
+                                <th class="text-center"><?= $this->translate('Order'); ?></th>
+                                <th class="text-center"><?= $this->translate('Published'); ?></th>
+                                <th class="text-center"><?= $this->translate('Cover'); ?></th>
+                                <th class="text-center"><?= $this->translate('Actions'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody data-container="image">
+                            <?php if (!empty($photos)): ?>
+                            <?php foreach ($photos as $photo): ?>
+                            <tr>
+                                <td class="text-center">
+                                    <img class="img-thumbnail" width="200" height="200" src="<?= $photo->getImageBag()->getUrl('200x200'); ?>" />
+                                </td>
+                                <td class="text-center" style="width: 120px;">
+                                    <?= Element::number(sprintf('photos[order][%s]', $photo->getId()), $photo->getOrder(), ['class' => 'form-control text-center', 'min' => '0']); ?>
+                                </td>
+                                <td class="text-center">
+                                    <div class="form-check d-inline-block">
+                                        <?= Element::checkbox(sprintf('photos[published][%s]', $photo->getId()), $photo->getPublished(), ['class' => 'form-check-input']); ?>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="form-check d-inline-block">
+                                        <?= Element::radio('photos[cover]', $photo->getImage(), $entity->getCover() == $photo->getImage(), ['class' => 'form-check-input']); ?>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-light" data-toggle="tooltip" title="<?= $this->translate('Replace this image'); ?>" data-button="edit" data-image="<?= $photo->getImage(); ?>" href="#">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    
+                                    <?php if ($entity->getCover() != $photo->getImage()): ?>
+                                    <div class="mt-2 text-danger">
+                                        <?= Element::checkbox(sprintf('photos[toDelete][%s]', $photo->getId()), false, ['class' => 'form-check-input'], false); ?>
+                                        <span class="small"><?= $this->translate('Remove'); ?></span>
+                                    </div>
+                                    <?php endif; ?>
+                                    
+                                    <?= Element::file(sprintf('image_%s', $photo->getId()), 'image/x-png, image/gif, image/jpeg', ['class' => 'd-none']); ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="specifications">
+                <?php if (count($languages) > 1): ?>
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link <?= $index == 0 ? 'active' : null; ?>" href="<?= sprintf('#language-f-%s', $language->getId()); ?>" role="tab" data-toggle="tab">
+                            <?= $language->getName(); ?>
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+
+                <div class="tab-content">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-f-%s', $language->getId()); ?>" role="tabpanel">
+                        <?php foreach ($features as $category => $options): ?>
+                        <fieldset class="mb-4 border p-3">
+                            <legend class="w-auto px-2 h5"><?= $category; ?></legend>
+
+                            <?php foreach ($options as $option): ?>
+                            <?php if ($option['lang_id'] == $language->getId()): ?>
+                            <div class="form-group mb-3">
+                                <label class="form-label"><?= $option['item']; ?></label>
+                                <?= call_user_func(sprintf('Krystal\Form\Element::%s', SpecificationItemTypeCollection::guessMethodByConst($option['type'])), sprintf('features[translation][%s][%s]', $language->getId(), $option['id']), $option['value'], ['class' => 'form-control']); ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                        </fieldset>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <?php if (!empty($attributes)): ?>
+            <div role="tabpanel" class="tab-pane fade" id="attrs">
+                <?php foreach ($attributes as $attribute): ?>
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $attribute['group_name']; ?></label>
+                    <?= Element::select(
+                        $attribute['group_dynamic'] ? sprintf('product[attributes][%s][]', $attribute['group_id']) : sprintf('product[attributes][%s]', $attribute['group_id']), 
+                        $attribute['attributes'], 
+                        AttributeProcessor::findActiveAttribute($attribute['attributes'], $attributes, $activeAttributes),
+                        ['class' => 'form-control', 'multiple' => $attribute['group_dynamic']],
+                        null
+                    ); ?>
+                </div>
                 <?php endforeach; ?>
             </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </div>
-      </div>
-
-      <?php if (!empty($attributes)): ?>
-      <div role="tabpanel" class="tab-pane" id="attrs">
-        <?php foreach ($attributes as $attribute): ?>
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php echo $attribute['group_name']; ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select(
-                    $attribute['group_dynamic'] ? sprintf('product[attributes][%s][]', $attribute['group_id']) : sprintf('product[attributes][%s]', $attribute['group_id']), 
-                    $attribute['attributes'], 
-                    AttributeProcessor::findActiveAttribute($attribute['attributes'], $attributes, $activeAttributes),
-                    array('class' => 'form-control', 'multiple' => $attribute['group_dynamic']),
-                    null
-                ); ?>
-            </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
-      <?php endif; ?>
-      <!--Images tab-->
     </div>
 </form>
 
 <?php else: ?>
-
-<div class="center-block">
-    <h2 class="text-muted text-center"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Before you add a product, you need to create at least one category'); ?></h2>
+<div class="text-center py-5">
+    <h2 class="text-muted"><i class="bi bi-exclamation-octagon"></i> <?= $this->translate('Before you add a product, you need to create at least one category'); ?></h2>
 </div>
-
 <?php endif; ?>

@@ -1,7 +1,6 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -13,39 +12,39 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
     <div class="btn-toolbar">
         <div class="btn-group mr-2">
             <div class="dropdown">
-              <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?php echo $newOrdersCount; ?>) <?php endif; ?> </span>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <i class="bi bi-list"></i> <?php $this->show('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?= $newOrdersCount; ?>) <?php endif; ?> </span>
               </button>
 
               <div class="dropdown-menu">
                  <?php if (isset($categoryId)): ?>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="glyphicon glyphicon-home"></i> <?php $this->show('Go home'); ?></a>
-                 <li class="divider">
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Browser@indexAction'); ?>"><i class="bi bi-house"></i> <?php $this->show('Go home'); ?></a>
+                 <div class="dropdown-divider"></div>
                  <?php endif; ?>
 
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Product@addAction'); ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php $this->show('Add product'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add category'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Configuration'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="glyphicon glyphicon-user"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?php echo $newOrdersCount; ?>) </span><?php endif; ?></a>
-                 <a class="dropdown-item" href="#" data-button="statistic" data-url="<?php echo $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Product@addAction'); ?>"><i class="bi bi-cart"></i> <?php $this->show('Add product'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Category@addAction'); ?>"><i class="bi bi-folder2-open"></i> <?php $this->show('Add category'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Config@indexAction'); ?>"><i class="bi bi-grid-3x3-gap"></i> <?php $this->show('Configuration'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Order@indexAction'); ?>"><i class="bi bi-person"></i> <?php $this->show('Orders'); ?><?php if ($newOrdersCount > 0): ?><span> (<?= $newOrdersCount; ?>) </span><?php endif; ?></a>
+                 <a class="dropdown-item" href="#" data-button="statistic" data-url="<?= $this->url('Shop:Admin:Statistic@indexAction'); ?>"><i class="bi bi-calendar-event"></i> <?php $this->show('Statistic'); ?></a>
                  <div class="dropdown-header"><?php $this->show('Configurable parameters'); ?></div>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="glyphicon glyphicon-certificate"></i> <?php $this->show('Brands'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="glyphicon glyphicon-edit"></i> <?php $this->show('Specifications'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Attributes'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Delivery types'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Coupon@indexAction'); ?>"><i class="glyphicon glyphicon-link"></i> <?php $this->show('Discount coupons'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:Currency@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Currencies'); ?></a>
-                 <a class="dropdown-item" href="<?php echo $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="glyphicon glyphicon-header"></i> <?php $this->show('Order statuses'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Brand@indexAction'); ?>"><i class="bi bi-patch-check"></i> <?php $this->show('Brands'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:SpecificationItem@indexAction', null); ?>"><i class="bi bi-pencil-square"></i> <?php $this->show('Specifications'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Attributes@indexAction'); ?>"><i class="bi bi-card-list"></i> <?php $this->show('Attributes'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:DeliveryType@indexAction'); ?>"><i class="bi bi-card-heading"></i> <?php $this->show('Delivery types'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Coupon@indexAction'); ?>"><i class="bi bi-link-45deg"></i> <?php $this->show('Discount coupons'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:Currency@indexAction'); ?>"><i class="bi bi-type-h1"></i> <?php $this->show('Currencies'); ?></a>
+                 <a class="dropdown-item" href="<?= $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="bi bi-type-h1"></i> <?php $this->show('Order statuses'); ?></a>
                  <div class="dropdown-divider"></div>
                  <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
                  
                  <?php if (!empty($products)):?>
-                 <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
-                 <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+                 <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?= $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="bi bi-download"></i> <?php $this->show('Save changes');?></a>
+                 <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?= $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="bi bi-x-lg"></i> <?php $this->show('Remove selected'); ?></a>
                  
                  <?php else: ?>
-                 <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes');?></a>
-                 <li class="disabled"><a class="dropdown-item"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+                 <a class="dropdown-item disabled"><i class="bi bi-download"></i> <?php $this->show('Save changes');?></a>
+                 <a class="dropdown-item disabled"><i class="bi bi-x-lg"></i> <?php $this->show('Remove selected'); ?></a>
                  
                  <?php endif; ?>
               </div>
@@ -54,22 +53,22 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
 
         <?php if (!empty($products)): ?>
         <div class="btn-group mr-2">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> <?php $this->show('Filter'); ?></button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> <?php $this->show('Filter'); ?></button>
         </div>
         <?php endif; ?>
 
         <?php if ($filter->isApplied()): ?>
         <div class="btn-group mr-2">
-            <a href="<?php echo $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+            <a href="<?= $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="bi bi-trash"></i> <?php $this->show('Reset filter'); ?></a>
         </div>
         <?php endif; ?>
     </div>
 
-    <div class="card">
-        <?php $this->loadPartial('items-per-page', array('caption' => 'Products')); ?>
+    <div class="card mt-3">
+        <?php $this->loadPartial('items-per-page', ['caption' => 'Products']); ?>
 
         <?php if (isset($categoryId)): ?>
-        <?php echo Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
+        <?= Element::hidden($filter->getElementName('category_id'), $categoryId); ?>
         <?php endif; ?>
 
         <?php $this->loadPartial('grid', [
@@ -78,7 +77,7 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
             'grid' => [
                 'batch' => true,
                 'pk' => 'id',
-                'tableClass' => 'table table-hover table-bordered',
+                'tableClass' => 'table table-bordered table-sm',
                 'columns' => [
                     [
                         'column' => 'id',
@@ -89,13 +88,13 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                         'column' => 'image',
                         'label' => 'Cover',
                         'value' => function($product){
-                            $image = Element::image($product->getImageBag()->getUrl('200x200'), array('class' => 'img-fluid'));
-                            return Element::link($image, $product->getImageBag()->getUrl('original'), array(
+                            $image = Element::image($product->getImageBag()->getUrl('200x200'), ['class' => 'img-fluid']);
+                            return Element::link($image, $product->getImageBag()->getUrl('original'), [
                                 'data-toggle' => 'tooltip',
                                 'data-placement' => 'top',
-                                'data-original-title' => $this->translate('Click to zoom this image'),
+                                'title' => $this->translate('Click to zoom this image'),
                                 'data-lightbox' => sprintf('image-%s', $product->getId())
-                            ));
+                            ]);
                         }
                     ],
 
@@ -114,7 +113,7 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                         'label' => 'Price',
                         'filter' => true,
                         'value' => function($product){
-                            return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), array('class' => 'form-control center-block', 'min' => '0'));
+                            return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), ['class' => 'form-control mx-auto', 'min' => '0']);
                         }
                     ],
 
@@ -142,14 +141,12 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                     function($product){
                         return Icon::view($product->getUrl(), $this->translate('View this product on site'));
                     },
-
                     function($product){
                         return Icon::edit(
                             $this->url('Shop:Admin:Product@editAction', $product->getId()),
                             $this->translate('Edit this product')
                         );
                     },
-
                     function($product){
                         return Icon::remove(
                             $this->url('Shop:Admin:Product@deleteAction', $product->getId()),
@@ -162,17 +159,17 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
     </div>
 </form>
 
-<div class="card">
+<div class="card mt-3">
     <?php $this->loadPartial('grid', [
         'title' => 'Categories',
         'rows' => $categories,
         'grid' => [
             'tableClass' => 'table table-hover table-bordered table-striped',
-            'rowAttributes' => array(
+            'rowAttributes' => [
                 'class' => function($category) use ($categoryId){
                     return $categoryId == $category['id'] ? 'table-info' : null;
                 }
-            ),
+            ],
 
             'columns' => [
                 [
@@ -219,16 +216,18 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
     ]); ?>
 </div>
 
-<div class="modal fade" id="statistic-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
- <div class="modal-dialog">
+<div class="modal fade" id="statistic-modal" tabindex="-1" role="dialog" aria-labelledby="statisticModalLabel" aria-hidden="true">
+ <div class="modal-dialog" role="document">
   <div class="modal-content">
     <div class="modal-header">
-      <h4 class="modal-title"><i class="glyphicon glyphicon-calendar"></i> <?php $this->show('Statistic'); ?></h4>
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h5 class="modal-title" id="statisticModalLabel"><i class="bi bi-calendar-event"></i> <?php $this->show('Statistic'); ?></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="modal-body" id="statistic-body"></div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="glyphicon glyphicon-ok"></i> OK</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="bi bi-check-lg"></i> OK</button>
     </div>
  </div>
  </div>

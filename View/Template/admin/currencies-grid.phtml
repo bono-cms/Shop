@@ -9,36 +9,39 @@ defined('KRYSTAL') or die;
 ?>
 
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-6 mb-4">
         <div class="card">
-            <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available currencies'); ?> <small>(<?php echo count($currencies); ?>)</small></h2>
+            <div class="card-header">
+                <h3 class="card-title m-0">
+                    <i class="bi bi-cash-stack"></i> <?php $this->show('Available currencies'); ?> 
+                    <small class="text-muted">(<?= count($currencies); ?>)</small>
+                </h3>
+            </div>
 
-            <div class="table-responsive">
-                <?= $this->widget(new GridViewWidget($currencies, array(
+            <div class="card-body table-responsive">
+                <?= $this->widget(new GridViewWidget($currencies, [
                     'tableClass' => 'table table-hover table-bordered table-striped',
-                    'rowAttributes' => array(
+                    'rowAttributes' => [
                         'class' => function($row) use ($currency){
                             return $row->getId() == $currency->getId() ? 'table-info' : null;
                         }
-                    ),
+                    ],
 
-                    'columns' => array(
-                        array(
+                    'columns' => [
+                        [
                             'column' => 'id',
                             'label' => '#'
-                        ),
-
-                        array(
+                        ],
+                        [
                             'column' => 'value'
-                        ),
-
-                        array(
+                        ],
+                        [
                             'column' => 'code',
                             'label' => 'Currency code'
-                        )
-                    ),
+                        ]
+                    ],
 
-                    'actions' => array(
+                    'actions' => [
                         'edit' => function($currency){
                             return Icon::edit(
                                 $this->url('Shop:Admin:Currency@editAction', $currency->getId()),
@@ -54,47 +57,53 @@ defined('KRYSTAL') or die;
                                 $this->url('Shop:Admin:Currency@indexAction')
                             );
                         }
-                    )
-                ))); ?>
+                    ]
+                ])); ?>
             </div>
         </div>
     </div>
 
     <div class="col-lg-6">
         <div class="card">
-            <h3 class="page-header"><i class="glyphicon glyphicon-pencil"></i> <?php $this->show($currency->getId() ? 'Update currency' : 'Add new currency'); ?></h3>
+            <div class="card-header">
+                <h3 class="card-title m-0">
+                    <i class="bi bi-pencil"></i> <?php $this->show($currency->getId() ? 'Update currency' : 'Add new currency'); ?>
+                </h3>
+            </div>
 
-            <form data-group="currency" autocomplete="off">
-                <input type="hidden" name="currency[id]" value="<?php echo $currency->getId(); ?>" />
+            <div class="card-body">
+                <form data-group="currency" autocomplete="off">
+                    <?= Element::hidden('currency[id]', $currency->getId()); ?>
 
-                <div class="form-group">
-                    <label class="col-lg-12 control-label"><?php $this->show('Code'); ?></label>
-                    <div class="col-lg-10">
+                    <div class="form-group mb-3">
+                        <label class="form-label"><?php $this->show('Code'); ?></label>
                         <div class="input-group">
-                            <?php echo Element::text('currency[code]', $currency->getCode(), array('class' => 'form-control', 'placeholder' => $this->translate('Unique currency code'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                            <?= Element::text('currency[code]', $currency->getCode(), ['class' => 'form-control', 'placeholder' => $this->translate('Unique currency code')]); ?>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-lg-12 control-label"><?php $this->show('Value'); ?></label>
-                    <div class="col-lg-10">
+                    <div class="form-group mb-3">
+                        <label class="form-label"><?php $this->show('Value'); ?></label>
                         <div class="input-group">
-                            <?php echo Element::text('currency[value]', $currency->getValue(), array('class' => 'form-control', 'placeholder' => $this->translate('Currency value'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                            <?= Element::text('currency[value]', $currency->getValue(), ['class' => 'form-control', 'placeholder' => $this->translate('Currency value')]); ?>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <?php $this->loadPartial('actions', array(
-                    'new' => !$currency->getId(),
-                    'add' => 'Shop:Admin:Currency@indexAction',
-                    'edit' => 'Shop:Admin:Currency@editAction',
-                    'save' => 'Shop:Admin:Currency@saveAction',
-                    'cancel' => 'Shop:Admin:Currency@indexAction'
-                )); ?>
-            </form>
+                    <?php $this->loadPartial('actions', [
+                        'new' => !$currency->getId(),
+                        'add' => 'Shop:Admin:Currency@indexAction',
+                        'edit' => 'Shop:Admin:Currency@editAction',
+                        'save' => 'Shop:Admin:Currency@saveAction',
+                        'cancel' => 'Shop:Admin:Currency@indexAction'
+                    ]); ?>
+                </form>
+            </div>
         </div>
     </div>
 </div>

@@ -9,49 +9,51 @@ defined('KRYSTAL') or die;
 ?>
 
 <div class="card">
-    <h2 class="page-header"><i class="glyphicon glyphicon-list-alt"></i> <?php $this->show('Available delivery types'); ?> <small>(<?= count($deliveryTypes); ?>)</small></h2>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title m-0">
+            <i class="bi bi-truck"></i> <?= $this->translate('Available delivery types'); ?> 
+            <small class="text-muted">(<?= count($deliveryTypes); ?>)</small>
+        </h3>
 
-    <p>
-        <a class="btn btn-primary" href="<?= $this->url('Shop:Admin:DeliveryType@addAction'); ?>"><?php $this->show('Add new delivery type'); ?></a>
-    </p>
+        <a class="btn btn-primary btn-sm" href="<?= $this->url('Shop:Admin:DeliveryType@addAction'); ?>">
+            <i class="bi bi-plus-lg"></i> <?= $this->translate('Add new delivery type'); ?>
+        </a>
+    </div>
 
-    <div class="table-responsive">
-        <?= $this->widget(new GridViewWidget($deliveryTypes, array(
+    <div class="card-body table-responsive">
+        <?= $this->widget(new GridViewWidget($deliveryTypes, [
             'tableClass' => 'table table-hover table-bordered table-striped',
-            'columns' => array(
-                array(
+            'columns' => [
+                [
                     'column' => 'id',
                     'label' => '#'
-                ),
-
-                array(
+                ],
+                [
                     'column' => 'name',
-                ),
-
-                array(
+                ],
+                [
                     'column' => 'price'
-                ),
-
-                array(
+                ],
+                [
                     'column' => 'order'
-                )
-            ),
+                ]
+            ],
 
-            'actions' => array(
-                'edit' => function($row){
+            'actions' => [
+                function($row){
                     return Icon::edit(
                         $this->url('Shop:Admin:DeliveryType@editAction', $row['id']),
                         $this->translate('Edit this delivery method')
                     );
                 },
 
-                'remove' => function($row){
+                function($row){
                     return Icon::remove(
                         $this->url('Shop:Admin:DeliveryType@deleteAction', $row['id']),
                         $this->translate('Remove this delivery type')
                     );
                 }
-            )
-        ))); ?>
+            ]
+        ])); ?>
     </div>
 </div>

@@ -8,93 +8,105 @@ defined('KRYSTAL') or die;
 ?>
 
 <form class="card" data-group="item" autocomplete="off">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="nav-item active"><a class="nav-link" href="#translations" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Item'); ?></a></li>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#item" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Options'); ?></a></li>
-	</ul>
-
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="translations" role="tabpanel">
-            <?php $this->loadPartial('language-tabs'); ?>
-
-            <div class="tab-content">
-                <?php foreach ($languages as $index => $language): ?>
-                <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
-                    <?php $entity = LanguageManager::findByLangId($language->getId(), $item); ?>
-
-                    <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
-                    <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
-                    <?php $this->loadPartial('language-name', array('language' => $language)); ?>
-
-                    <div class="form-group">
-                        <label class="col-lg-12 control-label"><?php $this->show('Name'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-12 control-label"><?php $this->show('Hint'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::textarea(sprintf('translation[%s][hint]', $language->getId()), $entity->getHint(), array('class' => 'form-control', 'placeholder' => $this->translate('Optional hint to be shown on hover'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="item" role="tabpanel">
-            <?php echo Element::hidden('item[id]', $entity->getId()); ?>
-
-            <div class="form-group">
-                <label class="col-lg-12 control-label"><?php $this->show('Front'); ?></label>
-                <div class="col-lg-10">
-                    <?php echo Element::checkbox('item[front]', $entity->getFront(), array('class' => 'form-control')); ?>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-lg-12 control-label"><?php $this->show('Type'); ?></label>
-                <div class="col-lg-10">
-                    <?php echo Element::select('item[type]', $this->translateArray($types), $entity->getType(), array('class' => 'form-control')); ?>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-lg-12 control-label"><?php $this->show('Order'); ?></label>
-                <div class="col-lg-10">
-                    <div class="input-group">
-                        <?php echo Element::text('item[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="col-lg-12 control-label"><?php $this->show('Category'); ?></label>
-                <div class="col-lg-10">
-                    <div class="input-group">
-                        <?php echo Element::select('item[category_id]', $categories, $entity->getCategoryId(), array('class' => 'form-control')); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" href="#translations" role="tab" data-toggle="tab">
+                    <i class="bi bi-file-earmark-text"></i> <?= $this->translate('Item'); ?>
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#options" role="tab" data-toggle="tab">
+                    <i class="bi bi-sliders"></i> <?= $this->translate('Options'); ?>
+                </a>
+            </li>
+        </ul>
     </div>
 
-    <?php $this->loadPartial('actions', array(
-        'new' => $new,
-        'add' => 'Shop:Admin:SpecificationItem@addAction',
-        'edit' => 'Shop:Admin:SpecificationItem@editAction',
-        'save' => 'Shop:Admin:SpecificationItem@saveAction',
-        'cancel' => array('Shop:Admin:SpecificationItem@indexAction', null)
-    )); ?>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="translations" role="tabpanel">
+                <?php $this->loadPartial('language-tabs'); ?>
 
+                <div class="tab-content mt-3">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>" role="tabpanel">
+                        <?php $entity = LanguageManager::findByLangId($language->getId(), $item); ?>
+
+                        <?= Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
+                        <?= Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
+                        
+                        <?php $this->loadPartial('language-name', ['language' => $language]); ?>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label"><?= $this->translate('Name'); ?></label>
+                            <div class="input-group">
+                                <?= Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Name')]); ?>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label"><?= $this->translate('Hint'); ?></label>
+                            <div class="input-group">
+                                <?= Element::textarea(sprintf('translation[%s][hint]', $language->getId()), $entity->getHint(), ['class' => 'form-control', 'placeholder' => $this->translate('Optional hint to be shown on hover')]); ?>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="options" role="tabpanel">
+                <?= Element::hidden('item[id]', $entity->getId()); ?>
+
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <?= Element::checkbox('item[front]', $entity->getFront(), [
+                            'class' => 'form-check-input', 
+                            'id' => 'item_front'
+                        ]); ?>
+                        <label class="form-check-label" for="item_front">
+                            <?= $this->translate('Front'); ?>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Type'); ?></label>
+                    <?= Element::select('item[type]', $this->translateArray($types), $entity->getType(), ['class' => 'form-control']); ?>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Order'); ?></label>
+                    <div class="input-group">
+                        <?= Element::text('item[order]', $entity->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order')]); ?>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label class="form-label"><?= $this->translate('Category'); ?></label>
+                    <?= Element::select('item[category_id]', $categories, $entity->getCategoryId(), ['class' => 'form-control']); ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <?php $this->loadPartial('actions', [
+                'new' => $new,
+                'add' => 'Shop:Admin:SpecificationItem@addAction',
+                'edit' => 'Shop:Admin:SpecificationItem@editAction',
+                'save' => 'Shop:Admin:SpecificationItem@saveAction',
+                'cancel' => ['Shop:Admin:SpecificationItem@indexAction', null]
+            ]); ?>
+        </div>
+    </div>
 </form>

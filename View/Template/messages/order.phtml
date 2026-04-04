@@ -1,27 +1,27 @@
 <?php defined('KRYSTAL') or die; ?>
 
-<p><?php $this->show('Hello there!'); ?></p>
-<p><?php $this->show('You have a new order from'); ?>: <?php echo $input['name']; ?></p>
-<p><?php $this->show('Contact information'); ?>:</p>
-<p><?php $this->show('Phone'); ?>: <?php echo $input['phone']; ?></p>
-<p><?php $this->show('Email'); ?>: <?php echo $input['email']; ?></p>
-<p><?php $this->show('Address'); ?>: <?php echo $input['address']; ?></p>
-<p><?php $this->show('Delivery type'); ?>: <?php echo $input['delivery']; ?></p>
+<p><?= $this->translate('Hello there!'); ?></p>
+<p><?= $this->translate('You have a new order from'); ?>: <?= $input['name']; ?></p>
+<p><?= $this->translate('Contact information'); ?>:</p>
+<p><?= $this->translate('Phone'); ?>: <?= $input['phone']; ?></p>
+<p><?= $this->translate('Email'); ?>: <?= $input['email']; ?></p>
+<p><?= $this->translate('Address'); ?>: <?= $input['address']; ?></p>
+<p><?= $this->translate('Delivery type'); ?>: <?= $input['delivery']; ?></p>
 
 <?php if (!empty($input['comment'])): ?>
-<p><?php $this->show('Comments'); ?>:</p>
-<?php echo $input['comment']; ?>
+<p><?= $this->translate('Comments'); ?>:</p>
+<?= $input['comment']; ?>
 <?php endif; ?>
 
 <br />
 
-<p><?php $this->show('Ordered products'); ?>: </p>
+<p><?= $this->translate('Ordered products'); ?>: </p>
 
 <?php foreach ($basketManager->getProducts() as $product): ?>
 <br />
-<p><?php $this->show('Product'); ?>: <?php echo $product->getName(); ?></p>
-<p><?php $this->show('Quantity'); ?> : <?php echo $product->getQty(); ?></p>
-<p><?php $this->show('Sub-total price'); ?>: <?php echo $product->getSubTotalPrice(), ' ', $currency; ?></p>
+<p><?= $this->translate('Product'); ?>: <?= $product->getName(); ?></p>
+<p><?= $this->translate('Quantity'); ?> : <?= $product->getQty(); ?></p>
+<p><?= $this->translate('Sub-total price'); ?>: <?= $product->getSubTotalPrice(), ' ', $currency; ?></p>
 <br />
 <?php endforeach; ?>
 
@@ -29,8 +29,8 @@
 <hr />
 
 <?php if (!empty($input['discount'])): ?>
-<p><?php $this->show('Discount'); ?>: <?php echo $input['discount']; ?></p>
+<p><?= $this->translate('Discount'); ?>: <?= $input['discount']; ?></p>
 <?php endif; ?>
 
-<p><?php $this->show('Total quantity of all products'); ?>: <?php echo $basketManager->getTotalQuantity(); ?></p>
-<p><?php $this->show('Total price'); ?>: <?php echo $basketManager->getTotalPrice(), ' ', $currency; ?></p>
+<p><?= $this->translate('Total quantity of all products'); ?>: <?= $basketManager->getTotalQuantity(); ?></p>
+<p><?= $this->translate('Total price'); ?>: <?= $basketManager->getTotalPrice(), ' ', $currency; ?></p>
