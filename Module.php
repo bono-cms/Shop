@@ -37,6 +37,7 @@ use Shop\Service\SpecificationCategoryService;
 use Shop\Service\SpecificationItemService;
 use Shop\Service\SpecificationValueService;
 use Shop\Service\BrandService;
+use Shop\Service\VariantService;
 
 final class Module extends AbstractCmsModule
 {
@@ -62,6 +63,7 @@ final class Module extends AbstractCmsModule
         $currencyMapper = $this->getMapper('/Shop/Storage/MySQL/CurrencyMapper', false);
         $orderStatusMapper = $this->getMapper('/Shop/Storage/MySQL/OrderStatusMapper');
         $wishlistMapper = $this->getMapper('/Shop/Storage/MySQL/WishlistMapper', false);
+        $variantMapper = $this->getMapper('/Shop/Storage/MySQL/ProductVariantMapper', false);
 
         // Now build required services
         $productImageManager = $this->getProductImageManager($config->getEntity());
@@ -108,6 +110,7 @@ final class Module extends AbstractCmsModule
         );
 
         return array(
+            'variantService' => new VariantService($variantMapper),
             'wishlistManager' => new WishlistManager($wishlistMapper, $productManager),
             'siteService' => $siteService,
             'configManager' => $config,
