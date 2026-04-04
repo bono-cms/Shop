@@ -386,7 +386,10 @@ defined('KRYSTAL') or die;
                             ],
 
                             [
-                                'column' => 'price'
+                                'column' => 'price',
+                                'value' => function($variant){
+                                    return number_format($variant->getPrice());
+                                }
                             ],
 
                             [
