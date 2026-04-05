@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `bono_module_shop_orders_products`;
 CREATE TABLE `bono_module_shop_orders_products` (
 	`order_id` INT NOT NULL,
 	`product_id` INT NOT NULL COMMENT 'Product id',
+    `sku` varchar(255) DEFAULT NULL COMMENT 'Product or variant SKU',
 	`name` varchar(255) NOT NULL COMMENT 'Product name',
 	`price` float NOT NULL COMMENT 'Product price',
 	`sub_total_price` float NOT NULL COMMENT 'Sub-total price',

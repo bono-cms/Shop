@@ -380,6 +380,7 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
             $data = array(
                 'order_id' => $id,
                 'product_id' => $product->getId(),
+                'sku' => $product->getSKU(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
                 'sub_total_price' => $product->getSubTotalPrice(),

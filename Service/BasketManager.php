@@ -259,7 +259,7 @@ final class BasketManager
     {
         $imageBag = clone $this->imageBag;
         $imageBag->setId((int) $product['id'])
-                 ->setCover(Filter::escape($product['cover']));
+                 ->setCover($product['cover']);
 
         $variantId = $item['attributes']['variant_id'] ?? null;
 
