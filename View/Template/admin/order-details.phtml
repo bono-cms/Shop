@@ -18,6 +18,7 @@
             <tr>
                 <th class="text-center text-muted"><?php $this->show('#'); ?></th>
                 <th class="text-center"><?php $this->show('Product'); ?></th>
+                <th class="text-center"><?php $this->show('SKU'); ?></th>
                 <th class="text-center"><?php $this->show('Price'); ?></th>
                 <th class="text-center"><?php $this->show('Sub total price'); ?></th>
                 <th class="text-center"><?php $this->show('Quantity'); ?></th>
@@ -37,6 +38,7 @@
                     <?= $detail['name']; ?>
                     <?php endif; ?>
                 </td>
+                <td class="text-center"><?= $detail['sku']; ?></td>
                 <td class="text-center"><?= number_format($detail['price']); ?> <?= $currency; ?></td>
                 <td class="text-center"><?= number_format($detail['sub_total_price']); ?> <?= $currency; ?></td>
                 <td class="text-center"><?= $detail['qty']; ?></td>

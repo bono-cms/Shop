@@ -146,6 +146,7 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
             self::column('order_id'),
             self::column('product_id'),
             self::column('name'),
+            self::column('sku'),
             self::column('price'),
             self::column('sub_total_price'),
             self::column('qty'),
