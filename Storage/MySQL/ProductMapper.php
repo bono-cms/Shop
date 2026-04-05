@@ -90,6 +90,20 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     }
 
     /**
+     * Fetches SKUs for multiple variant IDs
+     * 
+     * @param array $variantIds
+     * @return array [variant_id => sku]
+     */
+    public function fetchSkuByVariantIds(array $variantIds)
+    {
+        return $this->db->select(['id', 'sku'])
+                        ->from(ProductVariantMapper::getTableName())
+                        ->whereIn('id', $variantIds)
+                        ->queryAll();
+    }
+
+    /**
      * Finds product attributes by its associated id
      * 
      * @param string $id Product id

@@ -14,6 +14,14 @@ namespace Shop\Storage;
 interface ProductMapperInterface
 {
     /**
+     * Fetches SKUs for multiple variant IDs
+     * 
+     * @param array $variantIds
+     * @return array [variant_id => sku]
+     */
+    public function fetchSkuByVariantIds(array $variantIds);
+
+    /**
      * Finds product attributes by its associated id
      * 
      * @param string $id Product id
