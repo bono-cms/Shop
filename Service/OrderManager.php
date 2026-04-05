@@ -21,6 +21,7 @@ use Cms\Service\AbstractManager;
 use Cms\Service\MailerInterface;
 use Shop\Storage\OrderInfoMapperInterface;
 use Shop\Storage\OrderProductMapperInterface;
+use Shop\Module;
 
 final class OrderManager extends AbstractManager implements FilterableServiceInterface
 {
