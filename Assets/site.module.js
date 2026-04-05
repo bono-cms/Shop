@@ -708,14 +708,13 @@
 
             $.basket.order(function(response){
                 // 1 means success
-                if (response == "1"){
+                if (response.success){
                     window.location.reload();
                 } else {
                     $.getValidator($form).handleAll(response, $form);
                 }
             });
         });
-        
         
         $("[data-basket-button='clear-without-confirm']").click(function(event){
             event.preventDefault();

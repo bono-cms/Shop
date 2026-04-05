@@ -46,7 +46,10 @@ final class Order extends AbstractShopController
 
                 // Success back to client
                 $this->flashBag->set('success', 'Your order has been sent! We will contact you soon. Thank you!');
-                return '1';
+
+                return $this->json([
+                    'success' => true
+                ]);
             }
 
         } else {
