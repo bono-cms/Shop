@@ -17,7 +17,7 @@ use Shop\View\CategoryDropdown;
 use Shop\Service\CurrencyManagerInterface;
 use Shop\Storage\WishlistMapperInterface;
 
-final class SiteService implements SiteServiceInterface
+final class SiteService
 {
     /**
      * Product manager service
