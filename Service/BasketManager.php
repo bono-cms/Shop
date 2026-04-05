@@ -8,6 +8,7 @@
 
 namespace Shop\Service;
 
+use Krystal\Stdlib\ArrayUtils;
 use Krystal\Cart\ShoppingCart;
 use Krystal\Security\Filter;
 use Krystal\Image\Tool\ImageBag;
@@ -77,6 +78,7 @@ final class BasketManager
         if ($row !== false) {
             return [
                 'id' => $row['id'],
+                'sku' => $row['sku'],
                 'qty' => $row['qty'],
                 'price' => $row['price'],
                 'subTotal' => $row['qty'] * $row['price'],
@@ -103,17 +105,22 @@ final class BasketManager
             return [];
         }
 
-        // Optimization: fetch all products in one query
+        // 1. Fetch all main products in one query
         $ids = array_column($items, 'productId');
         $rows = $this->productMapper->fetchByIds($ids);
+
+        // 2. Fetch all variant SKUs in one query
+        $variantIds = array_filter(array_column(array_column($items, 'attributes'), 'variant_id'));
+        $skus = ArrayUtils::arrayList($this->productMapper->fetchSkuByVariantIds($variantIds), 'id', 'sku');
+        $variantSkus = !empty($variantIds) ? $skus : [];
 
         foreach ($items as $item) {
             $product = $this->findProductInRows($rows, $item['productId']);
 
             if ($product) {
-                $entities[] = $this->createEntity($product, $item);
+                // Pass the variant SKUs map to the entity creator
+                $entities[] = $this->createEntity($product, $item, $variantSkus);
             } else {
-                // Cleanup: product no longer exists in DB
                 $this->cart->remove($item['productId'], $item['attributes']);
             }
         }
@@ -167,7 +174,7 @@ final class BasketManager
     {
         return $this->cart->update($id, $attributes, [
             'quantity' => (int) $qty
-        ]);        
+        ]);
     }
 
     /**
@@ -241,17 +248,28 @@ final class BasketManager
     }
 
     /**
-     * Mapping DB row + Cart data to BasketEntity
+     * Maps database product row and cart item data to a BasketEntity
+     *
+     * @param array $product Raw product data from the mapper
+     * @param array $item Cart item data containing quantity, price, and attributes
+     * @param array $variantSkus Optional map of [variant_id => sku] for quick lookup
+     * @return \Shop\Service\BasketEntity
      */
-    private function createEntity(array $product, array $item)
+    private function createEntity(array $product, array $item, array $variantSkus = [])
     {
         $imageBag = clone $this->imageBag;
         $imageBag->setId((int) $product['id'])
                  ->setCover(Filter::escape($product['cover']));
 
+        $variantId = $item['attributes']['variant_id'] ?? null;
+
+        // Logic: If variant exists in our map, use it. Otherwise, use main product SKU.
+        $sku = $variantSkus[$variantId] ?? ($product['sku'] ?? null);
+
         $entity = new BasketEntity();
         $entity->setId($product['id'], BasketEntity::FILTER_INT)
-               ->setVariantId($item['attributes']['variant_id'] ?? null)
+               ->setVariantId($variantId)
+               ->setSKU($sku)
                ->setName($product['name'], BasketEntity::FILTER_HTML)
                ->setInStock($product['in_stock'], ProductEntity::FILTER_INT)
                ->setUrl($this->webPageManager->surround($product['slug'], $product['lang_id']))
