@@ -132,12 +132,22 @@ final class Category extends AbstractController
                 if ($service->update($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
                     return '1';
+                } else {
+                    return $this->json([
+                        'error' => true,
+                        'message' => 'Failed to update category'
+                    ]);
                 }
 
             } else {
                 if ($service->add($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
                     return $service->getLastId();
+                } else {
+                    return $this->json([
+                        'error' => true,
+                        'message' => 'Failed to update category'
+                    ]);
                 }
             }
 

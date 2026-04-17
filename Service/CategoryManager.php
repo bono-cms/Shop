@@ -298,13 +298,13 @@ final class CategoryManager extends AbstractManager implements MenuAwareManager
             // Remove a cover, but not a dir itself
             $this->imageManager->delete($category['id']);
             $category['cover'] = '';
-
         } else {
             if ($file) {
                 // If we have a previous cover's image, then we need to remove it
                 if (!empty($category['cover'])) {
                     if (!$this->imageManager->delete($category['id'], $category['cover'])) {
                         // If failed, then exit this method immediately
+                        trigger_error('Failed to delete previous category image', E_USER_NOTICE);
                         return false;
                     }
                 }
