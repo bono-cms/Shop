@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -28,10 +26,10 @@ final class Coupon extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Coupons');
 
-        return $this->view->render('coupons-grid', array(
+        return $this->view->render('coupons-grid', [
             'coupon' => $coupon,
             'coupons' => $this->getModuleService('couponManager')->fetchAll()
-        ));
+        ]);
     }
 
     /**
@@ -74,7 +72,10 @@ final class Coupon extends AbstractController
         $couponManager->deleteById($id);
 
         $this->flashBag->set('success', 'The coupon has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -84,34 +85,19 @@ final class Coupon extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('coupon');
+        $validator = $this->createValidation();
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'code' => array(
-                        'required' => true,
-                        'rules' => array(
-                            'NotEmpty' => array(
-                                'message' => 'The discount code is required'
-                            )
-                        )
-                    ),
+        $validator->field('coupon.code')
+                  ->required();
 
-                    'percentage' => array(
-                        'required' => true,
-                        'rules' => array(
-                            'NotEmpty' => array(
-                                'message' => 'The discount percentage is required'
-                            )
-                        )
-                    )
-                )
-            )
-        ));
+        $validator->field('coupon.percentage')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('between', null, ['min' => 1, 'max' => 100]);
 
-        if ($formValidator->isValid()) {
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('coupon');
+
             // Grab the service
             $couponManager = $this->getModuleService('couponManager');
 
@@ -119,16 +105,22 @@ final class Coupon extends AbstractController
                 $couponManager->update($input);
                 $this->flashBag->set('success', 'The coupon has been updated successfully');
 
-                return 1;
+                return $this->json([
+                    'refresh' => true
+                ]);
             } else {
                 $couponManager->add($input);
                 $this->flashBag->set('success', 'A coupon has added successfully');
 
-                return $couponManager->getLastId();
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:Coupon@editAction', [$couponManager->getLastId()]),
+                ]);
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

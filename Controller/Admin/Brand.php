@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -30,12 +28,12 @@ final class Brand extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Brands');
 
-        return $this->view->render('brands', array(
+        return $this->view->render('brands', [
             'new' => $new,
             'brand' => $brand,
             'brands' => $this->getModuleService('brandService')->fetchAll(),
             'title' => $new ? 'Add new brand' : 'Edit brand'
-        ));
+        ]);
     }
 
     /**
@@ -72,19 +70,36 @@ final class Brand extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('brand');
-        $new = !$input['id'];
+        $validator = $this->createValidation();
 
-        $brandService = $this->getModuleService('brandService');
+        $validator->field('brand.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
 
-        if ($brandService->save($input)) {
-            $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
-        }
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('brand');
+            $new = !$input['id'];
 
-        if ($new) {
-            return $brandService->getLastId();
+            $brandService = $this->getModuleService('brandService');
+
+            if ($brandService->save($input)) {
+                $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
+            }
+
+            if ($new) {
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:Brand@editAction', [$brandService->getLastId()]),
+                ]);
+            } else {
+                return $this->json([
+                    'refresh' => true
+                ]);
+            }
+
         } else {
-            return 1;
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 
@@ -99,6 +114,9 @@ final class Brand extends AbstractController
         $this->getModuleService('brandService')->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 }

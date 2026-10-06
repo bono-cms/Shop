@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -39,7 +37,7 @@ final class Browser extends AbstractController
     public function categoryAction($id, $page = 1)
     {
         $products = $this->getProductManager()->fetchAllByPage($page, $this->getSharedPerPageCount(), $id);
-        $url = $this->createUrl('Shop:Admin:Browser@categoryAction', array($id), 1);
+        $url = $this->createUrl('Shop:Admin:Browser@categoryAction', [$id], 1);
 
         return $this->createGrid($products, $url, $id);
     }
@@ -65,15 +63,15 @@ final class Browser extends AbstractController
         $this->view->getBreadcrumbBag()
                    ->addOne('Shop');
 
-        return $this->view->render('browser', array(
+        return $this->view->render('browser', [
             'newOrdersCount' => $this->getModuleService('orderManager')->countUnapproved(),
             'products' => $products,
             'paginator' => $paginator,
             'categoryId' => $categoryId,
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(true),
-            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Browser@filterAction', array(null))),
+            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Shop:Admin:Browser@filterAction', [null])),
             'query' => $this->request->getQuery()
-        ));
+        ]);
     }
 
     /**

@@ -13,24 +13,24 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
 <div class="btn-toolbar mb-3">
     <div class="dropdown">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            <i class="bi bi-list"></i> <?php $this->show('Menu'); ?>
+            <i class="bi bi-list"></i> <?= $this->translate('Menu'); ?>
         </button>
 
         <div class="dropdown-menu">
             <a class="dropdown-item" href="<?= $this->url('Shop:Admin:OrderStatus@indexAction'); ?>">
-                <i class="bi bi-type-h1"></i> <?php $this->show('Order statuses'); ?>
+                <i class="bi bi-type-h1"></i> <?= $this->translate('Order statuses'); ?>
             </a>
             <div class="dropdown-divider"></div>
             <?php if (!empty($orders)): ?>
             <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?= $this->url('Shop:Admin:Order@tweakAction'); ?>">
-                <i class="bi bi-save"></i> <?php $this->show('Save changes'); ?>
+                <i class="bi bi-save"></i> <?= $this->translate('Save changes'); ?>
             </a>
             <a class="dropdown-item text-danger" href="#" data-button="remove-selected" data-url="<?= $this->url('Shop:Admin:Order@deleteAction', null); ?>">
-                <i class="bi bi-x-circle"></i> <?php $this->show('Remove selected'); ?>
+                <i class="bi bi-x-circle"></i> <?= $this->translate('Remove selected'); ?>
             </a>
             <?php else: ?>
-            <a class="dropdown-item disabled"><i class="bi bi-save"></i> <?php $this->show('Save changes'); ?></a>
-            <a class="dropdown-item disabled"><i class="bi bi-x-circle"></i> <?php $this->show('Remove selected'); ?></a>
+            <a class="dropdown-item disabled"><i class="bi bi-save"></i> <?= $this->translate('Save changes'); ?></a>
+            <a class="dropdown-item disabled"><i class="bi bi-x-circle"></i> <?= $this->translate('Remove selected'); ?></a>
             <?php endif; ?>
         </div>
     </div>
@@ -39,7 +39,7 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
 <div class="card">
     <div class="card-header">
         <h3 class="card-title m-0">
-            <i class="bi bi-person"></i> <?php $this->show('Orders'); ?> 
+            <i class="bi bi-person"></i> <?= $this->translate('Orders'); ?> 
             <small class="text-muted">(<?= $paginator->getTotalAmount(); ?>)</small>
         </h3>
     </div>
@@ -139,17 +139,17 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
 
             <?php if (empty($orders)): ?>
             <div class="text-center py-5">
-                <h2 class="text-muted"><i class="bi bi-x-circle"></i> <?php $this->show('No orders'); ?></h2>
+                <h2 class="text-muted"><i class="bi bi-x-circle"></i> <?= $this->translate('No orders'); ?></h2>
             </div>
             <?php else: ?>
             <div class="mt-3">
                 <?php if ($appliedFilter): ?>
                 <a href="<?= $this->url('Shop:Admin:Order@indexAction'); ?>" class="btn btn-secondary">
-                    <i class="bi bi-trash"></i> <?php $this->show('Reset filter'); ?>
+                    <i class="bi bi-trash"></i> <?= $this->translate('Reset filter'); ?>
                 </a>
                 <?php endif; ?>
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-funnel"></i> <?php $this->show('Filter'); ?>
+                    <i class="bi bi-funnel"></i> <?= $this->translate('Filter'); ?>
                 </button>
             </div>
             <?php endif; ?>
@@ -165,7 +165,7 @@ $route = $this->url('Shop:Admin:Order@filterAction', null);
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><i class="bi bi-eye"></i> <?php $this->show('Order details'); ?></h4>
+                <h4 class="modal-title"><i class="bi bi-eye"></i> <?= $this->translate('Order details'); ?></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

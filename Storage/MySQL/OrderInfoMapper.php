@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -33,7 +31,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
      */
     private function getColumns()
     {
-        return array(
+        return [
             self::column('id'),
             self::column('datetime'),
             self::column('name'),
@@ -50,7 +48,7 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
             self::column('order_status_id'),
             OrderStatusTranslationMapper::column('name') => 'status_name',
             OrderStatusTranslationMapper::column('description') => 'status_description',
-        );
+        ];
     }
 
     /**
@@ -98,13 +96,13 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
         return $this->db->select($this->getColumns())
                         ->from(self::getTableName())
                         // Order status relation
-                        ->leftJoin(OrderStatusMapper::getTableName(), array(
+                        ->leftJoin(OrderStatusMapper::getTableName(), [
                             OrderStatusMapper::column('id') => self::getRawColumn('order_status_id')
-                        ))
+                        ])
                         // Order status translation
-                        ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                        ->leftJoin(OrderStatusTranslationMapper::getTableName(), [
                             OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
-                        ))
+                        ])
                         // Language constraint
                         ->whereEquals(OrderStatusTranslationMapper::column('lang_id'), $this->getLangId())
                         ->orderBy(self::column('id'))
@@ -156,14 +154,14 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
         $db = $this->db->select($this->getColumns())
                        ->from(self::getTableName())
                        // Order status relation
-                       ->leftJoin(OrderStatusMapper::getTableName(), array(
+                       ->leftJoin(OrderStatusMapper::getTableName(), [
                            OrderStatusMapper::column('id') => self::getRawColumn('order_status_id'),
                            self::column('id') => $id
-                       ))
+                       ])
                        // Order status translation
-                       ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                       ->leftJoin(OrderStatusTranslationMapper::getTableName(), [
                            OrderStatusTranslationMapper::column('id') => OrderStatusMapper::getRawColumn('id')
-                       ))
+                       ])
                        ->whereEquals(self::column('id'), $id);
 
         return $db->query();
@@ -179,12 +177,12 @@ final class OrderInfoMapper extends AbstractMapper implements OrderInfoMapperInt
     {
         $db = $this->db->select($this->getColumns())
                        ->from(self::getTableName())
-                       ->leftJoin(OrderStatusTranslationMapper::getTableName(), array(
+                       ->leftJoin(OrderStatusTranslationMapper::getTableName(), [
                             OrderStatusTranslationMapper::column('id') => self::getRawColumn('id')
-                       ))
-                       ->leftJoin(OrderStatusMapper::getTableName(), array(
+                       ])
+                       ->leftJoin(OrderStatusMapper::getTableName(), [
                            self::column('order_status_id') => new RawSqlFragment(OrderStatusMapper::column('id'))
-                       ))
+                       ])
                        ->whereEquals(self::column('customer_id'), $customerId)
                        ->orderBy($this->getPk())
                        ->desc();

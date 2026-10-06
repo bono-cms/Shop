@@ -13,7 +13,7 @@ defined('KRYSTAL') or die;
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title m-0">
-                    <i class="bi bi-patch-check"></i> <?php $this->show('Brands'); ?> <small class="text-muted">(<?= count($brands); ?>)</small>
+                    <i class="bi bi-patch-check"></i> <?= $this->translate('Brands'); ?> <small class="text-muted">(<?= count($brands); ?>)</small>
                 </h3>
             </div>
             <div class="card-body">
@@ -61,7 +61,7 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title m-0"><i class="bi bi-pencil"></i> <?php $this->show($title); ?></h4>
+                <h4 class="card-title m-0"><i class="bi bi-pencil"></i> <?= $this->translate($title); ?></h4>
             </div>
 
             <div class="card-body">
@@ -69,7 +69,7 @@ defined('KRYSTAL') or die;
                     <?= Element::hidden('brand[id]', $brand->getId()); ?>
 
                     <div class="form-group mb-3">
-                        <label class="form-label"><?php $this->show('Name'); ?></label>
+                        <label class="form-label"><?= $this->translate('Name'); ?></label>
                         <div class="input-group">
                             <?= Element::text('brand[name]', $brand->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Name')]); ?>
                             <div class="input-group-append">
@@ -79,7 +79,7 @@ defined('KRYSTAL') or die;
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label"><?php $this->show('Order'); ?></label>
+                        <label class="form-label"><?= $this->translate('Order'); ?></label>
                         <div class="input-group">
                             <?= Element::text('brand[order]', $brand->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order')]); ?>
                             <div class="input-group-append">

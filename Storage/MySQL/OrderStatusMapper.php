@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -38,13 +36,13 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
      */
     private function getColumns()
     {
-        return array(
+        return [
             self::column('id'),
             self::column('order'),
             OrderStatusTranslationMapper::column('lang_id'),
             OrderStatusTranslationMapper::column('name'),
             OrderStatusTranslationMapper::column('description')
-        );
+        ];
     }
 
     /**
@@ -72,10 +70,10 @@ final class OrderStatusMapper extends AbstractMapper implements OrderStatusMappe
 
         // Whether to sort
         if ($sort === true) {
-            $db->orderBy(array(
+            $db->orderBy([
                 'order',
                 new RawSqlFragment(sprintf('CASE WHEN `order` = 0 THEN %s END DESC', self::column('id')))
-            ));
+            ]);
         } else {
             $db->orderBy($this->getPk())
                ->desc();

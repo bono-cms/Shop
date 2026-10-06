@@ -3,15 +3,11 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
 
 namespace Shop\Controller;
-
-use Krystal\Validate\Pattern;
 
 final class Order extends AbstractShopController
 {
@@ -22,24 +18,28 @@ final class Order extends AbstractShopController
      */
     public function orderAction()
     {
-        $input = $this->request->getPost();
+        $validator = $this->createValidation();
 
-        // Create form validator
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name(),
-                    'phone' => new Pattern\Phone(),
-                    'email' => new Pattern\Email(),
-                    'address' => new Pattern\Address(),
-                    'comment' => new Pattern\Comment(),
-                    'captcha' => new Pattern\Captcha($this->captcha)
-                )
-            )
-        ));
+        $validator->field('name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
 
-        if ($formValidator->isValid()) {
+        $validator->field('phone')
+                  ->required();
+
+        $validator->field('email')
+                  ->required()
+                  ->addRule('email');
+
+        $validator->field('address')
+                  ->required();
+
+        $validator->field('captcha')
+                  ->addRule('captcha', null, ['expected' => $this->captcha]);
+
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost();
+
             if ($this->makeOrder($input)) {
                 // Do not remember current discount for next orders
                 $this->getModuleService('couponManager')->clearIfApplied();
@@ -53,7 +53,9 @@ final class Order extends AbstractShopController
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 
@@ -73,11 +75,11 @@ final class Order extends AbstractShopController
         $input['discount'] = $this->getModuleService('couponManager')->getAppliedDiscount();
 
         // Prepare a message first
-        $message = $this->view->renderRaw($this->moduleName, 'messages', 'order', array(
+        $message = $this->view->renderRaw($this->moduleName, 'messages', 'order', [
             'basketManager' => $this->getModuleService('basketManager'),
             'currency' => $this->getModuleService('configManager')->getEntity()->getCurrency(),
             'input' => $input
-        ));
+        ]);
 
         if ($orderManager->make($input)) {
             // Prepare the subject

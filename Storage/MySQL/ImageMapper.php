@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -76,12 +74,12 @@ final class ImageMapper extends AbstractMapper implements ImageMapperInterface
      */
     public function insert($productId, $image, $order, $published)
     {
-        return $this->db->insert(self::getTableName(), array(
+        return $this->db->insert(self::getTableName(), [
             'product_id' => $productId,
             'image' => $image,
             'order' => $order,
             'published' => $published
-        ))->execute();
+        ])->execute();
     }
 
     /**

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -33,10 +31,10 @@ final class AttributeGroup extends AbstractController
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
                    ->addOne($title);
 
-        return $this->view->render('attributes/group', array(
+        return $this->view->render('attributes/group', [
             'group' => $group,
             'new' => $new
-        ));
+        ]);
     }
 
     /**
@@ -74,17 +72,36 @@ final class AttributeGroup extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('group');
+        $validator = $this->createValidation();
 
-        $service = $this->getModuleService('attributeGroupManager');
-        $service->save($this->request->getPost());
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
 
-        if (!empty($input['id'])) {
-            $this->flashBag->set('success', 'The element has been updated successfully');
-            return '1';
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('group');
+
+            $service = $this->getModuleService('attributeGroupManager');
+            $service->save($this->request->getPost());
+
+            if (!empty($input['id'])) {
+                $this->flashBag->set('success', 'The element has been updated successfully');
+
+                return $this->json([
+                    'refresh' => true
+                ]);
+            } else {
+                $this->flashBag->set('success', 'The element has been created successfully');
+
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:AttributeGroup@editAction', [$service->getLastId()]),
+                ]);
+            }
+
         } else {
-            $this->flashBag->set('success', 'The element has been created successfully');
-            return $service->getLastId();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 
@@ -100,6 +117,9 @@ final class AttributeGroup extends AbstractController
         $service->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return '1';
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 }

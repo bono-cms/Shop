@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -178,7 +176,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
      * @param string $itemsPerPage Optional Per page count filter
      * @return array
      */
-    public function findByAttributes($categoryId, $customerId = null, array $attributes = array(), $sort = null, $page = null, $itemsPerPage = null)
+    public function findByAttributes($categoryId, $customerId = null, array $attributes = [], $sort = null, $page = null, $itemsPerPage = null)
     {
         return $this->prepareResults($this->productMapper->findByAttributes($categoryId, $customerId, $attributes, $sort, $page, $itemsPerPage));
     }
@@ -194,7 +192,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
      * @param array $parameters
      * @return array
      */
-    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = array())
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = [])
     {
         return $this->prepareResults($this->productMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc, $parameters));
     }
@@ -220,7 +218,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
      */
     public function fetchBestSales($qty, $limit)
     {
-        $entities = array();
+        $entities = [];
         $ids = $this->productMapper->fetchBestSales($qty, $limit);
 
         foreach ($ids as $id) {
@@ -282,12 +280,12 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
     {
         $bm = new BreadcrumbMaker($this->categoryMapper, $this->webPageManager);
 
-        return $bm->getWithCategoryId($product->getCategoryId(), array(
-            array(
+        return $bm->getWithCategoryId($product->getCategoryId(), [
+            [
                 'name' => $product->getName(),
                 'link' => '#'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -298,7 +296,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
      */
     private function createCategoryPair(array $categories)
     {
-        $result = array();
+        $result = [];
 
         foreach ($categories as $category) {
             $result[(int) $category['id']] = Filter::escape($category['name']);
@@ -315,7 +313,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
      */
     private function createCategoryIds(array $categories)
     {
-        $ids = array();
+        $ids = [];
 
         foreach ($categories as $category) {
             array_push($ids, (int) $category['id']);
@@ -340,7 +338,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
 
         $entity = new ProductEntity();
         $entity->setImageBag($imageBag)
-            ->setAttributeGroupIds(isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array())        
+            ->setAttributeGroupIds(isset($product['attribute_group_id']) ? $product['attribute_group_id'] : [])        
             ->setId($product['id'], ProductEntity::FILTER_INT)
             ->setBrandId($product['brand_id'])
             ->setLangId($product['lang_id'], ProductEntity::FILTER_INT)
@@ -412,7 +410,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
     private function preparePhotos($id, $images)
     {
         if (!empty($images)) {
-            $entities = array();
+            $entities = [];
 
             foreach ($images as $image) {
                 $imageBag = clone $this->imageManager->getImageBag();
@@ -583,7 +581,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
 
         // Request data
         $product =& $input['data']['product'];
-        $file = isset($input['files']['file']) ? $input['files']['file'] : array();
+        $file = isset($input['files']['file']) ? $input['files']['file'] : [];
 
         // Reset indexes
         if ($file) {
@@ -666,7 +664,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
         $productId = $product['id'];
 
         // An array of new appended images from a user
-        $appendedImages = isset($input['files']['file']) ? $input['files']['file'] : array();
+        $appendedImages = isset($input['files']['file']) ? $input['files']['file'] : [];
 
         if (!empty($input['files'])) {
             // Array of changed images, representing an id => FileBag instance
@@ -753,7 +751,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
      */
     private function getChangedImages(array $files)
     {
-        $result = array();
+        $result = [];
 
         foreach ($files as $dataType => $value) {
             if (!empty($value) && strpos($dataType, 'image_') !== false) {
@@ -839,7 +837,7 @@ final class ProductManager extends AbstractManager implements FilterableServiceI
     private function createAttachedEntity(array $collection)
     {
         // To be returned
-        $entities = array();
+        $entities = [];
 
         $ids = $this->createCategoryIds($collection);
 

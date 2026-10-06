@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -33,11 +31,11 @@ final class AttributeValue extends AbstractController
                    ->addOne('Attributes', 'Shop:Admin:Attributes@indexAction')
                    ->addOne($title);
 
-        return $this->view->render('attributes/value', array(
+        return $this->view->render('attributes/value', [
             'groups' => $this->getModuleService('attributeGroupManager')->fetchList(),
             'value' => $value,
             'new' => $new
-        ));
+        ]);
     }
 
     /**
@@ -52,7 +50,10 @@ final class AttributeValue extends AbstractController
         $service->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return '1';
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -90,18 +91,40 @@ final class AttributeValue extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('value');
+        $validator = $this->createValidation();
 
-        $service = $this->getModuleService('attributeValueManager');
-        $service->save($this->request->getPost());
+        $validator->field('value.group_id')
+                  ->required();
 
-        if (!empty($input['id'])) {
-            $this->flashBag->set('success', 'The element has been updated successfully');
-            return '1';
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
+
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('value');
+
+            $service = $this->getModuleService('attributeValueManager');
+            $service->save($this->request->getPost());
+
+            if (!empty($input['id'])) {
+                $this->flashBag->set('success', 'The element has been updated successfully');
+
+                return $this->json([
+                    'refresh' => true
+                ]);
+
+            } else {
+                $this->flashBag->set('success', 'The element has been created successfully');
+
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:AttributeValue@editAction', [$service->getLastId()]),
+                ]);
+            }
 
         } else {
-            $this->flashBag->set('success', 'The element has been created successfully');
-            return $service->getLastId();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

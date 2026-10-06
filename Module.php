@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -20,11 +18,8 @@ use Shop\Service\CouponManager;
 use Shop\Service\CurrencyManager;
 use Shop\Service\AttributeGroupManager;
 use Shop\Service\AttributeValueManager;
-use Shop\Service\ProductImageManagerFactory;
-use Shop\Service\CategoryImageManagerFactory;
 use Shop\Service\RecentProductManagerFactory;
 use Shop\Service\BasketManager;
-use Shop\Service\ProductManagerInterface;
 use Shop\Service\ProductManager;
 use Shop\Service\CategoryManager;
 use Shop\Service\OrderManager;
@@ -109,7 +104,7 @@ final class Module extends AbstractCmsModule
             $config->getEntity()
         );
 
-        return array(
+        return [
             'variantService' => new VariantService($variantMapper),
             'wishlistManager' => new WishlistManager($wishlistMapper, $productManager),
             'siteService' => $siteService,
@@ -128,7 +123,7 @@ final class Module extends AbstractCmsModule
             'specificationItemService' => new SpecificationItemService($this->getMapper('/Shop/Storage/MySQL/SpecificationItemMapper')),
             'specificationValueService' => new SpecificationValueService($this->getMapper('/Shop/Storage/MySQL/SpecificationValueMapper'), $this->getMapper('/Shop/Storage/MySQL/SpecificationCategoryMapper')),
             'brandService' => new BrandService($this->getMapper('/Shop/Storage/MySQL/BrandMapper'))
-        );
+        ];
     }
 
     /**
@@ -139,23 +134,23 @@ final class Module extends AbstractCmsModule
      */
     private function getProductImageManager(VirtualEntity $config)
     {
-        $plugins = array(
-            'thumb' => array(
-                'dimensions' => array(
+        $plugins = [
+            'thumb' => [
+                'dimensions' => [
                     // In product's page (Administration area)
-                    array(200, 200),
+                    [200, 200],
                     // Dimensions for a main cover image on site
-                    array($config->getCoverWidth(), $config->getCoverHeight()),
+                    [$config->getCoverWidth(), $config->getCoverHeight()],
                     // In category (and in browser)
-                    array($config->getCategoryCoverWidth(), $config->getCategoryCoverHeight()),
+                    [$config->getCategoryCoverWidth(), $config->getCategoryCoverHeight()],
                     // Thumbs on site
-                    array($config->getThumbWidth(), $config->getThumbHeight()),
-                )
-            ),
-            'original' => array(
+                    [$config->getThumbWidth(), $config->getThumbHeight()],
+                ]
+            ],
+            'original' => [
                 'prefix' => 'original'
-            )
-        );
+            ]
+        ];
 
         return new ImageManager(
             self::PARAM_PRODUCTS_IMG_PATH,
@@ -173,19 +168,19 @@ final class Module extends AbstractCmsModule
      */
     private function getCategoryImageManager(VirtualEntity $config)
     {
-        $plugins = array(
-            'thumb' => array(
-                'dimensions' => array(
+        $plugins = [
+            'thumb' => [
+                'dimensions' => [
                     // For the administration panel
-                    array(200, 200),
+                    [200, 200],
                     // For the site
-                    array($config->getCategoryCoverWidth(), $config->getCategoryCoverHeight())
-                )
-            ),
-            'original' => array(
+                    [$config->getCategoryCoverWidth(), $config->getCategoryCoverHeight()]
+                ]
+            ],
+            'original' => [
                 'prefix' => 'original'
-            )
-        );
+            ]
+        ];
 
         return new ImageManager(
             self::PARAM_CATEGORIES_IMG_PATH,
@@ -222,17 +217,4 @@ final class Module extends AbstractCmsModule
             return $this->getServiceLocator()->get('sessionBag');
         }
     }
-
-    /**
-     * Returns an instance of basket manager
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $config
-     * @param \Shop\Storage\ProductMapperInterface $productMapper
-     * @param \Krystal\Image\Tool\ImageBagInterface $imageBag
-     * @return \Shop\Service\BasketManager
-     */
-    private function getBasketManager(VirtualEntity $config, $productMapper, ImageBagInterface $imageBag)
-    {
-        return BasketManagerFactory::build($productMapper, $this->getWebPageManager(), $imageBag, $this->createStorage($config));
-    }    
 }

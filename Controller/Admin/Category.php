@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -12,9 +10,6 @@
 namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
-use Krystal\Tree\AdjacencyList\TreeBuilder;
-use Krystal\Tree\AdjacencyList\Render\PhpArray;
-use Krystal\Validate\Pattern;
 use Krystal\Stdlib\VirtualEntity;
 
 final class Category extends AbstractController
@@ -40,17 +35,17 @@ final class Category extends AbstractController
     private function createForm($category, $title)
     {
         $this->view->getPluginBag()
-                   ->load(array($this->getWysiwygPluginName(), 'chosen'))
+                   ->load([$this->getWysiwygPluginName(), 'chosen'])
                    ->appendScript('@Shop/admin/category.form.js');
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne($title);
 
-        return $this->view->render('category.form', array(
+        return $this->view->render('category.form', [
             'categories' => $this->getCategoriesTree(),
             'category' => $category
-        ));
+        ]);
     }
 
     /**
@@ -104,7 +99,10 @@ final class Category extends AbstractController
         $service->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return '1';
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -114,24 +112,24 @@ final class Category extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('category');
+        $validator = $this->createValidation();
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name()
-                )
-            )
-        ));
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
 
-        if (1) {
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('category');
+
             $service = $this->getModuleService('categoryManager');
 
             if (!empty($input['id'])) {
                 if ($service->update($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
-                    return '1';
+
+                    return $this->json([
+                        'refresh' => true
+                    ]);
                 } else {
                     return $this->json([
                         'error' => true,
@@ -142,7 +140,10 @@ final class Category extends AbstractController
             } else {
                 if ($service->add($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
-                    return $service->getLastId();
+
+                    return $this->json([
+                        'redirect' => $this->createUrl('Shop:Admin:Category@editAction', [$service->getLastId()]),
+                    ]);
                 } else {
                     return $this->json([
                         'error' => true,
@@ -152,7 +153,9 @@ final class Category extends AbstractController
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

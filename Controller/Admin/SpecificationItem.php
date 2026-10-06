@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -32,11 +30,11 @@ final class SpecificationItem extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Specifications');
 
-        return $this->view->render('specification/index', array(
+        return $this->view->render('specification/index', [
             'categories' => $this->getModuleService('specificationCategoryService')->fetchAll(),
             'categoryId' => $categoryId,
             'items' => $this->getModuleService('specificationItemService')->fetchAll($categoryId)
-        ));
+        ]);
     }
 
     /**
@@ -81,15 +79,15 @@ final class SpecificationItem extends AbstractController
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
+                                       ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', [null]))
                                        ->addOne($title);
 
-        return $this->view->render('specification/item.form', array(
+        return $this->view->render('specification/item.form', [
             'item' => $item,
             'new' => $new,
             'categories' => $this->getModuleService('specificationCategoryService')->fetchList(),
             'types' => $typeCollection->getAll()
-        ));
+        ]);
     }
 
     /**
@@ -131,7 +129,10 @@ final class SpecificationItem extends AbstractController
         $this->getModuleService('specificationItemService')->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -141,19 +142,41 @@ final class SpecificationItem extends AbstractController
      */
     public function saveAction()
     {
-        $data = $this->request->getPost();
+        $validator = $this->createValidation();
 
-        $new = !$data['item']['id'];
-        $specificationItemService = $this->getModuleService('specificationItemService');
-        
-        if ($specificationItemService->save($data)) {
-            $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
-        }
+        $validator->field('item.category_id')
+                  ->required();
 
-        if ($new) {
-            return $specificationItemService->getLastId();
+        $validator->field('item.type')
+                  ->required();
+
+        $validator->field('translation.*.name')
+                  ->required();
+
+        if ($validator->isPassed()) {
+            $data = $this->request->getPost();
+
+            $new = !$data['item']['id'];
+            $specificationItemService = $this->getModuleService('specificationItemService');
+            
+            if ($specificationItemService->save($data)) {
+                $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
+            }
+
+            if ($new) {
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:SpecificationItem@editAction', [$specificationItemService->getLastId()]),
+                ]);
+            } else {
+                return $this->json([
+                    'refresh' => true
+                ]);
+            }
+
         } else {
-            return 1;
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

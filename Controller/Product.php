@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -35,12 +33,12 @@ final class Product extends AbstractShopController
             $this->loadSitePlugins();
 
             // Render partial
-            return $this->view->disableLayout()->render('quick-view-modal', array(
+            return $this->view->disableLayout()->render('quick-view-modal', [
                 'product' => $productManager->fetchFullById($id, $this->createCustomerId()),
                 'images' => $productManager->fetchAllPublishedImagesById($id, $thumbsLimit),
                 'coverSize' => $coverSize,
                 'basketManager' => $this->getModuleService('basketManager')
-            ));
+            ]);
         }
     }
 
@@ -73,13 +71,13 @@ final class Product extends AbstractShopController
             // Load required plugins for view
             $this->loadPlugins();
 
-            $response = $this->view->render('shop-product', array(
+            $response = $this->view->render('shop-product', [
                 // Image bags of current product
                 'images' => $productManager->fetchAllPublishedImagesById($id),
                 'page' => $product,
                 'product' => $product,
                 'languages' => $productManager->getSwitchUrls($id)
-            ));
+            ]);
 
             // After product is viewed, it's time to increment its view count
             $productManager->incrementViewCount($id);
@@ -126,6 +124,6 @@ final class Product extends AbstractShopController
 
         // Load zoom plugin
         $this->view->getPluginBag()
-                   ->load(array('zoom'));
+                   ->load(['zoom']);
     }
 }

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -40,12 +38,12 @@ final class SpecificationCategoryMapper extends AbstractMapper implements Specif
      */
     private function getColumns()
     {
-        return array(
+        return [
             self::column('id'),
             self::column('order'),
             SpecificationCategoryTranslationMapper::column('lang_id'),
             SpecificationCategoryTranslationMapper::column('name')
-        );
+        ];
     }
 
     /**
@@ -63,9 +61,9 @@ final class SpecificationCategoryMapper extends AbstractMapper implements Specif
 
         $db = $this->createEntitySelect($columns)
                    // Item relation
-                   ->leftJoin(SpecificationItemMapper::getTableName(), array(
+                   ->leftJoin(SpecificationItemMapper::getTableName(), [
                         SpecificationItemMapper::column('category_id') => self::getRawColumn('id')
-                   ))
+                   ])
                    ->whereEquals(SpecificationCategoryTranslationMapper::column('lang_id'), $this->getLangId())
                    ->groupBy($this->getColumns())
                    ->orderBy(self::column('id'))

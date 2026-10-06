@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -151,7 +149,7 @@ final class CategoryManager extends AbstractManager implements MenuAwareManager
 
             $raw = $treeBuilder->render($walker);
 
-            $output = array();
+            $output = [];
 
             foreach ($raw as $id => $name) {
                 foreach ($rows as $index => $row) {
@@ -369,16 +367,16 @@ final class CategoryManager extends AbstractManager implements MenuAwareManager
      */
     private function createTreeData()
     {
-        $result = array();
+        $result = [];
         $entities = $this->prepareResults($this->fetchAll());
 
         foreach ($entities as $entity) {
-            $result[] = array(
+            $result[] = [
                 'name' => $entity->getName(),
                 'id' => $entity->getId(),
                 'parent_id' => $entity->getParentId(),
                 'url' => $entity->getUrl()
-            );
+            ];
         }
 
         return $result;

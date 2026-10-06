@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -29,13 +27,13 @@ final class SpecificationCategory extends AbstractController
 
         // Append breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
-                                       ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', array(null)))
+                                       ->addOne('Specifications', $this->createUrl('Shop:Admin:SpecificationItem@indexAction', [null]))
                                        ->addOne($title);
 
-        return $this->view->render('specification/category.form', array(
+        return $this->view->render('specification/category.form', [
             'category' => $category,
             'new' => $new
-        ));
+        ]);
     }
 
     /**
@@ -77,7 +75,10 @@ final class SpecificationCategory extends AbstractController
         $this->getModuleService('specificationCategoryService')->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -87,19 +88,36 @@ final class SpecificationCategory extends AbstractController
      */
     public function saveAction()
     {
-        $data = $this->request->getPost();
+        $validator = $this->createValidation();
 
-        $new = !$data['category']['id'];
-        $specificationCategoryService = $this->getModuleService('specificationCategoryService');
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
 
-        if ($specificationCategoryService->save($data)) {
-            $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
-        }
+        if ($validator->isPassed()) {
+            $data = $this->request->getPost();
 
-        if ($new) {
-            return $specificationCategoryService->getLastId();
+            $new = !$data['category']['id'];
+            $specificationCategoryService = $this->getModuleService('specificationCategoryService');
+
+            if ($specificationCategoryService->save($data)) {
+                $this->flashBag->set('success', !$new ? 'The element has been updated successfully' : 'The element has been created successfully');
+            }
+
+            if ($new) {
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:SpecificationCategory@editAction', [$specificationCategoryService->getLastId()]),
+                ]);
+            } else {
+                return $this->json([
+                    'refresh' => true
+                ]);
+            }
+
         } else {
-            return 1;
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

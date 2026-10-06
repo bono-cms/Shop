@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -53,9 +51,9 @@ final class Category extends AbstractShopController
 
         $this->loadSitePlugins();
 
-        return $this->view->disableLayout()->render('partials/category-products', array(
+        return $this->view->disableLayout()->render('partials/category-products', [
             'products' => $products
-        ));
+        ]);
     }
 
     /**
@@ -101,7 +99,7 @@ final class Category extends AbstractShopController
                 $this->createCustomerId()
             );
 
-            $vars = array(
+            $vars = [
                 'paginator' => $paginator,
                 'products' => $products,
                 'page' => $category,
@@ -111,7 +109,7 @@ final class Category extends AbstractShopController
                 // Form gadgets
                 'ppc' => $this->getPerPageCountGadget(),
                 'sorter' => $this->getCategorySortGadget()
-            );
+            ];
 
             // Extract child categories
             $children = $categoryManager->fetchChildrenByParentId($id);
@@ -158,7 +156,9 @@ final class Category extends AbstractShopController
             $count = $this->request->getPost('count');
             $this->getPerPageCountGadget()->setPerPageCount($count);
 
-            return '1';
+            return $this->json([
+                'refresh' => true
+            ]);
         }
     }
 
@@ -173,7 +173,9 @@ final class Category extends AbstractShopController
             $sort = $this->request->getPost('sort');
             $this->getCategorySortGadget()->setSortOption($sort);
 
-            return '1';
+            return $this->json([
+                'refresh' => true
+            ]);
         }
     }
 }

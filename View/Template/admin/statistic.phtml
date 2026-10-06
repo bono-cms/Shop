@@ -2,8 +2,8 @@
 <table class="table table-hover table-bordered table-striped">
 	<?php foreach ($data as $key => $value): ?>
 	<tr>
-		<td><?php $this->show($key); ?></td>
-		<td><?php echo $value; ?></td>
+		<td><?= $this->translate($key); ?></td>
+		<td><?= $value; ?></td>
 	</tr>
 	<?php endforeach; ?>
 </table>

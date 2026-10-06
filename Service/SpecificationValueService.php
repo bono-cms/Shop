@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -71,7 +69,7 @@ final class SpecificationValueService extends AbstractManager
      */
     private function extractFrontItems(array $collection)
     {
-        $output = array();
+        $output = [];
 
         foreach ($collection as $category => $items) {
             foreach ($items as $item) {
@@ -99,7 +97,7 @@ final class SpecificationValueService extends AbstractManager
 
         $partitions = ArrayUtils::arrayPartition($items, 'category_id');
 
-        $output = array();
+        $output = [];
 
         // Process merging items with categories
         foreach ($partitions as $categoryId => $partition) {
@@ -107,7 +105,7 @@ final class SpecificationValueService extends AbstractManager
                 if ($category['id'] == $categoryId) {
                     // Add on demand
                     if (!isset($output[$category['name']])) {
-                        $output[$category['name']] = array();
+                        $output[$category['name']] = [];
                     }
 
                     // Finally merge

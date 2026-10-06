@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -51,10 +49,10 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
      */
     public function add($customerId, $productId)
     {
-        return $this->persist(array(
+        return $this->persist([
             'customer_id' => $customerId,
             'product_id' => $productId
-        ));
+        ]);
     }
 
     /**
@@ -83,13 +81,13 @@ final class WishlistMapper extends AbstractMapper implements WishlistMapperInter
         return $this->db->select(ProductMapper::getSharedColumns(null, false))
                         ->from(self::getTableName())
                         // Product relation
-                        ->leftJoin(ProductMapper::getTableName(), array(
+                        ->leftJoin(ProductMapper::getTableName(), [
                             self::column('product_id') => ProductMapper::getRawColumn('id')
-                        ))
+                        ])
                         // Web page relation
-                        ->leftJoin(WebPageMapper::getTableName(), array(
+                        ->leftJoin(WebPageMapper::getTableName(), [
                             WebPageMapper::column('id') => ProductMapper::getRawColumn('web_page_id')
-                        ))
+                        ])
                         ->whereEquals(self::column('customer_id'), $customerId)
                         ->orderBy(self::column('wishlist_item_id'))
                         ->desc()

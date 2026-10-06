@@ -8,7 +8,7 @@
 </style>
 
 <h4 class="mb-3">
-    <i class="bi bi-cart"></i> <?php $this->show('Order details'); ?> 
+    <i class="bi bi-cart"></i> <?= $this->translate('Order details'); ?> 
     <small class="text-muted"># <?= $id; ?></small>
 </h4>
 
@@ -16,13 +16,13 @@
     <table class="table table-hover table-bordered table-striped">
         <thead>
             <tr>
-                <th class="text-center text-muted"><?php $this->show('#'); ?></th>
-                <th class="text-center"><?php $this->show('Product'); ?></th>
-                <th class="text-center"><?php $this->show('SKU'); ?></th>
-                <th class="text-center"><?php $this->show('Price'); ?></th>
-                <th class="text-center"><?php $this->show('Sub total price'); ?></th>
-                <th class="text-center"><?php $this->show('Quantity'); ?></th>
-                <th class="text-center"><?php $this->show('Attributes'); ?></th>
+                <th class="text-center text-muted"><?= $this->translate('#'); ?></th>
+                <th class="text-center"><?= $this->translate('Product'); ?></th>
+                <th class="text-center"><?= $this->translate('SKU'); ?></th>
+                <th class="text-center"><?= $this->translate('Price'); ?></th>
+                <th class="text-center"><?= $this->translate('Sub total price'); ?></th>
+                <th class="text-center"><?= $this->translate('Quantity'); ?></th>
+                <th class="text-center"><?= $this->translate('Attributes'); ?></th>
             </tr>
         </thead>
 
@@ -54,45 +54,45 @@
     </table>
 </div>
 
-<h4 class="mb-3"><i class="bi bi-person"></i> <?php $this->show('Customer details'); ?></h4>
+<h4 class="mb-3"><i class="bi bi-person"></i> <?= $this->translate('Customer details'); ?></h4>
 
 <div class="table-wrapper">
     <table class="table table-bordered table-hover">
         <tbody>
             <tr>
-                <td><strong><?php $this->show('Order ID'); ?></strong></td>
+                <td><strong><?= $this->translate('Order ID'); ?></strong></td>
                 <td><?= $id; ?></td>
             </tr>
             <tr>
-                <td><strong><?php $this->show('Customer'); ?></strong></td>
+                <td><strong><?= $this->translate('Customer'); ?></strong></td>
                 <td><?= $order->getName(); ?></td>
             </tr>
             <tr>
-                <td><strong><?php $this->show('Customer email'); ?></strong></td>
+                <td><strong><?= $this->translate('Customer email'); ?></strong></td>
                 <td><?= $order->getEmail(); ?></td>
             </tr>
             <tr>
-                <td><strong><?php $this->show('Customer address'); ?></strong></td>
+                <td><strong><?= $this->translate('Customer address'); ?></strong></td>
                 <td><?= $order->getAddress(); ?></td>
             </tr>
             <tr>
-                <td><strong><?php $this->show('Customer phone'); ?></strong></td>
+                <td><strong><?= $this->translate('Customer phone'); ?></strong></td>
                 <td><?= $order->getPhone(); ?></td>
             </tr>
             <tr>
-                <td><strong><?php $this->show('Order date'); ?></strong></td>
+                <td><strong><?= $this->translate('Order date'); ?></strong></td>
                 <td><?= $order->getDatetime(); ?></td>
             </tr>
             <tr>
-                <td><strong><?php $this->show('Order comment'); ?></strong></td>
+                <td><strong><?= $this->translate('Order comment'); ?></strong></td>
                 <td><?= $order->getComment(); ?></td>
             </tr>
             <tr class="table-light">
-                <td><strong><?php $this->show('Total quantity'); ?></strong></td>
+                <td><strong><?= $this->translate('Total quantity'); ?></strong></td>
                 <td><strong><?= $summary['totalQty']; ?></strong></td>
             </tr>
             <tr class="table-light">
-                <td><strong><?php $this->show('Total price'); ?></strong></td>
+                <td><strong><?= $this->translate('Total price'); ?></strong></td>
                 <td><strong><?= number_format($summary['totalPrice']); ?> <?= $currency; ?></strong></td>
             </tr>
         </tbody>

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -28,11 +26,11 @@ final class Attributes extends AbstractController
                    ->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                    ->addOne('Attributes');
 
-        return $this->view->render('attributes/index', array(
+        return $this->view->render('attributes/index', [
             'groups' => $this->getModuleService('attributeGroupManager')->fetchAll(),
             'values' => $this->getModuleService('attributeValueManager')->fetchAllByCategoryId($groupId),
             'groupId' => $groupId
-        ));
+        ]);
     }
 
     /**

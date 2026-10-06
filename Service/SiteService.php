@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -175,7 +173,7 @@ final class SiteService
      * @param \Krystal\Tree\AdjacencyList\Render\AbstractRenderer $walker
      * @return mixed
      */
-    public function renderCategoryDropdown(array $options = array(), AbstractRenderer $walker = null)
+    public function renderCategoryDropdown(array $options = [], AbstractRenderer $walker = null)
     {
         if (is_null($walker)) {
             $walker = new CategoryDropdown($options);
@@ -254,7 +252,7 @@ final class SiteService
                 $result = $this->recentProduct->getWithRecent($id);
             } else {
                 // If that functionality is disabled, then dummy empty array is used instead
-                $result = array();
+                $result = [];
             }
         }
 

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -13,7 +11,6 @@ namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
 
 final class OrderStatus extends AbstractController
 {
@@ -34,10 +31,10 @@ final class OrderStatus extends AbstractController
                                        ->addOne('Order statuses', 'Shop:Admin:OrderStatus@indexAction')
                                        ->addOne($title);
 
-        return $this->view->render('order-status/form', array(
+        return $this->view->render('order-status/form', [
             'orderStatus' => $orderStatus,
             'new' => $new
-        ));
+        ]);
     }
 
     /**
@@ -51,9 +48,9 @@ final class OrderStatus extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Order statuses');
 
-        return $this->view->render('order-status/index', array(
+        return $this->view->render('order-status/index', [
             'orderStatuses' => $this->getModuleService('orderStatusManager')->fetchAll()
-        ));
+        ]);
     }
 
     /**
@@ -96,7 +93,10 @@ final class OrderStatus extends AbstractController
         $service->deleteById($id);
 
         $this->flashBag->set('success', 'Order status has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -106,19 +106,15 @@ final class OrderStatus extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('orderStatus');
+        $validator = $this->createValidation();
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name(),
-                    'description' => new Pattern\Description()
-                )
-            )
-        ));
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
 
-        if (1) {
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('orderStatus');
+
             // Grab the service
             $service = $this->getModuleService('orderStatusManager');
 
@@ -126,16 +122,22 @@ final class OrderStatus extends AbstractController
                 $service->save($this->request->getPost());
                 $this->flashBag->set('success', 'Order status has been updated successfully');
 
-                return 1;
+                return $this->json([
+                    'refresh' => true
+                ]);
             } else {
                 $service->save($this->request->getPost());
                 $this->flashBag->set('success', 'Order status has been added successfully');
 
-                return $service->getLastId();
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:OrderStatus@editAction', [$service->getLastId()]),
+                ]);
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -12,9 +10,6 @@
 namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
-use Krystal\Tree\AdjacencyList\TreeBuilder;
-use Krystal\Tree\AdjacencyList\Render\PhpArray;
-use Krystal\Validate\Pattern;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 
@@ -41,7 +36,7 @@ final class Product extends AbstractController
 
         // Load view plugins
         $this->view->getPluginBag()
-                   ->load(array('preview', 'chosen', $this->getWysiwygPluginName()))
+                   ->load(['preview', 'chosen', $this->getWysiwygPluginName()])
                    ->appendScript('@Shop/admin/product.form.js')
                    ->appendStylesheet('@Shop/admin/product.form.css');
 
@@ -55,9 +50,9 @@ final class Product extends AbstractController
             $attributes = $this->getModuleService('productManager')->fetchAttributesById($id, true);
             $variants = $this->getModuleService('variantService')->fetchAllByProductId($id);
         } else {
-            $photos = array();
-            $attributes = array();
-            $variants = array();
+            $photos = [];
+            $attributes = [];
+            $variants = [];
         }
 
         // If not new, then grab attached specification categories
@@ -67,7 +62,7 @@ final class Product extends AbstractController
             }
         }
 
-        return $this->view->render('product.form', array(
+        return $this->view->render('product.form', [
             'new' => $new,
             'variants' => $variants,
             'names' => $this->getModuleService('productManager')->fetchAllNames(),
@@ -76,12 +71,12 @@ final class Product extends AbstractController
             'categories' => $this->getModuleService('categoryManager')->getCategoriesTree(),
             'config' => $this->getModuleService('configManager')->getEntity(),
             'attributes' => $attributes,
-            'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : array(),
+            'activeAttributes' => $id ? $this->getModuleService('productManager')->findAttributesByProductId($id) : [],
             'specCatIds' => $this->getModuleService('specificationCategoryService')->fetchList(), // Specification category IDs
-            'features' => $id ? $this->getModuleService('specificationValueService')->findByProduct($id) : array(),
+            'features' => $id ? $this->getModuleService('specificationValueService')->findByProduct($id) : [],
             'brands' => $this->getModuleService('brandService')->fetchList(),
             'attributeGroups' => $this->getModuleService('attributeGroupManager')->fetchList()
-        ));
+        ]);
     }
 
     /**
@@ -149,7 +144,9 @@ final class Product extends AbstractController
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -167,7 +164,10 @@ final class Product extends AbstractController
             $this->getModuleService('productManager')->updateSettings($input);
 
             $this->flashBag->set('success', 'Settings have been updated successfully');
-            return '1';
+
+            return $this->json([
+                'refresh' => true
+            ]);
         }
     }
 
@@ -181,44 +181,48 @@ final class Product extends AbstractController
         $input = $this->request->getPost();
 
         // Recovery missing keys if not received
-        $input['product'] = ArrayUtils::arrayRecovery($input['product'], array('category_id'), array());
+        $input['product'] = ArrayUtils::arrayRecovery($input['product'], ['category_id'], []);
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input['product'],
-                'definition' => array(
-                    // Custom case for category id
-                    'category_id' => array(
-                        'required' => true,
-                        'rules' => array(
-                            'NotEmpty' => array(
-                                'message' => 'Attach at least one category'
-                            )
-                        )
-                    ),
-                    'regular_price' => new Pattern\Price()
-                )
-            )
-        ));
+        $validator = $this->createValidation();
 
-        if ($formValidator->isValid()) {
+        $validator->field('product.category_id')
+                  ->required();
+
+        $validator->field('product.regular_price')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('positive');
+
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
+
+        if ($validator->isPassed()) {
             $service = $this->getModuleService('productManager');
 
             if (!empty($input['product']['id'])) {
                 if ($service->update($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
-                    return '1';
+
+                    return $this->json([
+                        'refresh' => true
+                    ]);
                 }
 
             } else {
                 if ($service->add($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
-                    return $service->getLastId();
+
+                    return $this->json([
+                        'redirect' => $this->createUrl('Shop:Admin:Product@editAction', [$service->getLastId()]),
+                    ]);
                 }
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

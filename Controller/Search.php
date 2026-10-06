@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -26,7 +24,7 @@ final class Search extends AbstractShopController
     {
         $placeholder = '(:var)';
 
-        $url =  $this->createUrl('Shop:Search@searchAction', array('?')) . $this->request->buildQuery(array('page' => $placeholder));
+        $url =  $this->createUrl('Shop:Search@searchAction', ['?']) . $this->request->buildQuery(['page' => $placeholder]);
         $url = str_replace(rawurlencode($placeholder), $placeholder, $url);
 
         $paginator->setUrl($url);
@@ -72,7 +70,12 @@ final class Search extends AbstractShopController
      */
     public function searchAction()
     {
-        if ($this->request->hasQuery('keyword')) {
+        $validator = $this->createValidation();
+
+        $validator->field('keyword')
+                  ->required();
+
+        if ($validator->isPassed()) {
             // Request variables
             $pageNumber = $this->request->hasQuery('page') ? $this->request->getQuery('page') : 1;
             $keyword = $this->request->getQuery('keyword');
@@ -99,7 +102,7 @@ final class Search extends AbstractShopController
             $page = $this->createPageEntity();
 
             // Variables to be passed to template
-            $vars = array(
+            $vars = [
                 'paginator' => $paginator,
                 'products' => $products,
                 'page' => $page,
@@ -110,7 +113,7 @@ final class Search extends AbstractShopController
                 'ppc' => $this->getPerPageCountGadget(),
                 'sorter' => $this->getCategorySortGadget(),
                 'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true)
-            );
+            ];
 
             if ($this->request->isAjax()){
                 // Render shared fragment for AJAX request
@@ -121,7 +124,9 @@ final class Search extends AbstractShopController
             }
 
         } else {
-            return false;
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

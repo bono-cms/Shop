@@ -12,12 +12,12 @@ defined('KRYSTAL') or die;
         <ul class="nav nav-tabs card-header-tabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" href="#common" role="tab" data-toggle="tab">
-                    <i class="bi bi-house"></i> <?php $this->show('Common'); ?>
+                    <i class="bi bi-house"></i> <?= $this->translate('Common'); ?>
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" href="#maintenance" role="tab" data-toggle="tab">
-                    <i class="bi bi-images"></i> <?php $this->show('Images'); ?>
+                    <i class="bi bi-images"></i> <?= $this->translate('Images'); ?>
                 </a>
             </li>
         </ul>
@@ -30,64 +30,64 @@ defined('KRYSTAL') or die;
                 <div class="form-group mb-3">
                     <div class="form-check">
                         <?= Element::checkbox('config[basket_enabled]', $config->getBasketEnabled(), ['class' => 'form-check-input', 'id' => 'basket_enabled']); ?>
-                        <label class="form-check-label" for="basket_enabled"><?php $this->show('Enable basket'); ?></label>
+                        <label class="form-check-label" for="basket_enabled"><?= $this->translate('Enable basket'); ?></label>
                     </div>
                 </div>
 
                 <div class="form-group mb-3">
                     <div class="form-check">
                         <?= Element::checkbox('config[stoke_price_enabled]', $config->getStokePriceEnabled(), ['class' => 'form-check-input', 'id' => 'stoke_price_enabled']); ?>
-                        <label class="form-check-label" for="stoke_price_enabled"><?php $this->show('Activate stoke price support'); ?></label>
+                        <label class="form-check-label" for="stoke_price_enabled"><?= $this->translate('Activate stoke price support'); ?></label>
                     </div>
                 </div>
 
                 <div class="form-group mb-3">
                     <div class="form-check">
                         <?= Element::checkbox('config[special_support]', $config->getSpecialSupport(), ['class' => 'form-check-input', 'id' => 'special_support']); ?>
-                        <label class="form-check-label" for="special_support"><?php $this->show('Activate special offer support'); ?></label>
+                        <label class="form-check-label" for="special_support"><?= $this->translate('Activate special offer support'); ?></label>
                     </div>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label"><?php $this->show('Currency'); ?></label>
+                    <label class="form-label"><?= $this->translate('Currency'); ?></label>
                     <div class="input-group">
                         <?= Element::text('config[currency]', $config->getCurrency(), ['class' => 'form-control']); ?>
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                         </div>
                     </div>
-                    <small class="form-text text-muted"><?php $this->show('Default which is displayed on site'); ?></small>
+                    <small class="form-text text-muted"><?= $this->translate('Default which is displayed on site'); ?></small>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label"><?php $this->show('Default per page count'); ?></label>
+                    <label class="form-label"><?= $this->translate('Default per page count'); ?></label>
                     <div class="input-group">
                         <?= Element::number('config[default_category_per_page_count]', $config->getDefaultCategoryPerPageCount(), ['class' => 'form-control', 'min' => '3']); ?>
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                         </div>
                     </div>
-                    <small class="form-text text-muted"><?php $this->show('Default per page count for when browsing categories on site'); ?></small>
+                    <small class="form-text text-muted"><?= $this->translate('Default per page count for when browsing categories on site'); ?></small>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label"><?php $this->show('Amount of new products in showcase'); ?></label>
+                    <label class="form-label"><?= $this->translate('Amount of new products in showcase'); ?></label>
                     <div class="input-group">
                         <?= Element::number('config[showcase_count]', $config->getShowCaseCount(), ['class' => 'form-control', 'min' => '1', 'max' => '10']); ?>
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                         </div>
                     </div>
-                    <small class="form-text text-muted"><?php $this->show("How many products you want to be shown on site's showcase?"); ?></small>
+                    <small class="form-text text-muted"><?= $this->translate("How many products you want to be shown on site's showcase?"); ?></small>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label"><?php $this->show("User's storage type"); ?></label>
+                    <label class="form-label"><?= $this->translate("User's storage type"); ?></label>
                     <?= Element::select('config[basket_storage_type]', $this->getTranslator()->translateArray($config->getBasketStorageTypes()), $config->getBasketStorageType(), ['class' => 'form-control']); ?>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label"><?php $this->show("Basket's page id"); ?></label>
+                    <label class="form-label"><?= $this->translate("Basket's page id"); ?></label>
                     <div class="input-group">
                         <?= Element::text('config[basket_page_id]', $config->getBasketPageId(), ['class' => 'form-control']); ?>
                         <div class="input-group-append">
@@ -102,12 +102,12 @@ defined('KRYSTAL') or die;
                     <ul class="nav nav-pills" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" href="#category-img" role="tab" data-toggle="tab">
-                                <i class="bi bi-folder"></i> <?php $this->show('Category'); ?>
+                                <i class="bi bi-folder"></i> <?= $this->translate('Category'); ?>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#product-img" role="tab" data-toggle="tab">
-                                <i class="bi bi-cart"></i> <?php $this->show("Product's page"); ?>
+                                <i class="bi bi-cart"></i> <?= $this->translate("Product's page"); ?>
                             </a>
                         </li>
                     </ul>
@@ -117,7 +117,7 @@ defined('KRYSTAL') or die;
                     <div class="tab-pane fade show active" id="category-img" role="tabpanel">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label"><?php $this->show("Height"); ?></label>
+                                <label class="form-label"><?= $this->translate("Height"); ?></label>
                                 <div class="input-group">
                                     <?= Element::number('config[category_cover_height]', $config->getCategoryCoverHeight(), ['class' => 'form-control', 'min' => '10', 'max' => '1000']); ?>
                                     <div class="input-group-append">
@@ -126,7 +126,7 @@ defined('KRYSTAL') or die;
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label"><?php $this->show("Width"); ?></label>
+                                <label class="form-label"><?= $this->translate("Width"); ?></label>
                                 <div class="input-group">
                                     <?= Element::number('config[category_cover_width]', $config->getCategoryCoverWidth(), ['class' => 'form-control', 'min' => '10', 'max' => '1000']); ?>
                                     <div class="input-group-append">
@@ -140,11 +140,11 @@ defined('KRYSTAL') or die;
                     <div class="tab-pane fade" id="product-img" role="tabpanel">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label"><?php $this->show("Cover's width"); ?></label>
+                                <label class="form-label"><?= $this->translate("Cover's width"); ?></label>
                                 <?= Element::number('config[cover_width]', $config->getCoverWidth(), ['class' => 'form-control']); ?>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label"><?php $this->show("Cover's height"); ?></label>
+                                <label class="form-label"><?= $this->translate("Cover's height"); ?></label>
                                 <?= Element::number('config[cover_height]', $config->getCoverHeight(), ['class' => 'form-control']); ?>
                             </div>
                         </div>
@@ -155,11 +155,11 @@ defined('KRYSTAL') or die;
 
         <div class="mt-4">
             <button data-button="save" data-url="<?= $this->url('Shop:Admin:Config@saveAction'); ?>" class="btn btn-primary">
-                <i class="bi bi-check-circle"></i> <?php $this->show('Save'); ?>
+                <i class="bi bi-check-circle"></i> <?= $this->translate('Save'); ?>
             </button>
 
             <button data-button="cancel" data-url="<?= $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-light border">
-                <i class="bi bi-x-circle"></i> <?php $this->show('Cancel'); ?>
+                <i class="bi bi-x-circle"></i> <?= $this->translate('Cancel'); ?>
             </button>
         </div>
     </div>

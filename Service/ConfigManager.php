@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -34,10 +32,10 @@ final class ConfigManager extends ConfigModuleService
 
         $entity->setBasketEnabled($this->get('basket_enabled', true), VirtualEntity::FILTER_BOOL);
         $entity->setBasketStorageType($this->get('basket_storage_type', 'cookies'), VirtualEntity::FILTER_TAGS);
-        $entity->setBasketStorageTypes(array(
+        $entity->setBasketStorageTypes([
             'session' => 'Save data until a user closes a browser (In session)',
             'cookies' => 'Save data forever (In cookies)'
-        ));
+        ]);
 
         $entity->setCoverHeight($this->get('cover_height', 300), VirtualEntity::FILTER_FLOAT)
                ->setCoverWidth($this->get('cover_width', 300), VirtualEntity::FILTER_FLOAT)

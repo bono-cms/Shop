@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS `bono_module_shop_orders_info`;
 CREATE TABLE `bono_module_shop_orders_info` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Unique order id',
@@ -11,7 +10,7 @@ CREATE TABLE `bono_module_shop_orders_info` (
 	`address` TEXT NOT NULL COMMENT 'Destination address',
 	`comment` LONGTEXT NOT NULL COMMENT 'Customer comment',
 	`delivery` TEXT NOT NULL COMMENT 'Delivery type',
-	`qty` int NOT NULL COMMENT 'Ammount of products',
+	`qty` int NOT NULL COMMENT 'Amount of products',
 	`total_price` FLOAT COMMENT 'Total price',
     `discount` FLOAT COMMENT 'Discount price if applied',
 	`approved` varchar(1) NOT NULL COMMENT 'Whether this order is approved'
@@ -20,7 +19,7 @@ CREATE TABLE `bono_module_shop_orders_info` (
 DROP TABLE IF EXISTS `bono_module_shop_orders_products`;
 CREATE TABLE `bono_module_shop_orders_products` (
 	`order_id` INT NOT NULL,
-	`product_id` INT NOT NULL COMMENT 'Product id',
+	`product_id` INT NOT NULL COMMENT 'Product ID',
     `sku` varchar(255) DEFAULT NULL COMMENT 'Product or variant SKU',
 	`name` varchar(255) NOT NULL COMMENT 'Product name',
 	`price` float NOT NULL COMMENT 'Product price',
@@ -32,9 +31,9 @@ CREATE TABLE `bono_module_shop_orders_products` (
 DROP TABLE IF EXISTS `bono_module_shop_categories`;
 CREATE TABLE `bono_module_shop_categories` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `parent_id` INT NOT NULL COMMENT 'Parent category id this category id refers to',
-    `order` INT NOT NULL COMMENT 'Sort order for this category',
-    `seo` varchar(1) NOT NULL COMMENT 'Whether SEO enabled or not',
+    `parent_id` INT NOT NULL COMMENT 'Parent category ID this category ID refers to',
+    `order` INT NOT NULL COMMENT 'Sorting order for this category',
+    `seo` varchar(1) NOT NULL COMMENT 'Whether SEO is enabled or not',
     `cover` varchar(254) NOT NULL COMMENT 'Cover image base name'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -42,7 +41,7 @@ DROP TABLE IF EXISTS `bono_module_shop_categories_translations`;
 CREATE TABLE `bono_module_shop_categories_translations` (
     `id` INT NOT NULL,
 	`lang_id` INT NOT NULL,
-	`web_page_id` INT NOT NULL COMMENT 'Sluggable web page id this category refers to',
+	`web_page_id` INT NOT NULL COMMENT 'Sluggable web page ID this category refers to',
 	`title` varchar(255) NOT NULL COMMENT 'Title of the category',
 	`name` varchar(255) NOT NULL COMMENT 'Name of the category',
 	`description` LONGTEXT NOT NULL COMMENT 'Full description of this category',
@@ -67,19 +66,19 @@ CREATE TABLE `bono_module_shop_products` (
     `seo` varchar(1) NOT NULL COMMENT 'Whether SEO tool is enabled or not',
     `cover` varchar(254) NOT NULL COMMENT 'Basename of image file',
     `date` DATE NOT NULL COMMENT 'Date when added',
-    `views` INT NOT NULL COMMENT 'View couter'
+    `views` INT NOT NULL COMMENT 'View counter'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_products_translations`;
 CREATE TABLE `bono_module_shop_products_translations` (
     `id` INT NOT NULL,
     `lang_id` INT NOT NULL,
-    `web_page_id` INT NOT NULL COMMENT 'Web page id this product refers to',
+    `web_page_id` INT NOT NULL COMMENT 'Web page ID this product refers to',
 	`title` varchar(255) NOT NULL COMMENT 'Title of the product',
 	`name` varchar(255) NOT NULL COMMENT 'Name of the product',
-	`description` LONGTEXT NOT NULL COMMENT 'Full description` of this product',
+	`description` LONGTEXT NOT NULL COMMENT 'Full description of this product',
 	`keywords` TEXT NOT NULL COMMENT 'Keywords for search engines',
-    `meta_description` TEXT NOT NULL COMMENT 'Meta-description for search engines',
+    `meta_description` TEXT NOT NULL COMMENT 'Meta description for search engines',
 
     FOREIGN KEY (id) REFERENCES bono_module_shop_products(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE,
@@ -88,7 +87,7 @@ CREATE TABLE `bono_module_shop_products_translations` (
 
 DROP TABLE IF EXISTS `bono_module_shop_product_images`;
 CREATE TABLE `bono_module_shop_product_images` (
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Image id',
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Image ID',
 	`product_id` INT NOT NULL,
 	`image` varchar(254) NOT NULL COMMENT 'Image base name on file-system',
 	`order` INT NOT NULL COMMENT 'Sort order',
@@ -109,13 +108,13 @@ CREATE TABLE `bono_module_shop_product_category_relations` (
 /* Attributes */
 DROP TABLE IF EXISTS `bono_module_shop_attribute_groups`;
 CREATE TABLE `bono_module_shop_attribute_groups` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Attr. Group ID',
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Attribute group ID',
     `dynamic` varchar(1) NOT NULL COMMENT 'Whether the group contains dynamic attributes only'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_attribute_groups_translation`;
 CREATE TABLE `bono_module_shop_attribute_groups_translation` (
-    `id` INT NOT NULL COMMENT 'Attr. Group ID',
+    `id` INT NOT NULL COMMENT 'Attribute group ID',
     `lang_id` INT NOT NULL COMMENT 'Attached language ID',
     `name` varchar(255) NOT NULL COMMENT 'Group name',
 
@@ -204,16 +203,16 @@ CREATE TABLE `bono_module_shop_currencies` (
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status`;
 CREATE TABLE `bono_module_shop_orders_status` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order Status ID',
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Order status ID',
     `order` INT NOT NULL COMMENT 'Sorting order'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_shop_orders_status_translations`;
 CREATE TABLE `bono_module_shop_orders_status_translations` (
-    `id` INT NOT NULL COMMENT 'Order Status ID',
+    `id` INT NOT NULL COMMENT 'Order status ID',
     `lang_id` INT NOT NULL COMMENT 'Attached language ID',
-    `name` varchar(255) NOT NULL COMMENT 'Order Status Name',
-    `description` TEXT COMMENT 'Order Status Description',
+    `name` varchar(255) NOT NULL COMMENT 'Order status name',
+    `description` TEXT COMMENT 'Order status description',
 
     FOREIGN KEY (id) REFERENCES bono_module_shop_orders_status(id) ON DELETE CASCADE,
     FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE

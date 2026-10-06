@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -39,12 +37,12 @@ final class AttributeGroupMapper extends AbstractMapper implements AttributeGrou
      */
     private function getColumns()
     {
-        return array(
+        return [
             self::column('id'),
             self::column('dynamic'),
             AttributeGroupTranslationMapper::column('lang_id'),
             AttributeGroupTranslationMapper::column('name')
-        );
+        ];
     }
 
     /**

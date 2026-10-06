@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -85,7 +83,7 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
      * @param array $parameters
      * @return array
      */
-    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = array())
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = [])
     {
         return $this->prepareResults($this->orderInfoMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc, $parameters));
     }
@@ -233,10 +231,10 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
             $totalQty += $product['qty'];
         }
 
-        return array(
+        return [
             'totalPrice' => $totalPrice,
             'totalQty' => $totalQty
-        );
+        ];
     }
 
     /**
@@ -248,7 +246,7 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
     private function prepareAttributes($attributes)
     {
         $attributes = json_decode($attributes);
-        $output = array();
+        $output = [];
 
         // Safely process attributes
         if (is_array($attributes)) {
@@ -349,7 +347,7 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
         $data['datetime'] = TimeHelper::getNow();
 
         // First of all, insert, because we need to obtain a last id
-        $this->orderInfoMapper->insert(ArrayUtils::arrayWithout($data, array('captcha')));
+        $this->orderInfoMapper->insert(ArrayUtils::arrayWithout($data, ['captcha']));
 
         // Now obtain last id
         $id = $this->orderInfoMapper->getLastId();
@@ -377,7 +375,7 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
     private function addProducts($id, array $products)
     {
         foreach ($products as $product) {
-            $data = array(
+            $data = [
                 'order_id' => $id,
                 'product_id' => $product->getId(),
                 'sku' => $product->getSKU(),
@@ -386,7 +384,7 @@ final class OrderManager extends AbstractManager implements FilterableServiceInt
                 'sub_total_price' => $product->getSubTotalPrice(),
                 'qty' => $product->getQty(),
                 'attributes' => json_encode($product->getAttributes())
-            );
+            ];
 
             $this->orderProductMapper->insert($data);
         }

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -25,9 +23,9 @@ final class Order extends AbstractController
     private function sendConfirmationMessage($receiver, $name)
     {
         // Prepare a message first
-        $body = $this->view->renderRaw($this->moduleName, 'messages', 'order-approved', array(
+        $body = $this->view->renderRaw($this->moduleName, 'messages', 'order-approved', [
             'name' => $name
-        ));
+        ]);
 
         // Grab the service and do email
         $mailer = $this->getService('Cms', 'mailer');
@@ -41,7 +39,7 @@ final class Order extends AbstractController
      */
     public function filterAction()
     {
-        $orders = $this->getFilter($this->getOrderManager(), $this->createUrl('Shop:Admin:Order@filterAction', array(null)));
+        $orders = $this->getFilter($this->getOrderManager(), $this->createUrl('Shop:Admin:Order@filterAction', [null]));
 
         if ($orders !== false) {
             return $this->createGrid($orders);
@@ -59,7 +57,7 @@ final class Order extends AbstractController
     public function indexAction($page = 1)
     {
         $orders = $this->getOrderManager()->fetchAllByPage($page, $this->getSharedPerPageCount());
-        $url = $this->createUrl('Shop:Admin:Order@indexAction', array(), 1);
+        $url = $this->createUrl('Shop:Admin:Order@indexAction', [], 1);
 
         return $this->createGrid($orders, $url);
     }
@@ -81,7 +79,10 @@ final class Order extends AbstractController
             $this->sendConfirmationMessage($order->getEmail(), $order->getName());
 
             $this->flashBag->set('success', 'Selected order marked as approved now');
-            return '1';
+
+            return $this->json([
+                'refresh' => true
+            ]);
         }
     }
 
@@ -99,7 +100,10 @@ final class Order extends AbstractController
             $this->getOrderManager()->updateOrderStatuses($relations);
 
             $this->flashBag->set('success', 'Settings have been saved successfully');
-            return 1;
+
+            return $this->json([
+                'refresh' => true
+            ]);
         }
     }
 
@@ -130,7 +134,9 @@ final class Order extends AbstractController
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -144,13 +150,13 @@ final class Order extends AbstractController
         $details = $this->getOrderManager()->fetchAllDetailsByOrderId($id);
         $order = $this->getOrderManager()->fetchById($id);
 
-        return $this->view->disableLayout()->render('order-details', array(
+        return $this->view->disableLayout()->render('order-details', [
             'id' => $id,
             'order' => $order,
             'currency' => $this->getConfig()->getCurrency(),
             'summary' => $this->getOrderManager()->createSummary($details),
             'details' => $details
-        ));
+        ]);
     }
 
     /**
@@ -177,7 +183,7 @@ final class Order extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('List of orders');
 
-        return $this->view->render('orders', array(
+        return $this->view->render('orders', [
             'orderStatuses' => $this->getModuleService('orderStatusManager')->fetchList(),
             'orders' => $orders,
             'paginator' => $paginator,
@@ -185,7 +191,7 @@ final class Order extends AbstractController
             'title' => 'Orders',
             'query' => $this->request->getQuery(),
             'appliedFilter' => $this->request->getQuery('filter', false)
-        ));
+        ]);
     }
 
     /**

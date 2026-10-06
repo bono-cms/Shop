@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -25,7 +23,7 @@ final class AttributeProcessor
      * 
      * @var array
      */
-    private $rows = array();
+    private $rows = [];
 
     const ARRAY_KEY_GROUP_ID = 'group_id';
     const ARRAY_KEY_GROUP_NAME = 'group_name';
@@ -55,16 +53,16 @@ final class AttributeProcessor
     public static function normalizeInput($productId, array $raw)
     {
         // To be returned
-        $collection = array();
+        $collection = [];
 
         foreach ($raw as $groupId => $value) {
             // Support multiple values on demand
             if (is_array($value)) {
                 foreach ($value as $valueId) {
-                    $collection[] = array($productId, $groupId, (int) $valueId);
+                    $collection[] = [$productId, $groupId, (int) $valueId];
                 }
             } else {
-                $collection[] = array($productId, $groupId, (int) $value);
+                $collection[] = [$productId, $groupId, (int) $value];
             }
         }
 
@@ -81,7 +79,7 @@ final class AttributeProcessor
      */
     public static function findActiveAttribute(array $values, array $attributes, array $activeAttributes)
     {
-        $output = array();
+        $output = [];
         $keys = array_keys($values);
 
         foreach ($attributes as $attribute) {
@@ -104,7 +102,7 @@ final class AttributeProcessor
      */
     public function process()
     {
-        $output = array();
+        $output = [];
 
         foreach ($this->rows as $row) {
             foreach ($output as $inner) {
@@ -113,12 +111,12 @@ final class AttributeProcessor
                 }
             }
 
-            $output[] = array(
+            $output[] = [
                 self::ARRAY_KEY_GROUP_ID => (int) $row[self::ARRAY_KEY_GROUP_ID],
                 self::ARRAY_KEY_GROUP_NAME => Filter::escape($row[self::ARRAY_KEY_GROUP_NAME]),
                 self::ARRAY_KEY_GROUP_DYNAMIC => isset($row['dynamic']) ? $row['dynamic'] : true,
                 self::ARRAY_KEY_ATTRIBUTES => $this->findAttrsByGroupId($row[self::ARRAY_KEY_GROUP_ID])
-            );
+            ];
         }
 
         return $output;
@@ -132,7 +130,7 @@ final class AttributeProcessor
      */
     private function findAttrsByGroupId($groupId)
     {
-        $output = array();
+        $output = [];
 
         foreach ($this->rows as $row) {
             if ($row[self::ARRAY_KEY_GROUP_ID] == $groupId) {

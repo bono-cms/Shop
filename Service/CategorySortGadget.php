@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -33,41 +31,41 @@ final class CategorySortGadget extends DataSorter
     {
         // Defaults
         $desc = false;
-        $order = array('id');
+        $order = ['id'];
 
         switch ($column) {
 
             case CategorySortGadget::SORT_ORDER:
-                $order = array('order');
+                $order = ['order'];
             break;
 
             case CategorySortGadget::SORT_TITLE:
-                $order = array('title');
+                $order = ['title'];
             break;
 
             case CategorySortGadget::SORT_PRICE_DESC:
-                $order = array('regular_price');
+                $order = ['regular_price'];
                 $desc = true;
             break;
 
             case CategorySortGadget::SORT_PRICE_ASC:
-                $order = array('regular_price');
+                $order = ['regular_price'];
             break;
 
             case CategorySortGadget::SORT_DATE_DESC:
-                $order = array('date', 'id');
+                $order = ['date', 'id'];
                 $desc = true;
             break;
 
             case CategorySortGadget::SORT_DATE_ASC:
-                $order = array('date', 'id');
+                $order = ['date', 'id'];
             break;
         }
 
-        return array(
+        return [
             'columns' => $order,
             'desc' => $desc
-        );
+        ];
     }
 
     /**
@@ -78,13 +76,13 @@ final class CategorySortGadget extends DataSorter
      */
     public function __construct(PersistentStorageInterface $storage)
     {
-        parent::__construct($storage, 'cat_sort', self::SORT_DATE_DESC, array(
+        parent::__construct($storage, 'cat_sort', self::SORT_DATE_DESC, [
             self::SORT_ORDER => 'By position',
             self::SORT_TITLE => 'By title',
             self::SORT_PRICE_ASC => 'By price - from lower to higher',
             self::SORT_PRICE_DESC => 'By price - from higher to lower',
             self::SORT_DATE_DESC => 'By date added - from newest to oldest',
             self::SORT_DATE_ASC => 'By date added - from oldest to newest'
-        ));
+        ]);
     }
 }

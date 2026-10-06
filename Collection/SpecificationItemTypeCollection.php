@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -22,11 +20,11 @@ final class SpecificationItemTypeCollection extends ArrayCollection
     /**
      * {@inheritDoc}
      */
-    protected $collection = array(
+    protected $collection = [
         self::TYPE_TEXT => 'Text',
         self::TYPE_DESCRIPTION => 'Description',
         self::TYPE_NUMBER => 'Number'
-    );
+    ];
 
     /**
      * Guess method by constant
@@ -36,11 +34,11 @@ final class SpecificationItemTypeCollection extends ArrayCollection
      */
     public static function guessMethodByConst($const)
     {
-        $map = array(
+        $map = [
             self::TYPE_TEXT => 'text',
             self::TYPE_DESCRIPTION => 'textarea',
             self::TYPE_NUMBER => 'number'
-        );
+        ];
 
         return $map[$const];
     }

@@ -13,7 +13,7 @@ defined('KRYSTAL') or die;
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title m-0">
-                    <i class="bi bi-cash-stack"></i> <?php $this->show('Available currencies'); ?> 
+                    <i class="bi bi-cash-stack"></i> <?= $this->translate('Available currencies'); ?> 
                     <small class="text-muted">(<?= count($currencies); ?>)</small>
                 </h3>
             </div>
@@ -42,14 +42,14 @@ defined('KRYSTAL') or die;
                     ],
 
                     'actions' => [
-                        'edit' => function($currency){
+                        function($currency){
                             return Icon::edit(
                                 $this->url('Shop:Admin:Currency@editAction', $currency->getId()),
                                 $this->translate('Edit this currency')
                             );
                         },
 
-                        'remove' => function($currency){
+                        function($currency){
                             return Icon::remove(
                                 $this->url('Shop:Admin:Currency@deleteAction', $currency->getId()),
                                 $this->translate('Remove this currency'),
@@ -67,7 +67,7 @@ defined('KRYSTAL') or die;
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title m-0">
-                    <i class="bi bi-pencil"></i> <?php $this->show($currency->getId() ? 'Update currency' : 'Add new currency'); ?>
+                    <i class="bi bi-pencil"></i> <?= $this->translate($currency->getId() ? 'Update currency' : 'Add new currency'); ?>
                 </h3>
             </div>
 
@@ -76,7 +76,7 @@ defined('KRYSTAL') or die;
                     <?= Element::hidden('currency[id]', $currency->getId()); ?>
 
                     <div class="form-group mb-3">
-                        <label class="form-label"><?php $this->show('Code'); ?></label>
+                        <label class="form-label"><?= $this->translate('Code'); ?></label>
                         <div class="input-group">
                             <?= Element::text('currency[code]', $currency->getCode(), ['class' => 'form-control', 'placeholder' => $this->translate('Unique currency code')]); ?>
                             <div class="input-group-append">
@@ -86,7 +86,7 @@ defined('KRYSTAL') or die;
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label"><?php $this->show('Value'); ?></label>
+                        <label class="form-label"><?= $this->translate('Value'); ?></label>
                         <div class="input-group">
                             <?= Element::text('currency[value]', $currency->getValue(), ['class' => 'form-control', 'placeholder' => $this->translate('Currency value')]); ?>
                             <div class="input-group-append">

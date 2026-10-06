@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -33,12 +31,12 @@ final class Basket extends AbstractShopController
             $this->view->getBreadcrumbBag()
                        ->addOne($page->getName());
 
-            return $this->view->render('shop-basket', array(
+            return $this->view->render('shop-basket', [
                 'products' => $this->getBasketManager()->getProducts(),
                 'page' => $page,
                 'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(true),
                 'languages' => $pageManager->getSwitchUrls($id, 'Shop:Basket@indexAction')
-            ));
+            ]);
 
         } else {
             return false;
@@ -83,8 +81,20 @@ final class Basket extends AbstractShopController
      */    
     public function addVariant()
     {
-        if ($this->request->hasPost('id', 'variant_id', 'qty')) {
+        $validator = $this->createValidation();
 
+        $validator->field('id')
+                  ->required();
+
+        $validator->field('variant_id')
+                  ->required();
+
+        $validator->field('qty')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('greaterthan', null, ['min' => 0]);
+
+        if ($validator->isPassed()) {
             // Get HTTP POST variables
             $id = $this->request->getPost('id');
             $variantId = $this->request->getPost('variant_id');
@@ -130,6 +140,11 @@ final class Basket extends AbstractShopController
                     'message' => 'The selected product or variant is no longer available'
                 ]);
             }
+
+        } else {
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 
@@ -140,7 +155,17 @@ final class Basket extends AbstractShopController
      */
     public function addAction()
     {
-        if ($this->request->hasPost('id', 'qty')) {
+        $validator = $this->createValidation();
+
+        $validator->field('id')
+                  ->required();
+
+        $validator->field('qty')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('greaterthan', null, ['min' => 0]);
+
+        if ($validator->isPassed()) {
             // Get HTTP POST variables
             $id = $this->request->getPost('id');
             $qty = $this->request->getPost('qty');
@@ -185,6 +210,11 @@ final class Basket extends AbstractShopController
                     'description' => sprintf('The product with ID %s does not exist', $id)
                 ]);
             }
+
+        } else {
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 

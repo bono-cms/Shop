@@ -3,15 +3,11 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
 
 namespace Shop\Controller;
-
-use Krystal\Validate\Pattern;
 
 final class Checkout extends AbstractShopController
 {
@@ -35,11 +31,11 @@ final class Checkout extends AbstractShopController
             $this->view->getBreadcrumbBag()
                        ->addOne($page->getName());
 
-            return $this->view->render('shop-checkout', array(
+            return $this->view->render('shop-checkout', [
                 'page' => $page,
                 'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll(),
                 'languages' => $pageManager->getSwitchUrls($id, 'Shop:Checkout@indexAction')
-            ));
+            ]);
 
         } else {
             return false;
@@ -53,7 +49,12 @@ final class Checkout extends AbstractShopController
      */
     public function couponAction()
     {
-        if ($this->request->hasQuery('code')) {
+        $validator = $this->createValidation();
+
+        $validator->field('code')
+                  ->required();
+
+        if ($validator->isPassed()) {
             $code = $this->request->getQuery('code');
 
             // Grab required services
@@ -67,6 +68,11 @@ final class Checkout extends AbstractShopController
             } else {
                 return 0;
             }
+
+        } else {
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

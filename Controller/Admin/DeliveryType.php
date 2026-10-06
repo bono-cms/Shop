@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -13,7 +11,6 @@ namespace Shop\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
 
 final class DeliveryType extends AbstractController
 {
@@ -33,10 +30,10 @@ final class DeliveryType extends AbstractController
                                        ->addOne('Delivery types', 'Shop:Admin:DeliveryType@indexAction')
                                        ->addOne($title);
 
-        return $this->view->render('delivery-type/form', array(
+        return $this->view->render('delivery-type/form', [
             'deliveryType' => $deliveryType,
             'new' => $new
-        ));
+        ]);
     }
 
     /**
@@ -50,9 +47,9 @@ final class DeliveryType extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Delivery types');
 
-        return $this->view->render('delivery-type/index', array(
+        return $this->view->render('delivery-type/index', [
             'deliveryTypes' => $this->getModuleService('deliveryTypeManager')->fetchAll()
-        ));
+        ]);
     }
 
     /**
@@ -95,7 +92,10 @@ final class DeliveryType extends AbstractController
         $deliveryTypeManager->deleteById($id);
 
         $this->flashBag->set('success', 'Delivery type has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -105,32 +105,41 @@ final class DeliveryType extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('deliveryType');
+        $validator = $this->createValidation();
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'price' => new Pattern\Price()
-                )
-            )
-        ));
+        $validator->field('deliveryType.price')
+                  ->required()
+                  ->addRule('numeric');
 
-        if ($formValidator->isValid()) {
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 2]);
+
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('deliveryType');
+
             // Grab the service
             $deliveryTypeManager = $this->getModuleService('deliveryTypeManager');
             $deliveryTypeManager->save($this->request->getPost());
 
             if ($input['id']) {
                 $this->flashBag->set('success', 'Delivery type has been updated successfully');
-                return 1;
+
+                return $this->json([
+                    'refresh' => true
+                ]);
             } else {
                 $this->flashBag->set('success', 'Delivery type has added successfully');
-                return $deliveryTypeManager->getLastId();
+
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:DeliveryType@editAction', [$deliveryTypeManager->getLastId()]),
+                ]);
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -45,11 +43,11 @@ final class Order extends AbstractShopController
 
         $this->loadSitePlugins();
 
-        return $this->view->render('shop-order-list', array(
+        return $this->view->render('shop-order-list', [
             'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true),
             'page' => $page,
             'orders' => $this->getModuleService('orderManager')->fetchAllByCustomerId($this->createCustomerId())
-        ));
+        ]);
     }
 
     /**
@@ -75,12 +73,12 @@ final class Order extends AbstractShopController
 
             $this->loadSitePlugins();
 
-            return $this->view->render('shop-order-details', array(
+            return $this->view->render('shop-order-details', [
                 'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true),
                 'page' => $page,
                 'products' => $orderManager->fetchAllDetailsByOrderId($id, $this->createCustomerId(), '120x120'),
                 'order' => $order
-            ));
+            ]);
 
         } else {
             return false;

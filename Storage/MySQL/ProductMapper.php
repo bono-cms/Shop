@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -48,7 +46,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public static function getSharedColumns($customerId = null, $extraColumns = true)
     {
         // Basic columns to be selected (required for most selections)
-        $columns = array(
+        $columns = [
             ProductMapper::column('id'),
             ProductMapper::column('brand_id'),
             ProductTranslationMapper::column('lang_id'),
@@ -62,11 +60,11 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             WebPageMapper::column('slug'),
             WebPageMapper::column('changefreq'),
             WebPageMapper::column('priority')
-        );
+        ];
 
         // Do extra columns need to be appended?
         if ($extraColumns === true) {
-            $columns = array_merge($columns, array(
+            $columns = array_merge($columns, [
                 ProductTranslationMapper::column('title'),
                 ProductTranslationMapper::column('description'),
                 ProductMapper::column('published'),
@@ -76,14 +74,14 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
                 ProductTranslationMapper::column('meta_description'),
                 ProductMapper::column('date'),
                 ProductMapper::column('views'),
-            ));
+            ]);
         }
 
         if ($customerId != null) {
             // Columns to be selected
-            $columns = array_merge($columns, array(
+            $columns = array_merge($columns, [
                 WishlistMapper::column('product_id') => 'product_wishlist_id'
-            ));
+            ]);
         }
 
         return $columns;
@@ -113,21 +111,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function findAttributesById($id, $dynamic)
     {
         // Data to be selected
-        $columns = array(
+        $columns = [
             AttributeGroupMapper::column('id') => 'group_id',
             AttributeGroupTranslationMapper::column('name') => 'group_name',
             AttributeGroupMapper::column('dynamic') => 'dynamic',
             AttributeValueMapper::column('id') => 'value_id',
             AttributeValueTranslationMapper::column('name') => 'value_name'
-        );
+        ];
 
         $db = $this->db->select($columns)
                         ->from(ProductAttributeGroupRelationMapper::getTableName())
                         // Attribute group relation
-                        ->leftJoin(AttributeGroupMapper::getTableName(), array(
+                        ->leftJoin(AttributeGroupMapper::getTableName(), [
                             AttributeGroupMapper::column('id') => ProductAttributeGroupRelationMapper::getRawColumn(self::PARAM_JUNCTION_SLAVE_COLUMN),
                             ProductAttributeGroupRelationMapper::column(self::PARAM_JUNCTION_MASTER_COLUMN) => $id
-                        ));
+                        ]);
 
         if ($dynamic === false) {
             $db->rawAnd()
@@ -135,18 +133,18 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         // Attribute group translations
-        $db->leftJoin(AttributeGroupTranslationMapper::getTableName(), array(
+        $db->leftJoin(AttributeGroupTranslationMapper::getTableName(), [
             AttributeGroupTranslationMapper::column('id') => AttributeGroupMapper::getRawColumn('id')
-        ))
+        ])
         // Attribute -> group relation
-        ->innerJoin(AttributeValueMapper::getTableName(), array(
+        ->innerJoin(AttributeValueMapper::getTableName(), [
             AttributeValueMapper::column('group_id') => AttributeGroupMapper::getRawColumn('id')
-        ))
+        ])
         // Attribute translation mapper
-        ->leftJoin(AttributeValueTranslationMapper::getTableName(), array(
+        ->leftJoin(AttributeValueTranslationMapper::getTableName(), [
             AttributeValueTranslationMapper::column('id') => AttributeValueMapper::getRawColumn('id'),
             AttributeValueTranslationMapper::column('lang_id') => AttributeGroupTranslationMapper::getRawColumn('lang_id')
-        ))
+        ])
         // Constraints
         ->whereEquals(AttributeValueTranslationMapper::column('lang_id'), $this->getLangId());
 
@@ -160,7 +158,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchAllNames()
     {
-        $db = $this->db->select(array('id', 'name'))
+        $db = $this->db->select(['id', 'name'])
                         ->from(ProductTranslationMapper::getTableName())
                         // Language constraint
                         ->whereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId())
@@ -233,7 +231,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchBestSales($qty, $limit)
     {
-        return $this->db->select(array(OrderProductMapper::column('product_id') => 'id'), true)
+        return $this->db->select([OrderProductMapper::column('product_id') => 'id'], true)
                         ->from(OrderProductMapper::getTableName())
                         ->innerJoin(OrderInfoMapper::getTableName())
                         ->whereEquals(OrderInfoMapper::column('id'), OrderProductMapper::getRawColumn('order_id'))
@@ -298,26 +296,26 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         $qb->select(self::getSharedColumns($customerId), true)
            ->from(ProductAttributeMapper::getTableName())
-           ->leftJoin(self::getTableName(), array(
+           ->leftJoin(self::getTableName(), [
                 self::column('id') =>ProductAttributeMapper::column('product_id')
-           ))
+           ])
            // Filter by category ID
-           ->innerJoin(ProductCategoryRelationMapper::getTableName(), array(
+           ->innerJoin(ProductCategoryRelationMapper::getTableName(), [
                 sprintf('%s.master_id', ProductCategoryRelationMapper::getTableName()) => self::column('id'),
                 sprintf('%s.slave_id', ProductCategoryRelationMapper::getTableName()) => (int) $categoryId
-            ));
+            ]);
 
             if ($customerId != null) {
-                $qb->leftJoin(WishlistMapper::getTableName(), array(
+                $qb->leftJoin(WishlistMapper::getTableName(), [
                     WishlistMapper::column('product_id') => self::column('id'),
                     WishlistMapper::column('customer_id') => $customerId
-                ));
+                ]);
             }
 
         // Slug
-        $qb->leftJoin(WebPageMapper::getTableName(), array(
+        $qb->leftJoin(WebPageMapper::getTableName(), [
             self::column('web_page_id') => WebPageMapper::column('id')
-        ));
+        ]);
 
         // Filter by group and value IDs
         $qb->whereEquals('group_id', (int) $groupId)
@@ -347,10 +345,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendTranslationRelation()
     {
-        $this->db->leftJoin(ProductTranslationMapper::getTableName(), array(
+        $this->db->leftJoin(ProductTranslationMapper::getTableName(), [
             self::column('id') => ProductTranslationMapper::getRawColumn('id'),
             ProductTranslationMapper::column('lang_id') => $this->getLangId()
-        ));
+        ]);
     }
 
     /**
@@ -360,9 +358,9 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     private function appendWebPageRelation()
     {
-        $this->db->leftJoin(WebPageMapper::getTableName(), array(
+        $this->db->leftJoin(WebPageMapper::getTableName(), [
             ProductTranslationMapper::column('web_page_id') => WebPageMapper::getRawColumn('id')
-        ));
+        ]);
     }
 
     /**
@@ -374,10 +372,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     private function appendCustomerRelation($customerId)
     {
         // Wish list relation
-        $this->db->leftJoin(WishlistMapper::getTableName(), array(
+        $this->db->leftJoin(WishlistMapper::getTableName(), [
             WishlistMapper::column('product_id') => self::getRawColumn('id'),
             WishlistMapper::column('customer_id') => $customerId
-        ));
+        ]);
     }
 
     /**
@@ -605,21 +603,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     private function queryCategoryRelation($id)
     {
         // To be selected
-        $columns = array(
+        $columns = [
             CategoryMapper::column('id'),
             CategoryTranslationMapper::column('name')
-        );
+        ];
 
         $db = $this->db->select($columns)
                        ->from(ProductCategoryRelationMapper::getTableName())
                        // Category relation
-                       ->innerJoin(CategoryMapper::getTableName(), array(
+                       ->innerJoin(CategoryMapper::getTableName(), [
                             CategoryMapper::column('id') => ProductCategoryRelationMapper::getRawColumn('slave_id')
-                       ))
+                       ])
                        // Category translation relation
-                       ->leftJoin(CategoryTranslationMapper::getTableName(), array(
+                       ->leftJoin(CategoryTranslationMapper::getTableName(), [
                             CategoryTranslationMapper::column('id') => CategoryMapper::getRawColumn('id')
-                       ))
+                       ])
                        // Constraints
                        ->whereEquals(ProductCategoryRelationMapper::column('master_id'), $id)
                        ->andWhereEquals(CategoryTranslationMapper::column('lang_id'), $this->getLangId());
@@ -636,21 +634,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     private function querySimilarRelation($id)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             self::column('id'), 
             ProductTranslationMapper::column('name')
-        );
+        ];
 
         $db = $this->db->select($columns)
                        ->from(ProductSimilarRelationMapper::getTableName())
                        // Product relation
-                       ->innerJoin(self::getTableName(), array(
+                       ->innerJoin(self::getTableName(), [
                             self::column('id') => ProductSimilarRelationMapper::getRawColumn('slave_id')
-                       ))
+                       ])
                        // Product translation relation
-                       ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                       ->leftJoin(ProductTranslationMapper::getTableName(), [
                             ProductTranslationMapper::column('id') => self::getRawColumn('id')
-                       ))
+                       ])
                        // Constraints
                        ->whereEquals(ProductSimilarRelationMapper::column('master_id'), $id)
                        ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
@@ -667,21 +665,21 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     private function queryRecommendedRelation($id)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             self::column('id'), 
             ProductTranslationMapper::column('name')
-        );
+        ];
 
         $db = $this->db->select($columns)
                        ->from(ProductRecommendedMapper::getTableName())
                        // Product relation
-                       ->innerJoin(self::getTableName(), array(
+                       ->innerJoin(self::getTableName(), [
                             self::column('id') => ProductRecommendedMapper::getRawColumn('slave_id')
-                       ))
+                       ])
                        // Product translation relation
-                       ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                       ->leftJoin(ProductTranslationMapper::getTableName(), [
                             ProductTranslationMapper::column('id') => self::getRawColumn('id')
-                       ))
+                       ])
                        // Constraints
                        ->whereEquals(ProductRecommendedMapper::column('master_id'), $id)
                        ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
@@ -700,15 +698,15 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function fetchById($id, $junction = true, $customerId = null, $withTranslations = false)
     {
-        $columns = array_merge(self::getSharedColumns($customerId), array(
+        $columns = array_merge(self::getSharedColumns($customerId), [
             BrandMapper::column('name') => 'brand'
-        ));
+        ]);
 
         $db = $this->createWebPageSelect($columns)
                    // Brand relation
-                   ->leftJoin(BrandMapper::getTableName(), array(
+                   ->leftJoin(BrandMapper::getTableName(), [
                         BrandMapper::column('id') => self::getRawColumn('brand_id')
-                   ));
+                   ]);
 
         if ($customerId != null) {
             $this->appendCustomerRelation($customerId);
@@ -720,7 +718,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             $db->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
         }
 
-        $rows = $withTranslations === true ? $db->queryAll() : array($db->query());
+        $rows = $withTranslations === true ? $db->queryAll() : [$db->query()];
 
         // Append relation data if required
         if ($rows && $junction === true) {
@@ -734,7 +732,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $attrs = $this->getSlaveIdsFromJunction(ProductAttributeGroupRelationMapper::getTableName(), $id);
 
         if ($withTranslations === false && isset($rows[0])) {
-            return array_merge($rows[0], array('attribute_group_id' => $attrs));
+            return array_merge($rows[0], ['attribute_group_id' => $attrs]);
         } else if ($withTranslations === true) {
             foreach ($rows as $index => $entity) {
                 $rows[$index]['attribute_group_id'] = $attrs;
@@ -755,20 +753,20 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
     public function fetchBasicById($id)
     {
         // To be selected
-        $columns = array(
+        $columns = [
             ProductTranslationMapper::column('name'), 
             self::column('regular_price'), 
             self::column('stoke_price'), 
             self::column('in_stock'), 
             self::column('cover')
-        );
+        ];
 
         $db = $this->db->select($columns)
                         ->from(self::getTableName())
                         // Translation relation
-                        ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                        ->leftJoin(ProductTranslationMapper::getTableName(), [
                             ProductTranslationMapper::column('id') => self::getRawColumn('id')
-                        ))
+                        ])
                         ->whereEquals(self::column('id'), $id)
                         ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
 
@@ -959,7 +957,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
      */
     public function updateSettings(array $settings)
     {
-        return $this->updateColumns($settings, array('regular_price', 'published', 'seo'));
+        return $this->updateColumns($settings, ['regular_price', 'published', 'seo']);
     }
 
     /**
@@ -976,7 +974,7 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         $translations =& $data['translation'];
 
         // Save data
-        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, array('attribute_group_id', 'features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids')), $translations);
+        $this->savePage('Shop', 'Shop:Product@indexAction', ArrayUtils::arrayWithout($product, ['attribute_group_id', 'features', 'attributes', 'slug', 'spec_cat_id', 'category_id', 'recommended_ids', 'similar_ids']), $translations);
 
         // Last product ID
         $id = !empty($product['id']) ? $product['id'] : $this->getLastId();
@@ -1000,10 +998,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
         }
 
         // Synchronize attributes
-        $this->syncWithJunction(ProductAttributeGroupRelationMapper::getTableName(), $id, isset($product['attribute_group_id']) ? $product['attribute_group_id'] : array());
+        $this->syncWithJunction(ProductAttributeGroupRelationMapper::getTableName(), $id, isset($product['attribute_group_id']) ? $product['attribute_group_id'] : []);
 
         // Specification category relation
-        $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : array());
+        $this->syncWithJunction(SpecificationCategoryProductRelationMapper::getTableName(), $id, isset($product['spec_cat_id']) ? $product['spec_cat_id'] : []);
 
         return true;
     }
@@ -1029,10 +1027,10 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
 
         foreach ($itemIds as $key) {
             // Data for columns
-            $primaryValues = array(
+            $primaryValues = [
                 'product_id' => $id,
                 'item_id' => $key
-            );
+            ];
 
             // 1. Insert first a new value
             $this->db->insert(SpecificationValueMapper::getTableName(), $primaryValues)
@@ -1041,11 +1039,11 @@ final class ProductMapper extends AbstractMapper implements ProductMapperInterfa
             foreach ($translations as $langId => $translation) {
                 foreach ($translation as $itemId => $value) {
                     if ($itemId == $key) {
-                        $translationValues = array(
+                        $translationValues = [
                             'id' => $this->getLastPk(SpecificationValueMapper::getTableName()),
                             'lang_id' => $langId,
                             'value' => $value
-                        );
+                        ];
 
                         // 3. Insert into translations
                         $this->db->insert(SpecificationValueTranslationMapper::getTableName(), $translationValues)

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -28,10 +26,10 @@ final class Currency extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Shop', 'Shop:Admin:Browser@indexAction')
                                        ->addOne('Currencies');
 
-        return $this->view->render('currencies-grid', array(
+        return $this->view->render('currencies-grid', [
             'currency' => $currency,
             'currencies' => $this->getModuleService('currencyManager')->fetchAll()
-        ));
+        ]);
     }
 
     /**
@@ -74,7 +72,10 @@ final class Currency extends AbstractController
         $currencyManager->deleteById($id);
 
         $this->flashBag->set('success', 'The currency has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -84,34 +85,18 @@ final class Currency extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('currency');
+        $validator = $this->createValidation();
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'code' => array(
-                        'required' => true,
-                        'rules' => array(
-                            'NotEmpty' => array(
-                                'message' => 'The currency code is required'
-                            )
-                        )
-                    ),
+        $validator->field('currency.code')
+                  ->required();
 
-                    'value' => array(
-                        'required' => true,
-                        'rules' => array(
-                            'NotEmpty' => array(
-                                'message' => 'The currency value is required'
-                            )
-                        )
-                    )
-                )
-            )
-        ));
+        $validator->field('currency.value')
+                  ->required()
+                  ->addRule('numeric');
 
-        if ($formValidator->isValid()) {
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('currency');
+
             // Grab the service
             $currencyManager = $this->getModuleService('currencyManager');
 
@@ -119,16 +104,22 @@ final class Currency extends AbstractController
                 $currencyManager->update($input);
                 $this->flashBag->set('success', 'The currency has been updated successfully');
 
-                return 1;
+                return $this->json([
+                    'refresh' => true
+                ]);
             } else {
                 $currencyManager->add($input);
                 $this->flashBag->set('success', 'A currency has been added successfully');
 
-                return $currencyManager->getLastId();
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:Currency@editAction', [$currencyManager->getLastId()]),
+                ]);
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

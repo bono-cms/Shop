@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -37,16 +35,16 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     public function fetchNames($groupId, $valueId)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             AttributeGroupMapper::column('name') => 'name',
             AttributeValueMapper::column('name') => 'value'
-        );
+        ];
 
         return $this->db->select($columns)
                         ->from(AttributeGroupMapper::getTableName())
-                        ->innerJoin(AttributeValueMapper::getTableName(), array(
+                        ->innerJoin(AttributeValueMapper::getTableName(), [
                             AttributeGroupMapper::column('id') => AttributeValueMapper::getRawColumn('group_id')
-                        ))
+                        ])
                         ->whereEquals(AttributeGroupMapper::column('id'), $groupId)
                         ->andWhereEquals(AttributeValueMapper::column('id'), $valueId)
                         ->query();
@@ -142,7 +140,7 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
     public function fetchAllDetailsByOrderId($id, $customerId = null)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             self::column('order_id'),
             self::column('product_id'),
             self::column('name'),
@@ -154,30 +152,30 @@ final class OrderProductMapper extends AbstractMapper implements OrderProductMap
             ProductMapper::column('cover'),
             WebPageMapper::column('slug'),
             WebPageMapper::column('lang_id')
-        );
+        ];
 
         // Select by order id
         $db = $this->db->select($columns, true)
                        ->from(self::getTableName())
                        // Product relation
-                       ->leftJoin(ProductMapper::getTableName(), array(
+                       ->leftJoin(ProductMapper::getTableName(), [
                             self::column('product_id') => ProductMapper::getRawColumn('id')
-                       ))
+                       ])
                        // Product translation relation
-                       ->leftJoin(ProductTranslationMapper::getTableName(), array(
+                       ->leftJoin(ProductTranslationMapper::getTableName(), [
                             ProductTranslationMapper::column('id') => ProductMapper::getRawColumn('id')
-                       ));
+                       ]);
 
         // If provided, filter also by customer ID
         if ($customerId !== null) {
-            $db->innerJoin(OrderInfoMapper::getTableName(), array(
+            $db->innerJoin(OrderInfoMapper::getTableName(), [
                 OrderInfoMapper::column('customer_id') => $customerId
-            ));
+            ]);
         }
 
-        $db->leftJoin(WebPageMapper::getTableName(), array(
+        $db->leftJoin(WebPageMapper::getTableName(), [
             WebPageMapper::column('id') => ProductTranslationMapper::getRawColumn('web_page_id')
-        ))
+        ])
         ->whereEquals(self::column('order_id'), $id)
         ->andWhereEquals(ProductTranslationMapper::column('lang_id'), $this->getLangId());
 

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -44,52 +42,52 @@ final class SpecificationValueMapper extends AbstractMapper implements Specifica
     public function findByProduct($id, $withTranslations, $extended)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             SpecificationCategoryMapper::column('id') => 'category_id',
             SpecificationItemMapper::column('front'),
             SpecificationItemTranslationMapper::column('name') => 'item',
             SpecificationItemTranslationMapper::column('hint'),
             SpecificationValueTranslationMapper::column('value')
-        );
+        ];
 
         if ($extended == true) {
-            $columns = array_merge($columns, array(
+            $columns = array_merge($columns, [
                 SpecificationItemMapper::column('id'),
                 SpecificationItemMapper::column('type'),
                 SpecificationItemTranslationMapper::column('lang_id'),
                 SpecificationCategoryTranslationMapper::column('name') => 'category',
-            ));
+            ]);
         }
 
         $db = $this->db->select($columns, true)
                        ->from(SpecificationCategoryProductRelationMapper::getTableName())
                        // Item relation
-                       ->leftJoin(SpecificationItemMapper::getTableName(), array(
+                       ->leftJoin(SpecificationItemMapper::getTableName(), [
                             SpecificationItemMapper::column('category_id') => SpecificationCategoryProductRelationMapper::getRawColumn('slave_id')
-                       ))
+                       ])
                        // Item translation relation
-                       ->leftJoin(SpecificationItemTranslationMapper::getTableName(), array(
+                       ->leftJoin(SpecificationItemTranslationMapper::getTableName(), [
                             SpecificationItemTranslationMapper::column('id') => SpecificationItemMapper::getRawColumn('id')
-                       ))
+                       ])
                        // Value relation
-                       ->leftJoin(SpecificationValueMapper::getTableName(), array(
+                       ->leftJoin(SpecificationValueMapper::getTableName(), [
                             SpecificationValueMapper::column('item_id') => SpecificationItemMapper::getRawColumn('id'),
                             SpecificationValueMapper::column('product_id') => SpecificationCategoryProductRelationMapper::getRawColumn('master_id')
-                       ))
+                       ])
                        // Category relation
-                       ->leftJoin(SpecificationCategoryMapper::getTableName(), array(
+                       ->leftJoin(SpecificationCategoryMapper::getTableName(), [
                             SpecificationCategoryMapper::column('id') => SpecificationItemMapper::getRawColumn('category_id')
-                       ))
+                       ])
                        // Category translation relation
-                       ->leftJoin(SpecificationCategoryTranslationMapper::getTableName(), array(
+                       ->leftJoin(SpecificationCategoryTranslationMapper::getTableName(), [
                             SpecificationCategoryTranslationMapper::column('id') => SpecificationCategoryMapper::getRawColumn('id'),
                             SpecificationCategoryTranslationMapper::column('lang_id') => SpecificationItemTranslationMapper::getRawColumn('lang_id')
-                       ))
+                       ])
                        // Value translation relation
-                       ->leftJoin(SpecificationValueTranslationMapper::getTableName(), array(
+                       ->leftJoin(SpecificationValueTranslationMapper::getTableName(), [
                             SpecificationValueTranslationMapper::column('id') => SpecificationValueMapper::getRawColumn('id'),
                             SpecificationValueTranslationMapper::column('lang_id') => SpecificationItemTranslationMapper::getRawColumn('lang_id')
-                       ))
+                       ])
                        // Constraint
                        ->whereEquals(SpecificationCategoryProductRelationMapper::column('master_id'), $id);
 

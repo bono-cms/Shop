@@ -462,7 +462,7 @@
                     $self.attr('data-button', 'wishlist-add');
 
                     // Update the heart icon, if provided
-                    $self.find('.glyphicon').attr('class', 'glyphicon glyphicon-heart-empty');
+                    $self.find('.bi').attr('class', 'bi bi-heart');
 
                     // Update the counter
                     wishlist.updateCount(newCount);
@@ -485,7 +485,7 @@
                     $self.attr('data-button', 'wishlist-remove');
 
                     // Update the heart icon, if provided
-                    $self.find('.glyphicon').attr('class', 'glyphicon glyphicon-heart');
+                    $self.find('.bi').attr('class', 'bi bi-heart-fill');
 
                     // Update the counter
                     wishlist.updateCount(newCount);

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -68,7 +66,7 @@ abstract class AbstractShopController extends AbstractController
             $default = $config->getDefaultCategoryPerPageCount();
 
             // Prepare defaults
-            $defaults = array($default, 3, 5, 10, 15, 20, 25); // Default collection
+            $defaults = [$default, 3, 5, 10, 15, 20, 25]; // Default collection
             $defaults = array_unique($defaults); // Removed duplicates if any
             asort($defaults, \SORT_NUMERIC); // Sort from lower to highest
 

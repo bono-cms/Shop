@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -32,11 +30,11 @@ final class Wishlist extends AbstractShopController
 
             $products = $this->getModuleService('wishlistManager')->fetchAllByCustomerId($this->createCustomerId());
 
-            return $this->view->render('shop-wishlist', array(
+            return $this->view->render('shop-wishlist', [
                 'languages' => $this->getService('Cms', 'languageManager')->fetchAll(true),
                 'page' => $page,
                 'products' => $products
-            ));
+            ]);
 
         } else {
             return false;
@@ -79,7 +77,7 @@ final class Wishlist extends AbstractShopController
             $customerId = $this->createCustomerId();
 
             $wishlistManager = $this->getModuleService('wishlistManager');
-            call_user_func(array($wishlistManager, $method), $customerId, $id);
+            call_user_func([$wishlistManager, $method], $customerId, $id);
 
             // Indicate success back to client
             return $wishlistManager->getCount($customerId);

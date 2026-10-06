@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -146,7 +144,7 @@ final class ProductAttributeMapper extends AbstractMapper implements ProductAttr
      */
     public function store($productId, array $values)
     {
-        return $this->db->insertMany(self::getTableName(), array('product_id', 'group_id', 'value_id'), AttributeProcessor::normalizeInput($productId, $values))
+        return $this->db->insertMany(self::getTableName(), ['product_id', 'group_id', 'value_id'], AttributeProcessor::normalizeInput($productId, $values))
                         ->execute();
     }
 }

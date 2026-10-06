@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -22,9 +20,9 @@ final class Statistic extends AbstractController
      */
     public function indexAction()
     {
-        return $this->view->disableLayout()->render('statistic', array(
+        return $this->view->disableLayout()->render('statistic', [
             'data' => $this->getData()
-        ));
+        ]);
     }
 
     /**
@@ -36,7 +34,7 @@ final class Statistic extends AbstractController
     {
         $currency = $this->getModuleService('configManager')->getEntity()->getCurrency();
 
-        return array(
+        return [
             'Total categories' => $this->getModuleService('categoryManager')->countAll(),
             'Total products' => $this->getModuleService('productManager')->countAll(),
             'Currency' => $currency,
@@ -44,6 +42,6 @@ final class Statistic extends AbstractController
             'Approved orders' => $this->getModuleService('orderManager')->countAll(true),
             'Total amount sold products' => $this->getModuleService('orderManager')->getQtySumCount(),
             'Total sum of sold products' => $this->getModuleService('orderManager')->getPriceSumCount().PHP_EOL.$currency,
-        );
+        ];
     }
 }

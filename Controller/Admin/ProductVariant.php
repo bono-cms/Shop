@@ -2,9 +2,7 @@
 
 /**
  * This file is part of the Bono CMS
- *
- * Copyright (c) No Global State Lab
- *
+ * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -34,11 +32,11 @@ final class ProductVariant extends AbstractController
                                        ->addOne($this->translator->translate('Edit the product "%s"', $product->getName()), $this->createUrl('Shop:Admin:Product@editAction', [$product->getId()]))
                                        ->addOne($title);
 
-        return $this->view->render('product.variant.form', array(
+        return $this->view->render('product.variant.form', [
             'variant' => $variant,
             'new' => $new,
             'title' => $title,
-        ));
+        ]);
     }
 
     /**
@@ -79,18 +77,40 @@ final class ProductVariant extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('variant');
-        $new = !isset($input['id']) || !$input['id'];
+        $validator = $this->createValidation();
 
-        $variantService = $this->getModuleService('variantService');
-        $variantService->save($input);
-        
-        $this->flashBag->set('success', $new ? 'The variant has been created successfully' : 'The variant has been updated successfully');
+        $validator->field('variant.price')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('positive');
 
-        if ($new) {
-            return $variantService->getLastId();
+        $validator->field('variant.stock')
+                  ->addRule('numeric')
+                  ->addRule('greaterthan', null, ['min' => -1]);
+
+        if ($validator->isPassed()) {
+            $input = $this->request->getPost('variant');
+            $new = !isset($input['id']) || !$input['id'];
+
+            $variantService = $this->getModuleService('variantService');
+            $variantService->save($input);
+            
+            $this->flashBag->set('success', $new ? 'The variant has been created successfully' : 'The variant has been updated successfully');
+
+            if ($new) {
+                return $this->json([
+                    'redirect' => $this->createUrl('Shop:Admin:ProductVariant@editAction', [$variantService->getLastId()]),
+                ]);
+            } else {
+                return $this->json([
+                    'refresh' => true
+                ]);
+            }
+
         } else {
-            return 1;
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 
@@ -105,6 +125,9 @@ final class ProductVariant extends AbstractController
         $this->getModuleService('variantService')->deleteById($id);
 
         $this->flashBag->set('success', 'Selected variant has been removed successfully');
-        return 1;
+
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 }
