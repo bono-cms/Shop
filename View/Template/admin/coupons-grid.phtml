@@ -4,8 +4,6 @@ use Krystal\Form\Element;
 use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <div class="row">
@@ -13,7 +11,7 @@ defined('KRYSTAL') or die;
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title m-0">
-                    <i class="bi bi-card-heading"></i> <?= $this->translate('Available coupons'); ?> 
+                    <i class="bi bi-card-heading"></i> <?= $this->translate('Available coupons'); ?>
                     <small class="text-muted">(<?= count($coupons); ?>)</small>
                 </h3>
             </div>
@@ -27,13 +25,8 @@ defined('KRYSTAL') or die;
                         }
                     ],
                     'columns' => [
-                        [
-                            'column' => 'id',
-                            'label' => '#'
-                        ],
-                        [
-                            'column' => 'code'
-                        ],
+                        ['column' => 'id', 'label' => '#'],
+                        ['column' => 'code'],
                         [
                             'column' => 'percentage',
                             'value' => function($coupon){
@@ -41,7 +34,6 @@ defined('KRYSTAL') or die;
                             }
                         ],
                     ],
-
                     'actions' => [
                         function($coupon){
                             return Icon::edit(
@@ -72,26 +64,22 @@ defined('KRYSTAL') or die;
             </div>
 
             <div class="card-body">
-                <form data-group="coupon" autocomplete="off">
+                <form autocomplete="off">
                     <input type="hidden" name="coupon[id]" value="<?= $coupon->getId(); ?>" />
 
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label class="form-label"><?= $this->translate('Code'); ?></label>
                         <div class="input-group">
                             <?= Element::text('coupon[code]', $coupon->getCode(), ['class' => 'form-control', 'placeholder' => $this->translate('Unique coupon code')]); ?>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                         </div>
                     </div>
 
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label class="form-label"><?= $this->translate('Percentage'); ?></label>
                         <div class="input-group">
                             <?= Element::number('coupon[percentage]', $coupon->getPercentage(), ['min' => 1, 'max' => 100, 'class' => 'form-control', 'placeholder' => $this->translate('Discount percentage')]); ?>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                         </div>
                     </div>
 

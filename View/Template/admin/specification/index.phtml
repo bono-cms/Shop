@@ -4,13 +4,11 @@ use Krystal\Form\Element;
 use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <div class="btn-toolbar mb-3">
     <div class="dropdown">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
             <i class="bi bi-list"></i> <?= $this->translate('Menu'); ?>
         </button>
 
@@ -30,23 +28,18 @@ defined('KRYSTAL') or die;
         <div class="card shadow-sm">
             <div class="card-header">
                 <h3 class="card-title m-0">
-                    <i class="bi bi-pencil-square"></i> <?= $this->translate('Specifications'); ?> 
+                    <i class="bi bi-pencil-square"></i> <?= $this->translate('Specifications'); ?>
                     <small class="text-muted">(<?= count($items); ?>)</small>
                 </h3>
             </div>
-            
+
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <?= $this->widget(new GridViewWidget($items, [
                         'tableClass' => 'table table-hover table-bordered table-striped m-0',
                         'columns' => [
-                            [
-                                'column' => 'id',
-                                'label' => '#'
-                            ],
-                            [
-                                'column' => 'name',
-                            ],
+                            ['column' => 'id', 'label' => '#'],
+                            ['column' => 'name'],
                             [
                                 'column' => 'front',
                                 'translateable' => true,
@@ -85,7 +78,7 @@ defined('KRYSTAL') or die;
         <div class="card shadow-sm">
             <div class="card-header">
                 <h3 class="card-title m-0">
-                    <i class="bi bi-folder"></i> <?= $this->translate('Categories'); ?> 
+                    <i class="bi bi-folder"></i> <?= $this->translate('Categories'); ?>
                     <small class="text-muted">(<?= count($categories); ?>)</small>
                 </h3>
             </div>
@@ -100,32 +93,23 @@ defined('KRYSTAL') or die;
                             }
                         ],
                         'columns' => [
-                            [
-                                'column' => 'id',
-                                'label' => '#'
-                            ],
+                            ['column' => 'id', 'label' => '#'],
                             [
                                 'column' => 'name',
                                 'value' => function($entity){
                                     return Element::link($entity['name'], $this->url('Shop:Admin:SpecificationItem@indexAction', $entity['id']));
                                 }
                             ],
-                            [
-                                'column' => 'order',
-                            ],
-                            [
-                                'column' => 'item_count',
-                                'label' => 'Item count'
-                            ],
+                            ['column' => 'order'],
+                            ['column' => 'item_count', 'label' => 'Item count'],
                         ],
                         'actions' => [
                             function($row){
                                 return Icon::edit(
-                                    $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']), 
+                                    $this->url('Shop:Admin:SpecificationCategory@editAction', $row['id']),
                                     $this->translate('Edit this category')
                                 );
                             },
-
                             function($row){
                                 return Icon::remove(
                                     $this->url('Shop:Admin:SpecificationCategory@deleteAction', $row['id']),

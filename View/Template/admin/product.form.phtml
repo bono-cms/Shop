@@ -6,48 +6,46 @@ use Shop\Collection\SpecificationItemTypeCollection;
 use Cms\Service\LanguageManager;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <?php if (!empty($categories)): ?>
 
-<form class="card" data-group="product" autocomplete="off">
+<form class="card" autocomplete="off">
     <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" href="#product" role="tab" data-toggle="tab">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#product" data-bs-toggle="tab">
                     <i class="bi bi-cart"></i> <?= $this->translate('Product'); ?>
                 </a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#configuration" role="tab" data-toggle="tab">
+            <li class="nav-item">
+                <a class="nav-link" href="#configuration" data-bs-toggle="tab">
                     <i class="bi bi-gear"></i> <?= $this->translate('Configuration'); ?>
                 </a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#images" role="tab" data-toggle="tab">
+            <li class="nav-item">
+                <a class="nav-link" href="#images" data-bs-toggle="tab">
                     <i class="bi bi-image"></i> <?= $this->translate('Images'); ?>
                 </a>
             </li>
             <?php if (!empty($features)): ?>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#specifications" role="tab" data-toggle="tab">
+            <li class="nav-item">
+                <a class="nav-link" href="#specifications" data-bs-toggle="tab">
                     <i class="bi bi-pencil-square"></i> <?= $this->translate('Specifications'); ?>
                 </a>
             </li>
             <?php endif; ?>
             <?php if (!empty($attributes)): ?>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#attrs" role="tab" data-toggle="tab">
+            <li class="nav-item">
+                <a class="nav-link" href="#attrs" data-bs-toggle="tab">
                     <i class="bi bi-list-ul"></i> <?= $this->translate('Attributes'); ?>
                 </a>
             </li>
             <?php endif; ?>
-            
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#variants" role="tab" data-toggle="tab">
-                    <i class="bi bi-grid-3x3-gap"></i>  <?= $this->translate('Variants'); ?> 
+
+            <li class="nav-item">
+                <a class="nav-link" href="#variants" data-bs-toggle="tab">
+                    <i class="bi bi-grid-3x3-gap"></i>  <?= $this->translate('Variants'); ?>
                     <span class="badge rounded-pill bg-secondary ms-1 text-white">
                         <?= count($variants); ?>
                     </span>
@@ -58,12 +56,12 @@ defined('KRYSTAL') or die;
 
     <div class="card-body">
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade show active" id="product">
+            <div class="tab-pane fade show active" id="product">
                 <?php $this->loadPartial('language-tabs'); ?>
 
                 <div class="tab-content mt-3">
                     <?php foreach ($languages as $index => $language): ?>
-                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>" role="tabpanel">
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>">
                         <?php $entity = LanguageManager::findByLangId($language->getId(), $product); ?>
 
                         <?= Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
@@ -72,60 +70,54 @@ defined('KRYSTAL') or die;
 
                         <?php $this->loadPartial('language-name', ['language' => $language]); ?>
 
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label class="form-label"><?= $this->translate('Name'); ?></label>
                             <div class="input-group">
                                 <?= Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), ['class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product name')]); ?>
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                                </div>
+                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                             </div>
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label class="form-label"><?= $this->translate('Description'); ?></label>
                             <?= Element::textarea(sprintf('translation[%s][description]', $language->getId()), $entity->getDescription(), ['data-wysiwyg' => 'true']); ?>
                         </div>
 
                         <div class="options border-top pt-3 mt-3">
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $this->translate('Slug'); ?></label>
                                 <div class="input-group">
                                     <?= Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), ['class' => 'form-control', 'placeholder' => $this->translate('URL slug for this product')]); ?>
-                                    <div class="input-group-append">
-                                        <a href="#" class="input-group-text text-decoration-none" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>">
-                                            <i class="bi bi-arrow-repeat" data-toggle="tooltip" title="<?= $this->translate('Refresh the slug'); ?>"></i>
-                                        </a>
-                                    </div>
+                                    <a href="#" class="input-group-text text-decoration-none" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>">
+                                        <i class="bi bi-arrow-repeat" data-bs-toggle="tooltip" title="<?= $this->translate('Refresh the slug'); ?>"></i>
+                                    </a>
                                 </div>
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $this->translate('Change frequency'); ?></label>
                                 <?= Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), ['class' => 'form-control']); ?>
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $this->translate('Priority'); ?></label>
                                 <?= Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), ['class' => 'form-control']); ?>
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $this->translate('Title'); ?></label>
                                 <div class="input-group">
                                     <?= Element::text(sprintf('translation[%s][title]', $language->getId()), $entity->getTitle(), ['class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Product title')]); ?>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                                    </div>
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                                 </div>
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $this->translate('Keywords'); ?></label>
                                 <?= Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), ['class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines')]); ?>
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $this->translate('Description'); ?></label>
                                 <?= Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), ['class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines')]); ?>
                             </div>
@@ -146,45 +138,41 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <div role="tabpanel" class="tab-pane fade" id="configuration">
-                <div class="form-group mb-3">
+            <div class="tab-pane fade" id="configuration">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Price'); ?></label>
                     <div class="input-group">
                         <?= Element::number('product[regular_price]', $entity->getPrice(), ['class' => 'form-control', 'min' => '1', 'step' => '0.01']); ?>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-cash"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="bi bi-cash"></i></span>
                     </div>
                 </div>
 
-                <div class="form-group mb-3 <?= !$config->getStokePriceEnabled() ? 'd-none' : ''; ?>">
+                <div class="mb-3 <?= !$config->getStokePriceEnabled() ? 'd-none' : ''; ?>">
                     <label class="form-label"><?= $this->translate('Stoke price'); ?></label>
                     <div class="input-group">
                         <?= Element::number('product[stoke_price]', $entity->getStokePrice(), ['class' => 'form-control']); ?>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-cash"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="bi bi-cash"></i></span>
                     </div>
                 </div>
 
                 <?php if (!empty($brands)): ?>
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Brand'); ?></label>
                     <?= Element::select('product[brand_id]', $brands, $entity->getBrandId(), ['class' => 'form-control'], ''); ?>
                 </div>
                 <?php endif; ?>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Attribute groups'); ?></label>
                     <?= Element::select('product[attribute_group_id][]', $attributeGroups, $entity->getAttributeGroupIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen', 'id' => 'groups']); ?>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Specification category'); ?></label>
                     <?= Element::select('product[spec_cat_id][]', $specCatIds, $entity->getSpecCatIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Category'); ?></label>
                     <?= Element::select('product[category_id][]', $categories, $entity->getCategoryIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
                 </div>
@@ -204,51 +192,47 @@ defined('KRYSTAL') or die;
                     <label class="form-check-label" for="product_special"><?= $this->translate('Special offer'); ?></label>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Order'); ?></label>
                     <div class="input-group">
                         <?= Element::number('product[order]', $entity->getOrder(), ['class' => 'form-control']); ?>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('In stock'); ?></label>
                     <div class="input-group">
                         <?= Element::number('product[in_stock]', $entity->getInStock(), ['class' => 'form-control']); ?>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Recommended products'); ?></label>
                     <?= Element::select('product[recommended_ids][]', $names, $entity->getRecommendedIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Similar products'); ?></label>
                     <?= Element::select('product[similar_ids][]', $names, $entity->getSimilarIds(), ['class' => 'form-control', 'multiple' => true, 'data-plugin' => 'chosen']); ?>
                 </div>
             </div>
 
-            <div role="tabpanel" class="tab-pane fade img-upload-form" id="images">
+            <div class="tab-pane fade img-upload-form" id="images">
                 <?= Element::hidden('product[cover]', $entity->getCover()); ?>
                 <?= Element::hidden('product[id]', $entity->getId()); ?>
 
                 <div id="file-input-container">
                     <?= Element::file('file[]', 'image/x-png, image/gif, image/jpeg', ['class' => 'd-none']); ?>
                 </div>
-                
+
                 <div class="mb-3">
                     <a class="btn btn-primary" data-button="upload" href="#">
                         <i class="bi bi-camera"></i> <?= $this->translate('Upload new image'); ?>
                     </a>
                 </div>
-                
+
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -281,17 +265,17 @@ defined('KRYSTAL') or die;
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn btn-sm btn-light" data-toggle="tooltip" title="<?= $this->translate('Replace this image'); ?>" data-button="edit" data-image="<?= $photo->getImage(); ?>" href="#">
+                                    <a class="btn btn-sm btn-light" data-bs-toggle="tooltip" title="<?= $this->translate('Replace this image'); ?>" data-button="edit" data-image="<?= $photo->getImage(); ?>" href="#">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    
+
                                     <?php if ($entity->getCover() != $photo->getImage()): ?>
                                     <div class="mt-2 text-danger">
                                         <?= Element::checkbox(sprintf('photos[toDelete][%s]', $photo->getId()), false, ['class' => 'form-check-input'], false); ?>
                                         <span class="small"><?= $this->translate('Remove'); ?></span>
                                     </div>
                                     <?php endif; ?>
-                                    
+
                                     <?= Element::file(sprintf('image_%s', $photo->getId()), 'image/x-png, image/gif, image/jpeg', ['class' => 'd-none']); ?>
                                 </td>
                             </tr>
@@ -302,12 +286,12 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <div role="tabpanel" class="tab-pane fade" id="specifications">
+            <div class="tab-pane fade" id="specifications">
                 <?php if (count($languages) > 1): ?>
-                <ul class="nav nav-tabs mb-3" role="tablist">
+                <ul class="nav nav-tabs mb-3">
                     <?php foreach ($languages as $index => $language): ?>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link <?= $index == 0 ? 'active' : null; ?>" href="<?= sprintf('#language-f-%s', $language->getId()); ?>" role="tab" data-toggle="tab">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $index == 0 ? 'active' : null; ?>" href="<?= sprintf('#language-f-%s', $language->getId()); ?>" data-bs-toggle="tab">
                             <?= $language->getName(); ?>
                         </a>
                     </li>
@@ -317,14 +301,14 @@ defined('KRYSTAL') or die;
 
                 <div class="tab-content">
                     <?php foreach ($languages as $index => $language): ?>
-                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-f-%s', $language->getId()); ?>" role="tabpanel">
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-f-%s', $language->getId()); ?>">
                         <?php foreach ($features as $category => $options): ?>
                         <fieldset class="mb-4 border p-3">
                             <legend class="w-auto px-2 h5"><?= $category; ?></legend>
 
                             <?php foreach ($options as $option): ?>
                             <?php if ($option['lang_id'] == $language->getId()): ?>
-                            <div class="form-group mb-3">
+                            <div class="mb-3">
                                 <label class="form-label"><?= $option['item']; ?></label>
                                 <?= call_user_func(sprintf('Krystal\Form\Element::%s', SpecificationItemTypeCollection::guessMethodByConst($option['type'])), sprintf('features[translation][%s][%s]', $language->getId(), $option['id']), $option['value'], ['class' => 'form-control']); ?>
                             </div>
@@ -338,13 +322,13 @@ defined('KRYSTAL') or die;
             </div>
 
             <?php if (!empty($attributes)): ?>
-            <div role="tabpanel" class="tab-pane fade" id="attrs">
+            <div class="tab-pane fade" id="attrs">
                 <?php foreach ($attributes as $attribute): ?>
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $attribute['group_name']; ?></label>
                     <?= Element::select(
-                        $attribute['group_dynamic'] ? sprintf('product[attributes][%s][]', $attribute['group_id']) : sprintf('product[attributes][%s]', $attribute['group_id']), 
-                        $attribute['attributes'], 
+                        $attribute['group_dynamic'] ? sprintf('product[attributes][%s][]', $attribute['group_id']) : sprintf('product[attributes][%s]', $attribute['group_id']),
+                        $attribute['attributes'],
                         AttributeProcessor::findActiveAttribute($attribute['attributes'], $attributes, $activeAttributes),
                         ['class' => 'form-control', 'multiple' => $attribute['group_dynamic']],
                         null
@@ -353,8 +337,8 @@ defined('KRYSTAL') or die;
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
-            
-            <div role="tabpanel" class="tab-pane fade" id="variants">
+
+            <div class="tab-pane fade" id="variants">
                 <div class="alert alert-info">
                     <i class="bi bi-info-circle me-2"></i>
                     <?= $this->translate('Product variants help you manage different versions of the same product, such as sizes or colors, each with its own price and stock level'); ?>
@@ -375,27 +359,15 @@ defined('KRYSTAL') or die;
                     'grid' => [
                         'tableClass' => 'table table-bordered table-sm',
                         'columns' => [
-                            [
-                                'column' => 'id',
-                                'label' => '#'
-                            ],
-
-                            [
-                                'column' => 'sku',
-                                'label' => 'SKU'
-                            ],
-
+                            ['column' => 'id', 'label' => '#'],
+                            ['column' => 'sku', 'label' => 'SKU'],
                             [
                                 'column' => 'price',
                                 'value' => function($variant){
                                     return number_format($variant->getPrice());
                                 }
                             ],
-
-                            [
-                                'column' => 'stock'
-                            ],
-
+                            ['column' => 'stock'],
                             [
                                 'column' => 'published',
                                 'translateable' => true,
@@ -404,7 +376,6 @@ defined('KRYSTAL') or die;
                                 }
                             ]
                         ],
-
                         'actions' => [
                             function($variant){
                                 return Icon::edit(
@@ -412,7 +383,6 @@ defined('KRYSTAL') or die;
                                     $this->translate('Edit this variant')
                                 );
                             },
-
                             function($variant){
                                 return Icon::remove(
                                     $this->url('Shop:Admin:ProductVariant@deleteAction', $variant->getId()),

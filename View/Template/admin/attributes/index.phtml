@@ -4,12 +4,10 @@ use Krystal\Form\Element;
 use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <div class="btn-toolbar mb-3">
-    <div class="btn-group mr-2">
+    <div class="btn-group me-2">
         <a class="btn btn-sm btn-primary" href="<?= $this->url('Shop:Admin:AttributeValue@addAction'); ?>">
             <i class="bi bi-tag"></i> <?= $this->translate('Add attribute'); ?>
         </a>
@@ -26,20 +24,15 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <div class="card p-3">
             <h4 class="card-title">
-                <i class="bi bi-tags"></i> <?= $this->translate('Values'); ?> 
+                <i class="bi bi-tags"></i> <?= $this->translate('Values'); ?>
                 <small class="text-muted">(<?= count($values); ?>)</small>
             </h4>
 
             <?= $this->widget(new GridViewWidget($values, [
                 'tableClass' => 'table table-hover table-bordered table-striped',
                 'columns' => [
-                    [
-                        'column' => 'id',
-                        'label' => '#'
-                    ],
-                    [
-                        'column' => 'name'
-                    ]
+                    ['column' => 'id', 'label' => '#'],
+                    ['column' => 'name']
                 ],
                 'actions' => [
                     function($value) {
@@ -48,7 +41,6 @@ defined('KRYSTAL') or die;
                             $this->translate('Edit this attribute')
                         );
                     },
-
                     function($value) {
                         return Icon::remove(
                             $this->url('Shop:Admin:AttributeValue@deleteAction', $value->getId()),
@@ -63,7 +55,7 @@ defined('KRYSTAL') or die;
     <div class="col-lg-6">
         <div class="card p-3">
             <h4 class="card-title">
-                <i class="bi bi-collection-play"></i> <?= $this->translate('Groups'); ?> 
+                <i class="bi bi-collection-play"></i> <?= $this->translate('Groups'); ?>
                 <small class="text-muted">(<?= count($groups); ?>)</small>
             </h4>
 
@@ -75,10 +67,7 @@ defined('KRYSTAL') or die;
                     }
                 ],
                 'columns' => [
-                    [
-                        'column' => 'id',
-                        'label' => '#'
-                    ],
+                    ['column' => 'id', 'label' => '#'],
                     [
                         'column' => 'name',
                         'value' => function($group) {
@@ -93,7 +82,6 @@ defined('KRYSTAL') or die;
                         }
                     ]
                 ],
-
                 'actions' => [
                     function($group) {
                         return Icon::edit(
@@ -101,7 +89,6 @@ defined('KRYSTAL') or die;
                             $this->translate('Edit this group')
                         );
                     },
-
                     function($group) {
                         return Icon::remove(
                             $this->url('Shop:Admin:AttributeGroup@deleteAction', $group->getId()),

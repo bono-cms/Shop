@@ -3,16 +3,15 @@
 use Krystal\Form\Element;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
 $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categoryId;
 
 ?>
 
 <form novalidate autocomplete="off">
     <div class="btn-toolbar">
-        <div class="btn-group mr-2">
+        <div class="btn-group me-2">
             <div class="dropdown">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                 <i class="bi bi-list"></i> <?= $this->translate('Menu'); ?><span><?php if ($newOrdersCount > 0): ?> (<?= $newOrdersCount; ?>) <?php endif; ?> </span>
               </button>
 
@@ -37,28 +36,28 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                  <a class="dropdown-item" href="<?= $this->url('Shop:Admin:OrderStatus@indexAction'); ?>"><i class="bi bi-type-h1"></i> <?= $this->translate('Order statuses'); ?></a>
                  <div class="dropdown-divider"></div>
                  <div class="dropdown-header"><?= $this->translate('Actions'); ?></div>
-                 
+
                  <?php if (!empty($products)):?>
                  <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?= $this->url('Shop:Admin:Product@tweakAction'); ?>"><i class="bi bi-download"></i> <?= $this->translate('Save changes'); ?></a>
                  <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?= $this->url('Shop:Admin:Product@deleteAction', null); ?>"><i class="bi bi-x-lg"></i> <?= $this->translate('Remove selected'); ?></a>
-                 
+
                  <?php else: ?>
                  <a class="dropdown-item disabled"><i class="bi bi-download"></i> <?= $this->translate('Save changes'); ?></a>
                  <a class="dropdown-item disabled"><i class="bi bi-x-lg"></i> <?= $this->translate('Remove selected'); ?></a>
-                 
+
                  <?php endif; ?>
               </div>
             </div>
         </div>
 
         <?php if (!empty($products)): ?>
-        <div class="btn-group mr-2">
+        <div class="btn-group me-2">
             <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> <?= $this->translate('Filter'); ?></button>
         </div>
         <?php endif; ?>
 
         <?php if ($filter->isApplied()): ?>
-        <div class="btn-group mr-2">
+        <div class="btn-group me-2">
             <a href="<?= $this->url('Shop:Admin:Browser@indexAction'); ?>" class="btn btn-primary"><i class="bi bi-trash"></i> <?= $this->translate('Reset filter'); ?></a>
         </div>
         <?php endif; ?>
@@ -79,35 +78,22 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                 'pk' => 'id',
                 'tableClass' => 'table table-bordered table-sm',
                 'columns' => [
-                    [
-                        'column' => 'id',
-                        'label' => '#'
-                    ],
-
+                    ['column' => 'id', 'label' => '#'],
                     [
                         'column' => 'image',
                         'label' => 'Cover',
                         'value' => function($product){
                             $image = Element::image($product->getImageBag()->getUrl('200x200'), ['class' => 'img-fluid']);
                             return Element::link($image, $product->getImageBag()->getUrl('original'), [
-                                'data-toggle' => 'tooltip',
-                                'data-placement' => 'top',
+                                'data-bs-toggle' => 'tooltip',
+                                'data-bs-placement' => 'top',
                                 'title' => $this->translate('Click to zoom this image'),
                                 'data-lightbox' => sprintf('image-%s', $product->getId())
                             ]);
                         }
                     ],
-
-                    [
-                        'column' => 'name',
-                        'filter' => true
-                    ],
-
-                    [
-                        'column' => 'date',
-                        'filter' => true
-                    ],
-
+                    ['column' => 'name', 'filter' => true],
+                    ['column' => 'date', 'filter' => true],
                     [
                         'column' => 'regular_price',
                         'label' => 'Price',
@@ -116,7 +102,6 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                             return Element::number(sprintf('regular_price[%s]', $product->getId()), $product->getPrice(), ['class' => 'form-control mx-auto', 'min' => '0']);
                         }
                     ],
-
                     [
                         'column' => 'published',
                         'type' => 'select',
@@ -125,7 +110,6 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                             return Element::checkbox(sprintf('published[%s]', $product->getId()), $product->getPublished());
                         }
                     ],
-
                     [
                         'column' => 'seo',
                         'label' => 'SEO',
@@ -136,7 +120,6 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                         }
                     ]
                 ],
-
                 'actions' => [
                     function($product){
                         return Icon::view($product->getUrl(), $this->translate('View this product on site'));
@@ -170,41 +153,27 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
                     return $categoryId == $category['id'] ? 'table-info' : null;
                 }
             ],
-
             'columns' => [
-                [
-                    'column' => 'id',
-                    'label' => '#'
-                ],
-
+                ['column' => 'id', 'label' => '#'],
                 [
                     'column' => 'name',
-                    'attributes' => [
-                        'class' => null
-                    ],
+                    'attributes' => ['class' => null],
                     'value' => function($category){
                         return Element::link($category['name'], $this->url('Shop:Admin:Browser@categoryAction', $category['id']));
                     }
                 ],
-
-                [
-                    'column' => 'product_count',
-                    'label' => 'Amount of products'
-                ]
+                ['column' => 'product_count', 'label' => 'Amount of products']
             ],
-
             'actions' => [
                 function($category){
                     return Icon::view($category['url'], $this->translate('View this category'));
                 },
-
                 function($row){
                     return Icon::edit(
                         $this->url('Shop:Admin:Category@editAction', $row['id']),
                         $this->translate('Edit this category')
                     );
                 },
-
                 function($row){
                     return Icon::remove(
                         $this->url('Shop:Admin:Category@deleteAction', $row['id']),
@@ -216,18 +185,16 @@ $categoryId = $filter->get('category_id') ? $filter->get('category_id') : $categ
     ]); ?>
 </div>
 
-<div class="modal fade" id="statistic-modal" tabindex="-1" role="dialog" aria-labelledby="statisticModalLabel" aria-hidden="true">
- <div class="modal-dialog" role="document">
+<div class="modal fade" id="statistic-modal" tabindex="-1" aria-labelledby="statisticModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
       <h5 class="modal-title" id="statisticModalLabel"><i class="bi bi-calendar-event"></i> <?= $this->translate('Statistic'); ?></h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body" id="statistic-body"></div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="bi bi-check-lg"></i> OK</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-check-lg"></i> OK</button>
     </div>
  </div>
  </div>

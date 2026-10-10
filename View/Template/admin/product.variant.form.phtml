@@ -10,31 +10,27 @@ use Krystal\Form\Element;
     </div>
 
     <div class="card-body">
-        <form data-group="variant" autocomplete="off">
+        <form autocomplete="off">
             <?= Element::hidden('variant[id]', $variant->getId()); ?>
             <?= Element::hidden('variant[product_id]', $variant->getProductId()); ?>
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label class="form-label"><?= $this->translate('SKU'); ?></label>
                         <div class="input-group">
                             <?= Element::text('variant[sku]', $variant->getSku(), ['class' => 'form-control', 'placeholder' => $this->translate('Stock keeping unit')]); ?>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label class="form-label"><?= $this->translate('Price'); ?></label>
                         <div class="input-group">
                             <?= Element::number('variant[price]', $variant->getPrice(), ['class' => 'form-control', 'step' => '0.01', 'placeholder' => $this->translate('Price')]); ?>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
                         </div>
                     </div>
                 </div>
@@ -42,19 +38,17 @@ use Krystal\Form\Element;
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label class="form-label"><?= $this->translate('Stock'); ?></label>
                         <div class="input-group">
                             <?= Element::number('variant[stock]', $variant->getStock(), ['class' => 'form-control', 'placeholder' => $this->translate('Current inventory')]); ?>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label class="form-label"><?= $this->translate('Published'); ?></label>
                         <?= Element::select('variant[published]', $this->translateArray(['1' => 'Yes', '0' => 'No']), $variant->getPublished(), ['class' => 'form-control']); ?>
                     </div>
@@ -66,7 +60,7 @@ use Krystal\Form\Element;
                 'add' => 'Shop:Admin:ProductVariant@addAction',
                 'edit' => 'Shop:Admin:ProductVariant@editAction',
                 'save' => 'Shop:Admin:ProductVariant@saveAction',
-                'cancel' => ['Shop:Admin:Product@editAction', $variant->getProductId()] // Returns back to the parent product
+                'cancel' => ['Shop:Admin:Product@editAction', $variant->getProductId()]
             ]); ?>
         </form>
     </div>

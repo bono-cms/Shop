@@ -3,20 +3,18 @@
 use Krystal\Form\Element;
 use Cms\Service\LanguageManager;
 
-defined('KRYSTAL') or die;
-
 ?>
 
-<form class="card" data-group="item" autocomplete="off">
+<form class="card" autocomplete="off">
     <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" href="#translations" role="tab" data-toggle="tab">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#translations" data-bs-toggle="tab">
                     <i class="bi bi-file-earmark-text"></i> <?= $this->translate('Item'); ?>
                 </a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#options" role="tab" data-toggle="tab">
+            <li class="nav-item">
+                <a class="nav-link" href="#options" data-bs-toggle="tab">
                     <i class="bi bi-sliders"></i> <?= $this->translate('Options'); ?>
                 </a>
             </li>
@@ -25,36 +23,32 @@ defined('KRYSTAL') or die;
 
     <div class="card-body">
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="translations" role="tabpanel">
+            <div class="tab-pane fade show active" id="translations">
                 <?php $this->loadPartial('language-tabs'); ?>
 
                 <div class="tab-content mt-3">
                     <?php foreach ($languages as $index => $language): ?>
-                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>" role="tabpanel">
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>">
                         <?php $entity = LanguageManager::findByLangId($language->getId(), $item); ?>
 
                         <?= Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
                         <?= Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
-                        
+
                         <?php $this->loadPartial('language-name', ['language' => $language]); ?>
 
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label class="form-label"><?= $this->translate('Name'); ?></label>
                             <div class="input-group">
                                 <?= Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Name')]); ?>
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                                </div>
+                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                             </div>
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label class="form-label"><?= $this->translate('Hint'); ?></label>
                             <div class="input-group">
                                 <?= Element::textarea(sprintf('translation[%s][hint]', $language->getId()), $entity->getHint(), ['class' => 'form-control', 'placeholder' => $this->translate('Optional hint to be shown on hover')]); ?>
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                                </div>
+                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                             </div>
                         </div>
                     </div>
@@ -62,13 +56,13 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="options" role="tabpanel">
+            <div class="tab-pane fade" id="options">
                 <?= Element::hidden('item[id]', $entity->getId()); ?>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <div class="form-check">
                         <?= Element::checkbox('item[front]', $entity->getFront(), [
-                            'class' => 'form-check-input', 
+                            'class' => 'form-check-input',
                             'id' => 'item_front'
                         ]); ?>
                         <label class="form-check-label" for="item_front">
@@ -76,23 +70,21 @@ defined('KRYSTAL') or die;
                         </label>
                     </div>
                 </div>
-                
-                <div class="form-group mb-3">
+
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Type'); ?></label>
                     <?= Element::select('item[type]', $this->translateArray($types), $entity->getType(), ['class' => 'form-control']); ?>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Order'); ?></label>
                     <div class="input-group">
                         <?= Element::text('item[order]', $entity->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order')]); ?>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
                 </div>
-                
-                <div class="form-group mb-3">
+
+                <div class="mb-3">
                     <label class="form-label"><?= $this->translate('Category'); ?></label>
                     <?= Element::select('item[category_id]', $categories, $entity->getCategoryId(), ['class' => 'form-control']); ?>
                 </div>
